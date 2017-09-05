@@ -1,7 +1,7 @@
 require_relative
 
 module Hotel
-  class Reservation
+  class Room 
     reservation_hash = {
       num_guests: 0,
       check_in_date: Date,
