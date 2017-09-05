@@ -19,6 +19,9 @@ describe "Hotel_System::Room" do
     room.room_num.must_equal 1
   end
 
-  
+  # it "can change the price for a given room number" do
+  #   hotel = Hotel_System::Hotel.new(20)
+  #   hotel.all_rooms[0].room.price.must_equal 200
+  # end
 
 end

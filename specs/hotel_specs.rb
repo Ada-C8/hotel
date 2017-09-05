@@ -20,6 +20,18 @@ describe "Hotel_System::Hotel" do
     end
   end
 
-  
+it "can access room number from room object" do
+  hotel = Hotel_System::Hotel.new(20)
+  hotel.room_number(0).must_equal 1
+  hotel.room_number(19).must_equal 20
+end
+
+it "list_of_rooms returns list of all hotel rooms" do
+  hotel = Hotel_System::Hotel.new(20)
+  hotel.list_of_rooms.must_be_instance_of Array
+  hotel.list_of_rooms.length.must_equal 20
+  hotel.list_of_rooms[0].must_equal 1
+  hotel.list_of_rooms[19].must_equal 20
+end
 
 end
