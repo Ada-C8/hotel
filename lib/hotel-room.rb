@@ -3,6 +3,7 @@ module Hotel
     #list of rooms - self method?
     #room has a number (1-20)
     NUMBER_OF_ROOMS = 20
+
     attr_reader :number
 
     def initialize(num)
@@ -14,11 +15,15 @@ module Hotel
     end
 
     def self.all
-      array_of_rooms = []
+      @@hotel_rooms = [] #NOTE should this be an class variable?
       NUMBER_OF_ROOMS.times do |i|
-        array_of_rooms << self.new(i+1)
+        @@hotel_rooms << self.new(i+1)
       end
-      return array_of_rooms
+      return @@hotel_rooms
+    end
+
+    def self.list_all
+      return @@hotel_rooms
     end
 
   end
