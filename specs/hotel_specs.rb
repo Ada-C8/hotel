@@ -13,4 +13,13 @@ describe "Hotel_System::Hotel" do
     hotel.all_rooms.length.must_equal 20
   end
 
+  it "hotel is an array of room objects" do
+    hotel = Hotel_System::Hotel.new(20)
+    hotel.all_rooms.each do |room|
+      room.must_be_instance_of Hotel_System::Room
+    end
+  end
+
+  
+
 end
