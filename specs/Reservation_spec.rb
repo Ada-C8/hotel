@@ -66,8 +66,4 @@ describe "Reservation class" do
     Hotel::Reservation.all(Date.new(2017, 7, 1))[0].end_date.must_equal Date.new(2017, 7, 5)
     Hotel::Reservation.all(Date.new(2017, 7, 1))[0].room_num.must_equal 1
   end
-
-  it "can access the list of reservations for a specific date" do
-
-  end
 end
