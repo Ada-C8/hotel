@@ -6,7 +6,7 @@ module Hotel_Chain
 
     attr_reader :no_of_rooms
 
-    def initialize(no_of_rooms = 20)
+    def initialize
       @no_of_rooms = no_of_rooms
     end
 
@@ -14,8 +14,9 @@ module Hotel_Chain
     def self.std_rate_hotel(no_of_rooms)
       hotel = []
       20.times do |room|
-        hotel << Hotel::Room.new(room+1)
+        hotel << Room.new(room+1)
       end
+      #@no_of_rooms = no_of_rooms
       puts "HOTEL ROOMS:"
       ap hotel
       return hotel
