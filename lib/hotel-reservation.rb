@@ -29,6 +29,7 @@ module Hotel
           list_of_reservations << reservation
         end
       end
+      return list_of_reservations
     end
 
   end

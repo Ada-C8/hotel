@@ -23,6 +23,7 @@ module Hotel
     end
 
     def self.list_all
+      #NOTE: may be repeat of self.all, do I need to recreate everytime I want to show a list?
       return @@hotel_rooms
     end
 
