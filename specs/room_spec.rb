@@ -7,10 +7,15 @@ describe "Room" do
 
       room.must_be_instance_of Hotel::Room
       room.number.must_equal 1
+
+      another = Hotel::Room.new(100) #TODO decide- Testing edge cases... could check for room parameters. Currently allowing rooms to be 'numbered' however.
+      another.number.must_equal 100
     end
 
-    it "Creates a room with a rate" do
+    it "Creates a room with a rate of $200" do
+      room = Hotel::Room.new(1)
 
+      room.rate.must_equal 200
     end
 
   end
