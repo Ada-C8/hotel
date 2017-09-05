@@ -12,5 +12,6 @@ describe "Building" do
       ada_inn.rooms[-1].number.must_equal 20
       ada_inn.rooms[300].must_be_nil
     end
+
   end
 end

@@ -7,7 +7,7 @@ module Hotel
     attr_reader :rooms
 
     def initialize
-      @rooms = []
+      @rooms = [] #NOTE As an administrator, I can access the list of all the rooms in the hotel"
 
       20.times do |num|
         @rooms << Hotel::Room.new(num + 1)
@@ -16,4 +16,6 @@ module Hotel
 
   end # Building class
 
+  this_hotel = Building.new #TODO 4 decide where to put this instantiation
+  
 end # Hotel module
