@@ -30,12 +30,20 @@ describe "Reservation class" do
     Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5), 20).must_be_instance_of Hotel::Reservation
   end
 
-  it "can calculate the final rate of the reservation" do
-    Hotel::Room.all.length
+  it "can calculate the total cost of the reservation" do
+    reservation = Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5))
+    reservation.total.must_equal 800
   end
 
   xit "can provide information about reservations on a specific date" do
 
   end
 
+  xit "can reserve a room for a given date range" do
+
+  end
+
+  xit "can access the list of reservations for a specific date" do
+
+  end\
 end

@@ -29,16 +29,4 @@ describe "Room class" do
   it "knows all rooms cost $200 per night" do
     Hotel::Room.all.each { |room| room[:rate].must_equal 200 }
   end
-
-  xit "can reserve a room for a given date range" do
-
-  end
-
-  xit "can access the list of reservations for a specific date" do
-
-  end
-
-  xit "can get the total cost for a given reservation" do
-
-  end
 end
