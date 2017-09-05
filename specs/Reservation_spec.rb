@@ -79,4 +79,14 @@ describe "Reservation class" do
   it "raises an exception if the start date is before today's date" do
     proc{Hotel::Reservation.new(Date.today - 1, Date.today)}.must_raise Exception
   end
+
+  it "raises an exception if the room is already reserved for the specified date range" do
+    # it won't allow the specified room to be booked when it is booked
+    Hotel::Reservation.new(Date.today, Date.today + 1, 1)
+    proc{Hotel::Reservation.new(Date.today, Date.today + 1, 1)}.must_raise Exception
+
+    # it won't allow any room to be booked when they are all booked for those dates
+
+
+  end
 end
