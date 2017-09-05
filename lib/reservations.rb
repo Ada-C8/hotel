@@ -2,11 +2,12 @@ require 'date'
 require 'rooms'
 
 module Hotel
-  class reservations
+  class Reservations
     attr_reader :room, :dates, :cost
-    def initialize(room, dates, cost)
+    def initialize(start_date, end_date)
       @room = room
-      @dates = Date.new(dates)
+      @start_date = start_date
+      @end_date = end_date
     end
 
     def check_dates(dates)
@@ -14,6 +15,15 @@ module Hotel
       #.valid_date?
       #date conversion with gem?
     end
+
+    def gets_room
+      @room = Hotel::Rooms.find(1..20).sample
+    end
+
+    def calculate_bill
+    end
+
+
 
   end
 end

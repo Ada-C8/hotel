@@ -13,8 +13,20 @@ module Hotel
       20.times do
         number += 1
         rooms << self.new(number)
-      end 
+      end
+      return rooms
     end
+
+    def self.find(number)
+      all_rooms = Hotel::Rooms.all
+      all_rooms.each do |room|
+        if room.number == number
+          return Rooms.new(room.number)
+        end
+      end
+      raise ArgumentError.new("Room does not exist.")
+    end
+
 
   end
 end
