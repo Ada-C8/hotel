@@ -8,7 +8,7 @@ describe "Room" do
       room.must_be_instance_of Hotel::Room
       room.number.must_equal 1
 
-      another = Hotel::Room.new(100) #TODO decide- Testing edge cases... could check for room parameters. Currently allowing rooms to be 'numbered' however.
+      another = Hotel::Room.new(100) #TODO 1. decide- Testing edge cases... could check for room parameters. Currently allowing rooms to be 'numbered' however.
       another.number.must_equal 100
     end
 
