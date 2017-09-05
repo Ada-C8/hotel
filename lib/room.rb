@@ -9,7 +9,8 @@ require_relative
 
 module Hotel
   class Room
-
+    @room_number = room_number
+    @room_price = 200
   end
 
 end
