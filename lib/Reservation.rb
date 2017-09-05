@@ -11,6 +11,7 @@ module Hotel
     def initialize(start_date = Date.today, end_date = Date.today + 1, room_num = 0)
       @start_date = start_date
       @end_date = end_date
+      @end_date = @start_date + 1 if @start_date >= @end_date
       room_num = Room.all.sample.room_num if room_num == 0
       @room_num = room_num
       @@reservations.push(self)
@@ -24,9 +25,9 @@ module Hotel
       return (@end_date - @start_date) * rate
     end
 
-    def self.all(*date)
-      puts "i'm here"
-      return @@reservations
+    def self.all(date = nil)
+      return @@reservations if date == nil
+      return @@reservations.select { |reservation| reservation.start_date <= date && reservation.end_date >= date }
     end
 
 

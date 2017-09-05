@@ -43,18 +43,31 @@ describe "Reservation class" do
   end
 
   it "can provide information about reservations on a specific date" do
-    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5))
+    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5), 1)
 
     Hotel::Reservation.all(Date.new(2017, 7, 1)).must_be_instance_of Array
     Hotel::Reservation.all(Date.new(2017, 7, 1)).length.must_equal 1
     Hotel::Reservation.all(Date.new(2017, 7, 1))[0].must_be_instance_of Hotel::Reservation
+
+    Hotel::Reservation.new(Date.new(2017, 9, 1), Date.new(2017, 9, 5), 2)
+
+    Hotel::Reservation.all(Date.new(2017, 9, 1)).must_be_instance_of Array
+    Hotel::Reservation.all(Date.new(2017, 9, 1)).length.must_equal 1
+    Hotel::Reservation.all(Date.new(2017, 9, 1))[0].must_be_instance_of Hotel::Reservation
+
+    Hotel::Reservation.all().must_be_instance_of Array
+    Hotel::Reservation.all().length.must_equal 2
+    Hotel::Reservation.all().each { |reservation| reservation.must_be_instance_of Hotel::Reservation }
   end
 
-  xit "can reserve a room for a given date range" do
-
+  it "can reserve a room for a given date range" do
+    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5), 1)
+    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].start_date.must_equal Date.new(2017, 7, 1)
+    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].end_date.must_equal Date.new(2017, 7, 5)
+    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].room_num.must_equal 1
   end
 
-  xit "can access the list of reservations for a specific date" do
+  it "can access the list of reservations for a specific date" do
 
-  end\
+  end
 end
