@@ -23,4 +23,15 @@ describe "hotel" do
       (Hotel.all_rooms).length.must_equal 20
     end
   end
+
+  describe "self.find_room(input_id)" do
+    it "should return room matching room number" do
+      room_1 = Hotel.find_room(1)
+      room_1.must_equal Hotel::HOTEL_ROOMS[0]
+      (Hotel::HOTEL_ROOMS[0]).id.must_equal 1
+      room_5 = Hotel.find_room(5)
+      room_5.must_equal Hotel::HOTEL_ROOMS[4]
+      (Hotel::HOTEL_ROOMS[4]).id.must_equal 5
+    end
+  end
 end
