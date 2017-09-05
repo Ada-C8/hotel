@@ -1,10 +1,22 @@
 require_relative 'spec_helper'
 
+module Hotel
+  class Room
+    def self.clear
+      @@rooms = []
+    end
+  end
+end
+
 describe "Room class" do
   before do
     @min = 1
     @max = 20
     (@min..@max).each { |num| Hotel::Room.new(num) }
+  end
+
+  after do
+    Hotel::Room.clear
   end
 
   it "can provide a list of all the rooms" do
