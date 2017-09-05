@@ -3,7 +3,7 @@ module Hotel
     attr_reader :price, :name
 
     def initialize(name, price)
-      @name = name.capitalize
+      @name = name.gsub(/[A-Za-z']+/,&:capitalize)
       @price = price.to_f
     end
 

@@ -38,13 +38,11 @@ describe "Room" do
       @room.must_respond_to :name
     end
 
-    it "returns a string" do
+    it "returns a capitalized string" do
       @room.name.class.must_equal String
-    end
-
-    it "the string returned must be capitalized" do
       @room = Hotel::Room.new("room 1", 200)
       @room.name.must_equal "Room 1"
     end
+
   end
 end
