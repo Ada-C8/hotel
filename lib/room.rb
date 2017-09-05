@@ -8,7 +8,7 @@ module Hotel
 
     DEFAULT_RATE = 200
 
-    attr_reader :room_num
+    attr_reader :room_num, :reservations
     attr_accessor :rate
 
     def initialize(room_num, rate = DEFAULT_RATE)
@@ -19,6 +19,7 @@ module Hotel
         raise ArgumentError.new("Not a valid room number")
       end
 
+      @reservations = []
       @rate = rate
     end
 
@@ -26,11 +27,15 @@ module Hotel
       # create a list of all hotel rooms
       all_rooms = []
 
-      (1..NUM_ROOMS).each do |num|
+      (1..Hotel::NUM_ROOMS).each do |num|
         all_rooms << Room.new(num)
       end
 
       return all_rooms
+    end
+
+    def reserve(start_date, end_date)
+      @reservations << Hotel::Reservation.new(start_date, end_date, @room_num)
     end
 
     private

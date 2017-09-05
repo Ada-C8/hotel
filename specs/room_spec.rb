@@ -14,17 +14,25 @@ describe "Testing Room class" do
       @room.rate.must_equal Hotel::Room::DEFAULT_RATE
     end
 
-    it "Raises an error if room number isn't between 1 & 20" do
-      proc { Hotel::Room.new(0) }.must_raise ArgumentError
-      proc { Hotel::Room.new(-2) }.must_raise ArgumentError
-      proc { Hotel::Room.new(21) }.must_raise ArgumentError
+    it "Raises an error if room number isn't valid num" do
+      invalid_nums = ["cat", 31.4, nil, 0, -1, Hotel::NUM_ROOMS + 1]
+
+      invalid_nums.each do |item|
+        proc { Hotel::Room.new(item) }.must_raise ArgumentError
+      end
     end
 
-    it "Raises an error if room number isn't an integer" do
-      proc { Hotel::Room.new("cat") }.must_raise ArgumentError
-      proc { Hotel::Room.new(4.23) }.must_raise ArgumentError
-      proc { Hotel::Room.new(nil) }.must_raise ArgumentError
-    end
+    # it "Raises an error if room number isn't between 1 & 20" do
+    #   proc { Hotel::Room.new(0) }.must_raise ArgumentError
+    #   proc { Hotel::Room.new(-2) }.must_raise ArgumentError
+    #   proc { Hotel::Room.new(21) }.must_raise ArgumentError
+    # end
+    #
+    # it "Raises an error if room number isn't an integer" do
+    #   proc { Hotel::Room.new("cat") }.must_raise ArgumentError
+    #   proc { Hotel::Room.new(4.23) }.must_raise ArgumentError
+    #   proc { Hotel::Room.new(nil) }.must_raise ArgumentError
+    # end
 
   end
 
@@ -46,6 +54,29 @@ describe "Testing Room class" do
       end
 
       room_nums.must_equal []
+    end
+
+  end
+
+  describe "#reserve" do
+    before do
+      @room = Hotel::Room.new(3)
+      @check_in = Date.new(2017,9,5)
+      @check_out = Date.new(2017,9,8)
+
+      @room.reserve(@check_in, @check_out)
+    end
+
+    it "Adds the reservation to the room's reservations array" do
+      @room.reservations.length.must_equal 1
+      @room.reservations[0].must_be_kind_of Hotel::Reservation
+    end
+
+    it "Reserves the room for the specified start and end dates" do
+      res = @room.reservations[0]
+
+      res.check_in.must_equal @check_in
+      res.check_out.must_equal @check_out
     end
 
   end
