@@ -6,7 +6,7 @@ module Hotel
 
   attr_reader :room_id, :rate
 
-  def initialize(room_id, rate = std_rate)
+  def initialize(room_id, rate = @std_rate)
     @room_id = room_id
     @std_rate = $200
     @NO_OF_ROOMS = 20
