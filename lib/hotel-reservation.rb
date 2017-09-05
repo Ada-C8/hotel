@@ -1,8 +1,8 @@
 module Hotel
   class Reservation
     @@all_reservations = []
-    
-    attr_reader :start_date, :end_date, :room
+
+    attr_reader :start_date, :end_date, :room, :total_cost
 
     def initialize(start_date, end_date, room)
       if end_date > start_date
