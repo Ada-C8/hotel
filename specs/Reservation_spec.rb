@@ -31,29 +31,30 @@ describe "Reservation class" do
     Hotel::Reservation.new().must_be_instance_of Hotel::Reservation
 
     #or by specifying a date range
-    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5)).must_be_instance_of Hotel::Reservation
+    Hotel::Reservation.new(Date.today, Date.today + 1).must_be_instance_of Hotel::Reservation
 
     #or by specifying both a date range and room number
-    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5), 20).must_be_instance_of Hotel::Reservation
+    Hotel::Room.new(21)
+    Hotel::Reservation.new(Date.today, Date.today + 1, 21).must_be_instance_of Hotel::Reservation
   end
 
   it "can calculate the total cost of the reservation" do
-    reservation = Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5))
+    reservation = Hotel::Reservation.new(Date.today, Date.today + 4)
     reservation.total.must_equal 800
   end
 
   it "can provide information about reservations on a specific date" do
-    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5), 1)
+    Hotel::Reservation.new(Date.today, Date.today + 1, 1)
 
-    Hotel::Reservation.all(Date.new(2017, 7, 1)).must_be_instance_of Array
-    Hotel::Reservation.all(Date.new(2017, 7, 1)).length.must_equal 1
-    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].must_be_instance_of Hotel::Reservation
+    Hotel::Reservation.all(Date.today).must_be_instance_of Array
+    Hotel::Reservation.all(Date.today).length.must_equal 1
+    Hotel::Reservation.all(Date.today)[0].must_be_instance_of Hotel::Reservation
 
-    Hotel::Reservation.new(Date.new(2017, 9, 1), Date.new(2017, 9, 5), 2)
+    Hotel::Reservation.new(Date.today + 2, Date.today + 3, 2)
 
-    Hotel::Reservation.all(Date.new(2017, 9, 1)).must_be_instance_of Array
-    Hotel::Reservation.all(Date.new(2017, 9, 1)).length.must_equal 1
-    Hotel::Reservation.all(Date.new(2017, 9, 1))[0].must_be_instance_of Hotel::Reservation
+    Hotel::Reservation.all(Date.today + 2).must_be_instance_of Array
+    Hotel::Reservation.all(Date.today + 2).length.must_equal 1
+    Hotel::Reservation.all(Date.today + 2)[0].must_be_instance_of Hotel::Reservation
 
     Hotel::Reservation.all().must_be_instance_of Array
     Hotel::Reservation.all().length.must_equal 2
@@ -61,9 +62,21 @@ describe "Reservation class" do
   end
 
   it "can reserve a room for a given date range" do
-    Hotel::Reservation.new(Date.new(2017, 7, 1), Date.new(2017, 7, 5), 1)
-    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].start_date.must_equal Date.new(2017, 7, 1)
-    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].end_date.must_equal Date.new(2017, 7, 5)
-    Hotel::Reservation.all(Date.new(2017, 7, 1))[0].room_num.must_equal 1
+    Hotel::Reservation.new(Date.today, Date.today + 1, 1)
+    Hotel::Reservation.all(Date.today)[0].start_date.must_equal Date.today
+    Hotel::Reservation.all(Date.today)[0].end_date.must_equal Date.today + 1
+    Hotel::Reservation.all(Date.today)[0].room_num.must_equal 1
+  end
+
+  it "raises an exception if the date range includes non-date values" do
+    proc{Hotel::Reservation.new(Date.today.to_s, Date.today + 1)}.must_raise Exception
+  end
+
+  it "raises an exception if the end date is after the start date" do
+    proc{Hotel::Reservation.new(Date.today, Date.today - 1)}.must_raise Exception
+  end
+
+  it "raises an exception if the start date is before today's date" do
+    proc{Hotel::Reservation.new(Date.today - 1, Date.today)}.must_raise Exception
   end
 end
