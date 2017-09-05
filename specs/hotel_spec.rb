@@ -16,4 +16,11 @@ describe "hotel" do
       end
     end
   end
+
+  describe "self.all_rooms" do
+    it "should return an array of 20 rooms" do
+      (Hotel.all_rooms).must_be_instance_of Array
+      (Hotel.all_rooms).length.must_equal 20
+    end
+  end
 end
