@@ -6,7 +6,7 @@ module Hotel_System
 
 class Hotel
 
-  attr_reader :all_rooms
+  attr_reader :all_rooms, :list_of_rooms, :room_number
 
   def initialize(num_of_rooms)
     @all_rooms = fill_hotel(num_of_rooms)
