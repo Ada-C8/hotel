@@ -34,7 +34,7 @@ module Hotel
       reservations = []
 
       @rooms.each do |room|
-        reservations << room.reservations
+        reservations.concat(room.reservations)
       end
 
       return reservations
@@ -43,6 +43,16 @@ module Hotel
     def find_reservations_by_date(date)
       # returns a list of all reservations for the given date
       # doesn't include rooms where check-out date == date
+      reservations = []
+
+      all_reservations.each do |reservation|
+        
+        if date >= reservation.check_in && date < reservation.check_out
+          reservations << reservation
+        end
+      end
+
+      return reservations
     end
 
     private

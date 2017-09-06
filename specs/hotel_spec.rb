@@ -52,14 +52,54 @@ describe "Testing Hotel class" do
     end
   end
 
-  xdescribe "#find_reservations_by_date" do
+  describe "#find_reservations_by_date" do
     before do
-      @hotel = Hotel.new
+      @hotel = Hotel::Hotel.new
 
+      # res that doesn't conflict with 9/5/17
+      5.times do |num|
+        room = @hotel.rooms[0 + num]
+        @hotel.reserve(Date.new(2017,9,1), Date.new(2017,9,4), room)
+      end
+
+      # res that does conflict with 9/5/17
+      5.times do |num|
+        room = @hotel.rooms[5 + num]
+        @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,9), room)
+      end
+
+      # res with start date conflicting with 9/5/17
+      5.times do |num|
+        room = @hotel.rooms[10 + num]
+        @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,9), room)
+      end
+
+      # res with end date not conflicting with 9/5/17
+      5.times do |num|
+        room = @hotel.rooms[15 + num]
+        @hotel.reserve(Date.new(2017,9,3), Date.new(2017,9,5), room)
+      end
+
+      @date_to_check = Date.new(2017,9,5)
+      @sept5_res = @hotel.find_reservations_by_date(@date_to_check)
     end
 
-    it "Returns a list of reservations" do
+    it "Returns a list of reservations for that date" do
+      @sept5_res.must_be_kind_of Array
+    end
 
+    it "Doesn't include reservations w/a check-out date matching date" do
+      @sept5_res.length.must_equal 10
+
+      room3 = @hotel.rooms[2]
+      @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,5), room3)
+
+      updated_res = @hotel.find_reservations_by_date(@date_to_check)
+      updated_res.length.must_equal 10
+
+      @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,6), room3)
+      updated_res = @hotel.find_reservations_by_date(@date_to_check)
+      updated_res.length.must_equal 11
     end
   end
 
