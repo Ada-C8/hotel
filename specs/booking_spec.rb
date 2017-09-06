@@ -43,7 +43,10 @@ describe "Booking" do
     # end # before
 
     it "Should raise an error if inproper dates are given" do
-      # TODO
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 1
+      proc{@booking.make_reservation(checkout_day, checkin_day, num_of_rooms)}.must_raise ArgumentError
     end # it "Should raise an error if inproper dates are given" do
 
     it "should be able to be called on @booking" do
@@ -123,6 +126,10 @@ describe "Booking" do
       @booking.check_date_for_reservations(date_to_check)[1].res_id.must_equal 2
 
     end # it "should return an array of all the reservations for the date given" do
+
+    it "will return an array of all the reservations for a date range" do
+      # TODO in wave 2 
+    end # it "will return an array of all the reservations for a date range" do
   end # describe "check_date_for_reservations" do
 
   describe "print_reservations" do
