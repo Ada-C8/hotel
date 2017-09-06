@@ -1,4 +1,4 @@
-require_relative 'hotel'
+# require_relative 'hotel'
 require_relative 'room'
 require 'date'
 
@@ -10,7 +10,7 @@ module Hotel
     attr_accessor :date_range, :room, :name, :contact_info, :price
 
     def  initialize(date_range, room, name, contact_info)
-      @dates = date_range
+      @date_range = date_range
       @room = room
       @name = name
       @contact_info = contact_info
@@ -19,7 +19,8 @@ module Hotel
 
     def dates
       dates_reserved = []
-      dates_reserved << @dates.each
+      @date_range.each_entry{|date| dates_reserved << date}
+      dates_reserved
     end #end available?
 
   end#end class
