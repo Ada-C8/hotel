@@ -20,23 +20,27 @@ describe "Hotel" do
     it "All_reservations must be kind of array" do
       @new_hotel.all_reservations.must_be_kind_of Array
     end
+    it "All_reservations must be empty if no reservations were made" do
+      @new_hotel.all_reservations.length.must_equal 0
+    end
   end
 
   #TODO more tests using make_reservation
-  xdescribe "#room_unavailable" do
+  describe "#room_unavailable" do
     it "Returns an array of dates for given room number" do
       @new_hotel.room_unavailable(5).must_be_kind_of Array
     end
     it "Returns empty array if no reservations were made for given room number" do
       @new_hotel.room_unavailable(5).length.must_equal 0
     end
-    xit "" do
-
+    it "Returns an array of one element if one reservation was made for given room number" do
+      new_reservation = @new_hotel.make_reservation(@date_range)
+      @new_hotel.room_unavailable(1).length.must_equal @date_range.dates_within_range.length
     end
   end
 
   #TODO more tests using make_reservation
-  xdescribe "#find_room" do
+  describe "#find_room" do
     it "Returns an integer" do
       @new_hotel.find_room(@date_range).must_be_kind_of Integer
     end
@@ -45,9 +49,13 @@ describe "Hotel" do
     end
   end
 
-  xdescribe "#make_reservation" do
+  describe "#make_reservation" do
     it "Returns an instance of class reservation" do
-      @new_hotel.make_reservation(@date_range).must_be_kind_of Reservation
+      @new_hotel.make_reservation(@date_range).must_be_kind_of BookingSystem::Reservation
+    end
+    it "Adds new reservation to all_reservations array" do
+      first_reservation = @new_hotel.make_reservation(@date_range)
+      @new_hotel.all_reservations.length.must_equal 1
     end
   end
 
