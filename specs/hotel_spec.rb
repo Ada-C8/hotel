@@ -28,7 +28,7 @@ describe 'Hotel' do
     end
   end
 
-  describe '#make_reservation' do
+  xdescribe '#make_reservation' do
     it "creates a reservation and adds it to the @reservations array" do
       @hotel.make_reservation('2017-09-05', '2017-09-08')
 
