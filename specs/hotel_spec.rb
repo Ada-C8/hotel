@@ -43,13 +43,13 @@ describe 'Hotel' do
       check_out = Date.new(2017, 03, 14)
       check_in = Date.new(2017, 03, 11)
       test.create_reservation(1, check_in, check_out)
-      Hotel.all_reservations.last.must_be_instance_of Reservation
+      test.all_reservations.last.must_be_instance_of Reservation
       # Hotel.all_reservations.must_be_kind_of Array
     end
 
   end
 
-  describe "self.all.reservations" do
+  describe "all_reservations" do
     it "returns an array" do
       bb = Hotel.new
       check_out = Date.new(2017, 03, 14)
@@ -59,7 +59,7 @@ describe 'Hotel' do
       check_in = Date.new(2017, 04, 8)
       check_out = Date.new(2017, 04, 11)
       bb.create_reservation(1, check_in, check_out)
-      Hotel.all_reservations.must_be_kind_of Array
+      bb.all_reservations.must_be_kind_of Array
     end
 
     it "@@reservations array includes all reservations" do
@@ -71,30 +71,76 @@ describe 'Hotel' do
       check_in = Date.new(2017, 04, 8)
       check_out = Date.new(2017, 04, 11)
       bb.create_reservation(1, check_in, check_out)
-      Hotel.all_reservations.length.must_equal 2
+      bb.all_reservations.length.must_equal 2
+    end
+  end
+
+  describe "check_date" do
+    it "returns an array of reservations" do
+      test_hotel = Hotel.new
+      check_out = Date.new(2017, 03, 14)
+      check_in = Date.new(2017, 03, 11)
+      test_hotel.create_reservation(1, check_in, check_out)
+
+      check_in = Date.new(2017, 04, 8)
+      check_out = Date.new(2017, 04, 11)
+      test_hotel.create_reservation(2, check_in, check_out)
+      date_to_check = Date.new(2017, 03, 12)
+      test_hotel.check_date(date_to_check).each do |reservation|
+        reservation.must_be_instance_of Reservation
+      end
+
+    end
+
+    it "returns the correct number of reservations for a certain day" do
+      test_hotel = Hotel.new
+
+      date_to_check = Date.new(2017, 03, 12)
+
+      # the date_to_check falls in the below date range and should be included
+      check_out = Date.new(2017, 03, 14)
+      check_in = Date.new(2017, 03, 11)
+      test_hotel.create_reservation(1, check_in, check_out)
+
+      # the date_to_check does not fall in the below date range (check_out day not included)
+      check_out = Date.new(2017, 03, 12)
+      check_in = Date.new(2017, 03, 8)
+      test_hotel.create_reservation(2, check_in, check_out)
+
+      # the date_to_check falls in the below date range and should be included
+      check_out = Date.new(2017, 03, 14)
+      check_in = Date.new(2017, 03, 11)
+      test_hotel.create_reservation(2, check_in, check_out)
+
+      # the date_to_check does not fall in the below date range
+      check_in = Date.new(2017, 04, 8)
+      check_out = Date.new(2017, 04, 11)
+      test_hotel.create_reservation(2, check_in, check_out)
+
+      # two reservations are included in the date_to_check
+      test_hotel.check_date(date_to_check).length.must_equal 2
     end
 
   end
 end
 
 
+  # it "room array elements range from 1 to 20" do
+  #   small_hotel = Hotel.new
+  #   small_hotel.rooms[0].must_equal 1
+  #   small_hotel.rooms[19].must_equal 20
+  # end
+  #
+  # it "can access list of all rooms in hotel" do
+  #   hotel_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+  #   Hotel.new.rooms.must_equal hotel_list
+  #
+  # end
 
-    # it "room array elements range from 1 to 20" do
-    #   small_hotel = Hotel.new
-    #   small_hotel.rooms[0].must_equal 1
-    #   small_hotel.rooms[19].must_equal 20
-    # end
-    #
-    # it "can access list of all rooms in hotel" do
-    #   hotel_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-    #   Hotel.new.rooms.must_equal hotel_list
-    #
-    # end
-
-    # it "can access list of all reservations" do
-    #   Hotel.new.rooms.must_equal hotel_list
-    #
-    # end
-    # it "holds a name" do
-    #   @player.name.must_equal "Ada"
-    # end
+  # it "can access list of all reservations" do
+  #   Hotel.new.rooms.must_equal hotel_list
+  #
+  # end
+  # it "holds a name" do
+  #   @player.name.must_equal "Ada"
+  # end

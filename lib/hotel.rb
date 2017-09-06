@@ -29,13 +29,13 @@ class Hotel
 
   end
 
-  def self.all_reservations
+  def all_reservations
     return @@reservations
   end
 
-  def self.check_date(date)
+  def check_date(date)
     reservations_for_day = []
-    Hotel.all_reservations.each do |reservation|
+    self.all_reservations.each do |reservation|
       days = reservation.dates.start
       reservation.dates.nights.to_i.times do
         if date == days
@@ -46,6 +46,10 @@ class Hotel
     end
     return reservations_for_day
   end
+
+def availability
+
+end
 
 # def add_reservation(chec)
 #
