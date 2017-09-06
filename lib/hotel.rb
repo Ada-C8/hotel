@@ -1,11 +1,12 @@
 module Hotel
   class Hotel
     attr_reader :rooms, :reservations
+    ROOM_COST = 200
 
     def initialize(num_rooms)
       @rooms = []
       num_rooms.times do |i|
-        @rooms << Room.new(i+1)
+        @rooms << Room.new(i+1, ROOM_COST)
       end
       @reservations = []
     end

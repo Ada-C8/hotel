@@ -2,9 +2,9 @@ module Hotel
   class Room
     attr_reader :number, :cost
 
-    def initialize(number)
+    def initialize(number, cost)
       @number = number
-      @cost = 200
+      @cost = cost
     end
 
     # #is_avail?()
