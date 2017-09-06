@@ -19,8 +19,9 @@ module Hotel_System
     # end
 
     def available?(check_in, check_out)
+      @overlap = []
       (check_in...check_out).each do |date|
-        @overlap = self.reservations.select do |reservation|
+        @overlap += self.reservations.select do |reservation|
           (reservation.check_in...reservation.check_out).cover?(date)
         end
       end
