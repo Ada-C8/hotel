@@ -2,6 +2,14 @@ require_relative 'spec_helper'
 
 describe "Reservation class" do
 
+  describe "InvalidRoomError class" do
+
+    it "Can be instantiated" do
+      BookingSystem::Reservation::InvalidRoomError.new.must_be_instance_of BookingSystem::Reservation::InvalidRoomError
+    end
+
+  end
+
   before do
     check_in = Date.new(2017,9,9)
     check_out = Date.new(2017,9,12)
