@@ -10,18 +10,20 @@ module Hotel
       @departure_date = Date.new(departure_year.to_i, departure_month.to_i, departure_day.to_i)
       @number_of_rooms = number_of_rooms.to_i
       @room_price = 200.00
+
     end
 
     def stay_length
       if @departure_date <= @arrival_date
         raise ArgumentError.new("Your departure date can't be before your arrival date.")
       end
-      departure_date_copy = @departure_date
-      stay_length = 0
-      until departure_date_copy.year == @arrival_date.year && departure_date_copy.mon == @arrival_date.mon && departure_date_copy.mday == @arrival_date.mday
-        departure_date_copy -= 1
-        stay_length += 1
-      end
+      # departure_date_copy = @departure_date
+      stay_length = @departure_date - @arrival_date
+      # stay_length = 0
+      # until departure_date_copy.year == @arrival_date.year && departure_date_copy.mon == @arrival_date.mon && departure_date_copy.mday == @arrival_date.mday
+      #   departure_date_copy -= 1
+      #   stay_length += 1
+      # end
       return stay_length
     end
 
