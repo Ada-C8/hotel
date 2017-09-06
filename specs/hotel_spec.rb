@@ -57,5 +57,18 @@ describe 'Hotel' do
     end
   end
 
-  # As an administrator, I can access the list of reservations for a specific date
+  describe '#view_reservations' do
+    # As an administrator, I can access the list of reservations for a specific date
+    it 'returns an array of Reservations' do
+      @hotel.make_reservation('2017-10-14','2017-10-18')
+      reservations = @hotel.view_reservations('2017-10-14')
+
+      reservations.must_be_kind_of Array
+      reservations.length.must_equal 1
+      reservations.each do |reservation|
+        reservation.must_be_kind_of Hotel::Reservation
+      end
+    end
+  end
+
 end
