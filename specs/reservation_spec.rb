@@ -6,7 +6,7 @@ describe "Reservation" do
     @reservation = BookingSystem::Reservation.new()
   end
 
-  describe "#initialize" do
+  xdescribe "#initialize" do
     it "should create an instance of Reservation" do
 
     end
