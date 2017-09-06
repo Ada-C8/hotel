@@ -28,25 +28,35 @@ describe "Date Range" do
   end
 
   describe "date overlap" do
-    it "it checks if the dates are within the checkin/checkout date range" do
+    it "checks if the dates are within the checkin/checkout date range" do
       start_date = Date.new(2001,2,4)
       end_date = Date.new(2001,2,10)
       @date.date_overlap?(start_date, end_date).must_equal true
     end
+
+    it "should return false if only the start date is included in the date range" do
+      start_date = Date.new(2001,2,4)
+      end_date = Date.new(2001,2,17)
+      @date.date_overlap?(start_date, end_date).must_equal true
+    end
+
+    it "checks if only the end date is included in the date range" do
+      start_date = Date.new(2001,2,1)
+      end_date = Date.new(2001,2,10)
+      @date.date_overlap?(start_date, end_date).must_equal true
+    end
+
+    it "checks if the start and end dates are not included in the date range" do
+      start_date = Date.new(2001,2,15)
+      end_date = Date.new(2001,2,25)
+      @date.date_overlap?(start_date, end_date).must_equal false
+    end
+
+    # it "should return false if start date is equal to the check_out date" do
+    #   start_date = Date.new(2001,2,14)
+    #   end_date = Date.new(2001,2,25)
+    #   @date.date_overlap?(start_date, end_date).must_equal false
+    # end
   end
-
-
-    # it "checks if only the checkin date is included in the date range" do
-    #
-    # end
-    #
-    # it "checks if only the checkout date is included in the date range" do
-    #
-    # end
-    #
-    # it "check if the checkin/checkout date are not included in the date range" do
-    #
-    # end
-  # end
 
 end #end of describe block
