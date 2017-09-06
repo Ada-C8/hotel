@@ -17,6 +17,16 @@ module Hotel
 
     end
 
+    def self.find(date)
+      # returns a list of all reservations for given date
+      # does not include reservations where check-out date == date
+    end
+
+    def total_cost
+      num_nights = (@check_out - @check_in).to_i
+      return num_nights * ::Hotel::Room::DEFAULT_RATE
+    end
+
 
   end # end of Reservation class
 end

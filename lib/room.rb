@@ -35,7 +35,9 @@ module Hotel
     end
 
     def reserve(start_date, end_date)
-      @reservations << Hotel::Reservation.new(start_date, end_date, @room_num)
+      # add reservation if room is available and return true; else false
+      #if is_available
+      @reservations << ::Hotel::Reservation.new(start_date, end_date, @room_num)
     end
 
     private
@@ -43,6 +45,19 @@ module Hotel
     def valid_room_num?(num)
       return num.class == Integer && num >= 1 && num <= 20
     end
+
+    # def is_available?(start_date, end_date)
+    #   @reservations.each do |reservation|
+    #     check_in = reservation.check_in
+    #     check_out = reservation.check_out
+    #
+    #     if date >= check_in && date < check_out
+    #       return false
+    #     end
+    #   end
+    #
+    #   return true
+    # end
 
   end # end of Room class
 

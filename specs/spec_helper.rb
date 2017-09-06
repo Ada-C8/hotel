@@ -8,6 +8,7 @@ require 'date'
 
 require_relative '../lib/room'
 require_relative '../lib/reservation'
+require_relative '../lib/hotel'
 
 reporter_options = { color:true}
 Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new(reporter_options)
