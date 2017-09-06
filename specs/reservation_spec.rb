@@ -14,11 +14,16 @@ describe "Reservation" do
       res1.room.number.must_equal 1
       res1.nights.must_be_kind_of Integer
       res1.nights.must_equal 9
+
+      ## TODO 4 Iffy as to whether or not I want to do this
+      res2 = Hotel::Reservation.new(date, 4, ada_inn.rooms[1])
+
+      puts Hotel::Reservation.all
     end
 
   end
 
-  describe "self.all method" do
+  describe "self.all method" do ##TODO see todo 4
     it "Can list all reservations by date" do
 
     end
