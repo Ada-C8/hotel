@@ -18,16 +18,12 @@ module Hotel
 
     def make_reservation(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
       @reservations << Reservation.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
-      # rooms_booked = 0
-      # @list_of_rooms.each do |room|
-      #   if room.booked.empty?
-      #     room.booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
-      #     rooms_booked += 1
-      #     break if rooms_booked == number_of_rooms.to_i
-      #   end
-      # end
-      number_of_rooms.to_i.times do |i|
-        available_at_date(year, month, day)[i].booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
+      if available_at_dates(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).empty?
+        puts "No avaibility at these dates."
+      else
+        number_of_rooms.to_i.times do |i|
+          available_at_dates(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)[0].booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
+        end
       end
     end
 
@@ -47,10 +43,12 @@ module Hotel
       available_rooms = []
       @list_of_rooms.each do |room|
         booked = false
-        room.booked.each do |stay_hash|
-          return if stay_hash.empty?
-          if date > stay_hash["arrival"] && date < stay_hash["departure"]
-            return booked = true
+        unless room.booked.empty?
+          room.booked.each do |stay_hash|
+            if date > stay_hash["arrival"] || date < stay_hash["departure"]
+              booked = true
+              break
+            end
           end
         end
         available_rooms << room if booked == false
@@ -65,7 +63,10 @@ module Hotel
       @list_of_rooms.each do |room|
         booked = false
         room.booked.each do |stay_hash|
-          return if stay_hash.empty?
+          if arrival_date < stay_hash["departure"] || departure_date > stay_hash["arrival"]
+            booked = true
+          end
+
           # #########CHANGE THIS !!!!!!!!!!
           # if arrival_date > stay_hash["arrival"] && date < stay_hash["departure"]
           #   return booked = true

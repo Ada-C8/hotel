@@ -104,10 +104,11 @@ describe "Hotel" do
 
     it "The available_at_date method returns an array of available rooms for a given date" do
       @hotel = Hotel::Hotel.new(20)
-      # @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
       @hotel.available_at_date(2017,9,18).must_be_kind_of Array
-      # @hotel.available_at_date(2017,9,18)[0].must_be_kind_of Hotel::Room
-      # @hotel.available_at_date(2017,9,18)[18].must_be_kind_of Hotel::Room
+      @hotel.available_at_date(2017,9,18)[0].must_be_kind_of Hotel::Room
+      @hotel.available_at_date(2017,9,18)[18].must_be_kind_of Hotel::Room
+      @hotel.available_at_date(2017,9,18)[19].must_be_nil
     end
   end
 
