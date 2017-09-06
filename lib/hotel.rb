@@ -16,8 +16,8 @@ module Hotel_Chain
     end
 
     #Method is called to print a list for the administrator
-    #myhotel = Hotel_Chain::MyHotel.new
-    #myhotel.list_of_rooms
+    #hotel = Hotel_Chain::MyHotel.new
+    #hotel.list_of_rooms
     def list_rooms
       #myhotel = Hotel_Chain::MyHotel.all
       list_array = []
@@ -30,13 +30,13 @@ module Hotel_Chain
     end
 
     # admin would enter the following to create a new reservation:
-    # reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+    # hotel.store_reservation(check_in_date, check_out_date)
     def store_reservation(check_in_date, check_out_date)
       @reservations_array << Hotel_Chain::Reservation.new(check_in_date, check_out_date)
     end
 
-
-
+    def print_reservations_by_date(date)
+    end
 
   end
 end
