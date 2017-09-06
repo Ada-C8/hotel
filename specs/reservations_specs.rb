@@ -69,4 +69,11 @@ describe "Hotel_System::Reservations" do
     reservation.num_of_nights.must_equal 4
   end
 
+  it "correctly calculates the total cost for a reservation" do
+    reservation = Hotel_System::Reservations.new(1, "2018-1-1", "2018-1-5", @hotel)
+    reservation.total_cost.must_equal 800
+    reservation2 = Hotel_System::Reservations.new(1, "2017-12-25", "2018-1-4", @hotel)
+    reservation2.total_cost.must_equal 2000
+  end
+
 end

@@ -6,7 +6,7 @@ require_relative 'room.rb'
 module Hotel_System
 
   class Reservations
-    attr_accessor :all_rooms, :check_in, :check_out, :res_room_number, :hotel, :today, :num_of_nights, :all_reservations
+    attr_accessor :all_rooms, :check_in, :check_out, :res_room_number, :hotel, :today, :num_of_nights, :all_reservations, :total_cost
 
     def initialize(room_number, check_in, check_out, parent_hotel = Hotel_System::Hotel.new )
       @check_in = Date.parse(check_in)
@@ -39,6 +39,9 @@ module Hotel_System
       @num_of_nights = (@check_out - @check_in).to_i
     end
 
+    def total_cost
+    total_cost = num_of_nights * @hotel.return_room_object_by_num(res_room_number).price
+    end
   end
 
 end

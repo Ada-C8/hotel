@@ -27,10 +27,7 @@ module Hotel_System
       return room_list
     end
 
-    def total_cost(reservation)
-    total_cost = reservation.num_of_nights * room.price
-
-    end
+    
 
     private
 
