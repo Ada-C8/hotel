@@ -29,12 +29,15 @@ describe "DateRange Class" do
       @vacation.nights.must_equal 3
     end
     it "nights_arr is an array" do
-      @vacation.nights.must_be_kind_of Array
+      @vacation.nights_arr.must_be_kind_of Array
     end
   end
   describe "valid_date? method" do
     it "valid_date? will raise an error if check_out if prior to check_in" do
-      proc{Hotel::DateRange.new(check_out,check_in)}.must_raise InvalidDateRangeError
+      check_in = Date.new(2017,9,5)
+      check_out = Date.new(2017,9,8)
+      trip = Hotel::DateRange.new(check_out,check_in)
+      proc{trip.valid_date?}.must_raise InvalidDateRangeError
     end
   end
   describe "make_nights_arr method" do
