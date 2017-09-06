@@ -1,26 +1,39 @@
 require 'pry'
-
+require 'date'
 module Hotel
 
   class Reservation
-    attr_reader :id, :guest, :check_in, :check_out, :room
+    attr_reader :guest, :check_in, :check_out, :room
+    attr_accessor :all_reservations, :id
 
-    def initialize(id, guest, check_in,check_out,room_id)
-      @id = id
+    @@all_reservations = []
+
+    def initialize(guest, check_in,check_out,room_id)
+      @id = 1
       @guest =  guest #Optional- create guest object
-      @check_in = check_in #ruby Date object
-      @check_out = check_out #ruby Date object
-      @room= room_id # later, this will be a room object assigned via namespacing method Hotel::Room.find_by(room_id)
+      @check_in = Date.parse(check_in) #ruby Date object
+      @check_out = Date.parse(check_out) #ruby Date object
+      @room= Hotel::Room.find_by_id(room_id) # later, this will be a room object assigned via namespacing method Hotel::Room.find_by(room_id)
+      @totalcost = 200
     end #end initialize
 
-    # def self.all
-    # end
+
+    def self.all #returns array
+      all_reservations = []
+
+      return all_reservations
+
+    end
+
+    def cost
+      @totalcost = (check_out.mjd - check_in.mjd)* @room.nightly_rate
+      return @totalcost
+    end
 
     # def self.find_by_guest(guest_id)
     # end
     #
-    # def self.find_by_date(check_in, check_out)
-    # end
+
     #
     # def self.find_by_room(room_id)
     # end
