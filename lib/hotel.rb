@@ -3,9 +3,10 @@ module Hotel
 
     attr_reader :reservations, :rooms
 
-    def initialize()
+    def initialize
       @reservations = [] #where reservation objects are pushed
-      @rooms = {} #roomnumber:price
+      @rooms = {room1:200, room2:200, room3:200, room4:200, room5:200, room6:200, room7:200,
+        room8:200, room9:200, room10:200} #roomnumber:price
     end
 
 
@@ -23,7 +24,7 @@ module Hotel
     # end
     #
     # def make_reservation(date_range, room)
-    #   reservation = Hotel::Reservation.new
+    #   reservation = Hotel::Reservation.new(id, date1, *date2, room_number, cost)
     #   @reservations << reservation
     # end
     #

@@ -23,10 +23,10 @@ describe 'DateRange' do
       @date1 = Date.new(2017,9,12)
       @date2 = Date.new(2017,9,12)
       @date3 = Date.new(2017,9,13)
-      @daterange = Hotel::DateRange.new(@date1, @date2)
+      @daterange = Hotel::DateRange.new(@date1)
       @daterange2 = Hotel::DateRange.new(@date1, @date3)
     end
-    it 'should return true if dates passed are the same' do
+    it 'should return true if one date is passed' do
       @daterange.one_day?.must_equal true
     end
 
@@ -93,7 +93,7 @@ describe 'DateRange' do
     end
 
     it "returns true if the date range is just one day" do
-      daterange = Hotel::DateRange.new(@date1, @date1)
+      daterange = Hotel::DateRange.new(@date1)
       daterange.include?(@date1).must_equal true
     end
   end
@@ -105,7 +105,7 @@ describe 'DateRange' do
       @date3 = Date.new(2017,9,15)
       @date4 = Date.new(2017,9,20)
       @daterange = Hotel::DateRange.new(@date1, @date2)
-      @daterange2 = Hotel::DateRange.new(@date1, @date1)
+      @daterange2 = Hotel::DateRange.new(@date1)
     end
     it 'returns an integer' do
       @daterange.number_days.must_be_kind_of Integer
@@ -115,7 +115,7 @@ describe 'DateRange' do
     end
 
     it 'returns the correct number of days for a multiday reservation' do
-      @daterange.number_days.must_equal 6
+      @daterange.number_days.must_equal 7
     end
 
   end

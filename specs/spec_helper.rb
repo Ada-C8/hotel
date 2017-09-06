@@ -7,4 +7,4 @@ require 'minitest/skip_dsl'
 
 require_relative '../lib/hotel'
 require_relative '../lib/daterange'
-# require_relative '../lib/reservation'
+require_relative '../lib/reservation'
