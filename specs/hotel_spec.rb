@@ -6,8 +6,8 @@ describe "#HOTEL" do
     @my_hotel = Hotel.new
 
     @reservation1 = {check_in: "January 4, 2018", check_out: "January 10, 2018", room: @my_hotel.rooms.first}
-    @reservation2 = {check_in: "January 5, 2018", check_out: "January 10, 2018", room: @my_hotel.rooms.first}
-    @reservation3 = {check_in: "January 8, 2018", check_out: "January 14, 2018", room: @my_hotel.rooms.first}
+    @reservation2 = {check_in: "January 5, 2018", check_out: "January 10, 2018", room: @my_hotel.rooms[1]}
+    @reservation3 = {check_in: "January 8, 2018", check_out: "January 14, 2018", room: @my_hotel.rooms[2]}
 
     @my_hotel.make_reservation(@reservation1[:check_in], @reservation1[:check_out], @reservation1[:room])
 
@@ -35,12 +35,14 @@ describe "#HOTEL" do
     it "Can display a list of reservations" do
       @my_hotel.reservations.must_be_instance_of Array
       @my_hotel.reservations.first.must_be_instance_of Reservation
+      @my_hotel.reservations.last.must_be_instance_of Reservation
       @my_hotel.reservations.first.room_number.must_equal 1
     end
 
     it "Can display a list of reservations for a specific date" do
       @my_hotel.reservation_by_date("January 5, 2018").must_be_instance_of Array
       @my_hotel.reservation_by_date("January 5, 2018").length.must_equal 2
+      @my_hotel.reservation_by_date("January 5, 2018").first.must_be_instance_of Reservation
       @my_hotel.reservation_by_date("January 10, 2018").length.must_equal 1
       @my_hotel.reservation_by_date("Janury 9, 2018").length.must_equal 3
       @my_hotel.reservation_by_date("2018-01-25").length.must_equal 0
@@ -50,14 +52,23 @@ describe "#HOTEL" do
 
   describe "#ROOMS" do
     it "Can find rooms reserved for a specific date" do
-      
+      @my_hotel.rooms_reserved("January 9, 2018").must_be_instance_of Array
+      @my_hotel.rooms_reserved("January 9, 2018").length.must_equal 3
+      @my_hotel.rooms_reserved("January 9, 2018").first.must_be_instance_of Room
+
     end
 
     it "Can find rooms with availability for a given date range" do
-
+      @my_hotel.rooms_available("January 9, 2018", "January 20, 2018").must_be_instance_of Array
+      @my_hotel.rooms_available("January 9, 2018", "January 20, 2018").length.must_equal 17
+      @my_hotel.rooms_available("January 9, 2018", "January 20, 2018").first.must_be_instance_of Room
+      @my_hotel.rooms_available("January 9, 2018", "January 20, 2018").last.must_be_instance_of Room
     end
   end
 end
+
+
+
 #CLI feature
 # it "#show_all_rooms returns a display of all of the available rooms" do
 #   @my_hotel.show_all_rooms.must_be_instance_of Array

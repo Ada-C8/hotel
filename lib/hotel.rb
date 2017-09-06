@@ -1,5 +1,6 @@
 require_relative "rooms"
 require 'date'
+require 'pry'
 
 class Hotel
   attr_reader :rooms, :reservations
@@ -18,11 +19,9 @@ class Hotel
     @reservations.push(new_reservation)
   end
 
-
   def reservation_by_date(date)
     my_date = Date.parse(date)
     raise ArgumentError.new("Invalid date") if my_date.nil?
-
 
     reservations_today = []
     @reservations.each do |reservation|
@@ -33,31 +32,26 @@ class Hotel
     return reservations_today
   end
 
-
-#will use !(rooms_reserved) to return the opposite of the reserved rooms
-  def available_rooms(check_in, check_out)
-    return !(roomes_reserved(check_in)) && !(rooms_reserved(check_out))
-  end
-
-#reservation_by_date(date) returns an array of reservations for the date; the each statement iterates through those reservations and gets the room number.
-
   def rooms_reserved(date)
-    rooms_reserved_today = []
+    reserved_rooms = []
     reservation_by_date(date).each do |reservation|
-      rooms_reserved_today.push(reservation.room)
+      reserved_rooms.push(reservation.room)
     end
-    return rooms_reserved_today
+    return reserved_rooms
   end
 
 
-
-  # def available_rooms(date_start, date_end)
-  #   valid_date(date_start, date_end)
-  #   Date.parse(date_start)
-  #   Date.parse(date_end)
-  #   vacant = []
-  #   #search through the reservations to see if the room number is included in any of the reservations
-  # end
+  def rooms_available(check_in, check_out)
+    last_night = Date.parse(check_out) - 1
+    available_rooms = @rooms
+    reservation_by_date(check_in).each do |reservation|
+      available_rooms.delete(reservation.room)
+    end
+    reservation_by_date(last_night.to_s).each do |reservation|
+      available_rooms.delete(reservation.room)
+    end
+    return available_rooms
+  end
 
   private
   def valid_date(check_in, check_out)

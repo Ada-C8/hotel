@@ -2,7 +2,7 @@ require 'date'
 require_relative 'rooms'
 
 class Reservation
-  attr_reader :check_in, :check_out, :nights, :bill, :num_nights, :room_number, :reservation_id
+  attr_reader :check_in, :check_out, :nights, :bill, :num_nights, :room_number, :reservation_id, :room
   def initialize(check_in, check_out, room)
     @reservation_id = rand(100000..999999)
     @check_in = Date.parse(check_in)
@@ -12,6 +12,7 @@ class Reservation
     @num_nights = @nights.length
     @room_number = room.number
     @bill = @num_nights * room.rate
+    @room = room
   end
 
 
