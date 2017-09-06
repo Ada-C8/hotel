@@ -43,13 +43,13 @@ module Hotel
     #   end
     # end
 
-    # def view_reservations(date)
-    #   reservations = []
-    #   @reservations.each do |reservation|
-    #     reservations << reservation if reservation.dates.include?(date)
-    #   end
-    #   reservations
-    # end
+    def view_reservations(date)
+      reservations = []
+      @reservations.each do |reservation|
+        reservations << reservation if reservation.dates.include?(date)
+      end
+      reservations
+    end
 
     def find_available_rooms(checkin, checkout)
       booked_rooms, available_rooms = [], []

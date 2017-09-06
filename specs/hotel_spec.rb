@@ -40,8 +40,11 @@ describe 'Hotel' do
     end
   end
 
-  describe "find_available_rooms" do
-
+  describe 'find_available_rooms' do
+    it 'returns an array of rooms' do
+      rooms = @hotel.find_available_rooms('2017-09-05', '2017-09-09')
+      rooms.must_be_kind_of Array
+    end
   end
 
   describe '#make_reservation' do
