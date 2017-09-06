@@ -35,6 +35,18 @@ module Hotel
     return all_reservations
   end
 
+  def self.all_blocks
+    all_blocks =[]
+    CSV.read('support/blocks.csv').each do |row|
+      block_rate = row[0]
+      num_of_rooms = row[1]
+      check_in_date = row[2].split
+      check_out_date = row[3].split
+      all_blocks.push(Hotel::Block.new(block_rate, num_of_rooms, check_in_date, check_out_date))
+    end
+    return all_blocks
+  end
+
   def self.cost(input_reservation)
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|

@@ -8,8 +8,8 @@ module Hotel
     attr_reader :discount_rate, :num_of_rooms
     def initialize(input_id, input_room_number, check_in_date, check_out_date)
       super
-      @discount_rate = input_id
-      @num_of_rooms = input_room_number
+      @discount_rate = input_id.to_f
+      @num_of_rooms = input_room_number.to_i
       raise ArgumentError.new "Blocks can contain a maximum of 5 rooms" if @num_of_rooms > 5
       @id = nil
       @room_number = nil

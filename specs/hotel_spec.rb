@@ -57,6 +57,21 @@ describe "hotel" do
 
   end
 
+  describe "self.all_blocks" do
+    it "returns an array" do
+      output = Hotel.all_blocks
+      output.must_be_instance_of Array
+    end
+    it "should match what is currently in the csv" do
+      output = Hotel.all_blocks
+      output.length.must_equal 1
+    end
+    it "should be filled with block objects" do
+      output = Hotel.all_blocks
+      output[0].must_be_instance_of Hotel::Block
+    end
+  end
+
   describe "self.cost(input_reservation)" do
     it "should return total_cost of a reservation when given id" do
       output = Hotel.cost(99)
