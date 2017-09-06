@@ -42,7 +42,8 @@ module Hotel
       num_of_rooms = row[1]
       check_in_date = row[2].split
       check_out_date = row[3].split
-      all_blocks.push(Hotel::Block.new(block_rate, num_of_rooms, check_in_date, check_out_date))
+      block_id = row[4]
+      all_blocks.push(Hotel::Block.new(block_rate, num_of_rooms, check_in_date, check_out_date, block_id))
     end
     return all_blocks
   end

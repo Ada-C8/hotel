@@ -15,8 +15,9 @@ Block.rooms.each
 
 
 # As an administrator, I can check whether a given block has any rooms available
-
+Hotel.block_available(input_id)
 # As an administrator, I can reserve a room from within a block of rooms
+Hotel.reserve_block_room(input_id)
 
 #Constraints
 # => A block can contain a maximum of 5 rooms
