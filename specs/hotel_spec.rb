@@ -21,10 +21,10 @@ describe 'Hotel' do
 
   describe 'make_reservation' do
     it 'creates a reservation object with two dates and pushes to reservations' do
-      @hotel.make_reservation(1, Date.new(2017,9,12), Date.new(2017,9,15), :room4, 200).must_be_kind_of Array
+      @hotel.make_reservation(Date.new(2018,9,12), Date.new(2018,9,15), :room4, 200).must_be_kind_of Array
     end
     it 'creates a reservation object with one date and pushes to reservations' do
-      @hotel.make_reservation(1, Date.new(2017,9,12), :room4, 200).must_be_kind_of Array
+      @hotel.make_reservation(Date.new(2018,9,12), :room4, 200).must_be_kind_of Array
     end
     it 'reservations is an array of reservation objects' do
       @hotel.reservations.each do |reservation|
@@ -34,12 +34,12 @@ describe 'Hotel' do
 end
   describe 'view available' do
     it 'returns a list of rooms that are available for a given date' do
-      @date1 = Date.new(2017,9,12)
-      @date2 = Date.new(2017,9,15)
-      @date3 = Date.new(2017,9,13)
-      @date4 = Date.new(2017,9,19)
-      @hotel.make_reservation(1, @date1 , @date2, :room4, 200)
-      #@hotel.view_available(Date.new(2017,9,15)).must_respond_to :date1
+      @date1 = Date.new(2018,9,12)
+      @date2 = Date.new(2018,9,15)
+      @date3 = Date.new(2018,9,13)
+      @date4 = Date.new(2018,9,19)
+      @hotel.make_reservation(@date1 , @date2, :room4, 200)
+      #@hotel.view_available(Date.new(2018,9,15)).must_respond_to :date1
       @hotel.view_available(@date1).must_be_kind_of Array
       @hotel.view_available(@date1).must_equal [:room1, :room2, :room3, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
@@ -47,7 +47,7 @@ end
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
       @hotel.view_available(@date3, @date4).must_equal [:room1, :room2, :room3, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
-      @hotel.make_reservation(2, @date1, @date2, :room5, 200)
+      @hotel.make_reservation(@date1, @date2, :room5, 200)
       @hotel.view_available(@date1, @date2).must_equal [:room1, :room2, :room3, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
     end
@@ -55,28 +55,37 @@ end
 
   describe 'view booked' do
     it 'returns a list of rooms that are booked for a given date' do
-      @date1 = Date.new(2017,9,12)
-      @date2 = Date.new(2017,9,15)
-      @date3 = Date.new(2017,9,13)
-      @date4 = Date.new(2017,9,19)
-      @hotel.make_reservation(1, @date1 , @date2, :room4, 200)
+      @date1 = Date.new(2018,9,12)
+      @date2 = Date.new(2018,9,15)
+      @date3 = Date.new(2018,9,13)
+      @date4 = Date.new(2018,9,19)
+      @hotel.make_reservation(@date1, @date2, :room4, 200)
       @hotel.view_booked(@date1).must_be_kind_of Array
       @hotel.view_booked(@date1).must_equal [:room4]
-      @hotel.make_reservation(2, @date1, @date2, :room5, 200)
+      @hotel.make_reservation(@date1, @date2, :room5, 200)
       @hotel.view_booked(@date1).must_equal [:room4, :room5]
     end
   end
 
   describe 'is_available?' do
     it 'returns true if the room is available for the given date range' do
-      @date1 = Date.new(2017,9,12)
-      @date2 = Date.new(2017,9,15)
+      @date1 = Date.new(2018,9,12)
+      @date2 = Date.new(2018,9,15)
       @hotel.is_available?(:room4, @date1, @date2).must_equal true
-      @hotel.make_reservation(1, @date1 , @date2, :room4, 200)
+      @hotel.make_reservation(@date1 , @date2, :room4, 200)
       @hotel.is_available?(:room4, @date1, @date2).must_equal false
     end
   end
 
+  describe 'make reservation for available room' do
+    it 'raises BookingError if room is not available' do
+      @date1 = Date.new(2018,9,12)
+      @date2 = Date.new(2018,9,15)
+      @hotel.make_reservation(@date1, @date2, :room4, 200)
+      proc {@hotel.make_reservation(@date1, @date2, :room4, 200)}.must_raise BookingError
+
+    end
+  end
 
 
 end

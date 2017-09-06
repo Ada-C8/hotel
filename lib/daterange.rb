@@ -1,58 +1,57 @@
 require 'date'
+require 'booking_error'
 
 module Hotel
   class DateRange
-    attr_reader :date1, :date2, :number_days
+    attr_reader :beginning, :ending, :number_days
 
-    def initialize(date1, date2=nil)
-      @date1 = date1
-      @date2 = date2
+    def initialize(date1, date2=date1)
+      @beginning = date1
+      @ending = date2
       one_day?
+      is_valid?
       beginning
       ending
     end
 
+    def is_valid?
+      if @beginning < Date.today or @ending < Date.today
+        raise DateError.new("You are living in the past, bud")
+      end
+      unless one_day?
+        if @beginning > @ending
+          raise DateError.new("Last night must be after first night")
+        end
+      end
+    end
+
     def one_day?
-      if @date2 == nil
+      if @beginning == @ending
         return true
       else
         return false
-      end
-    end
-
-    def beginning
-      if !one_day? && @date1 < @date2
-        @beginning = @date1
-      elsif !one_day? && @date2 < @date1
-        @beginning = @date2
-      elsif one_day?
-        @beginning = @date1
-      end
-    end
-
-    def ending
-      if !one_day? && @date1 > @date2
-        @ending = @date1
-      elsif !one_day? && @date2 > @date1
-        @ending = @date2
-      elsif one_day?
-        @ending = @date1
       end
     end
 
     def number_days
+      if one_day?
+        @number_days = 1
+      else
         @number_days = (@ending-@beginning).to_i + 1
+      end
     end
 
 
     def include?(date)
-      if (one_day? && date == @date1) || (@beginning <= date && date <= @ending)
+      if (one_day? && date == @beginning) || (@beginning <= date && date <= @ending)
         return true
       else
         return false
       end
     end
 
+
+#REFACTOR??
     def overlap?(daterange)
       if include?(daterange.beginning) || include?(daterange.ending)
         return true

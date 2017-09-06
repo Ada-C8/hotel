@@ -3,8 +3,8 @@ require 'date'
 
 describe 'Reservation' do
   before do
-    @reservation = Hotel::Reservation.new(1, Date.new(2017,9,12), Date.new(2017,9,15), :room4, 200)
-    @reservation_for_one = Hotel::Reservation.new(1, Date.new(2017,9,12), :room4, 200)
+    @reservation = Hotel::Reservation.new(1, Date.new(2018,9,12), Date.new(2018,9,15), :room4, 200)
+    @reservation_for_one = Hotel::Reservation.new(1, Date.new(2018,9,12), :room4, 200)
     Hotel::Hotel.new
   end
   describe 'initialize' do

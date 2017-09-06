@@ -1,3 +1,4 @@
+require 'booking_error'
 module Hotel
   class Hotel
 
@@ -10,9 +11,14 @@ module Hotel
         #CHANGE ROOMS TO CONSTANT??
       end
 
-      def make_reservation(id, date1, *date2, room_number, cost)
-        reservation = Reservation.new(id, date1, *date2, room_number, cost)
-        @reservations << reservation
+      def make_reservation(date1, *date2, room_number, cost)
+        if is_available?(room_number, date1, *date2)
+          id = @reservations.length + 1
+          reservation = Reservation.new(id, date1, *date2, room_number, cost)
+          @reservations << reservation
+        else
+          raise BookingError.new("Room is already booked during daterange selected")
+        end
       end
 
       def view_available(date1, *date2)
