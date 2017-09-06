@@ -1,5 +1,6 @@
 require 'Date'
 require_relative 'Room'
+require_relative 'Block'
 
 module Hotel
   class Reservation
