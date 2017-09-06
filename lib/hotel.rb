@@ -3,6 +3,7 @@ module Hotel
   require_relative 'reservation'
   require_relative 'room'
   require_relative 'block'
+  require_relative 'already_booked_error'
 
   class Hotel
     attr_reader :rooms, :reservations

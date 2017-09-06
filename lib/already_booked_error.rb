@@ -1,0 +1,2 @@
+class AlreadyBookedError < StandardError
+end
