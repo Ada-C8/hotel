@@ -53,7 +53,22 @@ describe "Hotel::Reservation" do
       Hotel::Reservation.new(@start_date+20,@end_date+20,@room_1)
       room_reservation = Hotel::Reservation.list_all[0]
       room_reservation.must_respond_to :total_cost
-      room_reservation.total_cost.must_equal (200*3).round(2)
+      room_reservation.total_cost.must_equal (room_reservation.rate*3).round(2)
+    end
+  end
+
+  describe "Block rooms" do
+    it "can make a block of rooms" do
+      start_date = Date.new(2017,6,5)
+      end_date = Date.new(2017,6,8)
+      block1 = Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, "Averi")
+      block1.must_be_instance_of Array
+      block1.length.must_equal 5
+    end
+    it "throws error when block is over 5 rooms" do
+      start_date = Date.new(2017,6,5)
+      end_date = Date.new(2017,6,8)
+      proc{Hotel::Reservation.block_rooms(start_date, end_date, 10, 150, "Averi")}.must_raise ArgumentError
     end
   end
 end
