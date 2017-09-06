@@ -1,4 +1,7 @@
+require 'date'
+require 'pry'
 require_relative 'spec_helper'
+
 
 describe "Hotel::Room class" do
   describe "initialize" do
@@ -25,6 +28,45 @@ describe "Hotel::Room class" do
     end
 
   end #end initialize
+
+  describe "reserve_room" do
+    it "can reserve a room if given the check-in/out date, reservation id, and guest id" do
+      room = Hotel::Room.new(666)
+      check_in_str = "2017-08-09"
+      check_out_str = "2017-08-12"
+
+      room.reserve_room(check_in_str, check_out_str, 1, 13)
+
+      binding.pry
+
+      all_dates = room.reserved_dates.values.flatten
+
+      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
+        all_dates.must_include date
+      end
+
+      room.reserve_room("2017-08-10", "2017-08-11", 42, 16).must_equal false
+    end
+
+  end #end reserve_room
+
+  describe "self.all" do
+    it "returns an array of all room objects, with the accurate number of rooms" do
+      test_all_rooms = Hotel::Room.all
+
+      test_all_rooms.must_be_instance_of Array
+
+      test_all_rooms.each do |room|
+        room.must_be_instance_of Hotel::Room
+      end
+
+      test_all_rooms.count.must_equal 20
+
+    end
+
+
+
+  end #end self.all
 
 
 end #end Hotel::Room class tests
