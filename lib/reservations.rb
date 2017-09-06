@@ -5,16 +5,16 @@ require_relative 'room.rb'
 
 module Hotel_System
 
-
   class Reservations
-    attr_accessor :all_rooms, :check_in, :check_out, :res_room_number, :today
+    attr_accessor :all_rooms, :check_in, :check_out, :res_room_number, :hotel, :today, :num_of_nights, :all_reservations
 
-
-    def initialize(room_num, check_in, check_out)
+    def initialize(room_num, check_in, check_out, parent_hotel)
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
       @res_room_number = room_num
+      @hotel = parent_hotel
       @today = Date.today
+      @hotel.all_reservations << self
     end
 
     def avail?

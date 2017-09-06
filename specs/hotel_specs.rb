@@ -1,6 +1,5 @@
 require_relative 'spec_helper.rb'
 
-
 describe "Hotel_System::Hotel" do
 
   it "can initialize a new hotel" do
@@ -32,6 +31,11 @@ it "list_of_rooms returns list of all hotel rooms" do
   hotel.list_of_rooms.length.must_equal 20
   hotel.list_of_rooms[0].must_equal 1
   hotel.list_of_rooms[19].must_equal 20
+end
+
+it "can store a list of reservations" do
+hotel = Hotel_System::Hotel.new(20)
+
 end
 
 end
