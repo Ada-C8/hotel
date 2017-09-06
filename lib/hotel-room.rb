@@ -29,21 +29,29 @@ module Hotel
 
     def available?(start_date, end_date)
       rooms_available = self.class.all_available_rooms(start_date, end_date)
+      # ap rooms_available
       rooms_available.each do |room|
-        if room.number == self.number
+        # ap "#{room.number} and #{@number}"
+        if room.number == @number
           return true
         end
       end
+      # puts "this is returning false"
       return false
     end
 
     def self.all_available_rooms(start_date, end_date)
-      available_rooms = list_all
+      unavailable_rooms = []
       (start_date...end_date).each do |date|
         list = Hotel::Reservation.list_for_date(date)
-        list.each do |reservation|
-          available_rooms.delete_at(reservation.room.number-1)
-        end
+        unavailable_rooms << list.map {|reservation| reservation.room.number}
+      end
+      unavailable_rooms.flatten!.uniq!
+      available_room_numbers = (1..NUMBER_OF_ROOMS).to_a - unavailable_rooms
+      # ap available_room_numbers
+      available_rooms = []
+      available_room_numbers.each do |i|
+        available_rooms << self.new(i)
       end
       return available_rooms
     end
