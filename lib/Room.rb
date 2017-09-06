@@ -9,6 +9,10 @@ module Hotel
     def initialize(room_num)
       @room_num = room_num
       @rate = STANDARD_RATE
+      collect_instance
+    end
+
+    def collect_instance
       @@rooms.push(self)
     end
 

@@ -14,6 +14,10 @@ module Hotel
       room_num = Room.all.sample.room_num if room_num == 0
       @room_num = room_num
       check_dates(start_date, end_date, room_num)
+      collect_instance
+    end
+
+    def collect_instance
       @@reservations.push(self)
     end
 
