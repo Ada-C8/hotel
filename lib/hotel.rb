@@ -35,7 +35,7 @@ module Hotel_Chain
       @reservations_array << Hotel_Chain::Reservation.new(check_in_date, check_out_date)
     end
 
-    def print_reservations_by_date(date)
+    def make_reservations_by_date_array(date)
       reservations_on_date = []
       @reservations_array.each do |reservation|
         if (reservation.check_in_date...reservation.check_out_date).cover?(Date.strptime(date, "%m/%d/%Y"))
@@ -47,6 +47,21 @@ module Hotel_Chain
       # end
       return reservations_on_date
     end
+
+    # def print_reservations_by_date(date)
+    #   array = []
+    #   reservations_on_date = self.make_reservations_by_date_array(date)
+    #   reservations_on_date.each do |reservation|
+    #     array  << "Room #{reservation.room_id} is reserved from #{reservation.check_in_date} to #{reservation.check_out_date}"
+    #   end
+    #   puts array
+    # end
+
+
+
+
+
+
 
   end
 end

@@ -37,6 +37,14 @@ describe "Reservation Class" do
 
   end
 
+  describe "error handling" do
+    it "raises an error if an incorrect date format is inputted" do
+      check_in_date = "2017/08/13"
+      check_out_date = "8/16/17"
+      proc {Hotel_Chain::Reservation.new(check_in_date, check_out_date)}.must_raise ArgumentError
+
+    end
+  end
 
 
 end
