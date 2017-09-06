@@ -18,16 +18,28 @@ module Hotels
 
     def add_dates(checkin, checkout)
       if checkout.nil?
+        too_old(checkin)
         @dates << checkin
       elsif checkout > checkin
-        (checkout - checkin).to_i.times do
-          @dates << checkin
-          checkin += 1
-        end
+        too_old(checkin)
+        too_old(checkout)
+        shovel_dates(checkin, checkout)
       else
         raise ArgumentError
       end
     end # add_dates method
+
+    def shovel_dates(checkin, checkout)
+      (checkout - checkin).to_i.times do
+        @dates << checkin
+        checkin += 1
+      end
+    end # shovel_dates method
+
+    def too_old(date)
+      today = Date.today
+      raise ArgumentError if today > date
+    end # too_old method
 
     def calc_total
       if block_id.zero?
