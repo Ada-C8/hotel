@@ -1,7 +1,7 @@
 require_relative '../lib/date_range'
 module Booking
   class Reservation
-    attr_reader :date_range
+    attr_reader :date_range, :room_number
     COST = 200
 
     def initialize(checkin, checkout, room_number)

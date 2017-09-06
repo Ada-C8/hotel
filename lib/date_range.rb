@@ -17,9 +17,10 @@ module Booking
       end
     end
 
-
+    # checkin = Date.new(2017, 01, 01)
+    # checkout = checkin + 3
     def number_of_nights
-      return (@checkout - 1) - @checkin
+      return (@checkout - @checkin)
     end
   end
 end
