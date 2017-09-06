@@ -8,9 +8,9 @@ module Hotel
 # Checkin and checkout dates are instances of the Date class
     def initialize(checkin_date, checkout_date)
       @checkin_date = checkin_date
-      # return checkin_date if  Date.valid_date?(checkin_date)
+
       @checkout_date = checkout_date
-      # return checkout_date if Date.valid_date(checkout_date)
+
     end
 
 # Check if date is included in date range
@@ -18,9 +18,12 @@ module Hotel
       if date >= @checkin_date && date <= @checkout_date
         return true
       else
-        return false
-        # raise ArgumentError.new("#{date} is an invalid date!")
+        raise ArgumentError.new("#{date} is an invalid date!")
       end
+    end
+
+    def date_overlap?(start_date, end_date)
+    (@checkin_date - end_date) * (start_date - @checkout_date) >= 0
     end
 
   end #end of class
