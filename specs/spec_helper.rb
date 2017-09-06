@@ -8,4 +8,5 @@ require 'minitest/skip_dsl'
 require 'pry'
 
 require_relative '../lib/Room.rb'
-require_relative '../lib/Hotel.rb'
+require_relative '../lib/Reservations.rb'
+require_relative '../lib/Booking.rb'
