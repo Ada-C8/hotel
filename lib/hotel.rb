@@ -6,7 +6,15 @@ module BookingSystem
       @all_reservations = []
     end
 
+    def make_reservation(room, check_in, check_out)
+      reservation = BookingSystem::Reservation.new(room, check_in, check_out)
+      @all_reservations << reservation
+      return reservation
+    end
 
+    def available_rooms
+      return []
+    end
 
   end
 end

@@ -23,15 +23,43 @@ describe "Hotel class" do
 
     it "Has an instance variable @all_reservations that holds objects (instances of Reservation class) in an Array" do
       @test_ob.all_reservations.must_be_instance_of Array
-    #  @test_ob.all_reservations[0].must_be_instance_of BookingSystem::Reservation
     end
 
-    it "text" do
-
-    end
   end#initialize
 
+  describe "available_rooms method" do
 
+    it "Can be called" do
+      @test_ob.must_respond_to :available_rooms
+    end
 
+    it "Returns an Array" do
+      @test_ob.available_rooms.must_be_instance_of Array
+    end
+
+  end
+
+  describe "make_reservation method" do
+
+    before do
+      @room = 1
+      @check_in = Date.new(2017,9,9)
+      @check_out = Date.new(2017,9,12)
+    end
+
+    it "Can be called" do
+      @test_ob.must_respond_to :make_reservation
+    end
+
+    it "Returns an instance of Reservation class" do
+      @test_ob.make_reservation(@room, @check_in, @check_out).must_be_instance_of BookingSystem::Reservation
+    end
+
+    it "Increases @all_reservations by 1" do
+      @test_ob.make_reservation(@room, @check_in, @check_out)
+      @test_ob.all_reservations.length.must_equal 1
+    end
+
+  end
 
 end
