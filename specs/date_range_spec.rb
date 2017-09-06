@@ -9,7 +9,7 @@ describe "DateRange Class" do
     # @vacation_bad_dates = Hotel::DateRange.new(check_out,check_in)
   end
   describe "initialize" do
-    it "Instance of DateRange class must respond to instance variables (check_in,check_out,nights, nights_arr" do
+    it "Instance of DateRange class must respond to instance variables" do
       @vacation.must_respond_to :check_in
       @vacation.must_respond_to :check_out
       @vacation.must_respond_to :nights

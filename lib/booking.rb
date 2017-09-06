@@ -12,9 +12,7 @@ module Hotel
       @nights = date_range.nights
       @total_cost = ''
     end
-    #initialize will have the following parameters
+    # figure out total cost method and them put it in initialize
     #@rooms = @rooms.each {|room| @total_cost += room.cost}
-    # def total_cost
-    # end
   end
 end
