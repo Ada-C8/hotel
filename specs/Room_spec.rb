@@ -31,8 +31,8 @@ describe "Hotel::Room class" do
   describe "reserve_room" do
     it "can reserve a room if given the check-in/out date, reservation id, and guest id" do
       room = Hotel::Room.new(666)
-      check_in_str = "2017-08-09"
-      check_out_str = "2017-08-12"
+      check_in_str = "2018-08-09"
+      check_out_str = "2018-08-12"
 
       room.reserve_room(check_in_str, check_out_str, 1, 13)
 
@@ -40,19 +40,31 @@ describe "Hotel::Room class" do
         room.all_dates.must_include date
       end
 
-      room.reserve_room("2017-08-10", "2017-08-11", 42, 16).must_equal false
+      room.reserve_room("2018-08-10", "2018-08-11", 42, 16).must_equal false
 
-      check_in_str2 = "2017-09-28"
-      check_out_str2 = "2017-10-1"
+      check_in_str2 = "2018-09-28"
+      check_out_str2 = "2018-10-1"
 
       room.reserve_room(check_in_str2, check_out_str2, 8, 23)
       (Date.parse(check_in_str2)...Date.parse(check_out_str2)).each do |date|
         room.all_dates.must_include date
       end
-
     end
 
-    it "doesn't accept dates that are earlier than today's date" do
+    it "Raises an error when we try to book a room with a check-in or check-out date earlier than today" do
+      room = Hotel::Room.new(123)
+      check_in_str = "2016-08-09"
+      check_out_str = "2016-08-12"
+
+      proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
+    end
+
+    it "raises an error if the check-in or check-out date is invalidt" do
+      room = Hotel::Room.new(123)
+      check_in_str = "February 30, 2018"
+      check_out_str = "February 31, 2018"
+
+      proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
 
     end
 

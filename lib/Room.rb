@@ -26,6 +26,15 @@ module Hotel
       check_in = Date.parse(check_in_str)
       check_out = Date.parse(check_out_str)
 
+
+      if check_in < Date.today || check_out < Date.today
+        raise ArgumentError.new("Can't make reservations for days earlier than today")
+      end
+
+      if check_in.class != Date ||check_out.class != Date
+        raise ArgumentError.new("Please provide a valid date")
+      end
+
       (check_in...check_out).each do |date|
         return false if @all_dates.include?(date)
       end
@@ -37,7 +46,8 @@ module Hotel
       end
 
       @all_dates = @reserv_id_and_dates.values.flatten
-      ### future note- would it be helpful to sort, and do binary search instead of include? look into it
+        ### future note- would it be helpful to sort, and do binary search instead of include? look into it
+
 
     end
 
@@ -105,4 +115,22 @@ end
 #
 #   end
 #
+# end
+
+
+
+
+#BEGIN RESCUE CLAUSE
+
+# begin
+#   if check_in < Date.today || check_out < Date.today
+#     raise ArgumentError.new("Can't make reservations for days earlier than today")
+#   end
+#
+#   if check_in.class != Date ||check_out.class != Date
+#     raise ArgumentError.new("Please provide the date in the following format: \n YYYY-MM-DD")
+#   end
+
+# rescue ArgumentError => exception
+#   puts "Encountered an error: #{exception}"
 # end
