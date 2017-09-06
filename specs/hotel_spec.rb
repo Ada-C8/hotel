@@ -3,6 +3,8 @@ require_relative 'spec_helper'
 describe 'Hotel' do
   before do
     @my_hotel = Hotel_System::Hotel.new(20)
+    @check_in = Date.new(2017,9,5)
+    @check_out = Date.new(2017,9,7)
   end
   describe '#initialize' do
     it 'takes number of rooms as a parameter when initialized' do
@@ -18,24 +20,22 @@ describe 'Hotel' do
   end
   describe 'reservations' do
     it "combines room reservation arrays into an array of all hotel reservations" do
-      check_in = Date.new(2017,9,5)
-      check_out = Date.new(2017,9,7)
-      @my_hotel.rooms[1].reserve(check_in, check_out)
+      @my_hotel.rooms[1].reserve(@check_in, @check_out)
       @my_hotel.reservations.length.must_equal 1
 
-      @my_hotel.rooms[19].reserve(check_in, check_out)
+      @my_hotel.rooms[19].reserve(@check_in, @check_out)
       @my_hotel.reservations.length.must_equal 2
     end
   end
   describe '#find_res_by_date' do
     it "returns an array of reservations whose duration includes given date" do
-      check_in = Date.new(2017,9,5)
-      check_out = Date.new(2017,9,7)
-      @my_hotel.rooms[1].reserve(check_in, check_out)
-      @my_hotel.rooms[19].reserve(check_in, check_out)
       date_to_find = Date.new(2017,9,6)
       birthday = Date.new(1991,7,19)
       date_outta_range = Date.new(2017,9,7)
+
+      @my_hotel.rooms[1].reserve(@check_in, @check_out)
+      @my_hotel.rooms[19].reserve(@check_in, @check_out)
+
       @my_hotel.find_res_by_date(date_to_find).must_be_instance_of Array
       @my_hotel.find_res_by_date(date_to_find).length.must_equal 2
       @my_hotel.find_res_by_date(date_outta_range).must_equal []
@@ -43,10 +43,8 @@ describe 'Hotel' do
     end
     describe "#find_avail_rooms" do
       before do
-        check_in = Date.new(2017,9,5)
-        check_out = Date.new(2017,9,7)
         @date_to_find = Date.new(2017,9,5)
-        10.times { |i| @my_hotel.rooms[i].reserve(check_in, check_out)}
+        10.times { |i| @my_hotel.rooms[i].reserve(@check_in, @check_out)}
       end
       it "returns a list of room objects" do
         @my_hotel.find_avail_rooms(@date_to_find).must_be_instance_of Array
