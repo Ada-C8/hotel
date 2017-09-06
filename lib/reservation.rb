@@ -2,6 +2,7 @@ require 'awesome_print'
 require 'date'
 
 module Hotels
+  # Contains the information pertinent to Reservations
   class Reservation
     attr_accessor :id, :block_id, :rooms, :dates
 
@@ -10,8 +11,11 @@ module Hotels
       @block_id = 0
       @dates = []
       @rooms = []
+      add_dates(checkin, checkout)
+    end # initialize method
 
-      if checkout == nil
+    def add_dates(checkin, checkout)
+      if checkout.nil?
         @dates << checkin
       elsif checkout > checkin
         (checkout - checkin).to_i.times do
@@ -21,7 +25,6 @@ module Hotels
       else
         raise ArgumentError
       end
-    end
-
-  end
-end
+    end # add_dates method
+  end # Reservation class
+end # Hotels module
