@@ -135,9 +135,36 @@ describe "Booking" do
       @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
       @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
 
-      check_length = @booking.check_date_for_reservations(date_to_check)
+      check_length = @booking.check_date_for_reservations(date_to_check).length
       @booking.print_reservations(date_to_check).length.must_equal check_length
-    end #it "will be an array that is the same length as the result check_date_for_reservations" do
+    end #it "will be an array that is the same length as the result check_date_for_reservations"
+
+    it "will print out in the right format" do
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 1
+      date_to_check = Date.new(2017, 9, 6) #both reservations include the 5th of September
+
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+      @booking.print_reservations(date_to_check).must_equal [["Reservation ID: 1", "Total cost: $400.0", "Rooms reserved:  1,", "Date range: 2017-09-05 - 2017-09-07"]]
+    end # it "will print out in the right format" do
+
+    it "will only include reservations for that date" do
+      checkin_day = Date.new(2017, 9, 5) # for first reservation
+      checkout_day = Date.new(2017, 9, 7) # for first reservation
+      starting = Date.new(2017, 9, 10) # for second reservation
+      ending = Date.new(2017, 9, 13) # for second reservation
+      num_of_rooms = 2
+      date_to_check = Date.new(2017, 9, 6) #both reservations include the 5th of September
+
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms ) # will be in print_reservations
+      @booking.make_reservation(starting, ending, num_of_rooms ) # won't be in in print_reservations
+      @booking.print_reservations(date_to_check).must_equal [["Reservation ID: 1", "Total cost: $800.0", "Rooms reserved:  1, 2,", "Date range: 2017-09-05 - 2017-09-07"]]
+    end #it "will only include reservations for that date" do
+
+  #TODO
+    # In wave 2 need to test to test that it will work for 2 reservations with differnt rooms in them (will need to have added no duplicate room reservations to make_reservation)
+
   end # describe "print_reservations" do
 
 

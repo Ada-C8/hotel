@@ -58,10 +58,22 @@ module Hotel
     end # check_date_for_reservations
 
     def print_reservations(date)
+      # Not sure if we need this and if simply calling check_date_for_reservations is enough for the user to be able to access all the reservations for a given date(range)
       reservations = check_date_for_reservations(date)
       nice_format_reservations = []
       reservations.each do |res|
+        loop_array = []
+        loop_array << "Reservation ID: #{res.res_id}"
+        loop_array << "Total cost: $#{res.total_cost}"
+        list_rooms = ""
+        res.res_rooms.each do |room|
+          list_rooms << " #{room.room_number},"
+        end #.each
+        loop_array << "Rooms reserved: #{list_rooms}"
+        loop_array << "Date range: #{res.date_range[0]} - #{res.date_range[-1] + 1}"
+        nice_format_reservations << loop_array
       end
+      return nice_format_reservations
 
     end #print_reservations
   end # Booking
