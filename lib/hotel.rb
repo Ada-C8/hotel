@@ -1,4 +1,9 @@
 module Hotel
+  require_relative 'room'
+  require_relative 'reservation'
+  require_relative 'room'
+  require_relative 'block'
+
   class Hotel
     attr_reader :rooms, :reservations
     ROOM_COST = 200
@@ -25,7 +30,7 @@ module Hotel
       @rooms.each do |room|
         return room if room.number == num
       end
-      
+
       nil
     end
 
