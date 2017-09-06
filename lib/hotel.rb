@@ -22,6 +22,29 @@ module Hotel
 
     end
 
+    def reserve(start_date, end_date, room)
+      # TODO check if available and return true if added; else false
+
+      room.reserve(start_date, end_date)
+
+    end
+
+    def all_reservations
+      # returns a list of all reservations for the hotel
+      reservations = []
+
+      @rooms.each do |room|
+        reservations << room.reservations
+      end
+
+      return reservations
+    end
+
+    def find_reservations_by_date(date)
+      # returns a list of all reservations for the given date
+      # doesn't include rooms where check-out date == date
+    end
+
     private
 
     def is_valid?(num)

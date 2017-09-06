@@ -36,4 +36,31 @@ describe "Testing Hotel class" do
     end
 
   end
+
+  describe "#reserve" do
+    before do
+      @hotel = Hotel::Hotel.new
+      @room1 = @hotel.rooms[0]
+    end
+
+    it "Reserves the given room for the given dates" do
+      @room1.reservations.must_equal []
+
+      @hotel.reserve('2017/9/3', '2017/9/5', @room1)
+      new_res = Hotel::Reservation.new(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1.room_num)
+      @room1.reservations[0].must_equal new_res
+    end
+  end
+
+  xdescribe "#find_reservations_by_date" do
+    before do
+      @hotel = Hotel.new
+
+    end
+
+    it "Returns a list of reservations" do
+
+    end
+  end
+
 end
