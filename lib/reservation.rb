@@ -5,7 +5,7 @@ require 'awesome_print'
 module Hotel_Chain
   class Reservation
 
-    attr_accessor :check_in_date, :check_out_date
+    attr_accessor :check_in_date, :check_out_date, :room_id
 
     #A new reservation object can be initialized by providing the check_in_date and check_out_date
     #Initialization converts the admin's date inputs to convert to Ruby Date objects, and stores them in instance variables.
