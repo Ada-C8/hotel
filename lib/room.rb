@@ -6,7 +6,7 @@ module Hotel
       @number = number
       @cost = 200
     end
-    
-    # #is_available?()
+
+    # #is_avail?()
   end
 end

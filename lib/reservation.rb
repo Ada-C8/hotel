@@ -1,5 +1,6 @@
 module Hotel
   class Reservation
+    # require_relative 'date_range'
     # @total_cost
     # @dates
     # @room
@@ -10,6 +11,7 @@ module Hotel
       @room = room
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
+      # @dates = DateRange::range(@checkin, @checkout)
       get_total
     end
 
@@ -19,6 +21,11 @@ module Hotel
     end
 
     # def includes_dates?(checkin, checkout)
+      # Date.parse????
+      # dates_to_check = DateRange::range(checkin, checkout)
+      # dates_to_check.each do |date|
+      # if @dates.include? date
+      # return true
     # end
   end
 end
