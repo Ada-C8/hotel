@@ -11,10 +11,16 @@ module BookingSystem
       @reservations = []
     end
 
+    def all_rooms_in_hotel
+      return @rooms
+    end
+
     def create_reservation(check_in, check_out)
       # As an administrator, I can reserve a room for a given date range
-      # Date must be in date format
       # Should I create the date instance first?
+      #TODO: Need a valid input method here for date input to be parsed in date range if not, raise an argument error
+      #TODO: check_in date needs to be less than check_out date
+
       reservation = Reservation.new(@rooms, check_in, check_out)
       @reservations << reservation
       return @reservations

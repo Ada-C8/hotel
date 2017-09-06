@@ -8,7 +8,7 @@ module BookingSystem
     end
 
     def start_end
-      # Populates all dates in between array
+      # Populates all dates in between check in and check out date
       all_dates = (@check_in..@check_out).map { |date| date }
       return all_dates
     end

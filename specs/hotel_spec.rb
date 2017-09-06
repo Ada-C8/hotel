@@ -11,15 +11,27 @@ describe "Hotel" do
   describe "#initialize" do
     it "should create an instance of Hotel" do
       @hotel.must_be_instance_of BookingSystem::Hotel
+
       @hotel.rooms.must_be_kind_of Array
       @hotel.must_respond_to :rooms
+
       @hotel.reservations.must_be_empty
       @hotel.must_respond_to :reservations
       # Iterate over rooms to make sure that it is 1 through 20???
     end
   end # Describe
 
+  describe "#all_rooms_in_hotel" do
+    it "should return an array of Integers (room numbers)" do
+      @hotel.all_rooms_in_hotel.must_be_kind_of Array
+      @hotel.all_rooms_in_hotel.each do |room_num|
+        room_num.must_be_kind_of Integer
+      end
+    end
+  end # Describe
+
   describe "#create_reservation" do
+    # TODO: Must write a regex to check input format from the user
     xit "should pass in a check_in and check_out date in a specific format" do
       check_in = '2001-02-03'
       check_out = '2001-02-04'
