@@ -55,6 +55,4 @@ describe 'Hotel' do
   end
 
   # As an administrator, I can access the list of reservations for a specific date
-
-  # As an administrator, I can get the total cost for a given reservation
 end

@@ -24,6 +24,7 @@ describe 'Reservation' do
     end
 
     it 'has @total_cost value, which is rate * num of nights' do
+      # As an administrator, I can get the total cost for a given reservation
       @reservation.total_cost.must_equal 400
       (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
