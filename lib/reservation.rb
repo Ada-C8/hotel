@@ -14,7 +14,7 @@ module Hotels
       @rooms = []
       add_dates(checkin, checkout)
       @total_cost = 0
-    end # initialize method
+    end
 
     def add_dates(checkin, checkout)
       if checkout.nil?
@@ -27,19 +27,19 @@ module Hotels
       else
         raise ArgumentError
       end
-    end # add_dates method
+    end # adds 1 or more valid Dates to a reservation
 
     def shovel_dates(checkin, checkout)
       (checkout - checkin).to_i.times do
         @dates << checkin
         checkin += 1
       end
-    end # shovel_dates method
+    end # adds multiple Dates to a reservation
 
     def too_old(date)
       today = Date.today
       raise ArgumentError if today > date
-    end # too_old method
+    end # checks if the selected date is older than the current date
 
     def calc_total
       if block_id.zero?
@@ -48,6 +48,6 @@ module Hotels
       end
       # elsif block_id > 0
       # @total_cost = Hotels::Room::BLOCK_RATE * nights_charged
-    end # calc_total method
+    end # changes the value of total cost depending on nightly rate
   end # Reservation class
 end # Hotels module

@@ -5,7 +5,7 @@ describe 'Reservation' do
     @checkin = Date.new(2017, 10, 31)
     @checkout = Date.new(2017, 11, 4)
     @reservation = Hotels::Reservation.new(@checkin, @checkout)
-  end
+  end # ------------------------- before block
 
   describe '#initialize' do
     it 'Can be initialized' do
@@ -41,5 +41,5 @@ describe 'Reservation' do
         Hotels::Reservation.new(checkin, checkout)
       } .must_raise ArgumentError
     end
-  end #------------------------- describe #initialize block
+  end # ------------------------- describe #initialize block
 end

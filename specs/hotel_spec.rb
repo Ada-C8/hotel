@@ -5,7 +5,7 @@ describe Hotels::Hotel do
     @conrad = Hotels::Hotel.new
     @checkin = Date.new(2017, 10, 31)
     @checkout = Date.new(2017, 11, 4)
-  end
+  end # ------------------------- before block
 
   describe '#initialize' do
     it 'Can be initialized' do
@@ -23,7 +23,7 @@ describe Hotels::Hotel do
     it 'Should initialize with no Reservations' do
       @conrad.reservations.must_be_empty
     end
-  end #------------------------- describe #initialize block
+  end # ------------------------- describe #initialize block
 
   describe '#list_rooms' do
     it 'Returns a list of rooms' do
@@ -35,7 +35,7 @@ describe Hotels::Hotel do
     it 'Should contain only room numbers (Integers)' do
       @conrad.list_rooms[5].must_be_kind_of Integer
     end
-  end #------------------------- describe #list_rooms block
+  end # ------------------------- describe #list_rooms block
 
   describe '#reserve_room' do
     it 'Returns a new Reservation' do
@@ -50,7 +50,7 @@ describe Hotels::Hotel do
       nights = @conrad.reserve_room(@checkin, @checkout).dates.length
       assert_equal 4, nights
     end
-  end #------------------------- describe #reserve_room block
+  end # ------------------------- describe #reserve_room block
 
   describe '#check_reserved' do
     it 'Returns an Array' do
@@ -71,7 +71,7 @@ describe Hotels::Hotel do
       20.times { @conrad.reserve_room(@checkin) }
       assert_nil @conrad.reserve_room(@checkin)
     end
-  end #------------------------- describe #check_reserved block
+  end # ------------------------- describe #check_reserved block
 
   describe '#total_cost' do
     it 'Returns an Integer' do
@@ -98,5 +98,5 @@ describe Hotels::Hotel do
       @conrad.reserve_room(@checkin)
       assert_nil @conrad.total_cost('20171031ABCEDFGHIJ0123456789')
     end
-  end #------------------------- describe #total_cost block
-end
+  end # ------------------------- describe #total_cost block
+end # ------------------------- describe Hotels::Hotel block

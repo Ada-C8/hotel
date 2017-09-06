@@ -18,5 +18,5 @@ describe 'Room' do
     it 'Has a rate for block reservation nights' do
       Hotels::Room::BLOCK_RATE.must_be_kind_of Integer
     end
-  end #------------------------- describe #initialize block
+  end # ------------------------- describe #initialize block
 end

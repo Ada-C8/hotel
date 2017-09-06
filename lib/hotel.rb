@@ -19,9 +19,9 @@ module Hotels
 
     def reserve_room(checkin, checkout = nil)
       # W1-2. Can reserve a room for a given date range
-      if full?(checkin)
+      if !full?(checkin)
         reservation = Hotels::Reservation.new(checkin, checkout)
-        reservation.id = room_id(checkin)
+        reservation.id = id_generator(checkin)
         random_room(reservation, checkin)
         @reservations << reservation
         reservation
@@ -42,12 +42,12 @@ module Hotels
       end
     end
 
-    def room_id(checkin)
+    def id_generator(checkin)
       initial_date = checkin.to_s.delete('-')
       random_alphabet = ('A'..'Z').to_a.sample(10).join
       random_digits = (0..9).to_a.shuffle.join
       "#{initial_date}#{random_alphabet}#{random_digits}"
-    end
+    end # generates and adds a room id number for a successful reservation
 
     def random_room(reservation, checkin)
       unavailable = unavailable_rooms(checkin)
@@ -55,7 +55,7 @@ module Hotels
         room_no = rand(1..20)
         reservation.rooms << room_no unless unavailable.include? room_no
       end
-    end
+    end # adds a room number (Integer) into the reservation
 
     def unavailable_rooms(date)
       unavailable = check_reserved(date)
@@ -65,11 +65,11 @@ module Hotels
           no_vacancy << room
         end
       end
-    end
+    end # returns an Array of reservations for the selected date
 
     def full?(checkin)
-      (0..19).cover? unavailable_rooms(checkin).length
-    end
+      !(0..19).cover? unavailable_rooms(checkin).length
+    end # returns T/F if all the hotel rooms are taken on the selected date
 
     def id_check(reservation)
       reservation = reservation
@@ -79,6 +79,6 @@ module Hotels
         end
       end
       reservation
-    end
+    end # returns the corresponding reservation to a given reservation ID
   end # Hotel class
 end # Hotels module
