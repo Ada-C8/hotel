@@ -14,6 +14,37 @@ describe "My_Hotel::Hotel" do
     end
   end
 
+  describe "make_reservation" do
+    it "can make a reservation" do
+      hotel_california = My_Hotel::Hotel.new
+      hotel_california.must_be_kind_of My_Hotel::Hotel
+      start_date = [2017, 12, 20]
+      end_date = [2017, 12, 24]
+
+      holiday = hotel_california.make_reservation(start_date, end_date)
+      holiday.must_be_kind_of My_Hotel::Reservation
+    end
+
+    it "updates the list_of_reservations" do
+      hotel_california = My_Hotel::Hotel.new
+      hotel_california.must_be_kind_of My_Hotel::Hotel
+      start_date = [2017, 12, 20]
+      end_date = [2017, 12, 24]
+      holiday = hotel_california.make_reservation(start_date, end_date)
+      hotel_california.list_of_reservations.must_be_kind_of Array
+      hotel_california.list_of_reservations.length.must_equal 1
+
+      start_date = [2017, 1, 20]
+      end_date = [2017, 1, 24]
+      holiday = hotel_california.make_reservation(start_date, end_date)
+      hotel_california.list_of_reservations.length.must_equal 2
+
+    end
+
+
+
+  end
+
   # describe "display_rooms"
   # it "must puts out a list of all the rooms" do
   #   #TODO: Test

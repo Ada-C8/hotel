@@ -49,26 +49,35 @@ module My_Hotel
         puts "Room Number #{index}: $#{price} per night."
         index += 1
       end
-
-      # def display_reservations
-      #   #puts out list of reservations
-      # end
-
-      #     def rooms_available_date(start_date, end_date)
-      # #display rooms available on that date
-      #     end
-
-      #def make_block
-      #define a block
-      # make a random_id_number for block.
-      #end
-
-      #def rooms_available_block(block_id)
-      #shows if any rooms in the block are available
-      # end
-
     end
+
+    def make_reservation(arrive, leave)
+      new_reservation = My_Hotel::Reservation.new(arrive, leave)
+      @list_of_reservations << new_reservation
+      return new_reservation
+    end
+    # def display_reservations
+    #   #puts out list of reservations
+    # end
+
+    #     def rooms_available_date(start_date, end_date)
+    # #display rooms available on that date
+    #     end
+
+    #def make_block
+    #define a block
+    # make a random_id_number for block.
+    #end
+
+    #def rooms_available_block(block_id)
+    #shows if any rooms in the block are available
+    # end
+
   end
 end
-# h= My_Hotel::Hotel.new
-# h.display_rooms
+
+
+h= My_Hotel::Hotel.new
+h.make_reservation([2017,2,1],[2017,2,5])
+h.make_reservation([2017,3,1],[2017,3,5])
+puts h.list_of_reservations
