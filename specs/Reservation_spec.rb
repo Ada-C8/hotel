@@ -89,7 +89,9 @@ describe "Reservation class" do
     Hotel::Reservation.new(nil, Date.today, Date.today + 1, 1)
     Hotel::Reservation.available(Date.today, Date.today + 1).must_be_instance_of Array
     Hotel::Reservation.available(Date.today, Date.today + 1).length.must_equal @max - 1
-    Hotel::Reservation.available(Date.today, Date.today + 1).each { |room| (@min..@max).to_a.include?(room).must_equal true}
+    Hotel::Reservation.available(Date.today, Date.today + 1).each do |room|
+      (@min..@max).to_a.include?(room).must_equal true
+    end
   end
 
   it "allows a user to reserve a room from within a block of rooms" do
