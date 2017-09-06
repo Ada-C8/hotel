@@ -112,7 +112,9 @@ describe "Hotel::Reservation" do
       end_date = Date.new(2017,6,11)
       block_name = "Dee"
       Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, block_name)
+      before_count = Hotel::Reservation.list_all.length
       Hotel::Reservation.reserve_block_room(block_name)
+      Hotel::Reservation.list_all.length.must_equal (before_count+1)
     end
     it "throws error if no rooms available in block" do
       start_date = Date.new(2017,7,29)
