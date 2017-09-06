@@ -25,4 +25,17 @@ describe 'Room' do
       @my_room.reservations.length.must_equal 1
     end
   end
+  describe '#available' do
+    it 'returns true if Date argument does not overlap with existing reservation' do
+      birthday_eve = Date.new(1991,7,18)
+      birthday = Date.new(1991,7,19)
+      @my_room.available?(birthday_eve, birthday).must_equal true
+    end
+    it 'returns false if Date argument does overlap with existing reservation' do
+      birthday_eve = Date.new(1991,7,18)
+      birthday = Date.new(1991,7,19)
+      @my_room.reserve(birthday_eve, birthday)
+      @my_room.available?(birthday_eve, birthday).must_equal false
+    end
+  end
 end

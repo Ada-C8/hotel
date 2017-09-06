@@ -41,5 +41,22 @@ describe 'Hotel' do
       @my_hotel.find_res_by_date(date_outta_range).must_equal []
       @my_hotel.find_res_by_date(birthday).must_equal []
     end
+    describe "#find_avail_rooms" do
+      before do
+        check_in = Date.new(2017,9,5)
+        check_out = Date.new(2017,9,7)
+        @date_to_find = Date.new(2017,9,5)
+        10.times { |i| @my_hotel.rooms[i].reserve(check_in, check_out)}
+      end
+      it "returns a list of room objects" do
+        @my_hotel.find_avail_rooms(@date_to_find).must_be_instance_of Array
+        @my_hotel.find_avail_rooms(@date_to_find).length.must_equal 10
+        @my_hotel.find_avail_rooms(@date_to_find).each {|room| room.must_be_instance_of Hotel_System::Room}
+      end
+      it "does not list rooms already reserved for a given date" do
+        @my_hotel.find_avail_rooms(@date_to_find).wont_include @my_hotel.rooms[0]
+        @my_hotel.find_avail_rooms(@date_to_find).wont_include @my_hotel.rooms[9]
+      end
+    end
   end
 end
