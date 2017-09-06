@@ -13,7 +13,7 @@ module BookingSystem
 
     def room_unavailable(room)
       dates = []
-      all_reservations.each do |reservation|
+      @all_reservations.each do |reservation|
         if reservation.room == room
           reservation.date_range.dates_within_range.each do |date|
             dates << date
@@ -23,12 +23,23 @@ module BookingSystem
       return dates #array of dates on which this room is unavailable
     end #end of method
 
-    # def make_reservation(date_range)
-    #   @all_reservations.each do |reservation|
-    #     if
-    #   end
-    #
-    # end #end of method
+    def find_room(date_range)
+      available_room = nil
+      @rooms.each_with_index do |room, i|
+        if !room_unavailable(i + 1).include?(date_range.dates_within_range)
+          available_room = room
+          break
+        end
+      end
+      return available_room
+    end #end of method
+
+    def make_reservation(date_range)
+
+
+
+
+    end #end of method
 
   end #end of class
 
