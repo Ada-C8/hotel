@@ -5,17 +5,20 @@ require_relative 'Reservation'
 module Hotel
 
   class Room
-    attr_reader :id, :status, :nightly_rate, :type, :reserved_dates
+    attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates
+    # :status
 
     @@total_num_rooms = 20
 
     def initialize(id_number, nightly_rate = 200)
       @id = id_number
-      @status =  :available
       @nightly_rate =  nightly_rate
       @type = :standard
-      @reserved_dates = {}
+      @reserv_id_and_dates = {}
        # holds all reservations, a hash with reservation ids as keys and values as the date range of the reservation ### check-out date should not be included
+      @all_dates = []
+
+      # @status =  :available #not sure if status is needed anymore.maybe a method, available?
 
     end
 
@@ -23,17 +26,18 @@ module Hotel
       check_in = Date.parse(check_in_str)
       check_out = Date.parse(check_out_str)
 
-      all_dates = @reserved_dates.values.flatten
-
       (check_in...check_out).each do |date|
-        return false if all_dates.include?(date)
+        return false if @all_dates.include?(date)
       end
 
-      @reserved_dates[reservation_id] = []
+      @reserv_id_and_dates[reservation_id] = []
 
       (check_in...check_out).each do |date|
-        @reserved_dates[reservation_id] << date
+        @reserv_id_and_dates[reservation_id] << date
       end
+
+      @all_dates = @reserv_id_and_dates.values.flatten
+      ### future note- would it be helpful to sort, and do binary search instead of include? look into it
 
     end
 
@@ -69,7 +73,7 @@ end
 # def available?(date_str)
 #   #date format is year, month, day
 #   date = Date.parse(date_str)
-#   return false if @reserved_dates.values.include?(date)
+#   return false if @reserv_id_and_dates.values.include?(date)
 #   return true
 # end
 #
@@ -79,6 +83,17 @@ end
 #
 #   (check_in...check_out).each do |date|
 #     return false if available?(date) == false
+#   end
+#
+#   return true
+# end
+
+# def available_all_days?(check_in_str, check_out_str)
+#   check_in = Date.parse(check_in_str)
+#   check_out = Date.parse(check_out_str)
+#
+#   (check_in...check_out).each do |date|
+#     return false if @all_dates.include?(date)
 #   end
 #
 #   return true
