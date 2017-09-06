@@ -8,6 +8,10 @@ module Hotel
     @@reservations = []
 
     def initialize(block_id = nil, start_date = Date.today, end_date = Date.today + 1, room_num = 0)
+      if block_id != nil
+        start_date = Block.all.select { |block| block.block_id == block_id }[0].start_date
+        end_date = Block.all.select { |block| block.block_id == block_id }[0].end_date
+      end
       room_num = Reservation.sample_available_rooms(start_date, end_date, 1, block_id).sample if room_num == 0
       raise NoRoomsAvailableError.new if room_num.class != Integer
       check_dates(start_date, end_date, room_num)

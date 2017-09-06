@@ -10,6 +10,7 @@ describe "Reservation class" do
   after do
     Hotel::Room.clear
     Hotel::Reservation.clear
+    Hotel::Block.clear
   end
 
   it "can create a new reservation for a room and date range" do
@@ -89,5 +90,24 @@ describe "Reservation class" do
     Hotel::Reservation.available(Date.today, Date.today + 1).must_be_instance_of Array
     Hotel::Reservation.available(Date.today, Date.today + 1).length.must_equal @max - 1
     Hotel::Reservation.available(Date.today, Date.today + 1).each { |room| (@min..@max).to_a.include?(room).must_equal true}
+  end
+
+  it "allows a user to reserve a room from within a block of rooms" do
+    block = Hotel::Block.new(Date.today, Date.today + 1, 5)
+    5.times do
+      reservation = Hotel::Reservation.new(1, Date.today, Date.today + 1)
+      reservation.must_be_instance_of Hotel::Reservation
+      block.rooms.include?(reservation.room_num).must_equal true
+    end
+  end
+
+  it "automatically sets the dates equal to the block dates if a block is specified" do
+    block = Hotel::Block.new(Date.today, Date.today + 1, 5)
+    (1..5).each do |n|
+      reservation = Hotel::Reservation.new(1, Date.today + n, Date.today + 1 + n)
+      reservation.start_date.must_equal(block.start_date)
+      reservation.end_date.must_equal(block.end_date)
+    end
+
   end
 end

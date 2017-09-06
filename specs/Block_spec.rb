@@ -51,16 +51,14 @@ describe "Block class" do
   end
 
   it "allows a user to check if a given block has rooms available" do
+    # returns an array of unbooked room numbers
     Hotel::Block.new(Date.today, Date.today + 1, 5)
     Hotel::Block.rooms_left(1).must_be_instance_of Array
     Hotel::Block.rooms_left(1).length.must_equal 5
 
+    # once a room is reserved, that is removed from the list of rooms left
     Hotel::Reservation.new(1, Date.today, Date.today + 1)
     Hotel::Block.rooms_left(1).length.must_equal 4
-  end
-
-  xit "allows a user to reserve a room from within a block of rooms" do
-
   end
 
 end
