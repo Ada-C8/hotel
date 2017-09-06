@@ -12,16 +12,8 @@ module Hotel
       return true
     end
 
-    def reserve_room
-      # reserve a room for a given date range
-    end
 
-    def access_reservations
-      # access the list of reservations for a specific date
-    end
 
-    def get_total
-      # get the total cost for a given reservation
-    end
+
   end
 end
