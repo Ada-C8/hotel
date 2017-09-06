@@ -1,9 +1,9 @@
 require_relative 'spec_helper'
-
+require_relative '../lib/room'
 # Your code should raise an error
 #  when an invalid date range is provided
 
-describe 'Room'
+describe 'Room' do
 
 it "there should be 20 total rooms" do
 
@@ -81,4 +81,5 @@ end
 
 it "All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations" do
 
+end
 end
