@@ -66,8 +66,8 @@ module Hotel
   end
 
   def self.available_rooms(begin_date, end_date)
-    begin_search = Date.new(begin_date[0], begin_date[1], begin_date[2])
-    end_search = Date.new(end_date[0], end_date[1], end_date[2])
+    begin_search = Date.new(begin_date[0].to_i, begin_date[1].to_i, begin_date[2].to_i)
+    end_search = Date.new(end_date[0].to_i, end_date[1].to_i, end_date[2].to_i)
     unavailable_rooms = []
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|
