@@ -36,6 +36,16 @@ module Hotel_Chain
     end
 
     def print_reservations_by_date(date)
+      reservations_on_date = []
+      @reservations_array.each do |reservation|
+        if (reservation.check_in_date...reservation.check_out_date).cover?(Date.strptime(date, "%m/%d/%Y"))
+          reservations_on_date << reservation
+        end
+      end
+      # if reservations_on_date.length == 0
+      #   return "There are currently no reservations for #{date}"
+      # end
+      return reservations_on_date
     end
 
   end

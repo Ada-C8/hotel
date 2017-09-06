@@ -21,9 +21,8 @@ module Hotel_Chain
       @room_id = HOTEL.array_of_rooms.sample.room_id
       @cost = (@check_out_date - @check_in_date) * 200
       #(rate will eventually reference the rate associated with the room_id)
-      puts "Check-in date: #{@check_in_date}"
-      puts "Cost: #{@cost}"
-      #HOTEL.store_reservation(check_in_date, check_out_date)
+      #puts "Check-in date: #{@check_in_date}"
+      #puts "Cost: #{@cost}"
     end
 
 

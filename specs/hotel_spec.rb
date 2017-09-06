@@ -56,12 +56,37 @@ describe "The Hotel class" do
 
 
   describe "print_reservations_by_date method" do
-
-    it "it can list all reservations by date" do
     #you can input a specific date
     #it returns any reservations which occur on a specific date
     #it iterates through all reservation object
-    #(Time.now..Time.now+4).cover?(Time.now)
+    #(Date.new(start_date)..Date.new(end_date)).cover?(Date.new(date))
+
+    it "returns an array" do
+    @myhotel.store_reservation("8/13/17", "8/16/17")
+    @myhotel.store_reservation("9/25/17", "9/29/17")
+    @myhotel.print_reservations_by_date("8/14/17").must_be_kind_of Array
+    end
+
+    it "it can list all reservations by date - middle date" do
+    @myhotel.store_reservation("8/13/17", "8/16/17")
+    @myhotel.store_reservation("9/25/17", "9/29/17")
+    @myhotel.print_reservations_by_date("8/14/17").length.must_equal 1
+    end
+
+    it "it can list all reservations by date - start date" do
+    @myhotel.store_reservation("8/13/17", "8/16/17")
+    @myhotel.store_reservation("9/25/17", "9/29/17")
+    @myhotel.print_reservations_by_date("9/25/17").length.must_equal 1
+    end
+
+    it "it returns false for searches on the reservation's end date" do
+    @myhotel.store_reservation("8/13/17", "8/16/17")
+    @myhotel.store_reservation("9/25/17", "9/29/17")
+    @myhotel.print_reservations_by_date("8/16/17").length.must_equal 0
+    end
+
+    it "it returns true for searches outside the range of any reservations" do
+    @myhotel.print_reservations_by_date("8/12/17").length.must_equal 0
     end
 
   end
