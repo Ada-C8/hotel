@@ -20,5 +20,10 @@ describe "DateRange Class" do
     it "Equals number_of_nights" do
       @date_range_test.number_of_nights.must_equal 3
     end
-  end
-end
+  end # end of describe Initialize DateRange Class
+  describe "Return_date_range method" do
+    it "Returns to a string" do
+      @date_range_test.return_date_range.must_be_kind_of String
+    end
+  end # end of describe return_date_range method
+end # end of describe DateRange class
