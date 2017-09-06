@@ -2,7 +2,8 @@ require_relative 'spec_helper'
 
 describe 'Reservation' do
   before do
-    @reservation = Hotel::Reservation.new(1, '2017-09-05', '2017-09-07')
+    @hotel = Hotel::Hotel.new(20)
+    @reservation = Hotel::Reservation.new(1, '2017-09-05', '2017-09-07', @hotel)
   end
 
   describe '#initialize' do
@@ -20,7 +21,7 @@ describe 'Reservation' do
       @reservation.id.length.must_equal 8
       @reservation.id[0..3].must_equal "0905"
     end
-    
+
     it 'has @total_cost value, which is rate * num of nights' do
       @reservation.total_cost.must_equal 400
       (@reservation.total_cost % @reservation.dates.length).must_equal 0

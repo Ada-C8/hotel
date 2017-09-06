@@ -2,22 +2,23 @@ module Hotel
   class Reservation
     require_relative 'date_range'
     # @reservation_id
-    attr_reader :total_cost, :dates, :checkin, :checkout, :id
+    attr_reader :total_cost, :dates, :checkin, :checkout, :id, :hotel
 
-    def initialize(room, checkin, checkout)
+    def initialize(room, checkin, checkout, hotel)
       @room = room
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
       @dates = DateRange::range_to(@checkin, @checkout)
       @id = create_id
+      @hotel = hotel
       get_total
     end
 
     def get_total
       num_nights = @dates.length
-      # @total_cost = num_nights * @room.cost
+      @total_cost = @hotel.room(@room).cost * num_nights
     end
-    
+
     # def includes_dates?(checkin, checkout)
     # Date.parse????
     # dates_to_check = DateRange::range(checkin, checkout)
