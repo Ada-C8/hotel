@@ -79,4 +79,22 @@ describe "hotel" do
       proc {Hotel.access_reservation([2011,10,3])}.must_raise ArgumentError
     end
   end
+
+  describe "self.available_rooms(begin_date, end_date)" do
+    it "should respond to available_rooms" do
+      Hotel.must_respond_to :available_rooms
+    end
+    it "should return an array of available_rooms" do
+      output = Hotel.available_rooms([2017,10,2], [2017,10,4])
+      output.must_be_instance_of Array
+    end
+    it "should give a list of rooms 2- 20 as available" do
+      output = Hotel.available_rooms([2017,10,2], [2017,10,4])
+      (output.length).must_equal 19
+    end
+    it "everything in the array should be a room" do
+      output = Hotel.available_rooms([2017,10,2], [2017,10,4])
+      output.each {|element| element.must_be_instance_of Hotel::Room}
+    end
+  end
 end
