@@ -121,6 +121,10 @@ describe "hotel" do
       output = Hotel.available_rooms([2017,10,2], [2017,10,4])
       output.each {|element| element.must_be_instance_of Hotel::Room}
     end
+    it "should check blocks to see if room is available" do
+      output = Hotel.available_rooms([2017,9,20],[2017,9, 22])
+      output[0].id.must_equal 3
+    end
   end
   describe "Hotel.reserve_room(begin_date, end_date)" do
     it "should respond to reserve_room" do
