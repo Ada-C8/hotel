@@ -15,7 +15,7 @@ module Hotel
 
     def get_total
       num_nights = @dates.length
-      @total_cost = @hotel.room(@room).cost * num_nights
+      @total_cost = @room.cost * num_nights
     end
 
     # def includes_dates?(checkin, checkout)
