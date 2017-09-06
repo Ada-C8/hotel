@@ -21,4 +21,11 @@ describe "Room class" do
   it "knows all rooms cost $200 per night" do
     Hotel::Room.all.each { |room| room.rate.must_equal 200 }
   end
+
+  it "can change the cost of a room" do
+    Hotel::Room.update_price(1, 400)
+    roomarray = Hotel::Room.all.select { |room| room.rate == 400 }
+    roomarray.length.must_equal 1
+    roomarray[0].room_num.must_equal 1
+  end
 end

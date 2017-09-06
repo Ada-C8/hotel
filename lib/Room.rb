@@ -1,7 +1,8 @@
 module Hotel
   class Room
 
-    attr_reader :room_num, :rate
+    attr_reader :room_num
+    attr_accessor :rate
 
     STANDARD_RATE = 200
     @@rooms = []
@@ -18,6 +19,12 @@ module Hotel
 
     def self.all
       return @@rooms
+    end
+
+    def self.update_price(room_num, new_rate)
+      @@rooms.each do |room|
+        room.rate = new_rate if room.room_num == room_num
+      end
     end
 
   end # Room class
