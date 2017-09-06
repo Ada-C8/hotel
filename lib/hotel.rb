@@ -4,29 +4,36 @@ require 'awesome_print'
 module Hotel_Chain
   class MyHotel
 
-    attr_reader :no_of_rooms, :array_of_rooms
+    attr_reader :array_of_rooms
 
     def initialize(no_of_rooms = 20)
-      @array_of_rooms = []
+      @array_of_rooms = Array.new(no_of_rooms)
+      no_of_rooms.times do |room|
+        @array_of_rooms[room] = Room.new(room+1)
+      end
     end
 
     #Returns a list of all rooms in the hotel
-    def self.all(no_of_rooms = 20)
-      myhotel = Hotel_Chain::MyHotel.new
-      no_of_rooms.times do |room|
-         myhotel.array_of_rooms << Room.new(room+1)
-      end
-      puts "HOTEL ROOMS:"
-      ap myhotel.array_of_rooms
-      return myhotel.array_of_rooms
-    end
+    # def self.all
+    #   myhotel = Hotel_Chain::MyHotel.new
+    #   myhotel.array_of_rooms.length.times do |room|
+    #      myhotel.array_of_rooms[room] = Room.new(room+1)
+    #   end
+    #   return myhotel.array_of_rooms
+    # end
 
-    def self.print_list_of_rooms
-      myhotel = Hotel_Chain::MyHotel.all
+    #Method is called to print a list for the administrator
+    #myhotel = Hotel_Chain::MyHotel.new
+    #myhotel.list_of_rooms
+    def list_rooms
+      #myhotel = Hotel_Chain::MyHotel.all
+      list_array = []
       i = 0
-      myhotel.array_of_rooms.each do |room_id, rate|
-        puts "#{i}. Room #{room_id} - $#{rate}"
+      @array_of_rooms.each do |object|
+          list_array << "#{i+1}. Room #{object.room_id} - $#{object.rate}/night"
+          i += 1
       end
+      return list_array
     end
 
   end
