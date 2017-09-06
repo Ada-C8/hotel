@@ -121,11 +121,13 @@ describe 'Reservations' do
       Hotel::Reservations.all_reservations.must_be_kind_of Array
     end
     it 'must contain correct number of reservations made' do
-      puts Hotel::Reservations.all_reservations
       Hotel::Reservations.all_reservations.length.must_equal 3
     end
     it 'must contain the first reservation made' do
       Hotel::Reservations.all_reservations[0].check_in.must_equal Date.parse("2017-09-21")
+    end
+    it 'must contain the correct total cost of the reservation' do
+      Hotel::Reservations.all_reservations[0].total_cost.must_equal 400
     end
   end
 

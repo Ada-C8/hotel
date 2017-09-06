@@ -29,13 +29,16 @@ module Hotel
     #   @blocks_collection = []
     # end
 
-    def self.new_reservation(check_in, check_out)
+    def self.new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200, total_cost = 200)
       booking = Hotel::Booking.new(check_in, check_out)
       @all_reservations << booking
       return booking
     end
 
-    def self.clear_reservations
+    def list_reservations_by_date
+    end
+
+    def self.clear_reservations #Using this for testing purposes
       @all_reservations = []
     end
 
