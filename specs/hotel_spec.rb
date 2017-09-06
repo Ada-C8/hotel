@@ -34,4 +34,33 @@ describe "hotel" do
       (Hotel::HOTEL_ROOMS[4]).id.must_equal 5
     end
   end
+
+  describe "self.all_reservations" do
+    it "returns an array" do
+      output = Hotel.all_reservations
+      output.must_be_instance_of Array
+    end
+
+    it "everthing in the array is a reservation" do
+      output = Hotel.all_reservations
+      output.each do |element|
+        element.must_be_instance_of Hotel::Reservation
+      end
+    end
+
+    it "should match what is currently in csv" do
+      output = Hotel.all_reservations
+      output.length.must_equal 1
+      output[0].room_number.must_equal 1
+      output[0].total_cost.must_equal 600
+    end
+
+  end
+
+  describe "self.cost(input_reservation)" do
+    it "should return total_cost of a reservation when given id" do
+      output = Hotel.cost(1)
+      output.must_equal 600
+    end
+  end
 end
