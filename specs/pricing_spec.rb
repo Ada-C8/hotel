@@ -1,0 +1,31 @@
+require_relative 'spec_helper'
+
+describe Hotel::Pricing do
+  describe "method self.calc_cost(reservation)" do
+    it "returns a float value" do
+      reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 13))
+      Hotel::Pricing.calc_cost(reservation).must_be_kind_of Float
+    end
+
+    it "calculates the cost of one night to be 200" do
+      reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 13))
+
+      Hotel::Pricing.calc_cost(reservation).must_equal 200
+    end
+
+    it "accurately calculates the cost of multiple night reservations" do
+      reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 14))
+
+      res2 = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 20) )
+
+
+      Hotel::Pricing.calc_cost(reservation).must_equal 400
+
+      Hotel::Pricing.calc_cost(res2).must_equal 1600
+    end
+
+
+  end
+
+
+end

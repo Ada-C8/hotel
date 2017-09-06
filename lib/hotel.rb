@@ -30,6 +30,10 @@ module Hotel
     return res_by_date
   end
 
+  def calc_cost(reservation)
+    
+  end
+
   private
 
   def create_rooms

@@ -32,6 +32,12 @@ describe Hotel::Reservation do
       reservation = Hotel::Reservation.new(@guest, check_in, check_out)
       reservation.total_nights.must_equal 365
     end
+
+    it "accurately calculates the length of stay of 7 days" do
+          reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 19))
+
+          reservation.total_nights.must_equal 7
+    end
   end
 
   describe "Reader Methods" do

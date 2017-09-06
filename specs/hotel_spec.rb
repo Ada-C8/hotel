@@ -79,7 +79,6 @@ describe Hotel::Hotel do
       end
     end
 
-    #[]     ##########COME BACK TO THIS!! ##############
     it "returns a list of unique Reservations that are occupying rooms that night" do
       reservations_4th = @carlisle.get_res_by_date(Date.new(2018,4,4))
       reservations_10th = @carlisle.get_res_by_date(Date.new(2018,4,10))

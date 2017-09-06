@@ -38,7 +38,7 @@ module Hotel
       raise ArgumentError.new "invalid dates"
     else
       length = @check_out - @check_in
-      return length
+      return length.to_i
     end
   end
 
