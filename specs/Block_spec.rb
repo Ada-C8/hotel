@@ -1,25 +1,5 @@
 require_relative 'spec_helper'
 
-module Hotel
-  class Room
-    def self.clear
-      @@rooms = []
-    end
-  end
-
-  class Reservation
-    def self.clear
-      @@reservations = []
-    end
-  end
-
-  class Block
-    def self.clear
-      @@blocks = []
-    end
-  end
-end
-
 describe "Block class" do
 
   before do

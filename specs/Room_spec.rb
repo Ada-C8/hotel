@@ -1,13 +1,5 @@
 require_relative 'spec_helper'
 
-module Hotel
-  class Room
-    def self.clear
-      @@rooms = []
-    end
-  end
-end
-
 describe "Room class" do
   before do
     @min = 1
