@@ -12,16 +12,20 @@ module Hotel
     @nights_arr = []
     end
 
-    #in start date [5], end date[6]
-    #out array of nights [5,6]
-
     def valid_date?
       if @check_in > @check_out
         raise InvalidDateRangeError.new("Invalid Date Range: Check-out #{@check_out} is before Check-in #{@check_in}")
       end
-    end
-    #check that is vaild input, that the dates are appropriate range and are of type dates.
+    end #end valid_date? method
 
-    #use for booking a reservation and for checking reservations
-  end
-end
+    def make_nights_arr
+      valid_date?
+      counter = 0
+      @nights.times do
+        @nights_arr << (@check_in + counter)
+        counter += 1
+      end
+      return @nights_arr
+    end #end make_nights_arr method 
+  end #end DateRange class
+end #end Hotel module

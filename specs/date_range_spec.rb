@@ -41,8 +41,25 @@ describe "DateRange Class" do
     end
   end
   describe "make_nights_arr method" do
-    # it "" do
-    #   binding.pry
-    # end
+    it "returns array" do
+      @vacation.make_nights_arr.must_be_kind_of Array
+    end
+    it "increase the size of instance variable @nights_arr" do
+      before = @vacation.nights_arr.length
+      # before.must_equal 0
+      @vacation.make_nights_arr
+      after = @vacation.nights_arr.length
+      after.must_be :>, before
+      after.must_equal @vacation.nights
+    end
+    it "will generate an array that has a length equal to nights" do
+      @vacation.make_nights_arr.length.must_equal @vacation.nights
+    end
+    it "nested method valid_date? will raise exception if checkout is prior to checkin" do
+      check_in = Date.new(2017,9,5)
+      check_out = Date.new(2017,9,8)
+      trip = Hotel::DateRange.new(check_out,check_in)
+      proc{trip.make_nights_arr}.must_raise InvalidDateRangeError
+    end
   end
 end
