@@ -3,9 +3,7 @@ SimpleCov.start
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/skip_dsl'
-require_relative '../lib/Room'
-require_relative '../lib/Reservation'
-require_relative '../lib/Block'
+require_relative '../lib/Hotel'
 
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new

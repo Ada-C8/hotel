@@ -1,5 +1,4 @@
 require 'Date'
-require_relative 'Reservation'
 
 module Hotel
   class Block

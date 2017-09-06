@@ -1,6 +1,4 @@
 require 'Date'
-require_relative 'Room'
-require_relative 'Custom_errors'
 
 module Hotel
   class Reservation
