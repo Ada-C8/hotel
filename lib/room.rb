@@ -1,18 +1,12 @@
 module Hotel
 
   class Room
-    attr_reader :per_night, :rooms
+    attr_reader :room_num, :rate, :status
 
-    def initialize
-      @per_night = 200
-      @rooms = {}
-      (1..20).each do |room|
-        @rooms[room] = @per_night
-      end
-    end
-
-    def all
-      return @rooms
+    def initialize(room_num, rate, status = :available)
+      @room_num = room_num
+      @rate = rate
+      @status = status
     end
 
   end #end of Room
