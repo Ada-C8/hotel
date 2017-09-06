@@ -40,6 +40,18 @@ module Hotel
       reservations << ::Hotel::Reservation.new(start_date, end_date, room_num)
     end
 
+    def is_booked?(date)
+      return reservations.any? { |reservation| reservation.include?(date) }
+
+      # reservations.each do |reservation|
+      #   if reservation.include?(date)
+      #     return true
+      #   end
+      # end
+      #
+      # return false
+    end
+
     private
 
     # def valid_room_num?(num)

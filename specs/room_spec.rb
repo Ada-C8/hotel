@@ -91,4 +91,20 @@ describe "Testing Room class" do
     # end
 
   end
+
+  describe "#is_booked?" do
+    it "Returns true if the room is booked for a given date" do
+      room = Hotel::Room.new(3)
+      check_in = Date.new(2017,9,5)
+      check_out = Date.new(2017,9,8)
+
+      room.reserve(check_in, check_out)
+      room.is_booked?(Date.new(2017,9,6)).must_equal true
+      room.is_booked?(Date.new(2017,9,8)).must_equal false
+
+      room.reserve(Date.new(2017,9,8), Date.new(2017,9,10))
+      room.is_booked?(Date.new(2017,9,8)).must_equal true
+
+    end
+  end
 end
