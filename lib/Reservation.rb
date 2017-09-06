@@ -35,9 +35,14 @@ module Hotel
     end
 
     def self.available(start_date, end_date)
-      return @@reservations.select do |reservation|
-        self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == false
+      available_rooms = Room.all.map { |room| room.room_num }
+      overlapping_reservations = @@reservations.select do |reservation|
+        self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
+      overlapping_reservations.each do |reservation|
+        available_rooms.delete(reservation.room_num) if available_rooms.include?(reservation.room_num)
+      end
+      return available_rooms
     end
 
     private
