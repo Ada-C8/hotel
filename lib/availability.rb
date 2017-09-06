@@ -2,9 +2,6 @@ require_relative 'rooms'
 require 'date'
 require 'pry'
 
-
-# When the first day of a reservation hits, an individual room room's status should be changed to :booked
-# When the last day of a reservation hits, a room's status should  automatically change back to :available
 # Recognize that a :blocked room should be able to be booked, but only by certain people
 
 # Allow people to reserve a certain room ID
@@ -15,52 +12,67 @@ require 'pry'
 
 class Availability
 attr_accessor :calendar
+HOTEL = Hotel.new
 
-  def initialize
-    hotel = Hotel.new
-    @calendar = []
-    # Everyday for the next year, I want a collection of dates, and for each date object, I want to see an attached collection of each room in the hotel & its status
+  def self.calendar
+    calendar = []
 
     date = Date.today
     roominfo = []
 
-    # index = 0
-    # hotel.rooms.each do |room|
-    #   roominfo << {hotel.rooms[index].id => hotel.rooms[index].status}
-    #   index += 1
-    # end
-
-    hotel.rooms.each do |room|
-      roominfo << {:id => room.id, :status => room.status}
+    HOTEL.rooms.each do |room|
+      id = room.id
+      status = room.status
+      roominfo << {id => status}
     end
 
     366.times do
-      @calendar << {:date => date, :all_room_status => roominfo}
+      calendar << {date => roominfo}
       date = date + 1
     end
 
+    return calendar
+
   end
 
-  def all_available_rooms(year, month, day)
-    input_date = Date.new(year,month,day)
+  def self.all_available_rooms(startyear, startmonth, startday, endyear, endmonth, endday)
+    checkin_date = Date.new(startyear,startmonth,startday)
+    checkout_date = Date.new(endyear,endmonth,endday)
     openrooms = []
-    @calendar.each do |dates|
-      dates.each do |datekey, datevalue|
-        if input_date == datevalue
-          dates[:all_room_status].each do |roominfo|
-            roominfo.each do |id, status|
-              if roominfo[:status] == :available
-                openrooms << roominfo[:id]
+
+    wanteddate = checkin_date
+
+    until wanteddate == checkout_date
+      self.calendar.each do |days|
+        days.each do |date, roominfo|
+          if wanteddate == date
+            roominfo.each do |rooms|
+              rooms.each do |id, status|
+
+                if status == :available
+                  openrooms << id
+                end
+                # binding.pry
               end
+
             end
           end
         end
       end
+      wanteddate += 1
     end
-    return openrooms
+
+    total_stay = (checkout_date - checkin_date).to_i
+    finalrooms = []
+    (1..20).each do |id|
+      if openrooms.count(id) == total_stay
+        finalrooms << id
+      end
+    end
+    return finalrooms
   end
+
 
 end #end of class
 
-# all_availability = Availability.new
-# all_availability.all_available_rooms(2017,9,8)
+Availability.all_available_rooms(2017, 9, 8, 2017, 9, 9)
