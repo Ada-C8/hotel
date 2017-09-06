@@ -86,7 +86,14 @@ describe "Reservation class" do
     proc{Hotel::Reservation.new(Date.today, Date.today + 1, 1)}.must_raise Exception
 
     # it won't allow any room to be booked when they are all booked for those dates
+    (2..20).each { |num| Hotel::Reservation.new(Date.today, Date.today + 1, num)}
+    proc{Hotel::Reservation.new(Date.today, Date.today + 1)}.must_raise Exception
+  end
 
-
+  it "allows a user to see all available rooms for a date range" do
+    Hotel::Reservation.new(Date.today, Date.today + 1, 1)
+    print Hotel::Reservation.available(Date.today, Date.today + 1)
+    Hotel::Reservation.available(Date.today, Date.today + 1).must_be_instance_of Array
+    Hotel::Reservation.available(Date.today, Date.today + 1).each { |room| room.must_be_instance_of Hotel::Room }
   end
 end

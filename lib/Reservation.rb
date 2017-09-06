@@ -17,17 +17,6 @@ module Hotel
       @@reservations.push(self)
     end
 
-    def check_dates(start_date, end_date, room_num)
-      raise ArgumentError if start_date.class != Date || end_date.class != Date
-      raise ArgumentError if end_date <= start_date
-      raise ArgumentError if start_date < Date.today
-      room_reservations = @@reservations.select { |reservation| reservation.room_num == room_num }
-      room_reservations.each do |reservation|
-        raise ArgumentError if start_date >= reservation.start_date && start_date < reservation.end_date
-        raise ArgumentError if end_date >= reservation.start_date && end_date <= reservation.end_date
-      end
-    end
-
     def total
       rate = 0
       Room.all.each do |room|
@@ -40,6 +29,35 @@ module Hotel
       return @@reservations if date == nil
       return @@reservations.select { |reservation| reservation.start_date <= date && reservation.end_date >= date }
     end
-    
+
+    def self.available(start_date, end_date)
+      return @@reservations.select do |reservation|
+        self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == false
+      end
+    end
+
+    private
+
+    def check_dates(start_date, end_date, room_num)
+      # prevent invalid dates
+      raise ArgumentError if start_date.class != Date || end_date.class != Date
+      raise ArgumentError if end_date <= start_date
+      raise ArgumentError if start_date < Date.today
+      # prevent double booking
+      room_reservations = @@reservations.select { |reservation| reservation.room_num == room_num }
+      room_reservations.each do |reservation|
+        raise ArgumentError if self.overlapping?(start_date, end_date, reservation.start_date, reservation,end_date)
+      end
+    end
+
+    def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
+      # start date is within comparison date range
+      return true if start_date >= comparison_start_date && start_date < comparison_end_date
+      # end date is within comparison date range
+      return true if end_date >= comparison_start_date && end_date <= comparison_end_date
+      return false
+    end
+
+
   end # Reservation class
 end # Hotel module
