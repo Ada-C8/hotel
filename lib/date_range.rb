@@ -15,7 +15,6 @@ module BookingSystem
       end
     end #end of initialize
 
-
     def dates_within_range
       dates = (@check_in .. @check_out - 1).map { |date| date }
       return dates
