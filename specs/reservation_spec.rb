@@ -4,8 +4,9 @@ describe "Reservation" do
   before do
     @check_in = Date.new(2017,9,15)
     @check_out = Date.new(2017,9,17)
+    @room = 5
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
-    @new_reservation = BookingSystem::Reservation.new(@date_range)
+    @new_reservation = BookingSystem::Reservation.new(@date_range, @room)
   end
 
   describe "#initialize" do
