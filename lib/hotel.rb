@@ -7,7 +7,7 @@ module Hotel_System
       @number_of_rooms = number_of_rooms
       @rooms = []
       number_of_rooms.times do |i|
-        @rooms << Hotel_System::Room.new(1)
+        @rooms << Hotel_System::Room.new(i + 1)
       end
     end
     def reservations

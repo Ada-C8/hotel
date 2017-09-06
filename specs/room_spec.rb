@@ -9,6 +9,13 @@ describe 'Room' do
       @check_in = Date.new(2017,9,5)
       @check_out = Date.new(2017,9,7)
     end
+    it "raises an Argument Error if parameters are not Date objects" do
+      proc {@my_room.reserve("today", "tomorrow")}.must_raise ArgumentError
+    end
+    it "raises an Argument Error if check_out is earlier than or same day as check_in" do
+      proc {@my_room.reserve(@check_in, @check_in)}.must_raise ArgumentError
+      proc {@my_room.reserve(@check_out, @check_in)}.must_raise ArgumentError
+    end
     it "creates a new reservation" do
       @my_room.reserve(@check_in, @check_out).must_be_instance_of Hotel_System::Reservation
     end
