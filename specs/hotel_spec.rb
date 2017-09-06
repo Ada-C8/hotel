@@ -48,6 +48,7 @@ describe "hotel class" do
   end
 
   describe "create_reservation" do
+
     it "Should respond to .create_reservation " do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.must_respond_to :create_reservation
@@ -56,7 +57,6 @@ describe "hotel class" do
     it "Should have reservations array" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.reservations.must_be_instance_of Array
-
     end
 
     it "should be able to add a reservation" do
@@ -66,7 +66,30 @@ describe "hotel class" do
       new_hotel.reservations.must_equal [new_reservation]
     end
 
+    it "Should create a reservation with a specific date range" do
 
+    end
+
+    it "Should have a room number" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 2)
+      new_reservation.room_number.must_equal 2
+    end
+
+    it "Should have a reservation number" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
+      new_reservation.reservation_number.must_equal 20
+    end
+
+    it "Should respond to check_in_date " do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
+      new_reservation.check_in_date.must_equal Date.new(2017,9,5)
+
+    end
+
+    it "Should respond to check_out_date" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
+      new_reservation.check_out_date.must_equal Date.new(2017,9,10)
+    end
 
   end
 end

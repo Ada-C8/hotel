@@ -15,6 +15,10 @@ module HotelManagment
       @room_number = room_number
     end
 
+    def rate
+      # nights = check_out_date - check_in_date
+      # rate = nights * @rate
+    end
 
   end #class end
 end #module end
