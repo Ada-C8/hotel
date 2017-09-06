@@ -25,13 +25,14 @@ module Hotel
       return @all_reservations
     end
 
-    def self.all_blocks
-      @blocks_collection = []
-    end
+    # def self.all_blocks
+    #   @blocks_collection = []
+    # end
 
-    def new_reservation(check_in, check_out)
-      booking = Booking.new(check_in, check_out)
+    def self.new_reservation(check_in, check_out)
+      booking = Hotel::Booking.new(check_in, check_out)
       @all_reservations << booking
+      return booking
     end
 
   end

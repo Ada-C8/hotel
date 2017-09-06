@@ -100,11 +100,28 @@ describe 'Reservations' do
     it "has a collection of reservations" do
       Hotel::Reservations.all_reservations.must_be_kind_of Array
     end
+  end
+
+  describe 'new reservation' do
+    before do
+      @new_booking1 = Hotel::Reservations.new_reservation("2017-09-21", "2017-09-23")
+    end
+    it 'must create a new booking' do
+      @new_booking1.must_be_instance_of Hotel::Booking
+    end
+  end
+
+  describe 'all reservations' do
+    it 'must be an array of all reservations' do
+      
+
+    end
+  end
+
   # ##TODO: write more tests
   # end
   # describe 'blocks' do
-  #   it "has a colelction of blocks" do
+  #   it "has a collection of blocks" do
   #     @new_hotel.blocks_collection.must_be_kind of Array
   #   end
-  end
 end
