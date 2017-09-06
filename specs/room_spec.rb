@@ -14,12 +14,10 @@ describe "Testing Room class" do
       @room.rate.must_equal Hotel::Room::DEFAULT_RATE
     end
 
-    it "Raises an error if room number isn't valid num" do
-      invalid_nums = ["cat", 31.4, nil, 0, -1, Hotel::NUM_ROOMS + 1]
-
-      invalid_nums.each do |item|
-        proc { Hotel::Room.new(item) }.must_raise ArgumentError
-      end
+    it "Raises an error if room number isn't a valid num" do
+      # doesn't test for room num > 20 b/c optional param in Hotel allows for more rooms
+      proc { Hotel::Room.new(-1) }.must_raise ArgumentError
+      proc { Hotel::Room.new(0) }.must_raise ArgumentError
     end
 
     # it "Raises an error if room number isn't between 1 & 20" do
@@ -28,6 +26,7 @@ describe "Testing Room class" do
     #   proc { Hotel::Room.new(21) }.must_raise ArgumentError
     # end
     #
+      # moving input check to user interface
     # it "Raises an error if room number isn't an integer" do
     #   proc { Hotel::Room.new("cat") }.must_raise ArgumentError
     #   proc { Hotel::Room.new(4.23) }.must_raise ArgumentError
@@ -36,27 +35,27 @@ describe "Testing Room class" do
 
   end
 
-  describe "#self.all" do
-    before do
-      @all_rooms = Hotel::Room.all
-    end
-
-    it "Returns a list of all the rooms in the hotel" do
-      @all_rooms.must_be_kind_of Array
-      @all_rooms.length.must_equal Hotel::NUM_ROOMS
-    end
-
-    it "Each hotel must have a different number between 1 & NUM_ROOMS" do
-      room_nums = (1..Hotel::NUM_ROOMS).to_a
-
-      @all_rooms.each do |room|
-        room_nums.delete(room.room_num)
-      end
-
-      room_nums.must_equal []
-    end
-
-  end
+  # describe "#self.all" do
+  #   before do
+  #     @all_rooms = Hotel::Room.all
+  #   end
+  #
+  #   it "Returns a list of all the rooms in the hotel" do
+  #     @all_rooms.must_be_kind_of Array
+  #     @all_rooms.length.must_equal Hotel::Hotel::NUM_ROOMS
+  #   end
+  #
+  #   it "Each hotel must have a different number between 1 & NUM_ROOMS" do
+  #     room_nums = (1..Hotel::Hotel::NUM_ROOMS).to_a
+  #
+  #     @all_rooms.each do |room|
+  #       room_nums.delete(room.room_num)
+  #     end
+  #
+  #     room_nums.must_equal []
+  #   end
+  #
+  # end
 
   describe "#reserve" do
     before do

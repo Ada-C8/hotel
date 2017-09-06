@@ -2,7 +2,7 @@ require_relative 'reservation'
 
 module Hotel
 
-  NUM_ROOMS = 20
+  # NUM_ROOMS = 20
 
   class Room
 
@@ -13,7 +13,7 @@ module Hotel
 
     def initialize(room_num, rate = DEFAULT_RATE)
 
-      if valid_room_num?(room_num)
+      if room_num > 0
         @room_num = room_num
       else
         raise ArgumentError.new("Not a valid room number")
@@ -23,28 +23,28 @@ module Hotel
       @rate = rate
     end
 
-    def self.all
-      # create a list of all hotel rooms
-      all_rooms = []
-
-      (1..Hotel::NUM_ROOMS).each do |num|
-        all_rooms << Room.new(num)
-      end
-
-      return all_rooms
-    end
+    # def self.all
+    #   # create a list of all hotel rooms
+    #   all_rooms = []
+    #
+    #   (1..Hotel::NUM_ROOMS).each do |num|
+    #     all_rooms << Room.new(num)
+    #   end
+    #
+    #   return all_rooms
+    # end
 
     def reserve(start_date, end_date)
       # add reservation if room is available and return true; else false
       #if is_available
-      @reservations << ::Hotel::Reservation.new(start_date, end_date, @room_num)
+      reservations << ::Hotel::Reservation.new(start_date, end_date, room_num)
     end
 
     private
 
-    def valid_room_num?(num)
-      return num.class == Integer && num >= 1 && num <= 20
-    end
+    # def valid_room_num?(num)
+    #   return num >= 1 && num <= ::Hotel::Hotel::NUM_ROOMS
+    # end
 
     # def is_available?(start_date, end_date)
     #   @reservations.each do |reservation|

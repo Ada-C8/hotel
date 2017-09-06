@@ -28,10 +28,18 @@ describe "Testing Hotel class" do
     end
 
     it "Raises an error if not passed a valid number for num of rooms" do
-      invalid_nums = [-1, 0, "dog", 3.14, nil, ""]
+      proc { Hotel::Hotel.new(-1) }.must_raise ArgumentError
+      proc { Hotel::Hotel.new(0) }.must_raise ArgumentError
+    end
 
-      invalid_nums.each do |item|
-        proc { Hotel::Hotel.new(item) }.must_raise ArgumentError
+    it "Creates rooms with room nums between 1 & specified number of rooms" do
+      num_rooms = 25
+      big_hotel = Hotel::Hotel.new(num_rooms)
+      num_big_hotel_rooms = big_hotel.rooms.length
+
+      big_hotel.rooms.each do |room|
+        room.room_num.must_be :>=, 1
+        room.room_num.must_be :<=, num_big_hotel_rooms
       end
     end
 
@@ -46,7 +54,7 @@ describe "Testing Hotel class" do
     it "Reserves the given room for the given dates" do
       @room1.reservations.must_equal []
 
-      @hotel.reserve('2017/9/3', '2017/9/5', @room1)
+      @hotel.reserve(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1)
       new_res = Hotel::Reservation.new(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1.room_num)
       @room1.reservations[0].must_equal new_res
     end

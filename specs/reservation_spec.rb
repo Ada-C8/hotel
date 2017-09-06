@@ -13,8 +13,8 @@ describe "Testing Reservation class" do
     end
 
     it "Raises an error if check_out date isn't later than check_in date" do
-      check_in = '2017/9/5'
-      check_out = '2017/8/5'
+      check_in = Date.new(2017,9,5)
+      check_out = Date.new(2017,8,5)
 
       proc { Hotel::Reservation.new(check_in, check_out, 2) }.must_raise ArgumentError
 
@@ -22,19 +22,20 @@ describe "Testing Reservation class" do
       proc { Hotel::Reservation.new(check_in, check_out, 2) }.must_raise ArgumentError
     end
 
-    it "Raises an error if check in or check out aren't date objects or can't be parsed as dates" do
-      not_dates = ["cat", nil, 0, "", -1]
-      valid_date = '2017/9/5'
-
-      not_dates.each do |item|
-        proc { Hotel::Reservation.new(valid_date, item, 20) }.must_raise ArgumentError
-      end
-
-      not_dates.each do |item|
-        proc {Hotel::Reservation.new(item, valid_date, 18) }.must_raise ArgumentError
-      end
-
-    end
+    # move this to user interface
+    # it "Raises an error if check in or check out aren't date objects or can't be parsed as dates" do
+    #   not_dates = ["cat", nil, 0, "", -1]
+    #   valid_date = '2017/9/5'
+    #
+    #   not_dates.each do |item|
+    #     proc { Hotel::Reservation.new(valid_date, item, 20) }.must_raise ArgumentError
+    #   end
+    #
+    #   not_dates.each do |item|
+    #     proc {Hotel::Reservation.new(item, valid_date, 18) }.must_raise ArgumentError
+    #   end
+    #
+    # end
 
   end
 
