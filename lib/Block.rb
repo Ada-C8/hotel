@@ -4,6 +4,8 @@ require_relative 'Reservation'
 module Hotel
   class Block
 
+    attr_reader :start_date, :end_date, :discount, :rooms
+
     @@blocks = []
 
     def initialize(start_date, end_date, number_of_rooms, discount = 0.1)
@@ -12,7 +14,6 @@ module Hotel
       @discount = discount
       @rooms = Hotel::Reservation.available(start_date, end_date).sample(number_of_rooms)
       collect_instance
-      print @rooms
     end
 
     def collect_instance
