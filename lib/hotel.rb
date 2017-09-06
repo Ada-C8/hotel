@@ -18,7 +18,15 @@ module Hotel
     end
 
     def make_reservation(checkin, checkout)
-      @reservations << Reservation.new(checkin, checkout)
+      @reservations << Reservation.new(checkin, checkout, self)
+    end
+
+    def room(num)
+      @rooms.each do |room|
+        return room if room.number == num
+      end
+      
+      nil
     end
 
     # def view_avail(checkin, checkout)

@@ -28,6 +28,18 @@ describe 'Hotel' do
     end
   end
 
+  describe '#room' do
+    it 'returns the Room with corresponding number' do
+      room = @hotel.room(4)
+      room.must_be_kind_of Hotel::Room
+      room.number.must_equal 4
+    end
+
+    it 'returns nil if room is not found' do
+      @hotel.room(10000).must_equal nil
+    end
+  end
+
   xdescribe '#make_reservation' do
     it "creates a reservation and adds it to the @reservations array" do
       @hotel.make_reservation('2017-09-05', '2017-09-08')
