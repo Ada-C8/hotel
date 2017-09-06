@@ -30,17 +30,10 @@ module Hotel_System
     end
 
     def find_avail_rooms(date)
-      all_reservations = self.reservations
-      all_rooms = self.rooms
-      reserved_rooms = all_reservations.map {|reservation| reservation.room}
-      avail_rooms = all_rooms.reject do |room|
-        reserved_rooms.include?(room.room_number)
-      end
+      date_reservations = self.find_res_by_date(date)
+      reserved_rooms = date_reservations.map {|reservation| reservation.room }
+      avail_rooms = self.rooms.reject {|room| reserved_rooms.include?(room.room_number)}
       return avail_rooms
     end
-    # def reserve_room(name, check_in, check_out)
-    #   reservation = Hotel_System::Reservation.new(name, check_in, check_out)
-    #   @reservations[:reservation.name] =
-    # end
   end
 end
