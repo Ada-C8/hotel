@@ -9,6 +9,18 @@ describe 'DateRange' do
       DateRange.new(check_in, check_out ).must_be_instance_of DateRange
     end
 
+    it "raises an argument error if check_out date is before check_in" do
+      check_out = Date.new(2017, 03, 11)
+      check_in = Date.new(2017, 04, 11)
+      proc { DateRange.new(check_in, check_out)}.must_raise ArgumentError
+    end
+
+    it "does not raise an argument error if check_out date is after check_in" do
+      check_in = Date.new(2017, 03, 11)
+      check_out = Date.new(2017, 04, 11)
+      DateRange.new(check_in, check_out).must_be_instance_of DateRange
+    end
+
     # it "requires check_in and check_out date for new instance" do
     #   DateRange.new.must_be_instance_of DateRange
     # end
