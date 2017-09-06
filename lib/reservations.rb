@@ -1,12 +1,13 @@
 module Hotel
   class Reservation
 
+  attr_reader :total_nights, :check_in, :check_out
+
   def initialize(guest, check_in, check_out)
     @guest = guest
     @check_in = check_in_date(check_in)
     @check_out = check_out_date(check_out)
     @total_nights = calculate_res_length
-
   end
 
 
@@ -30,7 +31,6 @@ module Hotel
   end
 
   def calculate_res_length
-
     if @check_in >= @check_out || @check_in < Date.today
       raise ArgumentError.new "invalid dates"
     else

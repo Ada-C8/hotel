@@ -19,22 +19,47 @@ describe Hotel::Reservation do
       proc{Hotel::Reservation.new(@guest, check_in, check_out)}.must_raise ArgumentError
     end
 
-    it "raises an ArgumentError if the check_out date is before or on the same day as the check_in date" do
-      check_in = Date.new(2017, 11, 15)
-      check_out = Date.new(2017, 11, 15)
-      proc {Hotel::Reservation.new(@guest, check_in, check_out)}.must_raise ArgumentError
-
-      check_in = Date.new(2017, 11, 15)
-      check_out = Date.new(2017, 11, 14)
-      proc {Hotel::Reservation.new(@guest, check_in, check_out)}.must_raise ArgumentError
+    it "accurately calculates the length of a stay of 1 night" do
+      check_in = Date.new(2017, 11, 14)
+      check_out = Date.new(2017, 11, 17)
+      reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+      reservation.total_nights.must_equal 3
     end
 
-    it "raises an ArgumentError if the check_in date is before today when initializing" do
-      check_in = Date.new(2017, 8, 30)
-      check_out = Date.new(2017, 11, 15)
-      proc {Hotel::Reservation.new(@guest, check_in, check_out)}.must_raise ArgumentError
+    it "accurately calculates the length of a stay of 1 year" do
+      check_in = Date.new(2017, 11, 14)
+      check_out = Date.new(2018, 11, 14)
+      reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+      reservation.total_nights.must_equal 365
     end
   end
+
+  describe "Reader Methods" do
+    before do
+      check_in = Date.new(2018, 4, 1)
+      check_out = Date.new(2018, 4, 22)
+      @reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+    end
+
+    it "can retrieve the total_nights" do
+      @reservation.total_nights.must_equal 21
+    end
+
+    it "can retrieve the check_in date" do
+      @reservation.check_in.must_equal Date.new(2018, 4, 1)
+    end
+
+    it "can retrieve the check_out date" do
+      @reservation.check_out.must_equal Date.new(2018, 4, 22)
+    end
+
+    # it "can retrieve the room" do
+    #
+    # end
+  end
+
+
+
 
 
 end
