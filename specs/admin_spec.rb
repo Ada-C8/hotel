@@ -18,7 +18,7 @@ describe "Admin" do
       check_out = Date.new(2017,10,7)
       room_num = 1
       @admin.reserve(check_in, check_out, room_num).must_be_instance_of Hotel::Reservation
-      @admin.reservations_rooms_hash.length.must_equal 1
+      @admin.reservations.length.must_equal 1
     end
 
     it "Returns an ArgumentError if the reservation can't be made" do
@@ -26,6 +26,8 @@ describe "Admin" do
       proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise ArgumentError
 
       #room_num given is already reserved for a portion of date a prior reservation has
+      @admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1).must_be_instance_of Hotel::Reservation
+      proc {@admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1)}.must_raise ArgumentError
 
     end
 
