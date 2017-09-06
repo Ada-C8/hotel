@@ -53,12 +53,11 @@ module BookingSystem
     def make_reservation(date_range)
       room = find_room(date_range)
       if room == nil
-        raise ArgumentError.new("No room is available on given dates")
+        raise NoRoomAvailable.new("No room is available on given dates")
       end
-      if room != nil
-        new_reservation = Reservation.new(date_range, room)
-        @all_reservations << new_reservation
-      end
+      new_reservation = Reservation.new(date_range, room)
+      @all_reservations << new_reservation
+
       return new_reservation #new instance of class Reservation
     end #end of method
 
