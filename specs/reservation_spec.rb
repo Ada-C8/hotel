@@ -11,4 +11,9 @@ describe 'Reservation' do
       @my_reservation.must_be_instance_of Hotel_System::Reservation
     end
   end
+  describe '#cost' do
+    it 'calculates the cost of the reservation' do
+      @my_reservation.cost.must_equal 400
+    end
+  end
 end

@@ -7,5 +7,8 @@ module Hotel_System
       @check_out = check_out
       @room = nil
     end
+    def cost
+      ((@check_out - @check_in) * 200).to_int
+    end
   end
 end
