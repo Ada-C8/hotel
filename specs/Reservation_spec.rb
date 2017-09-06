@@ -74,28 +74,28 @@ describe "Reservation class" do
     Hotel::Reservation.all(Date.today)[0].room_num.must_equal 1
   end
 
-  it "raises an exception if the date range includes non-date values" do
-    proc{Hotel::Reservation.new(Date.today.to_s, Date.today + 1)}.must_raise Exception
+  it "raises an InvalidDateError if the date range includes non-date values" do
+    proc{Hotel::Reservation.new(Date.today.to_s, Date.today + 1)}.must_raise InvalidDateError
   end
 
-  it "raises an exception if the end date is after the start date" do
-    proc{Hotel::Reservation.new(Date.today, Date.today - 1)}.must_raise Exception
+  it "raises an InvalidDateError if the end date is after the start date" do
+    proc{Hotel::Reservation.new(Date.today, Date.today - 1)}.must_raise InvalidDateError
   end
 
-  it "raises an exception if the start date is before today's date" do
-    proc{Hotel::Reservation.new(Date.today - 1, Date.today)}.must_raise Exception
+  it "raises an InvalidDateError if the start date is before today's date" do
+    proc{Hotel::Reservation.new(Date.today - 1, Date.today)}.must_raise InvalidDateError
   end
 
-  it "raises an exception if the room is already reserved for the specified date range" do
+  it "raises exception if the room is already reserved for the specified date range" do
     # it won't allow the specified room to be booked when it is booked
     Hotel::Reservation.new(Date.today + 1, Date.today + 3, 1)
-    proc{Hotel::Reservation.new(Date.today, Date.today + 2, 1)}.must_raise Exception
-    proc{Hotel::Reservation.new(Date.today + 2, Date.today + 5, 1)}.must_raise Exception
-    proc{Hotel::Reservation.new(Date.today, Date.today + 2, 1)}.must_raise Exception
+    proc{Hotel::Reservation.new(Date.today, Date.today + 2, 1)}.must_raise AlreadyBookedError
+    proc{Hotel::Reservation.new(Date.today + 2, Date.today + 5, 1)}.must_raise AlreadyBookedError
+    proc{Hotel::Reservation.new(Date.today, Date.today + 2, 1)}.must_raise AlreadyBookedError
 
     # it won't allow any room to be booked when they are all booked for those dates
-    (2..20).each { |num| Hotel::Reservation.new(Date.today, Date.today + 1, num)}
-    proc{Hotel::Reservation.new(Date.today, Date.today + 1)}.must_raise Exception
+    (2..@max).each { |num| Hotel::Reservation.new(Date.today, Date.today + 1, num)}
+    proc{Hotel::Reservation.new(Date.today, Date.today + 1)}.must_raise NoRoomsAvailableError
   end
 
   it "allows a user to see all available room numbers for a date range" do

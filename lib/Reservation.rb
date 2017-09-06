@@ -1,5 +1,6 @@
 require 'Date'
 require_relative 'Room'
+require_relative 'Custom_errors'
 
 module Hotel
   class Reservation
@@ -9,7 +10,8 @@ module Hotel
     @@reservations = []
 
     def initialize(start_date = Date.today, end_date = Date.today + 1, room_num = 0)
-      room_num = Room.all.sample.room_num if room_num == 0
+      room_num = Reservation.available(start_date, end_date).sample if room_num == 0
+      raise NoRoomsAvailableError.new if room_num.class != Integer
       check_dates(start_date, end_date, room_num)
       @start_date = start_date
       @end_date = end_date
@@ -49,13 +51,13 @@ module Hotel
 
     def check_dates(start_date, end_date, room_num)
       # prevent invalid dates
-      raise ArgumentError if start_date.class != Date || end_date.class != Date
-      raise ArgumentError if end_date <= start_date
-      raise ArgumentError if start_date < Date.today
+      raise InvalidDateError if start_date.class != Date || end_date.class != Date
+      raise InvalidDateError if end_date <= start_date
+      raise InvalidDateError if start_date < Date.today
       # prevent double booking
       room_reservations = @@reservations.select { |reservation| reservation.room_num == room_num }
       room_reservations.each do |reservation|
-        raise ArgumentError if Hotel::Reservation.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
+        raise AlreadyBookedError if Hotel::Reservation.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
     end
 
