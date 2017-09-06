@@ -9,9 +9,9 @@ module Hotel
 
     def initialize(room, checkin, checkout)
       @room = room
-      @checkin = Date.parse(checkin)
-      @checkout = Date.parse(checkout)
-      # @dates = DateRange::range(@checkin, @checkout)
+      checkin = Date.parse(checkin)
+      checkout = Date.parse(checkout)
+      # @dates = DateRange::range(checkin, checkout)
       get_total
     end
 
