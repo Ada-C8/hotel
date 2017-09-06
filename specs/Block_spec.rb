@@ -48,7 +48,7 @@ describe "Block class" do
   end
 
   it "only makes blocks with rooms available during the specified date range" do
-    ((@min + 4)..@max).each { |num| Hotel::Reservation.new(Date.today, Date.today + 1, num)}
+    ((@min + 4)..@max).each { |num| Hotel::Reservation.new(nil, Date.today, Date.today + 1, num)}
     # can't make a block with more rooms than are available
     proc{Hotel::Block.new(Date.today, Date.today + 1, 5)}.must_raise NoRoomsAvailableError
     # a block will only be made with available rooms
@@ -60,8 +60,10 @@ describe "Block class" do
 
   end
 
-  xit "prevents a room from being in two blocks at the same time" do
-
+  it "prevents a room from being in two blocks at the same time" do
+    4.times { Hotel::Block.new(Date.today, Date.today + 1, 5) }
+    proc { Hotel::Block.new(Date.today, Date.today + 1, 1) }.must_raise Exception
+    Hotel::Block.available(Date.today, Date.today + 1).must_equal []
   end
 
   xit "allows a user to check if a given block has rooms available" do

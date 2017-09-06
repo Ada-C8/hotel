@@ -12,13 +12,21 @@ module Hotel
       @start_date = start_date
       @end_date = end_date
       @discount = discount
-      @rooms = Hotel::Reservation.available(start_date, end_date).sample(number_of_rooms)
+      @rooms = sample_available_rooms(start_date, end_date, number_of_rooms)
       raise NoRoomsAvailableError if @rooms.length < number_of_rooms
       collect_instance
     end
 
     def collect_instance
       @@blocks.push(self)
+    end
+
+    def sample_available_rooms(start_date, end_date, number_of_rooms)
+      room_numbers = Room.all.map { |room| room.room_num }
+      blocked_room_numbers = room_numbers - Hotel::Block.available(start_date, end_date)
+      reserved_room_numbers = room_numbers - Hotel::Reservation.available(start_date, end_date)
+      available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
+      return available_room_numbers.sample(number_of_rooms)
     end
 
     def self.available(start_date, end_date)
