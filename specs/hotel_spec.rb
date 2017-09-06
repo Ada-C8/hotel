@@ -25,7 +25,6 @@ describe "Hotel" do
     end
   end
 
-  #TODO more tests using make_reservation
   describe "#room_unavailable" do
     it "Returns an array of dates for given room number" do
       @new_hotel.room_unavailable(5).must_be_kind_of Array
@@ -39,7 +38,6 @@ describe "Hotel" do
     end
   end
 
-  #TODO more tests using make_reservation
   describe "#find_room" do
     it "Returns an integer" do
       @new_hotel.find_room(@date_range).must_be_kind_of Integer
@@ -86,6 +84,24 @@ describe "Hotel" do
       reservation = hotel.make_reservation(date_range)
       second_reservation = hotel.make_reservation(date_range)
       proc { hotel.make_reservation(date_range) }.must_raise BookingSystem::NoRoomAvailableError
+    end
+  end
+
+  describe "#list_of_reservations" do
+    before do
+      @hotel = BookingSystem::Hotel.new(2)
+      @check_in = Date.new(2017,9,15)
+      @check_out = Date.new(2017,9,17)
+      @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
+      @reservation = @hotel.make_reservation(@date_range)
+      @second_reservation = @hotel.make_reservation(@date_range)
+      @date = Date.new(2017,9,15)
+    end
+    it "Returns an instance of array class " do
+      @hotel.list_of_reservations(@date).must_be_kind_of Array
+    end
+    it "Returns an array of the right length" do
+      @hotel.list_of_reservations(@date).length.must_equal 2
     end
   end
 

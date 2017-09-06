@@ -54,6 +54,19 @@ module BookingSystem
       return new_reservation #new instance of class Reservation
     end #end of method
 
+    def list_of_reservations(date)
+      list = []
+      @all_reservations.each do |reservation|
+        if reservation.date_range.dates_within_range.include?(date)
+          list << reservation
+        end
+      end
+
+      # list = @all_reservations.map { |reservation| reservation if reservation.date_range.dates_within_range.include?(date) }
+
+      return list
+    end #end of method
+
   end #end of class
 
 end #end of module
