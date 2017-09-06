@@ -56,8 +56,10 @@ describe "Block class" do
     (@min..(@min+3)).each { |num| block.rooms.include?(num).must_equal true}
   end
 
-  xit "prevents blocked rooms from being reserved by the general public" do
-
+  it "prevents blocked rooms from being reserved by the general public" do
+    4.times { Hotel::Block.new(Date.today, Date.today + 1, 5) }
+    proc { Hotel::Reservation.new(nil, Date.today, Date.today + 1) }.must_raise NoRoomsAvailableError
+    Hotel::Reservation.new(1, Date.today, Date.today + 1).must_be_instance_of Hotel::Reservation
   end
 
   it "prevents a room from being in two blocks at the same time" do

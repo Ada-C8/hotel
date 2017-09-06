@@ -8,7 +8,7 @@ module Hotel
     @@reservations = []
 
     def initialize(block_id = nil, start_date = Date.today, end_date = Date.today + 1, room_num = 0)
-      room_num = Reservation.available(start_date, end_date).sample if room_num == 0
+      room_num = sample_available_rooms(start_date, end_date, 1, block_id).sample if room_num == 0
       raise NoRoomsAvailableError.new if room_num.class != Integer
       check_dates(start_date, end_date, room_num)
       @start_date = start_date
@@ -19,6 +19,21 @@ module Hotel
 
     def collect_instance
       @@reservations.push(self)
+    end
+
+    def sample_available_rooms(start_date, end_date, number_of_rooms, block_id)
+      if block_id == nil
+        room_numbers = Room.all.map { |room| room.room_num }
+        blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
+        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
+        available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
+        return available_room_numbers.sample(number_of_rooms)
+      else
+        room_numbers = Block.all.select { |block| block.block_id == block_id }[0].rooms
+        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
+        available_room_numbers = room_numbers - reserved_room_numbers
+        return available_room_numbers.sample(number_of_rooms)
+      end
     end
 
     def total

@@ -3,12 +3,13 @@ require 'Date'
 module Hotel
   class Block
 
-    attr_reader :start_date, :end_date, :discount, :rooms
+    attr_reader :start_date, :end_date, :discount, :rooms, :block_id
 
     @@blocks = []
 
     def initialize(start_date, end_date, number_of_rooms, discount = 0.1)
       raise ArgumentError.new("Blocks can have between 1 and 5 rooms") if (1..5).to_a.include?number_of_rooms == false
+      @block_id = @@blocks.length + 1
       @start_date = start_date
       @end_date = end_date
       @discount = discount
@@ -40,6 +41,10 @@ module Hotel
         end
       end
       return available_rooms
+    end
+
+    def self.all
+      return @@blocks
     end
 
     private
