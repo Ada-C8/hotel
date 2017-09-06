@@ -36,14 +36,6 @@ module Hotel
       nil
     end
 
-    # def view_avail(checkin, checkout)
-    #   available_rooms = []
-    #   @rooms.each do |room|
-    #     available_rooms << room.number if room.is_avail?(checkin, checkout)
-    #     available_rooms
-    #   end
-    # end
-
     def view_reservations(date)
       date = DateRange::validate(date)
       reservations = []
@@ -55,13 +47,13 @@ module Hotel
 
     def find_available_rooms(checkin, checkout)
       booked_rooms, available_rooms = [], []
-      # @reservations.each do |reservation|
-      #   if reservation.room is not in booked_room && !(reservation.includes_dates?(checkin,checkout))
-      #     booked_rooms << reservation.number
-      #   end
-      # end
+      @reservations.each do |reservation|
+        if !(booked_rooms.include?reservation.room) && reservation.includes_dates?(checkin, checkout)
+          booked_rooms << reservation.room
+        end
+      end
       @rooms.each do |room|
-        available_rooms << room unless booked_rooms.include?room.number
+        available_rooms << room unless booked_rooms.include?room
       end
       available_rooms
     end

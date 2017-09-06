@@ -45,6 +45,18 @@ describe 'Hotel' do
       rooms = @hotel.find_available_rooms('2017-09-05', '2017-09-09')
       rooms.must_be_kind_of Array
     end
+
+    it 'returns only available rooms' do
+      @hotel.make_reservation('2017-10-14', '2017-10-18')
+      @hotel.make_reservation('2017-10-14', '2017-10-18')
+      @hotel.make_reservation('2018-10-14', '2018-10-18')
+      rooms = @hotel.find_available_rooms('2017-10-14', '2017-10-18')
+
+      rooms.length.must_equal 18
+      rooms.each do |room|
+        puts "Room number #{room.number} is free"
+      end
+    end
   end
 
   describe '#make_reservation' do
@@ -74,6 +86,5 @@ end
 
 # As an administrator, I can view a list of rooms that are not reserved for a given date range
 # As an administrator, I can reserve an available room for a given date range
-#
 # A reservation is allowed start on the same day that another reservation for the same room ends
 # Your code should raise an exception when asked to reserve a room that is not available
