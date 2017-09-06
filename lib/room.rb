@@ -1,6 +1,6 @@
 module Hotels
+  # Contains information regarding individual Rooms in Hotels::Hotel
   class Room
-
     attr_reader :room_id, :price
 
     REGULAR_RATE = 200
@@ -10,6 +10,5 @@ module Hotels
       @room_id = room_number
       @price = REGULAR_RATE
     end
-
   end
 end

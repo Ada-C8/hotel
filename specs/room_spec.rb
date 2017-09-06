@@ -16,6 +16,5 @@ describe "Room" do
     it "Has a price per night that is an Integer" do
       @room.price.must_be_kind_of Integer
     end
-  end
-
+  end #------------------------- describe #initialize block
 end
