@@ -1,2 +1,0 @@
-class AlreadyBookedError < StandardError
-end
