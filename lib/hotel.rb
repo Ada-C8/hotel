@@ -36,9 +36,18 @@ module Hotel
   end
 
   def self.cost(input_reservation)
-    self.all_reservations
+    all_reservations = self.all_reservations
     all_reservations.each do |reservation|
       return (reservation.total_cost) if reservation.id == input_reservation
+    end
+  end
+
+  def self.access_reservation(input_date)
+    search_date = Date.new(input_date[0], input_date[1], input_date[2])
+    search_reservations = []
+    all_reservations = self.all_reservations
+    all_reservations.each do |reservation|
+      search_reservations << reservation if search_date.between?(reservation.check_in, reservation.check_out - 1)
     end
   end
 

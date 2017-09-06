@@ -6,7 +6,7 @@ module Hotel
     # @@reservation_id_max = 0
     attr_reader :id, :room_number, :room, :check_in, :check_out, :total_cost
     def initialize(input_id, input_room_number, check_in_date, check_out_date)
-      @id = input_id
+      @id = input_id.to_i
 
       @room_number = input_room_number.to_i
 

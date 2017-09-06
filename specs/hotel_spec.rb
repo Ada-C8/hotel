@@ -59,8 +59,21 @@ describe "hotel" do
 
   describe "self.cost(input_reservation)" do
     it "should return total_cost of a reservation when given id" do
-      output = Hotel.cost(1)
+      output = Hotel.cost(99)
       output.must_equal 600
+    end
+  end
+
+  describe "self.access_reservation(input_date)" do
+    it "should return array" do
+      output = Hotel.access_reservation([2017,10,3])
+      output.must_be_instance_of Array
+    end
+    it "everything in array should be a reservation" do
+      output = Hotel.access_reservation([2017,10,3])
+      output.each do |element|
+        element.must_be_instance_of Hotel::Reservation
+      end
     end
   end
 end
