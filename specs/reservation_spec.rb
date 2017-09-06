@@ -23,7 +23,12 @@ describe "Reservation Class" do
 
     it "a reservation has a check-in date" do
       @reservation.check_in_date.must_be_kind_of Date
+
     end
+
+    # it "can return a check-in date" do
+    #   @reservation.check_in_date.must_equal 0017-08-16.to_i
+    # end
     #
     # it "can reserve a room for a given date" do
     #
