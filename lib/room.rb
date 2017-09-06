@@ -6,7 +6,7 @@ module Hotel
     def initialize(number, price = 200)
       @number = number.to_i
       @price = price.to_f
-      @booked = false
+      @booked = []
     end
 
   end
