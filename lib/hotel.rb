@@ -68,6 +68,11 @@ module Hotel
   end
 
   def self.reserve_room(begin_date, end_date)
+    # begin_reservation = Date.new(begin_date[0], begin_date[1], begin_date[2])
+    # end_reservation = Date.new(end_date[0], end_date[1], end_date[2])
+    available_rooms = self.available_rooms(begin_date, end_date)
+    raise ArgumentError.new "No rooms are available for this date range" if available_rooms.length == 0
+    return Hotel::Reservation.new(10, available_rooms[0].id, begin_date, end_date)
   end
 
 end
