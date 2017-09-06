@@ -56,8 +56,14 @@ describe "Reservation class" do
     Hotel::Reservation.all(Date.today + 2).length.must_equal 1
     Hotel::Reservation.all(Date.today + 2)[0].must_be_instance_of Hotel::Reservation
 
+    Hotel::Reservation.new(Date.today + 2, Date.today + 3, 3)
+
+    Hotel::Reservation.all(Date.today + 2).must_be_instance_of Array
+    Hotel::Reservation.all(Date.today + 2).length.must_equal 2
+    Hotel::Reservation.all(Date.today + 2)[0].must_be_instance_of Hotel::Reservation
+
     Hotel::Reservation.all().must_be_instance_of Array
-    Hotel::Reservation.all().length.must_equal 2
+    Hotel::Reservation.all().length.must_equal 3
     Hotel::Reservation.all().each { |reservation| reservation.must_be_instance_of Hotel::Reservation }
   end
 
@@ -82,8 +88,10 @@ describe "Reservation class" do
 
   it "raises an exception if the room is already reserved for the specified date range" do
     # it won't allow the specified room to be booked when it is booked
-    Hotel::Reservation.new(Date.today, Date.today + 1, 1)
-    proc{Hotel::Reservation.new(Date.today, Date.today + 1, 1)}.must_raise Exception
+    Hotel::Reservation.new(Date.today + 1, Date.today + 3, 1)
+    proc{Hotel::Reservation.new(Date.today, Date.today + 2, 1)}.must_raise Exception
+    proc{Hotel::Reservation.new(Date.today + 2, Date.today + 5, 1)}.must_raise Exception
+    proc{Hotel::Reservation.new(Date.today, Date.today + 2, 1)}.must_raise Exception
 
     # it won't allow any room to be booked when they are all booked for those dates
     (2..20).each { |num| Hotel::Reservation.new(Date.today, Date.today + 1, num)}

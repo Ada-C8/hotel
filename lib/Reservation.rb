@@ -9,11 +9,11 @@ module Hotel
     @@reservations = []
 
     def initialize(start_date = Date.today, end_date = Date.today + 1, room_num = 0)
+      room_num = Room.all.sample.room_num if room_num == 0
+      check_dates(start_date, end_date, room_num)
       @start_date = start_date
       @end_date = end_date
-      room_num = Room.all.sample.room_num if room_num == 0
       @room_num = room_num
-      check_dates(start_date, end_date, room_num)
       collect_instance
     end
 
@@ -55,7 +55,7 @@ module Hotel
       # prevent double booking
       room_reservations = @@reservations.select { |reservation| reservation.room_num == room_num }
       room_reservations.each do |reservation|
-        raise ArgumentError if self.overlapping?(start_date, end_date, reservation.start_date, reservation,end_date)
+        raise ArgumentError if Hotel::Reservation.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
     end
 
