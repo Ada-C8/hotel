@@ -44,6 +44,7 @@ module Hotel
       unavailable_rooms = []
       (start_date...end_date).each do |date|
         list = Hotel::Reservation.list_for_date(date)
+        list += Hotel::Reservation.blocklist_for_date(date)
         unavailable_rooms << list.map {|reservation| reservation.room.number}
       end
       unavailable_rooms.flatten!.uniq!

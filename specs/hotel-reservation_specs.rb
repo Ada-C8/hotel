@@ -62,13 +62,33 @@ describe "Hotel::Reservation" do
       start_date = Date.new(2017,6,5)
       end_date = Date.new(2017,6,8)
       block1 = Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, "Averi")
-      block1.must_be_instance_of Array
-      block1.length.must_equal 5
+      block1.must_be_instance_of Hash
+      block1["Averi"].must_be_instance_of Array
     end
     it "throws error when block is over 5 rooms" do
       start_date = Date.new(2017,6,5)
       end_date = Date.new(2017,6,8)
       proc{Hotel::Reservation.block_rooms(start_date, end_date, 10, 150, "Averi")}.must_raise ArgumentError
+    end
+    it "general public can't reserve block room" do
+      start_date = Date.new(2017,6,5)
+      end_date = Date.new(2017,6,8)
+      Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, "Dee")
+      proc{Hotel::Reservation.new(start_date,end_date,Hotel::Room.new(1))}.must_raise ArgumentError
+    end
+    it "can check if a block of rooms has availability" do
+      start_date = Date.new(2017,6,19)
+      end_date = Date.new(2017,6,21)
+      block_name = "Dee"
+      Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, block_name)
+      Hotel::Reservation.block_availability(block_name).must_equal true
+    end
+    it "can reserve a block room" do
+      start_date = Date.new(2017,6,9)
+      end_date = Date.new(2017,6,11)
+      block_name = "Dee"
+      Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, block_name)
+      Hotel::Reservation.reserve_block_room(block_name)
     end
   end
 end
