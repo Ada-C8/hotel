@@ -23,6 +23,7 @@ describe "Admin" do
 
     it "Returns an ArgumentError if the reservation can't be made" do
       #check_in_date is later than check_out_date
+      proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise ArgumentError
 
       #room_num given is already reserved for a portion of date a prior reservation has
 
