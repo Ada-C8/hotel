@@ -78,7 +78,18 @@ describe "Hotel" do
       hotel.room_unavailable(1).length.must_equal 4
       hotel.room_unavailable(2).length.must_equal 2
     end
+    it "Raise an error if no room is available withing given dates" do
+      hotel = BookingSystem::Hotel.new(2)
+      check_in = Date.new(2017,9,15)
+      check_out = Date.new(2017,9,17)
+      date_range = BookingSystem::DateRange.new(check_in, check_out)
+      reservation = hotel.make_reservation(date_range)
+      second_reservation = hotel.make_reservation(date_range)
+      proc { hotel.make_reservation(date_range) }.must_raise BookingSystem::NoRoomAvailableError
+    end
   end
+
+
 
 
 

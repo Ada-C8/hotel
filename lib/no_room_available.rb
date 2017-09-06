@@ -1,4 +1,4 @@
 module BookingSystem
-  class NoRoomAvailable < ArgumentError
+  class NoRoomAvailableError < ArgumentError
   end
 end #end of module

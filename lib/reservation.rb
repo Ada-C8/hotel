@@ -14,7 +14,6 @@ module BookingSystem
       @date_range = date_range
       @room = room
       @total_cost = COST * date_range.dates_within_range.length
-      puts "Reservation  was created"
 
     end #end of initialize
 
