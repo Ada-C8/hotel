@@ -20,7 +20,7 @@ module Hotel
     end
 
     def total
-      @room_price * stay_length * @number_of_rooms
+      return @room_price * stay_length * @number_of_rooms
     end
 
   end # End of class Reservation

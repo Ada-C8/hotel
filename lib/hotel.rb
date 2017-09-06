@@ -18,11 +18,11 @@ module Hotel
 
     def make_reservation(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
       @reservations << Reservation.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
-      if available_at_dates(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).empty?
-        puts "No avaibility at these dates."
+      if available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day) == "No avaibility at these dates."
+        raise NoAvailableRoomError.new("No avaibility at these dates.")
       else
         number_of_rooms.to_i.times do |i|
-          available_at_dates(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)[0].booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
+          available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).first.booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
         end
       end
     end
@@ -53,10 +53,14 @@ module Hotel
         end
         available_rooms << room if booked == false
       end
-      return available_rooms
+      if available_rooms.empty?
+        return "No avaibility at these dates."
+      else
+        return available_rooms
+      end
     end
 
-    def available_at_dates(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
+    def available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
       arrival_date = Date.new(arrival_year.to_i, arrival_month.to_i, arrival_day.to_i)
       departure_date = Date.new(departure_year.to_i, departure_month.to_i, departure_day.to_i)
       available_rooms = []
@@ -74,7 +78,11 @@ module Hotel
         end
         available_rooms << room if booked == false
       end
-      return available_rooms
+      if available_rooms.empty?
+        return "No avaibility at these dates."
+      else
+        return available_rooms
+      end
     end
 
   end

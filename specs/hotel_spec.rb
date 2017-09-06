@@ -75,6 +75,14 @@ describe "Hotel" do
       @hotel.list_of_rooms[3].booked[0]["arrival"].class.must_equal Date
       @hotel.list_of_rooms[4].booked.must_be_empty
       @hotel.list_of_rooms[5].booked.must_be_empty
+      @hotel = Hotel::Hotel.new(20)
+      @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 20)
+      proc {@hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)}.must_raise Hotel::NoAvailableRoomError
+      @hotel = Hotel::Hotel.new(20)
+      20.times do
+        @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      end
+      proc {@hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)}.must_raise Hotel::NoAvailableRoomError
     end
 
     it "has a reservations_by_date method" do
@@ -109,8 +117,43 @@ describe "Hotel" do
       @hotel.available_at_date(2017,9,18)[0].must_be_kind_of Hotel::Room
       @hotel.available_at_date(2017,9,18)[18].must_be_kind_of Hotel::Room
       @hotel.available_at_date(2017,9,18)[19].must_be_nil
+
+      @hotel = Hotel::Hotel.new(20)
+      20.times do
+        @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      end
+      @hotel.available_at_date(2017,9,18).must_equal "No avaibility at these dates."
     end
+
+    it "has a available_at_period method" do
+      @hotel = Hotel::Hotel.new(20)
+      @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      @hotel.must_respond_to :available_at_period
+    end
+
+    it "The available_at_period method returns an array of available rooms for a period of time" do
+      @hotel = Hotel::Hotel.new(20)
+      @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      @hotel.available_at_period(2017,9,18,2017,9,30).must_be_kind_of Array
+      @hotel.available_at_period(2017,9,18,2017,9,30)[0].must_be_kind_of Hotel::Room
+      @hotel.available_at_period(2017,9,18,2017,9,30)[18].must_be_kind_of Hotel::Room
+      @hotel.available_at_period(2017,9,18,2017,9,30)[19].must_be_nil
+      @hotel.available_at_period(2017,9,15,2017,9,17)[18].must_be_kind_of Hotel::Room
+      @hotel.available_at_period(2017,9,15,2017,9,17)[19].must_be_nil
+      @hotel.available_at_period(2017,9,19,2017,9,22)[18].must_be_kind_of Hotel::Room
+      @hotel.available_at_period(2017,9,19,2017,9,22)[19].must_be_nil
+
+      @hotel = Hotel::Hotel.new(20)
+      20.times do
+        @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      end
+      @hotel.available_at_period(2017,9,17, 2017,9,19).must_equal "No avaibility at these dates."
+    end
+
+
   end
+
+
 
 
 end
