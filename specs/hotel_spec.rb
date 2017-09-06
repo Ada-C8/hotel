@@ -122,7 +122,7 @@ describe "hotel" do
       output.each {|element| element.must_be_instance_of Hotel::Room}
     end
     it "should check blocks to see if room is available" do
-      output = Hotel.available_rooms([2017,9,20],[2017,9, 22])
+      output = Hotel.truly_available([2017,9,20],[2017,9, 22])
       output[0].id.must_equal 3
     end
   end

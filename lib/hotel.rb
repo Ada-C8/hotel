@@ -79,6 +79,29 @@ module Hotel
     return available_rooms
   end
 
+  def self.blocked_rooms(begin_date, end_date)
+    begin_search = Date.new(begin_date[0].to_i, begin_date[1].to_i, begin_date[2].to_i)
+    end_search = Date.new(end_date[0].to_i, end_date[1].to_i, end_date[2].to_i)
+    blocked_rooms = []
+    all_the_blocks = self.all_blocks
+    all_the_blocks.each do |block|
+      if (begin_search >= block.check_in) && (begin_search < block.check_out) && (end_search >= block.check_in) && (end_search <= block.check_out)
+        block.rooms.each do |room|
+          blocked_rooms << room
+        end
+      end
+    end
+    return blocked_rooms
+  end
+
+  def self.truly_available(begin_date, end_date)
+    available_rooms = self.available_rooms(begin_date, end_date)
+    blocked_rooms = self.blocked_rooms(begin_date, end_date)
+    truly_available = available_rooms - blocked_rooms
+    return truly_available
+  end
+
+
   def self.reserve_room(begin_date, end_date)
     # begin_reservation = Date.new(begin_date[0], begin_date[1], begin_date[2])
     # end_reservation = Date.new(end_date[0], end_date[1], end_date[2])
