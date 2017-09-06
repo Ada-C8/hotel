@@ -19,7 +19,7 @@ module Hotel
 
     def all_rooms
       list = []
-      @rooms.each { |room| list << room.number }
+      @rooms.each { |room| list << room }
       list
     end
 

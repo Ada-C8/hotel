@@ -24,7 +24,11 @@ describe 'Hotel' do
   describe '#all_rooms' do
     # As an administrator, I can access the list of all of the rooms in the hotel
     it 'Returns an array of all room numbers' do
-      @hotel.all_rooms.must_equal (1..20).to_a
+      all_rooms = @hotel.all_rooms
+      all_rooms.must_be_kind_of Array
+      all_rooms.each do |room|
+        room.must_be_kind_of Hotel::Room
+      end
     end
   end
 
