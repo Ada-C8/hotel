@@ -43,22 +43,7 @@ module BookingSystem
     end #end of method
 
     def find_room(date_range)
-      available_room = nil
-      @rooms.each_with_index do |room, i|
-        booked_dates = room_unavailable(i + 1) #array of dates
-
-        count = 0
-        date_range.dates_within_range.each do |date|
-          if !booked_dates.include?(date)
-            count += 1
-          end
-        end
-        if count == date_range.dates_within_range.length
-          available_room = room
-          break
-        end
-      end
-      return available_room #room number
+      return list_of_available_rooms(date_range)[0] #room number
     end #end of method
 
     def make_reservation(date_range)
