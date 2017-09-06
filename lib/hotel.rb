@@ -35,10 +35,12 @@ module BookingSystem
     end #end of method
 
     def make_reservation(date_range)
-
-
-
-
+      room = find_room(date_range)
+      if room != nil
+        new_reservation = Reservation.new(date_range, room)
+        @all_reservations << new_reservation
+      end
+      return new_reservation #new instance of class Reservation
     end #end of method
 
   end #end of class

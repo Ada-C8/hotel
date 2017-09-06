@@ -8,7 +8,7 @@ module BookingSystem
 
     attr_reader :id, :date_range, :room, :total_cost
 
-    def initialize(date_range)
+    def initialize(date_range, room)
       @id = @@id_count
       @@id_count += 1
       @date_range = date_range
@@ -18,7 +18,7 @@ module BookingSystem
 
     end #end of initialize
 
-    
+
 
 
   end #end of class
