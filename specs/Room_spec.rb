@@ -66,6 +66,7 @@ describe "Hotel::Room class" do
 
       test_all_rooms.each do |room|
         room.must_be_instance_of Hotel::Room
+        room.nightly_rate.must_equal 200
       end
 
       test_all_rooms.count.must_equal 20
