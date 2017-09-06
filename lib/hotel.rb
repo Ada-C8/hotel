@@ -7,7 +7,6 @@ class Hotel
   def initialize
     @reservations = []
     @rooms = []
-
     (1..20).each do |room|
       @rooms.push(Room.new(room, 200))
     end
@@ -15,8 +14,18 @@ class Hotel
 
   def make_reservation(check_in, check_out, room)
     valid_date(check_in, check_out)
-    new_reservation = Reservation.new(check_in, check_out, room)
-    @reservations.push(new_reservation)
+    begin
+      if rooms_available(check_in, check_out).include?(room)
+        new_reservation = Reservation.new(check_in, check_out, room)
+        @reservations.push(new_reservation)
+      else
+        begin
+        raise ArgumentError.new("That room is not available.")
+        rescue ArgumentError => exception
+          puts "#{exception}: #{check_in}-#{check_out}"
+        end
+      end
+    end
   end
 
   def reservation_by_date(date)
@@ -43,15 +52,23 @@ class Hotel
 
   def rooms_available(check_in, check_out)
     last_night = Date.parse(check_out) - 1
-    available_rooms = @rooms
+    available_rooms = Array.new(@rooms)
+
     reservation_by_date(check_in).each do |reservation|
       available_rooms.delete(reservation.room)
     end
+
     reservation_by_date(last_night.to_s).each do |reservation|
       available_rooms.delete(reservation.room)
     end
+
     return available_rooms
   end
+
+  def block_reservation(check_in, check_out, rooms)
+    @reservations.push(Block.new(check_in, check_out, rooms))
+  end
+
 
   private
   def valid_date(check_in, check_out)
@@ -69,10 +86,10 @@ class Hotel
 end
 
 #this is an interface feature
-  # def show_all_rooms
-  #   room_display = []
-  #   @rooms.each do |room|
-  #     return
-  #   end
-  #   return room_display
-  # end
+# def show_all_rooms
+#   room_display = []
+#   @rooms.each do |room|
+#     return
+#   end
+#   return room_display
+# end

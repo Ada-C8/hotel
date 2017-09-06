@@ -1,11 +1,12 @@
 require_relative './spec_helper'
 require_relative '../lib/hotel'
+require 'pry'
 
 describe "#HOTEL" do
   before do
     @my_hotel = Hotel.new
 
-    @reservation1 = {check_in: "January 4, 2018", check_out: "January 10, 2018", room: @my_hotel.rooms.first}
+    @reservation1 = {check_in: "January 4, 2018", check_out: "January 10, 2018", room: @my_hotel.rooms[0]}
     @reservation2 = {check_in: "January 5, 2018", check_out: "January 10, 2018", room: @my_hotel.rooms[1]}
     @reservation3 = {check_in: "January 8, 2018", check_out: "January 14, 2018", room: @my_hotel.rooms[2]}
 
@@ -37,6 +38,25 @@ describe "#HOTEL" do
       @my_hotel.reservations.first.must_be_instance_of Reservation
       @my_hotel.reservations.last.must_be_instance_of Reservation
       @my_hotel.reservations.first.room_number.must_equal 1
+    end
+
+    it "Can reserve rooms that are available" do
+      @reservation4 = {check_in: "January 7, 2018", check_out: "January 11, 2018", room: @my_hotel.rooms[19]}
+      @my_hotel.make_reservation(@reservation4[:check_in], @reservation4[:check_out], @reservation4[:room])
+      @my_hotel.reservations.length.must_equal 4
+    end
+
+    it "Can book a reservation for a room the same day another reservation ends" do
+      @reservation5 = {check_in: "January 10, 2018", check_out: "January 11, 2018", room: @my_hotel.rooms[0]}
+      @my_hotel.make_reservation(@reservation5[:check_in], @reservation5[:check_out], @reservation5[:room])
+      @my_hotel.reservations.length.must_equal 4
+
+    end
+
+    it "Rejects reservation attemps on rooms that are already reserved for the specified dates" do
+      @reservation5 = {check_in: "January 7, 2018", check_out: "January 13, 2018", room: @my_hotel.rooms[1]}
+      @my_hotel.make_reservation(@reservation5[:check_in], @reservation5[:check_out], @reservation5[:room])
+      @my_hotel.reservations.length.must_equal 3
     end
 
     it "Can display a list of reservations for a specific date" do
