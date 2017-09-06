@@ -6,7 +6,7 @@ class Hotel
     @rooms = []
 
     (1..20).each do |room|
-      @rooms.push(Room.new(room))
+      @rooms.push(Room.new(room, 200))
     end
   end
 

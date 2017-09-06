@@ -1,15 +1,15 @@
 #ROOM
 
 class Room
-  attr_reader :details, :reservatoins
-  def initialize(number)
-    @specs = {number: number,
-      rate: 200}
+  attr_reader :details, :reservations, :rate, :number
+  def initialize(number, rate)
+    @number = number
+    @rate = rate
     @reservations = []
   end
 
-  def add_reservation(start, finish)
-    #will call on make reseveration
+  def add_reservation(check_in, check_out)
+    @reservations.push(Reservation.new(check_in, check_out, @rate))
   end
 
 

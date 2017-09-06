@@ -11,7 +11,8 @@ describe "#HOTEL" do
       @my_hotel.rooms.length.must_equal 20
     end
 
-    it "Can return a list of all rooms in the hotel" do
+
+    it "A list of ALL rooms can be displayed/accessed by the admin" do
       @my_hotel.rooms.must_be_instance_of Array
       @my_hotel.rooms.first.must_be_instance_of Room
     end

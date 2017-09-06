@@ -15,7 +15,7 @@ describe "#RESERVATION" do
   end
 
   it "Can accurately report the number of nights in a reservation" do
-    @new_reservation.nights.must_equal 2
+    @new_reservation.num_nights.must_equal 2
   end
 
   it "Raises an Argument error for invalid input" do
@@ -33,5 +33,9 @@ describe "#RESERVATION" do
   it "can calculate the cost for a reservation" do
     @new_reservation.bill.must_equal 400
     @new_reservation1.bill.must_equal 700
+  end
+
+  it "can show all nights in the reservation date range" do
+    @new_reservation.nights.must_equal ["2018-01-16", "2018-01-17"]
   end
 end
