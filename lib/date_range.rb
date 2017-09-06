@@ -1,4 +1,6 @@
 module DateRange
+  require 'date'
+  
   def self.range_to(start_date, end_date)
     start_date = validate(start_date)
     end_date = validate(end_date)
