@@ -35,5 +35,9 @@ describe "reservation" do
       proc {Hotel::Reservation.new(10,1,[2017,10,24], [2017,10,24])}.must_raise ArgumentError
       proc {Hotel::Reservation.new(10,1,[2017,10,24], [2017,10,22])}.must_raise ArgumentError
     end
+    # it "room should not be available for that date range" do
+    #   output = Hotel.all_reservations
+    #   (output[0].avaiability(begin_date, end_date)).must_equal false
+    # end
   end
 end

@@ -7,9 +7,10 @@ require_relative 'lib/reservation.rb'
 
 # => As an administrator, I can view a list of rooms that are not reserved for a given date range
 Hotel.available_rooms(begin_date, end_date)
-
+#=> returns array [Room Object.available true for date range]
 # => As an administrator, I can reserve an available room for a given date range
 Hotel.reserve_room(begin_date, end_date)
+
 
 # Constraints
 

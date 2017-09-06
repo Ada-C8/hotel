@@ -21,5 +21,9 @@ describe "room" do
       input = Hotel::Room.new(1, 200)
       input.must_respond_to :cost
     end
+    # it "should have respond to avaiability" do
+    #   input = Hotel::Room.new(1, 200)
+    #   input.must_respond_to :avaiability
+    # end
   end
 end
