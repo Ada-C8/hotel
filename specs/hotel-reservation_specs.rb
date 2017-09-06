@@ -17,13 +17,11 @@ describe "Hotel::Reservation" do
       Hotel::Reservation.new(@start_date2,@end_date2,@room_1)
       Hotel::Reservation.new(@start_date2,@end_date2,@room_2)
       reservation_list = Hotel::Reservation.list_for_date(@start_date2+1)
-      # ap reservation_list
       reservation_list.must_be_instance_of Array
       reservation_list.length.must_equal 2
     end
     it "will return a blank array for no reservations" do
       reservation_list = Hotel::Reservation.list_for_date(@end_date+10)
-      # ap reservation_list
       reservation_list.must_equal []
     end
   end
@@ -35,7 +33,6 @@ describe "Hotel::Reservation" do
     end
 
     it "throws error with wrong dates" do
-      # bad_date = Date.new(2017,9,1)
       proc{Hotel::Reservation.new(@start_date,@start_date-2,@room_1)}.must_raise ArgumentError
     end
 

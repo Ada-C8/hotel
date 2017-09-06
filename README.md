@@ -93,11 +93,11 @@ Remember that your job is only to build the classes that store information and h
 
 ### Constraints
 
-- A reservation is allowed start on the same day that another reservation for the same room ends
+- _A reservation is allowed start on the same day that another reservation for the same room ends_
 
 ### Error Handling
 
-- Your code should raise an exception when asked to reserve a room that is not available
+- _Your code should raise an exception when asked to reserve a room that is not available_
 
 ## Wave Three: Blocks of Rooms
 
