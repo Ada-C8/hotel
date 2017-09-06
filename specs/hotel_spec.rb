@@ -70,5 +70,10 @@ describe 'Hotel' do
       end
     end
   end
-
 end
+
+# As an administrator, I can view a list of rooms that are not reserved for a given date range
+# As an administrator, I can reserve an available room for a given date range
+#
+# A reservation is allowed start on the same day that another reservation for the same room ends
+# Your code should raise an exception when asked to reserve a room that is not available
