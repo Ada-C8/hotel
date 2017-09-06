@@ -1,7 +1,32 @@
 module DateRange
-  def self.range(start_date, end_date)
+  def self.range_to(start_date, end_date)
     start_date = validate(start_date)
     end_date = validate(end_date)
+    raise ArgumentError.new('Start date must be before end date') unless start_date < end_date
+
+    dates = []
+
+    while start_date < end_date
+      dates << start_date
+      start_date += 1
+    end
+
+    dates
+  end
+
+  def self.range_with(start_date, end_date)
+    start_date = validate(start_date)
+    end_date = validate(end_date)
+    raise ArgumentError.new('Start date must be before end date') unless start_date < end_date
+
+    dates = []
+
+    while start_date <= end_date
+      dates << start_date
+      start_date += 1
+    end
+
+    dates
   end
 
   # private
@@ -11,7 +36,7 @@ module DateRange
     begin
       Date.parse(input)
     rescue
-      raise TypeError.new("Invalid input #{input.class} - must be Date or String")
-    end  
+      raise TypeError.new("Invalid input #{input.class}-must be Date or String")
+    end
   end
 end
