@@ -20,7 +20,7 @@ describe 'Reservation' do
     it 'has 8-digit @reservation_id value where first 4 digits are checkin date' do
       @reservation.id.must_be_kind_of String
       @reservation.id.length.must_equal 8
-      @reservation.id[0..3].must_equal "0905"
+      @reservation.id[0..3].must_equal '0905'
     end
 
     it 'has @total_cost value, which is rate * num of nights' do
@@ -38,7 +38,7 @@ describe 'Reservation' do
 
     it 'returns false if provided date range does not overlap' do
       overlap = @reservation.includes_dates?('2017-10-14', '2017-10-15')
-      overlap.must_equal false      
+      overlap.must_equal false
     end
   end
 end

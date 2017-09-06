@@ -12,7 +12,7 @@ module Hotel
     def initialize(num_rooms)
       @rooms = []
       num_rooms.times do |i|
-        @rooms << Room.new(i+1, ROOM_COST)
+        @rooms << Room.new(i + 1, ROOM_COST)
       end
       @reservations = []
     end
@@ -25,8 +25,8 @@ module Hotel
 
     def make_reservation(checkin, checkout)
       room_num = find_available_rooms(checkin, checkout).first
-      if room_num == nil
-        raise NoRoomError.new("No available rooms for dates #{checkin} - #{checkout}")
+      if room_num.nil?
+        raise(NoRoomError, "No available rooms for dates #{checkin} - #{checkout}")
       end
       @reservations << Reservation.new(room_num, checkin, checkout, self)
     end
@@ -40,7 +40,7 @@ module Hotel
     end
 
     def view_reservations(date)
-      date = DateRange::validate(date)
+      date = DateRange.validate(date)
       reservations = []
       @reservations.each do |reservation|
         reservations << reservation if reservation.dates.include?(date)
@@ -51,12 +51,12 @@ module Hotel
     def find_available_rooms(checkin, checkout)
       booked_rooms, available_rooms = [], []
       @reservations.each do |reservation|
-        if !(booked_rooms.include?reservation.room) && reservation.includes_dates?(checkin, checkout)
+        if !(booked_rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
           booked_rooms << reservation.room
         end
       end
       @rooms.each do |room|
-        available_rooms << room unless booked_rooms.include?room
+        available_rooms << room unless booked_rooms.include? room
       end
       available_rooms
     end

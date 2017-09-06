@@ -7,7 +7,7 @@ module Hotel
       @room = room
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
-      @dates = DateRange::range_to(@checkin, @checkout)
+      @dates = DateRange.range_to(@checkin, @checkout)
       @id = create_id
       @hotel = hotel
       get_total
@@ -19,7 +19,7 @@ module Hotel
     end
 
     def includes_dates?(checkfirst, checklast)
-      dates_to_check = DateRange::range_to(checkfirst, checklast)
+      dates_to_check = DateRange.range_to(checkfirst, checklast)
       dates_to_check.each do |check_date|
         @dates.each do |book_date|
           return true if book_date.strftime == check_date.strftime
@@ -31,8 +31,7 @@ module Hotel
     private
 
     def create_id
-      '%.2d%.2d%.4d' % [@checkin.month, @checkin.day, rand(9999)]
+      format('%.2d%.2d%.4d', @checkin.month, @checkin.day, rand(9999))
     end
-
   end
 end

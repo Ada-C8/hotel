@@ -1,13 +1,12 @@
 require_relative 'spec_helper'
 
-
 describe 'Hotel' do
   before do
     @hotel = Hotel::Hotel.new(20)
   end
 
   describe '#initialize' do
-    it "Can be instantiated" do
+    it 'Can be instantiated' do
       @hotel.must_be_kind_of Hotel::Hotel
     end
 
@@ -40,7 +39,7 @@ describe 'Hotel' do
     end
 
     it 'returns nil if room is not found' do
-      @hotel.room(10000).must_equal nil
+      @hotel.room(1000).must_equal nil
     end
   end
 
@@ -64,7 +63,7 @@ describe 'Hotel' do
   describe '#make_reservation' do
     # As an administrator, I can reserve a room for a given date range
     # As an administrator, I can reserve an available room for a given date range
-    it "creates a reservation and adds it to the @reservations array" do
+    it 'creates a reservation and adds it to the @reservations array' do
       @hotel.make_reservation('2017-09-05', '2017-09-08')
       reservation = @hotel.reservations[0]
       reservation.must_be_kind_of Hotel::Reservation
@@ -103,14 +102,14 @@ describe 'Hotel' do
       # Your code should raise an exception when asked to reserve a room that is not available
       proc {
         21.times { @hotel.make_reservation('2017-09-05', '2017-09-08') }
-    }.must_raise NoRoomError
+      }.must_raise NoRoomError
     end
   end
 
   describe '#view_reservations' do
     # As an administrator, I can access the list of reservations for a specific date
     it 'returns an array of Reservations' do
-      @hotel.make_reservation('2017-10-14','2017-10-18')
+      @hotel.make_reservation('2017-10-14', '2017-10-18')
       reservations = @hotel.view_reservations('2017-10-14')
 
       reservations.must_be_kind_of Array
