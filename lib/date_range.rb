@@ -1,3 +1,4 @@
+# require_relative 'reservation'
 require 'date'
 
 class DateRange
@@ -14,9 +15,20 @@ class DateRange
     # @dates = alldays
   end
   #
-  # def include?
+  def include?
+  # Reservation.check_date(self.start)
+  #   Reservation.all.each_with_index do |reservation, i|
+  #     reservation.dates.nights.times do
+  #       if date == reservation.next
   #
-  # end
+  #         reservation.next << reservation
+  #       else
+  #
+  #       end
+  #
+  #     end
+  #   end
+  end
   #
   # def overlap?
   #

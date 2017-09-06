@@ -6,13 +6,13 @@ describe 'Reservation' do
     it "creates a new instance of hotel" do
       check_in = Date.new(2017, 03, 11)
       check_out = Date.new(2017, 04, 11)
-      Reservation.new(check_in, check_out).must_be_instance_of Reservation
+      Reservation.new(1, check_in, check_out).must_be_instance_of Reservation
     end
 
     it "can get the total cost for a given reservation" do
       check_out = Date.new(2017, 03, 14)
       check_in = Date.new(2017, 03, 11)
-      Reservation.new(check_in, check_out).total_cost.must_equal 600
+      Reservation.new(1, check_in, check_out).total_cost.must_equal 600
     end
   end
 
