@@ -56,7 +56,34 @@ describe Hotel::Reservation do
     # it "can retrieve the room" do
     #
     # end
-  end
+  end # end of reader Methods
+
+  describe "method include_date?" do
+    before do
+      @reservation = Hotel::Reservation.new("guest", Date.new(2018, 2, 15), Date.new(2018, 2, 23))
+    end
+
+    it "returns true if the reservation includes that date" do
+      @reservation = Hotel::Reservation.new("guest", Date.new(2018, 2, 15), Date.new(2018, 2, 23))
+      @reservation.include_date?(Date.new(2018, 2, 20)).must_equal true
+    end
+
+    it "returns false if the reservation doesn't include that date" do
+      @reservation.include_date?(Date.new(2018, 2, 25)).must_equal false
+      @reservation.include_date?(Date.new(2018, 2, 2)).must_equal false
+    end
+
+    it "returns true if the check_in date is that date" do
+      @reservation.include_date?(Date.new(2018, 2, 15)).must_equal true
+    end
+
+    it "returns false if the check_out date is that date" do
+      @reservation.include_date?(Date.new(2018, 2, 23)).must_equal false
+    end
+
+  end #end of method include_date?
+
+
 
 
 

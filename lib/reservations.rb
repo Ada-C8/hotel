@@ -10,6 +10,11 @@ module Hotel
     @total_nights = calculate_res_length
   end
 
+  # Reservations that are checking out on that date will return false since they are not staying that night at the hotel
+  def include_date?(date)
+    date.between?(@check_in, @check_out - 1)
+  end
+
   private
 
   def check_in_date(check_in)
