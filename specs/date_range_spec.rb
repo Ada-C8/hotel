@@ -20,25 +20,18 @@ describe "DateRange" do
     end
   end
 
-  # xdescribe "#valid_dates?" do
-  #   it "Returns true if given check_out date is after check_in date" do
-  #     @new_date_range.valid_dates?.must_equal true
-  #   end
-  #   it "Returns false if given check_out date is before check_in date" do
-  #     date_range = BookingSystem::DateRange.new("17-09-2017", "15-09-2017")
-  #     proc { date_range.valid_dates? }.must_raise ArgumentError
-  #   end
-  # end
-  #
-  # xdescribe "dates_within_range" do
-  #   it "Returns an array" do
-  #     @new_date_range.dates_within_range.must_be_kind_of Array
-  #   end
-  #   it "Returns an array of dates within the given range" do
-  #     @new_date_range.dates_within_range.must_equal [a, b, c]
-  #   end
-  # end
-
-
+  describe "dates_within_range" do
+    it "Returns an array" do
+      @new_date_range.dates_within_range.must_be_kind_of Array
+    end
+    it "Returns the array of right length for short ranges" do
+      @new_date_range.dates_within_range.length.must_equal 2
+    end
+    it "Returns the array of right length for long ranges" do
+      check_in = Date.new(2017,9,15)
+      check_out = Date.new(2017,10,15)
+      BookingSystem::DateRange.new(check_in, check_out).dates_within_range.length.must_equal 30
+    end
+  end
 
 end #end of discribe
