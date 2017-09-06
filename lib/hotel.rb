@@ -31,11 +31,14 @@ module BookingSystem
           break
         end
       end
-      return available_room
+      return available_room #room number
     end #end of method
 
     def make_reservation(date_range)
       room = find_room(date_range)
+      if room == nil
+        raise ArgumentError.new("No room is available on these dates")
+      end
       if room != nil
         new_reservation = Reservation.new(date_range, room)
         @all_reservations << new_reservation
