@@ -21,5 +21,28 @@ module Hotel
       @@blocks.push(self)
     end
 
+    def self.available(start_date, end_date)
+      available_rooms = Room.all.map { |room| room.room_num }
+      overlapping_blocks = @@blocks.select do |block|
+        self.overlapping?(start_date, end_date, block.start_date, block.end_date) == true
+      end
+      overlapping_blocks.each do |block|
+        block.rooms.each do |room|
+          available_rooms.delete(room) if available_rooms.include?(room)
+        end
+      end
+      return available_rooms
+    end
+
+    private
+
+    def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
+      # start date is within comparison date range
+      return true if start_date >= comparison_start_date && start_date < comparison_end_date
+      # end date is within comparison date range
+      return true if end_date >= comparison_start_date && end_date <= comparison_end_date
+      return false
+    end
+
   end # Block class
 end # Hotel module
