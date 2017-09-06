@@ -5,36 +5,37 @@ require_relative 'reservation'
 module Hotel
 
   class California
-    attr_reader :rooms, :reservations
+    attr_reader :all_rooms, :all_reservations
 
     def initialize
       @num_of_rooms = 20
       @rate = 200
-      @rooms = {}
+      @all_rooms = {}
       (1..@num_of_rooms).each do |room|
-        @rooms[room] = Hotel::Room.new(room, @rate)
+        @all_rooms[room] = Hotel::Room.new(room, @rate)
       end
-      @reservations = []
+      @all_reservations = []
     end
 
     def create_reservation(start_date, end_date)
       start_date = Date.parse(start_date)
       end_date = Date.parse(end_date)
-      @reservations << Hotel::Reservation.new(start_date, end_date)
+      @all_reservations << Hotel::Reservation.new(start_date, end_date)
     end
 
-    # ~ num of nights (days - 1) * per night
-    def reservation_total
+    def total(num)
+      num_nights = @all_reservations[num-1].dates.length - 1
+      return num_nights * @rate
     end
 
-    # find all reservations for a date
-    def self.find_by_date(year,month,day)
-    end
-
-    def all_rooms
-    end
-
-    def all_reservations
+    def find_by_date(date)
+      by_date = []
+      @all_reservations.each_index do |i|
+        if @all_reservations[i].dates.include? date
+          by_date << @all_reservations[i]
+        end
+      end
+      return by_date
     end
 
   end #end of California
