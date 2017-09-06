@@ -23,16 +23,19 @@ module BookingSystem
 
     def all_reservations_on(date) # UNAVAILABLE ROOMS
       # As an administrator, I can access the list of reservations for a specific date (single)
-      # Loop through @reservations and check the dates for each reservation
+      date = Date.parse(date) # Figure out how to parse this
       current_reservations = []
+      # print @reservations.length
       @reservations.each do |reservation| # Do I need an array date range for this method?
-        if reservation.stay_dates.include? (date)
-        # if date >= reservation.check_in && date <= reservation.check_out
+        if reservation.stay_dates.include? date
           current_reservations << reservation
         end
-        # If the date matches, return all instances of Reservations as an ARRAY
-        return current_reservations
       end
+      #   # if date >= reservation.check_in && date <= reservation.check_out
+      #   end
+      #   # If the date matches, return all instances of Reservations as an ARRAY
+      # end
+      return current_reservations
     end
 
     # def check_avail_rooms_for(dates) # WAVE 2

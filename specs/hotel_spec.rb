@@ -50,9 +50,9 @@ describe "Hotel" do
         @hotel.create_reservation('2001-02-03', '2001-02-05')
       end
       # @reservations is now filled with Reservation objects
-      @hotel.all_reservations_on('2001-02-04').must_be_kind_of Array
-      @hotel.reservations.length.must_equal 10
-      
+      current_reservations = @hotel.all_reservations_on('2001-02-03')
+      current_reservations.length.must_equal 10
+      current_reservations.must_be_kind_of Array
     end
   end # Describe
 
