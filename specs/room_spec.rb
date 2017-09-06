@@ -2,19 +2,18 @@ require_relative 'spec_helper'
 
 describe "Room" do
   before do
-    @room = Hotel::Room.new()
+    @room = Hotel::Room.new(20)
   end
 
   describe "initialize" do
-    it "Has an available attribute that is initialized to true" do
-      @room.available.must_equal true
-    end
 
-    it "Has a check_in_date and check_out_date initialized to nil (because it's unreserved yet)" do
-    # initializing to nil because a simple Date.new would give you a -4721 BC date,
-    # it doesn't make sense to initialize a mock value
-      assert_nil(@room.check_in_date)
-      assert_nil(@room.check_out_date)
+    it "Can create an object of class Room" do
+        Hotel::Room.new(1).must_be_instance_of Hotel::Room
+        # initializing to nil because a simple Date.new would give you a -4721 BC date,
+        # it doesn't make sense to initialize a mock value
+        assert_nil(@room.check_in_date)
+        assert_nil(@room.check_out_date)
+        @room.available.must_equal true
     end
 
     it "(Wave 1) Returns the cost of the room." do
@@ -23,13 +22,12 @@ describe "Room" do
     end
   end
 
-  describe "self.all" do
-    it "Will create a hash composed of the 20 rooms in the hotel" do
-      all_rooms = Hotel::Room.all
-      all_rooms.must_be_instance_of Hash
+  describe "self.create_rooms" do
+    it "Will create an array composed of the 20 rooms in the hotel" do
+      all_rooms = Hotel::Room.create_rooms
+      all_rooms.must_be_instance_of Array
       all_rooms.length.must_equal 20
-      all_rooms[rand(20) + 1].must_be_instance_of Hotel::Room
-      all_rooms.keys[rand(20)].must_be_instance_of Integer
+      all_rooms[rand(20)].must_be_instance_of Hotel::Room
     end
   end
 

@@ -16,7 +16,7 @@ module Hotel
       @room_number = room_number
     end
 
-    def self.create_room
+    def self.create_rooms
       room_array = []
       NUM_OF_ROOMS.times do |i|
         room_array << Hotel::Room.new(i + 1) # Hotel Room Numbers start with 1, not 0
