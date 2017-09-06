@@ -32,7 +32,7 @@ end
 
 describe 'Booking' do
   before do
-    @new_booking = Hotel::Booking.new
+    @new_booking = Hotel::Booking.new(9/21/17, 9/23/17)
   end
   describe 'initialize' do
     it "must be an instance of Booking" do
