@@ -1,4 +1,5 @@
 require 'date'
+require 'date_range'
 
 class Hotel
 attr_reader :rooms
