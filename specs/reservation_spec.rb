@@ -10,6 +10,11 @@ describe 'Reservation' do
       @reservation.must_be_kind_of Hotel::Reservation
     end
 
+    it 'has @dates value, which is array of dates' do
+      @reservation.dates.must_be_kind_of Array
+      @reservation.dates.first.must_be_kind_of Date
+    end
+
     it 'has @total_cost value' do
       @reservation.total_cost.must_equal 400
     end
