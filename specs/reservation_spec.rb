@@ -33,10 +33,10 @@ describe "Reservation Class" do
 
     it "returns the correct cost for the reservation" do
       @reservation.cost.must_equal 600
-
     end
 
-
   end
+
+
 
 end

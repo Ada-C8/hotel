@@ -47,4 +47,27 @@ describe "The Hotel class" do
 
   end
 
+  describe "it stores reservation objects" do
+
+    it "it stores a reservation and returns the array length" do
+    #every time a new reservation is created in the reservation class, it calls the store_reservation method and stores that reservation object"
+    hotel = Hotel_Chain::MyHotel.new
+    hotel.store_reservation("8/13/17", "8/16/17")
+    hotel.store_reservation("9/25/17", "9/29/17")
+    hotel.reservations_array.length.must_equal 2
+    end
+
+  end
+
+
+  describe "it can list all reservations by date" do
+
+    #you can input a specific date
+
+    #it returns any reservations which occur on a specific date
+    #it iterates through all reservation object
+    #(Time.now..Time.now+4).cover?(Time.now)
+
+  end
+
 end

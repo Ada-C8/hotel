@@ -1,15 +1,17 @@
 #Hotel.rb
 require 'awesome_print'
+require 'date'
 
 module Hotel_Chain
   class MyHotel
 
-    attr_reader :array_of_rooms
+    attr_reader :array_of_rooms, :reservations_array
 
     def initialize(no_of_rooms = 20)
       @array_of_rooms = Array.new(no_of_rooms)
       no_of_rooms.times do |room|
         @array_of_rooms[room] = Room.new(room+1)
+      @reservations_array = []
       end
     end
 
@@ -26,6 +28,15 @@ module Hotel_Chain
       end
       return list_array
     end
+
+    # admin would enter the following to create a new reservation:
+    # reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+    def store_reservation(check_in_date, check_out_date)
+      @reservations_array << Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+    end
+
+
+
 
   end
 end
