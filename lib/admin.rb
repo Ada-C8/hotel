@@ -1,4 +1,4 @@
-require_relative 'hotel'
+# require_relative 'hotel'
 require_relative 'reservation'
 
 module Hotel
@@ -40,7 +40,7 @@ module Hotel
         overlap.any? ? false : reserved_rooms_for_dates << reservation.room
 
       end
-      rooms_avalable = @all_rooms - reserved_rooms_for_dates
+      rooms_available = @all_rooms - reserved_rooms_for_dates
     end#rooms_available
 
   end #class Admin
