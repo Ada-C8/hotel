@@ -13,11 +13,11 @@ module Hotel
       # check input
       raise ArgumentError.new("Not a valid number of rooms") if num_rooms < 1
 
-      @rooms = []
+      @rooms = {}
 
-      # loop through num_rooms and add rooms to array
+      # loop through num_rooms and add rooms to hash
       (1..num_rooms).each do |num|
-        @rooms << ::Hotel::Room.new(num)
+        @rooms[num] = ::Hotel::Room.new(num)
       end
 
     end
@@ -45,10 +45,11 @@ module Hotel
       # doesn't include rooms where check-out date == date
       reservations = []
 
-      rooms.each do |room|
+      rooms.each do |room_num, room|
         reservations.concat(room.reservations.select { |reservation| reservation.include? date })
       end
 
+      # organize using group_by? (room_num)
       return reservations
 
       # reservations = []
@@ -64,6 +65,33 @@ module Hotel
       # end
       #
       # return reservations
+    end
+
+    def find_avail_rooms(start_date, end_date)
+      # returns a list of rooms available in the date range
+      avail_rooms = (1..rooms.length).to_a
+      date_range = (start_date...end_date).to_a  # don't include end date since checkout won't conflict with start date of another res
+
+      # iterate through all room numbers and check if room reservations include any of the dates in date range
+      (1..avail_rooms.length).each do |room_num|
+        room = rooms[room_num]
+
+        date_range.each do |date|
+          room.reservations.each do |reservation|
+            puts "iterating through reservations for room #{room_num}"
+
+            if reservation.include?(date)
+              avail_rooms.delete(room_num)
+              puts "breaking out...or am I?"
+              break
+            end
+          end
+        end
+      end
+
+      # return list of room objects
+      return avail_rooms.map { |room_num| rooms[room_num] }
+
     end
 
     # private

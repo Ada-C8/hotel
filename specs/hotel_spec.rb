@@ -6,13 +6,13 @@ describe "Testing Hotel class" do
       @hotel = Hotel::Hotel.new
     end
 
-    it "Creates a hotel class with an array of rooms" do
+    it "Creates a hotel class with a hash of rooms" do
       @hotel.must_be_instance_of Hotel::Hotel
 
       rooms = @hotel.rooms
-      rooms.must_be_instance_of Array
+      rooms.must_be_kind_of Hash
 
-      rooms.each do |room|
+      rooms.each do |room_num, room|
         room.must_be_instance_of Hotel::Room
       end
     end
@@ -37,9 +37,9 @@ describe "Testing Hotel class" do
       big_hotel = Hotel::Hotel.new(num_rooms)
       num_big_hotel_rooms = big_hotel.rooms.length
 
-      big_hotel.rooms.each do |room|
-        room.room_num.must_be :>=, 1
-        room.room_num.must_be :<=, num_big_hotel_rooms
+      big_hotel.rooms.each do |room_num, room|
+        room_num.must_be :>=, 1
+        room_num.must_be :<=, num_big_hotel_rooms
       end
     end
 
@@ -48,7 +48,7 @@ describe "Testing Hotel class" do
   describe "#reserve" do
     before do
       @hotel = Hotel::Hotel.new
-      @room1 = @hotel.rooms[0]
+      @room1 = @hotel.rooms[1]
     end
 
     it "Reserves the given room for the given dates" do
@@ -66,25 +66,25 @@ describe "Testing Hotel class" do
 
       # res that doesn't conflict with 9/5/17
       5.times do |num|
-        room = @hotel.rooms[0 + num]
+        room = @hotel.rooms[1 + num]
         @hotel.reserve(Date.new(2017,9,1), Date.new(2017,9,4), room)
       end
 
       # res that does conflict with 9/5/17
       5.times do |num|
-        room = @hotel.rooms[5 + num]
+        room = @hotel.rooms[6 + num]
         @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,9), room)
       end
 
       # res with start date conflicting with 9/5/17
       5.times do |num|
-        room = @hotel.rooms[10 + num]
+        room = @hotel.rooms[11 + num]
         @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,9), room)
       end
 
       # res with end date not conflicting with 9/5/17
       5.times do |num|
-        room = @hotel.rooms[15 + num]
+        room = @hotel.rooms[16 + num]
         @hotel.reserve(Date.new(2017,9,3), Date.new(2017,9,5), room)
       end
 
@@ -110,5 +110,63 @@ describe "Testing Hotel class" do
       updated_res.length.must_equal 11
     end
   end
+
+  describe "#find_avail_rooms" do
+    before do
+      @hotel = Hotel::Hotel.new
+
+      # res that doesn't conflict with 9/5/17 - 9/7/17
+      5.times do |num|
+        room = @hotel.rooms[1 + num]
+        @hotel.reserve(Date.new(2017,9,1), Date.new(2017,9,4), room)
+      end
+
+      # res that does conflict with 9/5/17-9/7/17
+      5.times do |num|
+        room = @hotel.rooms[6 + num]
+        @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,9), room)
+      end
+
+      # res conflicting with 9/5/17-9/7/17
+      5.times do |num|
+        room = @hotel.rooms[11 + num]
+        @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,9), room)
+      end
+
+      # res not conflicting with 9/5/17-9/7/17
+      5.times do |num|
+        room = @hotel.rooms[16 + num]
+        @hotel.reserve(Date.new(2017,9,3), Date.new(2017,9,5), room)
+      end
+
+      @start_date = Date.new(2017,9,5)
+      @end_date = Date.new(2017,9,7)
+    end
+
+    it "Returns a list of rooms available for the given date range" do
+      avail_rooms = @hotel.find_avail_rooms(@start_date, @end_date)
+      avail_rooms.must_be_kind_of Array
+
+      avail_rooms.each do |room|
+        room.must_be_instance_of Hotel::Room
+      end
+    end
+
+    it "Counts rooms as available if check_out date equals start_date of another reservation" do
+      expected_availability = 10
+      avail_rooms = @hotel.find_avail_rooms(@start_date, @end_date)
+      avail_rooms.length.must_equal expected_availability
+
+      room1 = @hotel.rooms[1]
+      @hotel.reserve(Date.new(2017,9,4), @start_date, room1)
+      @hotel.find_avail_rooms(@start_date, @end_date).must_equal avail_rooms
+
+      @hotel.reserve(@start_date, Date.new(2017,9,6), room1)
+      updated_avail_rooms = @hotel.find_avail_rooms(@start_date, @end_date)
+      updated_avail_rooms.length.must_equal expected_availability - 1
+      updated_avail_rooms.wont_include room1
+    end
+  end
+
 
 end
