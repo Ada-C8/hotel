@@ -40,14 +40,19 @@ describe 'Hotel' do
     end
   end
 
-  xdescribe '#make_reservation' do
+  describe "find_available_rooms" do
+
+  end
+
+  describe '#make_reservation' do
+    # As an administrator, I can reserve a room for a given date range
     it "creates a reservation and adds it to the @reservations array" do
       @hotel.make_reservation('2017-09-05', '2017-09-08')
-
-      @hotel.reservations[0].must_be_kind_of Hotel::Reservation
+      reservation = @hotel.reservations[0]
+      reservation.must_be_kind_of Hotel::Reservation
+      reservation.checkout.strftime.must_equal '2017-09-08'
     end
   end
-  # As an administrator, I can reserve a room for a given date range
 
   # As an administrator, I can access the list of reservations for a specific date
 

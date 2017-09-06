@@ -23,7 +23,8 @@ module Hotel
     end
 
     def make_reservation(checkin, checkout)
-      @reservations << Reservation.new(checkin, checkout, self)
+      room_num = find_available_rooms(checkin, checkout).first
+      @reservations << Reservation.new(room_num, checkin, checkout, self)
     end
 
     def room(num)
@@ -50,24 +51,17 @@ module Hotel
     #   reservations
     # end
 
-    # def find_available_rooms(checkin, checkout)
-    #   booked_rooms, available_rooms = [], []
-    #   @reservations.each do |reservation|
-    #     if reservation.room is not in booked_room && !(reservation.includes_dates?(checkin,checkout))
-    #       booked_rooms << reservation.number
-    #     end
-    #   end
-    #   @rooms.each do |room|
-    #     available_rooms << room unless booked_rooms.include?room.number
-    #   end
-    #   available_rooms
-    # end
-
-
-    # def make_reservation(checkin, checkout)
-    #   room_num = find_available_rooms(checkin, checkout).first
-    #   @reservations << Reservation.new(room_num, checkin, checkout)
-    # end
-
+    def find_available_rooms(checkin, checkout)
+      booked_rooms, available_rooms = [], []
+      # @reservations.each do |reservation|
+      #   if reservation.room is not in booked_room && !(reservation.includes_dates?(checkin,checkout))
+      #     booked_rooms << reservation.number
+      #   end
+      # end
+      @rooms.each do |room|
+        available_rooms << room unless booked_rooms.include?room.number
+      end
+      available_rooms
+    end
   end
 end
