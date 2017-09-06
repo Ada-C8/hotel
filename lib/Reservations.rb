@@ -35,5 +35,9 @@ module Hotel
       return booking
     end
 
+    def self.clear_reservations
+      @all_reservations = []
+    end
+
   end
 end

@@ -103,18 +103,29 @@ describe 'Reservations' do
   end
 
   describe 'new reservation' do
-    before do
-      @new_booking1 = Hotel::Reservations.new_reservation("2017-09-21", "2017-09-23")
-    end
+
     it 'must create a new booking' do
-      @new_booking1.must_be_instance_of Hotel::Booking
+      new_booking1 = Hotel::Reservations.new_reservation("2017-09-21", "2017-09-23")
+      new_booking1.must_be_instance_of Hotel::Booking
     end
   end
 
   describe 'all reservations' do
+    before do
+      Hotel::Reservations.clear_reservations
+      @new_booking1 = Hotel::Reservations.new_reservation("2017-09-21", "2017-09-23")
+      @new_booking2 = Hotel::Reservations.new_reservation("2020-01-01", "2020-01-15")
+      @new_booking3 = Hotel::Reservations.new_reservation("2019-01-01", "2019-01-15")
+    end
     it 'must be an array of all reservations' do
-      
-
+      Hotel::Reservations.all_reservations.must_be_kind_of Array
+    end
+    it 'must contain correct number of reservations made' do
+      puts Hotel::Reservations.all_reservations
+      Hotel::Reservations.all_reservations.length.must_equal 3
+    end
+    it 'must contain the first reservation made' do
+      Hotel::Reservations.all_reservations[0].check_in.must_equal Date.parse("2017-09-21")
     end
   end
 

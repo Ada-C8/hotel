@@ -11,8 +11,9 @@ module Hotel
       #@date_range = date_range
       #@room_rate = room_rate
       @dates = DateRange.new(check_in, check_out)
-      #@total_cost = total_cost
+      @total_cost = total_cost
     end
+    
   end
 
 end
