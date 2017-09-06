@@ -9,11 +9,11 @@ module Hotel
     end
 
     # As an administrator, I can reserve a room for a given date range
-    def reserve(check_in, check_out)
+    def reserve(check_in, check_out, room_num)
       # Given check_in and check_out (Date objects)...
       # Create a Reservation with those dates + assign a room
               #(.detect Enumerable would be useful since you just need the first instance where the room is avaiable)
-      new_reservation = Hotel::Reservation.new(check_in, check_out)
+      new_reservation = Hotel::Reservation.new(check_in, check_out, room_num)
       #TODO: what should an unsuccessful "reservation" return?
       return new_reservation != nil #successfully creates Reservation Object
 
