@@ -14,14 +14,18 @@ describe 'Reservation' do
     it 'Has an ID' do
       @reservation.id.must_be_kind_of Integer
     end
+    it 'Must contain at least one piece of data' do
+      @reservation.dates.length.must_be :>=, 1
+    end
     it 'Must contain at least one Date' do
       @reservation.dates[0].must_be_instance_of Date
-      @reservation.dates.length.must_be :>=, 1
     end
     it 'Checks if checkout is later than checkin time' do
       checkin = Date.new(2017, 10, 31)
       checkout = Date.new(2016, 11, 4)
-      proc { Hotels::Reservation.new(checkin, checkout) } .must_raise ArgumentError
+      proc {
+        Hotels::Reservation.new(checkin, checkout)
+      } .must_raise ArgumentError
     end
     it 'Creates a new Reservation with a single date parameter' do
       Hotels::Reservation.new(@checkin).must_be_kind_of Hotels::Reservation

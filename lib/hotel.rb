@@ -1,5 +1,5 @@
 require 'awesome_print'
-require_relative 'room'
+# require_relative 'room'
 require_relative 'reservation'
 
 module Hotels
@@ -19,11 +19,13 @@ module Hotels
 
     def reserve_room(checkin, checkout = nil)
       # W1-2. Can reserve a room for a given date range
-      reservation = Hotels::Reservation.new(checkin, checkout)
-      reservation.id = room_id(checkin)
-      random_room(reservation, checkin)
-      @reservations << reservation
-      return reservation if full?(checkin) # guard clause over IF/ELSE
+      if full?(checkin)
+        reservation = Hotels::Reservation.new(checkin, checkout)
+        reservation.id = room_id(checkin)
+        random_room(reservation, checkin)
+        @reservations << reservation
+        reservation
+      end
     end
 
     def check_reserved(date)
@@ -33,20 +35,15 @@ module Hotels
 
     def total_cost(reservation)
       # W1-4. Can get the total cost for a given reservation
-    end
-
-    def unavailable_rooms(date)
-      unavailable = check_reserved(date)
-      no_vacancy = []
-      unavailable.each do |reservation|
-        reservation.rooms.each do |room|
-          no_vacancy << room
-        end
+      reservation = id_check(reservation)
+      if reservation.class == Hotels::Reservation
+        reservation.calc_total
+        reservation.total_cost
       end
     end
 
     def room_id(checkin)
-      initial_date = checkin
+      initial_date = checkin.to_s.delete('-')
       random_alphabet = ('A'..'Z').to_a.sample(10).join
       random_digits = (0..9).to_a.shuffle.join
       "#{initial_date}#{random_alphabet}#{random_digits}"
@@ -60,8 +57,28 @@ module Hotels
       end
     end
 
+    def unavailable_rooms(date)
+      unavailable = check_reserved(date)
+      no_vacancy = []
+      unavailable.each do |reservation|
+        reservation.rooms.each do |room|
+          no_vacancy << room
+        end
+      end
+    end
+
     def full?(checkin)
       (0..19).cover? unavailable_rooms(checkin).length
+    end
+
+    def id_check(reservation)
+      reservation = reservation
+      if reservation.class == String
+        @reservations.each_with_index do |appt, index|
+          reservation = @reservations[index] if reservation.equal? appt.id
+        end
+      end
+      reservation
     end
   end # Hotel class
 end # Hotels module

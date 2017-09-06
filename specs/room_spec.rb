@@ -12,8 +12,11 @@ describe 'Room' do
     it 'Has an ID number' do
       @room.room_id.must_equal 5
     end
-    it 'Has a price per night that is an Integer' do
-      @room.price.must_be_kind_of Integer
+    it 'Has a rate for regular reservation nights' do
+      Hotels::Room::REGULAR_RATE.must_be_kind_of Integer
+    end
+    it 'Has a rate for block reservation nights' do
+      Hotels::Room::BLOCK_RATE.must_be_kind_of Integer
     end
   end #------------------------- describe #initialize block
 end

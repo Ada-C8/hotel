@@ -8,7 +8,6 @@ module Hotels
 
     def initialize(room_number)
       @room_id = room_number
-      @price = REGULAR_RATE
     end
   end
 end
