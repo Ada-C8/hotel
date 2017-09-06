@@ -28,7 +28,7 @@ describe "Reservation class" do
     end
 
     it "Raises InvalidRoomError if room argument is not an Integer between 1-20" do
-      check_in = Date.new(2017,9,12)
+      check_in = Date.new(2017,9,9)
       check_out = Date.new(2017,9,12)
 
       proc { BookingSystem::Reservation.new("one", check_in, check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
@@ -38,8 +38,20 @@ describe "Reservation class" do
       proc { BookingSystem::Reservation.new(21, check_in, check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
     end
 
+  end
 
+  describe "total_cost method" do
 
+    it "Can be called" do
+      @test_ob.must_respond_to :total_cost
+    end
+
+    it "Returns the total cost of the reservation as an Integer" do
+      room_price = 200
+      length_of_stay = 3 #2017,9,9; 2017,9,10; 2017,9,11
+      total_cost = room_price * length_of_stay
+      @test_ob.total_cost.must_equal total_cost
+    end
   end
 
 end
