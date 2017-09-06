@@ -96,15 +96,15 @@ describe 'Reservations' do
     ##TODO: write more tests here ##
   end
 
-  # describe 'collection of reservations' do
-  #   it "has a collection of reservtations" do
-  #     @new_hotel.reservations_collection.must_be_kind of Array
-  #   end
+  describe 'all reservations' do
+    it "has a collection of reservations" do
+      Hotel::Reservations.all_reservations.must_be_kind_of Array
+    end
   # ##TODO: write more tests
   # end
   # describe 'blocks' do
   #   it "has a colelction of blocks" do
   #     @new_hotel.blocks_collection.must_be_kind of Array
   #   end
-  # end
+  end
 end
