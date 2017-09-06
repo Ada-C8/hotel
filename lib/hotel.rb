@@ -3,7 +3,7 @@ module Hotel
   require_relative 'reservation'
   require_relative 'room'
   require_relative 'block'
-  require_relative 'already_booked_error'
+  require_relative 'no_room_error'
 
   class Hotel
     attr_reader :rooms, :reservations
@@ -25,6 +25,9 @@ module Hotel
 
     def make_reservation(checkin, checkout)
       room_num = find_available_rooms(checkin, checkout).first
+      if room_num == nil
+        raise NoRoomError.new("No available rooms for dates #{checkin} - #{checkout}")
+      end
       @reservations << Reservation.new(room_num, checkin, checkout, self)
     end
 

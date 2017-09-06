@@ -41,6 +41,7 @@ describe 'Hotel' do
   end
 
   describe 'find_available_rooms' do
+    # As an administrator, I can view a list of rooms that are not reserved for a given date range
     it 'returns an array of rooms' do
       rooms = @hotel.find_available_rooms('2017-09-05', '2017-09-09')
       rooms.must_be_kind_of Array
@@ -53,19 +54,52 @@ describe 'Hotel' do
       rooms = @hotel.find_available_rooms('2017-10-14', '2017-10-18')
 
       rooms.length.must_equal 18
-      rooms.each do |room|
-        puts "Room number #{room.number} is free"
-      end
     end
   end
 
   describe '#make_reservation' do
     # As an administrator, I can reserve a room for a given date range
+    # As an administrator, I can reserve an available room for a given date range
     it "creates a reservation and adds it to the @reservations array" do
       @hotel.make_reservation('2017-09-05', '2017-09-08')
       reservation = @hotel.reservations[0]
       reservation.must_be_kind_of Hotel::Reservation
       reservation.checkout.strftime.must_equal '2017-09-08'
+    end
+
+    it 'will reserve the first available room' do
+      @hotel.make_reservation('2017-09-05', '2017-09-08')
+      @hotel.make_reservation('2017-09-05', '2017-09-08')
+      reservation1 = @hotel.reservations[0]
+      reservation2 = @hotel.reservations[1]
+
+      reservation1.room.wont_equal reservation2.room
+    end
+
+    it 'will book a room again after a reservation ends' do
+      @hotel.make_reservation('2017-09-05', '2017-09-08')
+      @hotel.make_reservation('2018-09-05', '2018-09-08')
+      reservation1 = @hotel.reservations[0]
+      reservation2 = @hotel.reservations[1]
+
+      reservation1.room.must_equal reservation2.room
+    end
+
+    it 'can book two consecutive reservations to the same room' do
+      # A reservation is allowed start on the same day that another reservation for the same room ends
+      @hotel.make_reservation('2017-09-05', '2017-09-08')
+      @hotel.make_reservation('2017-09-08', '2017-09-11')
+      reservation1 = @hotel.reservations[0]
+      reservation2 = @hotel.reservations[1]
+
+      reservation1.room.must_equal reservation2.room
+    end
+
+    it 'raises NoRoomError if no rooms are available' do
+      # Your code should raise an exception when asked to reserve a room that is not available
+      proc {
+        21.times { @hotel.make_reservation('2017-09-05', '2017-09-08') }
+    }.must_raise NoRoomError
     end
   end
 
@@ -83,8 +117,3 @@ describe 'Hotel' do
     end
   end
 end
-
-# As an administrator, I can view a list of rooms that are not reserved for a given date range
-# As an administrator, I can reserve an available room for a given date range
-# A reservation is allowed start on the same day that another reservation for the same room ends
-# Your code should raise an exception when asked to reserve a room that is not available
