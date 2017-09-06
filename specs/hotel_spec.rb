@@ -38,7 +38,6 @@ describe "#HOTEL" do
       @my_hotel.reservations.first.room_number.must_equal 1
     end
 
-
     it "Can display a list of reservations for a specific date" do
       @my_hotel.reservation_by_date("January 5, 2018").must_be_instance_of Array
       @my_hotel.reservation_by_date("January 5, 2018").length.must_equal 2
@@ -47,6 +46,16 @@ describe "#HOTEL" do
       @my_hotel.reservation_by_date("2018-01-25").length.must_equal 0
     end
 
+  end
+
+  describe "#ROOMS" do
+    it "Can find rooms reserved for a specific date" do
+      
+    end
+
+    it "Can find rooms with availability for a given date range" do
+
+    end
   end
 end
 #CLI feature

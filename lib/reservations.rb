@@ -14,6 +14,8 @@ class Reservation
     @bill = @num_nights * room.rate
   end
 
+
+private
   def populate_nights(check_in, check_out)
     nights = []
     until check_in == check_out

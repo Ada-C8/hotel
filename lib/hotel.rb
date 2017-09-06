@@ -34,6 +34,23 @@ class Hotel
   end
 
 
+#will use !(rooms_reserved) to return the opposite of the reserved rooms
+  def available_rooms(check_in, check_out)
+    return !(roomes_reserved(check_in)) && !(rooms_reserved(check_out))
+  end
+
+#reservation_by_date(date) returns an array of reservations for the date; the each statement iterates through those reservations and gets the room number.
+
+  def rooms_reserved(date)
+    rooms_reserved_today = []
+    reservation_by_date(date).each do |reservation|
+      rooms_reserved_today.push(reservation.room)
+    end
+    return rooms_reserved_today
+  end
+
+
+
   # def available_rooms(date_start, date_end)
   #   valid_date(date_start, date_end)
   #   Date.parse(date_start)
@@ -43,7 +60,7 @@ class Hotel
   # end
 
   private
-  def valid_date(check_in, check_out=nil)
+  def valid_date(check_in, check_out)
     start = Date.parse(check_in)
     finish = Date.parse(check_out)
 

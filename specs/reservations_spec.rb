@@ -17,20 +17,20 @@ describe "#RESERVATION" do
 
   end
 
-  it "Can accurately report the number of nights in a reservation" do
-    @new_reservation.num_nights.must_equal 2
-  end
-
   it "Raises an Argument error for invalid input" do
     proc {Reservation.new("yesterday", "tomorrow", @room)}.must_raise ArgumentError
 
     proc {Reservation.new("tomorrow", "today", @room)}.must_raise ArgumentError
 
-    proc {Reservation.new("gibberish", "hey", @room)}.must_raise ArgumentError
+    proc {Reservation.new("January 4, 2018", "hey", @room)}.must_raise ArgumentError
 
     proc{Reservation.new("today", "tomorrow", @room)}.must_raise ArgumentError
 
     proc{Reservation.new("01-18-2018", "01-18-2018", @room)}.must_raise ArgumentError
+  end
+
+  it "Can accurately report the number of nights in a reservation" do
+    @new_reservation.num_nights.must_equal 2
   end
 
   it "can calculate the cost for a reservation" do
@@ -42,4 +42,6 @@ describe "#RESERVATION" do
     @new_reservation.nights.must_equal ["2018-01-16", "2018-01-17"]
     @new_reservation1.nights.length.must_equal 7
   end
+
+
 end
