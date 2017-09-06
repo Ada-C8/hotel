@@ -7,8 +7,8 @@ module HotelManagment
     attr_reader :rooms, :reservations
     def initialize
       @rooms = []
-      @reservations = []
       @reserved_rooms = []
+      @reservations = []
     end
 
     def add_20_rooms
@@ -26,8 +26,7 @@ module HotelManagment
 
 
     def create_reservation
-      reservation = reservation.new(first_name, last_name, check_in_date,check_out_date)
-
+      reservation = reservation.new(first_name, last_name, check_in_date,check_out_date, reservation_number, room_number)
       @reservations << reservation
     end
 

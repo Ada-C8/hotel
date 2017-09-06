@@ -48,16 +48,25 @@ describe "hotel class" do
   end
 
   describe "create_reservation" do
-    it "should have reservations array" do
+    it "Should respond to .create_reservation " do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.must_respond_to :create_reservation
+    end
+
+    it "Should have reservations array" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.reservations.must_be_instance_of Array
 
     end
 
     it "should be able to add a reservation" do
-
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 1)
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.reservations << new_reservation
+      new_hotel.reservations.must_equal [new_reservation]
     end
 
-    it "Should respond to .create_reservation " do
 
-    end
+
   end
 end

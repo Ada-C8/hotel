@@ -6,14 +6,14 @@ describe "Reservaton Class" do
 
     it "Should be able to instantiate a reservation" do
 
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
       new_reservation.must_be_instance_of HotelManagment::Reservation
 
     end
 
     it "First name should be an instance of String" do
 
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
 
       new_reservation.first_name.must_be_instance_of String
 
@@ -21,30 +21,36 @@ describe "Reservaton Class" do
 
     it "Last name should be an instance of String" do
 
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
       new_reservation.last_name.must_be_instance_of String
 
     end
 
     it "check_in_date should be an instance of Date" do
 
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
       new_reservation.check_in_date.must_be_instance_of Date
 
     end
 
     it "check_out_date should be an instance of Date" do
 
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
       new_reservation.check_out_date.must_be_instance_of Date
 
     end
 
     it "reservation_number must be instance of integer" do
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
 
       new_reservation.reservation_number.must_be_instance_of Integer
+    end
 
+
+    it "room_number must be instance of integer" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 1)
+
+      new_reservation.room_number.must_be_instance_of Integer
     end
   end
 end
