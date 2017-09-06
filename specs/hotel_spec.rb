@@ -29,9 +29,11 @@ describe 'Hotel' do
   end
 
   describe '#make_reservation' do
-    @hotel.make_reservation('2017-09-05', '2017-09-08')
+    it "creates a reservation and adds it to the @reservations array" do
+      @hotel.make_reservation('2017-09-05', '2017-09-08')
 
-    @hotel.reservations[0].must_be_kind_of Hotel::Reservation
+      @hotel.reservations[0].must_be_kind_of Hotel::Reservation
+    end
   end
   # As an administrator, I can reserve a room for a given date range
 
