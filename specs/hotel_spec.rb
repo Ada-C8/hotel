@@ -50,7 +50,7 @@ describe "hotel" do
 
     it "should match what is currently in csv" do
       output = Hotel.all_reservations
-      output.length.must_equal 1
+      output.length.must_equal 21
       output[0].room_number.must_equal 1
       output[0].total_cost.must_equal 600
     end
@@ -116,7 +116,7 @@ describe "hotel" do
       output.must_be_instance_of Hotel::Reservation
     end
     it "should raise an error if there are unavailable_rooms" do
-      #TODO: probably update csv for this 
+      proc {Hotel.reserve_room([2017,11,24], [2017,11, 25])}.must_raise ArgumentError
     end
   end
 end
