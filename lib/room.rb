@@ -18,6 +18,14 @@ module Hotel
       @available ? @available = false : @available = true
     end
 
+    def self.all
+      room_array = []
+      NUM_OF_ROOMS.times do |i|
+        room_array << Hotel::Room.new(i + 1) # Hotel Room Numbers start with 1, not 0
+      end
+      return room_array
+    end
+
   end # END OF CLASS
 
 end # END OF MODULE
