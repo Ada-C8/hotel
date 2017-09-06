@@ -1,3 +1,6 @@
+require 'pry'
+require 'date'
+
 module Hotel
   class Booking
     #initialize will have the following parameters (date_range, num_rooms)
