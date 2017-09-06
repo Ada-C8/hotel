@@ -14,10 +14,18 @@ module Hotel_System
       reservations = []
       @rooms.each do |room|
         if room.reservations != []
-          reservations.push(room.reservations)
+          reservations += room.reservations
         end
       end
       return reservations
+    end
+
+    def find_res_by_date(date)
+      all_reservations = self.reservations
+      date_reservations = all_reservations.select do |reservation|
+        (reservation.check_in...reservation.check_out).cover?(date)
+      end
+      return date_reservations
     end
     # def reserve_room(name, check_in, check_out)
     #   reservation = Hotel_System::Reservation.new(name, check_in, check_out)
