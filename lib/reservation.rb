@@ -1,6 +1,6 @@
 module Hotel
   class Reservation
-    # require_relative 'date_range'
+    require_relative 'date_range'
     # @total_cost
     # @dates
     # @room

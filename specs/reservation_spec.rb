@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'Reservation' do
   before do
-    @reservation = Hotel::Reservation.new('2017-09-05', '2017-09-07')
+    @reservation = Hotel::Reservation.new(1, '2017-09-05', '2017-09-07')
   end
 
   describe '#initialize' do
