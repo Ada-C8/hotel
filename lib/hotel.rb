@@ -1,47 +1,34 @@
 require_relative 'reservation'
 module My_Hotel
   class Hotel
-    ROOMS = {room_1: 200,
-      room_2: 200,
-      room_3: 200,
-      room_4: 200,
-      room_5: 200,
-      room_6: 200,
-      room_7: 200,
-      room_8: 200,
-      room_9: 200,
-      room_10: 200,
-      room_11: 200,
-      room_12: 200,
-      room_13: 200,
-      room_14: 200,
-      room_15: 200,
-      room_16: 200,
-      room_17: 200,
-      room_18: 200,
-      room_19: 200,
-      room_20: 200
+    ROOMS = {1 => 200,
+      2 => 200,
+      3 => 200,
+      4 => 200,
+      5 => 200,
+      6 => 200,
+      7 => 200,
+      8 => 200,
+      9 => 200,
+      10 => 200,
+      11 => 200,
+      12 => 200,
+      13 => 200,
+      14 => 200,
+      15 => 200,
+      16 => 200,
+      17 => 200,
+      18 => 200,
+      19 => 200,
+      20 => 200
     }
 
-
-    attr_reader :rooms, :list_of_reservations
+    attr_reader :rooms, :all_reservations
 
     def initialize
       @rooms = ROOMS
-      @list_of_reservations = []
+      @all_reservations = []
     end
-
-
-
-    # def make_rooms
-    #   room_number_array = [1..20]
-    #   20.times do
-    #     index = 0
-    #     Reservation.new(room_number_array, 200)
-    #     index +=1
-    #   end
-    # end
-
 
     def display_rooms
       index = 1
@@ -53,9 +40,55 @@ module My_Hotel
 
     def make_reservation(arrive, leave)
       new_reservation = My_Hotel::Reservation.new(arrive, leave)
-      @list_of_reservations << new_reservation
+      @all_reservations << new_reservation
+      assign_room(new_reservation)
+      set_cost(new_reservation)
+      set_reservation_id(new_reservation)
       return new_reservation
     end
+
+    def set_cost(reservation)
+      number_of_nights = (reservation.date_range.to_a.length - 1)
+      cost_per_night = ROOMS[reservation.room_number]
+      cost = number_of_nights * cost_per_night
+      reservation.cost = cost
+    end
+
+    def set_reservation_id(reservation)
+      reservation.reservation_id = @all_reservations.length if @all_reservations != []
+    end
+
+    def assign_room(reservation)
+      room_number = rand(20)
+      reservation.room_number = room_number
+    end
+
+    # def find_by_reservation_id
+    #
+    # end
+
+
+    # if @list_of_reservations.length  == 0 #if there are no reservations make any random reservation_id
+    #   return 5.times do reservation_id << rand(9)
+    #   end
+    # end
+    #
+    # unique = false
+    # while unique == false #while reservation_id is not unique
+    #   unique = true
+    #   5.times do reservation_id << rand(9) #make new reservation_id
+    #     @list_of_reservations.each do |reservation| #check if unique
+    #       if reservation.reservation_id == reservation_id
+    #         unique = false
+    #       end
+    #     end
+    #   end
+    # end
+    # reservation_id
+
+
+
+
     # def display_reservations
     #   #puts out list of reservations
     # end
@@ -77,7 +110,8 @@ module My_Hotel
 end
 
 
-h= My_Hotel::Hotel.new
-h.make_reservation([2017,2,1],[2017,2,5])
-h.make_reservation([2017,3,1],[2017,3,5])
-puts h.list_of_reservations
+# h= My_Hotel::Hotel.new
+# a = h.make_reservation([2017,2,1],[2017,2,5])
+# puts h.all_reservation_objects[0].room_number
+# puts h.all_reservation_objects[0].cost
+# puts h.all_reservation_objects[0].reservation_id

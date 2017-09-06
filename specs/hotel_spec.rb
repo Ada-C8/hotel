@@ -25,20 +25,49 @@ describe "My_Hotel::Hotel" do
       holiday.must_be_kind_of My_Hotel::Reservation
     end
 
+    it "calculates the cost" do
+      hotel_california = My_Hotel::Hotel.new
+      hotel_california.must_be_kind_of My_Hotel::Hotel
+
+      start_date = [2017, 12, 20]
+      end_date = [2017, 12, 24]
+      holiday = hotel_california.make_reservation(start_date, end_date)
+      holiday.cost.must_equal 600 #nominal case
+
+#should reject bad dates
+      # start_date = [2017, 12, 24]
+      # end_date = [2017, 12, 24]
+      # holiday = hotel_california.make_reservation(start_date, end_date)
+      # holiday.cost.must_equal 0 #edge case
+    end
+
+    it "assigns a room number" do
+      hotel_california = My_Hotel::Hotel.new
+      hotel_california.must_be_kind_of My_Hotel::Hotel
+
+      start_date = [2017, 12, 20]
+      end_date = [2017, 12, 24]
+      holiday = hotel_california.make_reservation(start_date, end_date)
+      holiday.room_number.must_be_kind_of Integer
+      (1..20).must_include holiday.room_number
+
+    end
+
+
+
     it "updates the list_of_reservations" do
       hotel_california = My_Hotel::Hotel.new
       hotel_california.must_be_kind_of My_Hotel::Hotel
       start_date = [2017, 12, 20]
       end_date = [2017, 12, 24]
       holiday = hotel_california.make_reservation(start_date, end_date)
-      hotel_california.list_of_reservations.must_be_kind_of Array
-      hotel_california.list_of_reservations.length.must_equal 1
+      hotel_california.all_reservations.must_be_kind_of Array
+      hotel_california.all_reservations.length.must_equal 1
 
       start_date = [2017, 1, 20]
       end_date = [2017, 1, 24]
       holiday = hotel_california.make_reservation(start_date, end_date)
-      hotel_california.list_of_reservations.length.must_equal 2
-
+      hotel_california.all_reservations.length.must_equal 2
     end
 
 
