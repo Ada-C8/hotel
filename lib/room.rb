@@ -16,7 +16,7 @@ module Hotel
 
     def room_numbers(room_num)
       if room_num.between?(1, 20)
-        return true
+        return room_num
       else
         raise ArgumentError.new "Not a valid room number"
       end

@@ -33,7 +33,7 @@ describe "Hotel#Room wave 1" do
     end
 
     it "accepts a vaild room number" do
-      @room.room_numbers(4).must_equal true
+      @room.room_numbers(4).must_equal 4
     end
 
     it "raises an ArgumentError if the room number is not 1-20" do
