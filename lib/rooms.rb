@@ -5,11 +5,6 @@ class Room
   def initialize(number, rate)
     @number = number
     @rate = rate
-    @reservations = []
-  end
-
-  def add_reservation(check_in, check_out)
-    @reservations.push(Reservation.new(check_in, check_out, @rate))
   end
 
 
