@@ -6,7 +6,7 @@ describe 'DateRange' do
     it "creates a new instance of DateRange" do
       check_in = Date.new(2017, 03, 11)
       check_out = Date.new(2017, 04, 11)
-      DateRange.new(check_in, check_out ).must_be_instance_of DateRange
+      DateRange.new(check_in, check_out).must_be_instance_of DateRange
     end
 
     it "raises an argument error if check_out date is before check_in" do
@@ -18,12 +18,17 @@ describe 'DateRange' do
     it "does not raise an argument error if check_out date is after check_in" do
       check_in = Date.new(2017, 03, 11)
       check_out = Date.new(2017, 04, 11)
+      # proc { DateRange.new(check_in, check_out)}.wont_throw Exception
       DateRange.new(check_in, check_out).must_be_instance_of DateRange
     end
 
-    # it "requires check_in and check_out date for new instance" do
-    #   DateRange.new.must_be_instance_of DateRange
-    # end
+    it "provides the nights of stay" do
+      check_in = Date.new(2017, 03, 11)
+      check_out = Date.new(2017, 03, 22)
+      stay = DateRange.new(check_in, check_out)
+
+      stay.nights.must_equal 10
+    end
   end
 
   #   it "initialize with all rooms in hotel as array" do
