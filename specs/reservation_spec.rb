@@ -10,6 +10,8 @@ describe 'Reservation' do
       @reservation.must_be_kind_of Hotel::Reservation
     end
 
-
+    it 'has @total_cost value' do
+      @reservation.total_cost.must_equal 400
+    end
   end
 end
