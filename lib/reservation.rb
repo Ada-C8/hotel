@@ -1,4 +1,4 @@
-require_relative
+# require_relative
 
 reservation_hash = {
   num_guests: 0,
@@ -9,11 +9,7 @@ reservation_hash = {
   total_price: 0
 }
 
-def self.all(rooms)
-  rooms.each do |room|
 
-  end
-end
 
   def self.find
   end

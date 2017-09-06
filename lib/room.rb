@@ -1,4 +1,4 @@
-require_relative
+# require_relative
 # The hotel has 20 rooms, and they are numbered 1 through 20
 # Every room is identical, and a room always costs $200/night
 # The last day of a reservation is the checkout day,
@@ -8,9 +8,18 @@ require_relative
 # conflict with each other (this will come in wave 2!)
 
 module Hotel
-  class Room
-    @room_number = room_number
-    @room_price = 200
-  end
 
+  class Hotel
+
+    attr_reader :rooms, :room_price
+
+    def initialize
+      @rooms = (1..20).to_a
+      @room_price = 200
+    end
+
+  end
 end
+
+hotel = Hotel::Hotel.new
+p hotel.rooms
