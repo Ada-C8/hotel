@@ -40,8 +40,19 @@ module Hotel
       reservations << ::Hotel::Reservation.new(start_date, end_date, room_num)
     end
 
-    def is_booked?(date)
-      return reservations.any? { |reservation| reservation.include?(date) }
+    def is_booked?(start_date, end_date = start_date.next_day)
+      # don't include final date since check-out doesn't conflict with check-in of a new reservation
+      date_range = (start_date...end_date).to_a
+
+      reservations.each do |reservation|
+        date_range.each do |date|
+          if reservation.include?(date)
+            return true
+          end
+        end
+      end
+      
+      return false
 
       # reservations.each do |reservation|
       #   if reservation.include?(date)

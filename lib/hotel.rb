@@ -52,49 +52,20 @@ module Hotel
       # organize using group_by? (room_num)
       return reservations
 
-      # reservations = []
-      #
-      # all_reservations.each do |reservation|
-      #
-      #   # if date >= reservation.check_in && date < reservation.check_out
-      #   #   reservations << reservation
-      #   # end
-      #   if reservation.include?(date)
-      #     reservations << reservation
-      #   end
-      # end
-      #
-      # return reservations
     end
 
     def find_avail_rooms(start_date, end_date)
-      # returns a list of rooms available in the date range
-      avail_rooms = (1..rooms.length).to_a
-      date_range = (start_date...end_date).to_a  # don't include end date since checkout won't conflict with start date of another res
+      # returns a hash of rooms available in the date range
 
-      # iterate through all room numbers and check if room reservations include any of the dates in date range
-      (1..avail_rooms.length).each do |room_num|
-        room = rooms[room_num]
+      # check input
+      raise ArgumentError.new("End date must be after start date") if start_date >= end_date
 
-        date_range.each do |date|
-          room.reservations.each do |reservation|
-            puts "iterating through reservations for room #{room_num}"
-
-            if reservation.include?(date)
-              avail_rooms.delete(room_num)
-              puts "breaking out...or am I?"
-              break
-            end
-          end
-        end
-      end
-
-      # return list of room objects
-      return avail_rooms.map { |room_num| rooms[room_num] }
+      return rooms.reject { |room_num, room| room.is_booked?(start_date, end_date) }
 
     end
 
-    # private
+    private
+
     #
     # def is_valid?(num) move integer check to user input
     #   return num.is_a?(Integer) && num > 0

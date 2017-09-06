@@ -143,11 +143,11 @@ describe "Testing Hotel class" do
       @end_date = Date.new(2017,9,7)
     end
 
-    it "Returns a list of rooms available for the given date range" do
+    it "Returns a hash of rooms available for the given date range" do
       avail_rooms = @hotel.find_avail_rooms(@start_date, @end_date)
-      avail_rooms.must_be_kind_of Array
+      avail_rooms.must_be_kind_of Hash
 
-      avail_rooms.each do |room|
+      avail_rooms.each do |room_num, room|
         room.must_be_instance_of Hotel::Room
       end
     end
@@ -165,6 +165,13 @@ describe "Testing Hotel class" do
       updated_avail_rooms = @hotel.find_avail_rooms(@start_date, @end_date)
       updated_avail_rooms.length.must_equal expected_availability - 1
       updated_avail_rooms.wont_include room1
+    end
+
+    it "Raises ArgumentError if start date is later than end date" do
+      room1 = @hotel.rooms[1]
+      proc { @hotel.find_avail_rooms(@end_date, @start_date, room1) }.must_raise ArgumentError
+
+      proc { @hotel.find_avail_rooms(@end_date, @end_date, room1) }.must_raise ArgumentError
     end
   end
 
