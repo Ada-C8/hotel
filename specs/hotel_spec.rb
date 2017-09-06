@@ -92,9 +92,22 @@ describe "hotel" do
       output = Hotel.available_rooms([2017,10,2], [2017,10,4])
       (output.length).must_equal 19
     end
+    it "should give 20 rooms available" do
+      output = Hotel.available_rooms([2017,2,10], [2017,2,14])
+      (output.length).must_equal 20
+      start_on_checkout = Hotel.available_rooms([2017,10,5], [2017,10,6])
+      (start_on_checkout.length).must_equal 20
+    end
+    it "should give 19 rooms available" do
+      output = Hotel.available_rooms([2017,10,3], [2017,10,4])
+      (output.length).must_equal 19
+    end
     it "everything in the array should be a room" do
       output = Hotel.available_rooms([2017,10,2], [2017,10,4])
       output.each {|element| element.must_be_instance_of Hotel::Room}
     end
+
+
+
   end
 end
