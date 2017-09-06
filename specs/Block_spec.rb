@@ -38,7 +38,9 @@ describe "Block class" do
 
   it "prevents blocked rooms from being reserved by the general public" do
     4.times { Hotel::Block.new(Date.today, Date.today + 1, 5) }
+    # can't book room in a block without the block_id
     proc { Hotel::Reservation.new(nil, Date.today, Date.today + 1) }.must_raise NoRoomsAvailableError
+    # can book a room with the block_id
     Hotel::Reservation.new(1, Date.today, Date.today + 1).must_be_instance_of Hotel::Reservation
   end
 
@@ -48,8 +50,13 @@ describe "Block class" do
     Hotel::Block.available(Date.today, Date.today + 1).must_equal []
   end
 
-  xit "allows a user to check if a given block has rooms available" do
+  it "allows a user to check if a given block has rooms available" do
+    Hotel::Block.new(Date.today, Date.today + 1, 5)
+    Hotel::Block.rooms_left(1).must_be_instance_of Array
+    Hotel::Block.rooms_left(1).length.must_equal 5
 
+    Hotel::Reservation.new(1, Date.today, Date.today + 1)
+    Hotel::Block.rooms_left(1).length.must_equal 4
   end
 
   xit "allows a user to reserve a room from within a block of rooms" do

@@ -47,6 +47,11 @@ module Hotel
       return @@blocks
     end
 
+    def self.rooms_left(block_id)
+      block = @@blocks.select { |a_block| a_block.block_id == block_id }[0]
+      return Reservation.sample_available_rooms(block.start_date, block.end_date, block.rooms.length, block_id)
+    end
+
     private
 
     def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
