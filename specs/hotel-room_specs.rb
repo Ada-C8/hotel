@@ -19,21 +19,33 @@ describe "Hotel::Room" do
     end
 
     it "can make a hotel of rooms" do
-      hotel = Hotel::Room.all
+      Hotel::Room.must_respond_to :list_all
+      hotel = Hotel::Room.list_all
       hotel.must_be_instance_of Array
       20.times do |i|
         hotel[i].must_be_instance_of Hotel::Room
       end
     end
 
-    it "can make a list of rooms" do
-      Hotel::Room.must_respond_to :list_all
-      hotel = Hotel::Room.all
-      Hotel::Room.list_all.must_be_instance_of Array
-      hotel_list = Hotel::Room.list_all
-      20.times do |i|
-        hotel_list[i].must_be_instance_of Hotel::Room
-      end
+    # it "can make a list of rooms" do
+    #   Hotel::Room.all #make hotel
+    #   Hotel::Room.list_all.must_be_instance_of Array
+    #   hotel_list = Hotel::Room.list_all
+    #   20.times do |i|
+    #     hotel_list[i].must_be_instance_of Hotel::Room
+    #   end
+    # end
+
+    it "can list rooms that are available" do
+      start_date = Date.new(2017,9,5)
+      end_date = Date.new(2017,9,8)
+      start_date2 = Date.new(2017,9,5)
+      end_date2 = Date.new(2017,9,8)
+      # room_reservation = Hotel::Reservation.new(start_date,end_date,Hotel::Room.new(1))
+      # room_reservation2 = Hotel::Reservation.new(start_date,end_date,Hotel::Room.new(2))
+      all_rooms = Hotel::Room.all_available_rooms(start_date, end_date)
+      all_rooms.must_be_instance_of Array
+      all_rooms.length.must_equal 20
     end
 
   end
