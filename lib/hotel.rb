@@ -67,4 +67,7 @@ module Hotel
     return available_rooms
   end
 
+  def self.reserve_room(begin_date, end_date)
+  end
+
 end
