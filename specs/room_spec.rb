@@ -2,7 +2,7 @@ require_relative 'spec_helper.rb'
 
 describe "Room" do
   before do
-    @room = Hotel::Room.new("Room 1", 200)
+    @room = Hotel::Room.new(1, 200)
   end
 
   describe "Room class" do
@@ -32,16 +32,16 @@ describe "Room" do
     end
   end
 
-  describe "name attribute" do
+  describe "number attribute" do
 
     it "Room has a name attribute" do
-      @room.must_respond_to :name
+      @room.must_respond_to :number
     end
 
-    it "returns a capitalized string" do
-      @room.name.class.must_equal String
-      @room = Hotel::Room.new("room 1", 200)
-      @room.name.must_equal "Room 1"
+    it "returns a integer" do
+      @room.number.class.must_equal Integer
+      @room = Hotel::Room.new(1.00, 200)
+      @room.number.must_equal 1
     end
 
   end
