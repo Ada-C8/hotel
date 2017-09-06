@@ -67,11 +67,14 @@ describe "Hotel" do
       @hotel.list_of_rooms[3].booked.must_equal true
       @hotel.list_of_rooms[4].booked.must_equal false
       @hotel.list_of_rooms[5].booked.must_equal false
-
-
-
     end
 
+    it "has a reservations_by_date method" do
+      @hotel = Hotel::Hotel.new(20)
+      @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      @hotel.must_respond_to :reservations_by_date
+
+    end
   end
 
 end

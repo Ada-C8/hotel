@@ -27,5 +27,15 @@ module Hotel
         end
       end
     end
+
+    def reservations_by_date(year, month, day)
+      reservations_at_date = []
+      date = Date.new(year.to_i, month.to_i, day.to_i)
+      @reservations.each do |reservation|
+        if date >= reservation.arrival_date && date < reservation.departure_date
+          reservations_at_date << reservation
+        end
+      end
+    end
   end
 end
