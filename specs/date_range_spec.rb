@@ -19,7 +19,7 @@ describe "Date Range" do
   describe "date include" do
     it "checks if a date is included in the date range" do
 
-      @date.date_include?(Date.new(2001,2,5)) .must_equal true
+      @date.date_include?(Date.new(2001,2,5)).must_equal true
     end
 
     it "raises an error for an invalid date" do
@@ -29,6 +29,10 @@ describe "Date Range" do
 
   describe "date overlap" do
     it "it checks if the dates are within the checkin/checkout date range" do
+      start_date = Date.new(2001,2,4)
+      end_date = Date.new(2001,2,10)
+      @date.date_overlap?(start_date, end_date).must_equal true
+    end
   end
 
 
