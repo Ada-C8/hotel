@@ -10,6 +10,7 @@ module Hotel
     @check_out = check_out
     @nights = (@check_out - @check_in).to_i
     @nights_arr = []
+    make_nights_arr
     end
 
     def valid_date?
@@ -25,7 +26,7 @@ module Hotel
         @nights_arr << (@check_in + counter)
         counter += 1
       end
-      return @nights_arr
-    end #end make_nights_arr method 
+      # return @nights_arr
+    end #end make_nights_arr method
   end #end DateRange class
 end #end Hotel module
