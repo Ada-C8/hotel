@@ -18,5 +18,29 @@ describe "Room" do
       room.rate.must_equal 200
     end
 
+    it "Creates a room with an empty array of reserved dates" do
+      room = Hotel::Room.new(1)
+
+      room.dates_reserved.must_be_kind_of Array
+      room.dates_reserved.must_equal []
+    end
+  end
+
+  describe "reserve method" do
+    it "Reserves room for a given date range" do
+      room = Hotel::Room.new(1)
+      date = '2017-10-12'
+      room.reserve(date, 3)
+
+      room.dates_reserved.must_include Date.parse('2017-10-12')
+      room.dates_reserved.must_include Date.parse('2017-10-14')
+      room.dates_reserved.wont_include Date.parse('2017-10-11')
+      room.dates_reserved.wont_include Date.parse('2017-10-15')
+
+    end
+
+    it "Creates a reservation instance" do
+      # TODO next!! Probably in reservations
+    end
   end
 end

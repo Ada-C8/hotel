@@ -2,30 +2,30 @@ require_relative 'spec_helper'
 
 describe "Reservation" do
   describe "initialize" do
-    it "Creates a Reservation with a check-in date, a room and a number of nights" do
-      ada_inn = Hotel::Building.new
-      date = '2017-02-12'
-      res1 = Hotel::Reservation.new(date, 9, ada_inn.rooms[0])
+    before do
+      @ada_inn = Hotel::Building.new
+      @date = '2017-02-12'
+      @ada_inn.rooms[0].reserve(@date, 9)
+    end
 
-      res1.must_be_instance_of Hotel::Reservation
-      res1.check_in.must_be_kind_of Date
-      res1.check_in.must_equal Date.parse('2017-02-12')
-      res1.room.must_be_instance_of Hotel::Room
-      res1.room.number.must_equal 1
-      res1.nights.must_be_kind_of Integer
-      res1.nights.must_equal 9
+    it "Creates a Reservation with a check-in date, a room, a number of nights and a check_out" do
 
-      ## TODO 4 Iffy as to whether or not I want to do this
-      res2 = Hotel::Reservation.new(date, 4, ada_inn.rooms[1])
+      @ada_inn.rooms[0].reservation.must_be_instance_of Hotel::Reservation
 
-      puts Hotel::Reservation.all
+      @ada_inn.rooms[0].reservation.check_in.must_be_kind_of Date
+      @ada_inn.rooms[0].reservation.check_in.must_equal Date.parse('2017-02-12')
+
+      @ada_inn.rooms[0].reservation.room.must_be_instance_of Hotel::Room
+      @ada_inn.rooms[0].reservation.room.number.must_equal 1
+
+      @ada_inn.rooms[0].reservation.nights.must_be_kind_of Integer
+      @ada_inn.rooms[0].reservation.nights.must_equal 9
+
+      @ada_inn.rooms[0].reservation.check_out.must_equal Date.parse('2017-02-21')
+
+
     end
 
   end
 
-  describe "self.all method" do ##TODO see todo 4
-    it "Can list all reservations by date" do
-
-    end
-  end
 end
