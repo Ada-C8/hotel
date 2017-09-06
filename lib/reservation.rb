@@ -17,6 +17,14 @@ module Hotel
       num_nights = @dates.length
       # @total_cost = num_nights * @room.cost
     end
+    
+    # def includes_dates?(checkin, checkout)
+    # Date.parse????
+    # dates_to_check = DateRange::range(checkin, checkout)
+    # dates_to_check.each do |date|
+    # if @dates.include? date
+    # return true
+    # end
 
     private
 
@@ -24,12 +32,5 @@ module Hotel
       '%.2d%.2d%.4d' % [@checkin.month, @checkin.day, rand(9999)]
     end
 
-    # def includes_dates?(checkin, checkout)
-      # Date.parse????
-      # dates_to_check = DateRange::range(checkin, checkout)
-      # dates_to_check.each do |date|
-      # if @dates.include? date
-      # return true
-    # end
   end
 end
