@@ -6,7 +6,7 @@ require 'date'
 module Hotel_Chain
   class Reservation
 
-    attr_accessor :check_in_date, :check_out_date, :room_id, :hotel
+    attr_accessor :check_in_date, :check_out_date, :room_id, :hotel, :cost
 
     #A new reservation object can be initialized by providing the check_in_date and check_out_date
     #Initialization converts the admin's date inputs to convert to Ruby Date objects, and stores them in instance variables.
@@ -15,11 +15,13 @@ module Hotel_Chain
     #I may also like to have the program assign a reservation_id (this info can live in a spreadsheet)- then I will need a method to look up a reservation by reservation_id
     def initialize(check_in_date, check_out_date)
       @check_in_date = Date.strptime(check_in_date, "%m/%d/%Y")
-      @check_in_date = Date.strptime(check_out_date, "%m/%d/%Y")
+      @check_out_date = Date.strptime(check_out_date, "%m/%d/%Y")
       @hotel = Hotel_Chain::MyHotel.new
       @room_id = @hotel.array_of_rooms.sample.room_id
-      #@cost = Date math * 200 (rate will eventually reference the rate associated with the room_id)
-      #puts "Check-in date: #{@check_in_date}"
+      @cost = (@check_out_date - @check_in_date) * 200 
+      #(rate will eventually reference the rate associated with the room_id)
+      puts "Check-in date: #{@check_in_date}"
+      puts "Cost: #{@cost}"
     end
 
   end

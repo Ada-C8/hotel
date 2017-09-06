@@ -26,13 +26,16 @@ describe "Reservation Class" do
 
     end
 
-    # it "can return a check-in date" do
-    #   @reservation.check_in_date.must_equal 0017-08-16.to_i
-    # end
-    #
-    # it "can reserve a room for a given date" do
-    #
-    # end
+    it "can return a check-in date" do
+      @reservation.check_in_date.must_equal Date.strptime("8/13/17", "%m/%d/%Y")
+      #@reservation.check_in_date.to_date.must_equal 0017-08-13
+    end
+
+    it "returns the correct cost for the reservation" do
+      @reservation.cost.must_equal 600
+
+    end
+
 
   end
 
