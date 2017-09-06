@@ -2,7 +2,7 @@ require_relative 'date_range'
 module My_Hotel
   class Reservation
 
-    attr_accessor :reservation_id, :block_id, :room_number, :cost, :date_range
+    attr_accessor :reservation_id, :block_id, :room_number, :cost, :nights
 
 
     def initialize(start_date,end_date)
@@ -11,10 +11,15 @@ module My_Hotel
       @reservation_id = nil
       @cost = nil
       @room_number = nil
-      @date_range = My_Hotel::Date_Range.new(@start_date, @end_date).nights
+      @nights = My_Hotel::Date_Range.new(@start_date, @end_date).nights
       @block_id = []
 
     end
+
+
+
+
+
 
     # def self.set_id
     #   reservation_id = 1 if Hotel.list_of_reservations == nil
@@ -38,11 +43,6 @@ module My_Hotel
     #     end
     #   end
     # end
-
-
-    def cost_reservation
-      number of dates * Room.rate = sum
-    end
 
     # def cancel_reservation
     # end

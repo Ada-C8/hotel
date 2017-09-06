@@ -48,10 +48,14 @@ module My_Hotel
     end
 
     def set_cost(reservation)
-      number_of_nights = (reservation.date_range.to_a.length - 1)
-      cost_per_night = ROOMS[reservation.room_number]
-      cost = number_of_nights * cost_per_night
-      reservation.cost = cost
+      if reservation.nights.to_a.length <= 0
+        return reservation.cost = 0
+      else
+        number_of_nights = reservation.nights.to_a.length
+        cost_per_night = ROOMS[reservation.room_number]
+        cost = number_of_nights * cost_per_night
+        reservation.cost = cost
+      end
     end
 
     def set_reservation_id(reservation)
@@ -59,13 +63,44 @@ module My_Hotel
     end
 
     def assign_room(reservation)
-      room_number = rand(20)
+      room_number = rand(20) + 1
       reservation.room_number = room_number
     end
 
-    # def find_by_reservation_id
-    #
-    # end
+    #given the reservation_id, returns the reservation if it exists, or nill if it does not
+    def find_by_reservation_id(reservation_id)
+      @all_reservations.each do |reservation|
+        if reservation.reservation_id == reservation_id
+          return reservation
+        end
+      end
+      return nil
+    end
+
+    def find_reserved_rooms(date)
+      reservations_on_date = find_reservations_by_date(date)
+      booked_rooms = []
+      reservations_on_date.each do |reservation|
+        booked_rooms << reservation.room_number
+      end
+      return booked_rooms
+    end
+
+
+    #given an array [year,month,day], it returns all the reservations on that day.
+    #if there are no reservations on that day, returns an empty array
+    def find_reservations_by_date(date)
+      # check_date = Date.civil(date[0], date[1], date[2])
+      reservations_on_date = []
+      @all_reservations.each do |reservation|
+        if reservation.nights.include?(date)
+          reservations_on_date << reservation
+        end
+      end
+      return reservations_on_date
+    end
+
+
 
 
     # if @list_of_reservations.length  == 0 #if there are no reservations make any random reservation_id
@@ -109,9 +144,14 @@ module My_Hotel
   end
 end
 
-
+#
 # h= My_Hotel::Hotel.new
 # a = h.make_reservation([2017,2,1],[2017,2,5])
-# puts h.all_reservation_objects[0].room_number
-# puts h.all_reservation_objects[0].cost
-# puts h.all_reservation_objects[0].reservation_id
+# b = h.make_reservation([2017,2,3],[2017,2,6])
+# c = h.make_reservation([2017,4,3],[2017,4,6])
+# puts a.room_number
+# puts b.room_number
+# puts c.room_number
+# puts h.find_reserved_rooms([2017,2,3])
+# # puts
+# puts h.find_reservations_by_date([2017,2,3])

@@ -6,6 +6,7 @@ require 'minitest'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/pride'
+require 'date'
 
 #Require any classes
 require_relative '../lib/hotel.rb'
