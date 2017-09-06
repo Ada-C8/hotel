@@ -6,29 +6,29 @@ module Hotel_System
 
   class Hotel
 
-    attr_reader :all_rooms, :list_of_rooms, :room_number
+    attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number, :room_object, :room_price
 
     attr_accessor :all_reservations
 
     def initialize(num_of_rooms)
       @all_rooms = fill_hotel(num_of_rooms)
+      @all_reservations = []
     end
 
-    def room_number(index)
-      room_number = @all_rooms[index].room_num
-      return room_number
+    def return_room_object_by_num(room_number)
+      room_object = @all_rooms[room_number - 1]
     end
 
     def list_of_rooms
       room_list = []
-      @all_rooms.length.times do |i|
-        room_list << room_number(i)
+      @all_rooms.each do |room|
+        room_list << room.room_number
       end
       return room_list
     end
 
-    def all_reservations
-      @all_reservations = []
+    def total_cost(reservation)
+    total_cost = reservation.num_of_nights * room.price
 
     end
 

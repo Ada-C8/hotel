@@ -23,7 +23,6 @@ describe "Hotel_System::Reservations" do
     reservation.check_out.strftime("%Y-%m-%d").must_equal("2018-05-01")
   end
 
-  #TODO
   it "valid date ranges will pass valid_date_range?" do
     reservation = Hotel_System::Reservations.new(1, "1-1-2018", "1-5-2018", @hotel)
     reservation.valid_date_range?.must_equal true

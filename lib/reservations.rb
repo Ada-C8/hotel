@@ -8,11 +8,11 @@ module Hotel_System
   class Reservations
     attr_accessor :all_rooms, :check_in, :check_out, :res_room_number, :hotel, :today, :num_of_nights, :all_reservations
 
-    def initialize(room_num, check_in, check_out, parent_hotel)
+    def initialize(room_number, check_in, check_out, parent_hotel = Hotel_System::Hotel.new )
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
-      @res_room_number = room_num
       @hotel = parent_hotel
+      @res_room_number = @hotel.return_room_object_by_num(room_number).room_number
       @today = Date.today
       @hotel.all_reservations << self
     end
