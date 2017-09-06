@@ -26,8 +26,7 @@ describe 'DateRange' do
       check_in = Date.new(2017, 03, 11)
       check_out = Date.new(2017, 03, 22)
       stay = DateRange.new(check_in, check_out)
-
-      stay.nights.must_equal 10
+      stay.nights.must_equal 11
     end
   end
 

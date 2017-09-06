@@ -22,6 +22,11 @@ describe 'Hotel' do
       Hotel.new.rooms.must_equal hotel_list
 
     end
+
+    # it "can access list of all reservations" do
+    #   Hotel.new.rooms.must_equal hotel_list
+    #
+    # end
   end
   # it "holds a name" do
   #   @player.name.must_equal "Ada"
