@@ -31,5 +31,9 @@ describe "reservation" do
       input.must_respond_to :total_cost
       (input.total_cost).must_equal 400
     end
+    it "should raise an error for invalid date range" do
+      proc {Hotel::Reservation.new(10,1,[2017,10,24], [2017,10,24])}.must_raise ArgumentError
+      proc {Hotel::Reservation.new(10,1,[2017,10,24], [2017,10,22])}.must_raise ArgumentError
+    end
   end
 end

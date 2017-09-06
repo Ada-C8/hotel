@@ -49,6 +49,8 @@ module Hotel
     all_reservations.each do |reservation|
       search_reservations << reservation if search_date.between?(reservation.check_in, reservation.check_out - 1)
     end
+    raise ArgumentError.new "No Reservations are present on that date" if search_reservations.length == 0
+    return search_reservations
   end
 
 end

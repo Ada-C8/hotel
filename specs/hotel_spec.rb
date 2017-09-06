@@ -75,5 +75,8 @@ describe "hotel" do
         element.must_be_instance_of Hotel::Reservation
       end
     end
+    it "should return an error if an invalid date is passed" do
+      proc {Hotel.access_reservation([2011,10,3])}.must_raise ArgumentError
+    end
   end
 end
