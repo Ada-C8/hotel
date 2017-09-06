@@ -10,8 +10,6 @@ module Hotel
     @total_nights = calculate_res_length
   end
 
-
-
   private
 
   def check_in_date(check_in)
