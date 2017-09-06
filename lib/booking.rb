@@ -30,6 +30,8 @@ module Hotel
     end # initialize
 
     def make_reservation(start_date, end_date, num_rooms )
+      # TODO need to raise an argument error if invalid dates are given
+
       dates_booked = Hotel::DateRange.new(start_date, end_date).nights_booked
       reservation_id = @all_reservations.length + 1
       rooms = []
@@ -37,13 +39,30 @@ module Hotel
       num_rooms.times do
         rooms << @all_rooms[i]
         i += 1
-      end # TODO: later I need to change this to pull from the availible rooms array
-      cost = (num_rooms * dates_booked.length * 20.0)
+      end # TODO: later I need to change this to pull from the availible rooms array (wave 2)
+      cost = (num_rooms * dates_booked.length * 200.0)
 
       @all_reservations << Hotel::Reservation.new(reservation_id, cost, rooms, dates_booked)
     end # make_reservation
 
-    # def check_date_for_reservations
-    # end # check_date_for_reservations
+    def check_date_for_reservations(date)
+      # it will have a method that checks if there is a reservation for the date(s) requested
+          # iterate though @all_reservations for each day requested and if the day is included in the Booking then it will look at the Reservation that included that date and add the room(s) in that reservation to a new array not_availible.
+          date_reservations = []
+          @all_reservations.each do |res|
+            if res.date_range.include?(date)
+              date_reservations << res
+            end # if
+          end # .each
+            return date_reservations
+    end # check_date_for_reservations
+
+    def print_reservations(date)
+      reservations = check_date_for_reservations(date)
+      nice_format_reservations = []
+      reservations.each do |res|
+      end
+
+    end #print_reservations
   end # Booking
 end # Hotel

@@ -11,7 +11,7 @@ describe "room" do
     end # it "will be initialized with a room_number" do
 
     it "will be initialized with a cost (float)" do
-       Hotel::Room.new(4).cost.must_equal 20.0
+       Hotel::Room.new(4).cost.must_equal 200.0
        Hotel::Room.new(4).cost.must_be_kind_of Float
     end # it "will be initialized with a cost" do
 

@@ -6,7 +6,7 @@ module Hotel
     attr_reader :room_number, :cost
     def initialize(room_number)
       @room_number = room_number.to_i
-      @cost = 20.0
+      @cost = 200.0
     end # initialie
   end # class Room
 end # module Hotel

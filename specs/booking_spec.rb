@@ -42,9 +42,21 @@ describe "Booking" do
     #   @booking.make_reservation()
     # end # before
 
+    it "Should raise an error if inproper dates are given" do
+      # TODO
+    end # it "Should raise an error if inproper dates are given" do
+
     it "should be able to be called on @booking" do
       @booking.must_respond_to :make_reservation
     end #it "should be able to be called on @booking" do
+
+    it "will create a new instance of Reservation" do
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 1
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms)
+      @booking.all_reservations[0].must_be_kind_of Hotel::Reservation
+    end # it "will create a new instance of Reservation" do
 
     it "should create the correct value for dates_booked" do
       checkin_day = Date.new(2017, 9, 5)
@@ -71,40 +83,62 @@ describe "Booking" do
       checkin_day = Date.new(2017, 9, 5)
       checkout_day = Date.new(2017, 9, 7)
       num_of_rooms = 3
-      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )[0].res_rooms.length.must_equal 3 
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )[0].res_rooms.length.must_equal 3
     end # it "will have the right number of rooms in the reservation if three rooms are asked for" do
 
-
-
-
-
-
-
-
-
-
-
-    xit "will create a new instance of Reservation" do
-      @booking.all_reservations[0].must_be_kind_of Hotel::Reservation
-    end # it "will create a new instance of Reservation" do
-
-    xit "will create the right reservation id for each reservation" do
-      # TODO
-    end # it "will create the right reservation id for each reservation" do
-
-    xit "will create a reservation for one room" do
-      # TODO
-    end # it "will create a reservation for one room" do
-
-    xit "will create a reservation for two rooms" do
-      # TODO
-    end # it "will create a reservation for two rooms" do
-
-    xit "will have the correct cost of the reservation" do
-      # TODO
-    end # it "will have the correct cost of the reservation" do
-
+    it "will have the right total cost for the reservation" do
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 3
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )[0].total_cost.must_equal 1200 # (2 * 2 * 200.0)
+    end # it "will have the right total cost for the reservation" do
   end #  describe make_reservation
+
+  describe "check_date_for_reservations" do
+    it "should be able to be called on @booking" do
+      @booking.must_respond_to :check_date_for_reservations
+    end # it "should be able to be called on @booking" do
+
+    it "should return an empty array is there are no reservations for the date given" do
+      #TODO: check for a date range as well in another test
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 3
+      date_to_check = Date.new(2017, 9, 25)
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+
+      @booking.check_date_for_reservations(date_to_check).must_be_kind_of Array
+      @booking.check_date_for_reservations(date_to_check).must_be_empty
+    end # it "should return an empty array is there are no reservations for the date given" do
+
+    it "should return an array of all the reservations for the date given" do
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 1
+      date_to_check = Date.new(2017, 9, 6) #both reservations include the 5th of September
+
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+      @booking.check_date_for_reservations(date_to_check).length.must_equal 2
+      @booking.check_date_for_reservations(date_to_check)[1].res_id.must_equal 2
+
+    end # it "should return an array of all the reservations for the date given" do
+  end # describe "check_date_for_reservations" do
+
+  describe "print_reservations" do
+    it "will be an array that is the same length as the result check_date_for_reservations" do
+      checkin_day = Date.new(2017, 9, 5)
+      checkout_day = Date.new(2017, 9, 7)
+      num_of_rooms = 1
+      date_to_check = Date.new(2017, 9, 6) #both reservations include the 5th of September
+
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+
+      check_length = @booking.check_date_for_reservations(date_to_check)
+      @booking.print_reservations(date_to_check).length.must_equal check_length
+    end #it "will be an array that is the same length as the result check_date_for_reservations" do
+  end # describe "print_reservations" do
 
 
 end # Booking
