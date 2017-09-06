@@ -16,7 +16,6 @@ describe "Hotel::Room class" do
       new_room = Hotel::Room.new(1)
 
       new_room.id.must_equal 1
-      new_room.status.must_equal :available
       new_room.nightly_rate.must_equal 200
     end
 
@@ -37,15 +36,24 @@ describe "Hotel::Room class" do
 
       room.reserve_room(check_in_str, check_out_str, 1, 13)
 
-      binding.pry
-
-      all_dates = room.reserved_dates.values.flatten
-
       (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
-        all_dates.must_include date
+        room.all_dates.must_include date
       end
 
       room.reserve_room("2017-08-10", "2017-08-11", 42, 16).must_equal false
+
+      check_in_str2 = "2017-09-28"
+      check_out_str2 = "2017-10-1"
+
+      room.reserve_room(check_in_str2, check_out_str2, 8, 23)
+      (Date.parse(check_in_str2)...Date.parse(check_out_str2)).each do |date|
+        room.all_dates.must_include date
+      end
+
+    end
+
+    it "doesn't accept dates that are earlier than today's date" do
+
     end
 
   end #end reserve_room
