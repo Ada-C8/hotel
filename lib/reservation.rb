@@ -1,7 +1,6 @@
 module Hotel
   class Reservation
     require_relative 'date_range'
-    # @reservation_id
     attr_reader :total_cost, :dates, :checkin, :checkout, :id, :hotel
 
     def initialize(room, checkin, checkout, hotel)
