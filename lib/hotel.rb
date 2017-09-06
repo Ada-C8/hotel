@@ -13,15 +13,6 @@ module Hotel_Chain
       end
     end
 
-    #Returns a list of all rooms in the hotel
-    # def self.all
-    #   myhotel = Hotel_Chain::MyHotel.new
-    #   myhotel.array_of_rooms.length.times do |room|
-    #      myhotel.array_of_rooms[room] = Room.new(room+1)
-    #   end
-    #   return myhotel.array_of_rooms
-    # end
-
     #Method is called to print a list for the administrator
     #myhotel = Hotel_Chain::MyHotel.new
     #myhotel.list_of_rooms

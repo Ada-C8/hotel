@@ -33,16 +33,16 @@ describe "The Hotel class" do
       proc {myhotel.list_rooms}.wont_be_nil
     end
 
-    # it "Returns an array with length 20" do
-    #   myhotel = Hotel_Chain::MyHotel.new
-    #
-    # end
+    it "Returns an array with length 20" do
+      myhotel = Hotel_Chain::MyHotel.new
+      myhotel.list_rooms.length.must_equal 20
+
+    end
 
     it "gives expected statement at 0 position" do
       myhotel = Hotel_Chain::MyHotel.new
       myhotel.list_rooms[0].must_equal "1. Room 1 - $200/night"
     end
-
 
 
   end
