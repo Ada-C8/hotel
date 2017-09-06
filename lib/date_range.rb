@@ -23,7 +23,14 @@ module Hotel
     end
 
     def date_overlap?(start_date, end_date)
-    (@checkin_date - end_date) * (start_date - @checkout_date) >= 0
+    # (@checkin_date - end_date) * (start_date - @checkout_date) >= 0
+
+      if (start_date <= @checkout_date) && (end_date > @checkin_date)
+        return true
+      else
+        return false
+        # raise ArgumentError.new("#{start_date} and #{end_date} are outside the date range")
+      end
     end
 
   end #end of class
