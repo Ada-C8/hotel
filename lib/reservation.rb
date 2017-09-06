@@ -1,6 +1,7 @@
 #reservation.rb
 
 require 'awesome_print'
+require 'date'
 
 module Hotel_Chain
   class Reservation
@@ -13,8 +14,8 @@ module Hotel_Chain
     #In wave 2, I will create methods to check a spreadsheet to see if the room is available.
     #I may also like to have the program assign a reservation_id (this info can live in a spreadsheet)- then I will need a method to look up a reservation by reservation_id
     def initialize(check_in_date, check_out_date)
-      @check_in_date = check_in_date #Date.new(check_in_date)
-      @check_out_date = check_out_date #Date.new(check_out_date)
+      @check_in_date = Date.strptime(check_in_date, "%m/%d/%Y")
+      @check_in_date = Date.strptime(check_out_date, "%m/%d/%Y")
       @hotel = Hotel_Chain::MyHotel.new
       @room_id = @hotel.array_of_rooms.sample.room_id
       #@cost = Date math * 200 (rate will eventually reference the rate associated with the room_id)
