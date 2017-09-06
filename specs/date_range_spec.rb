@@ -11,17 +11,9 @@ describe "Date Range" do
       date.must_be_instance_of Hotel::DateRange
     end
   end
-  # describe "valid_date" do
-  #   it "checks if the checkin and checkout dates are valid"
-  #     checkin_date = "2001,2,3"
-  #     checkout_date = "2001,2,14"
-  #     date =  Hotel::DateRange.new(checkin_date, checkout_date)
-  #     date.valid_date?(checkin_date).mumust_be_kind_of date
-  # end
-
 
   describe "date include" do
-    it "checks if the checkin/checkout dates are included in the date range" do
+    it "checks if a date is included in the date range" do
       checkin_date = Date.new(2001,2,3)
 
       checkout_date = Date.new(2001,2,14)
@@ -32,7 +24,23 @@ describe "Date Range" do
 
       date.date_include?(input_date) .must_equal true
     end
+
+    it "raises an error for an invalid date" do
+      checkin_date = Date.new(2001,2,3)
+
+      checkout_date = Date.new(2001,2,14)
+
+      date =  Hotel::DateRange.new(checkin_date, checkout_date)
+
+      proc{date.date_include?(Date.new(2007,15,5))}.must_raise ArgumentError
+
+    end
   end
+
+
+  # describe "date overlap" do
+  #   it "check if the "
+  # end
 
 
 
