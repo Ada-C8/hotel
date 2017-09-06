@@ -15,15 +15,15 @@ describe 'Reservation' do
       @reservation.dates.first.must_be_kind_of Date
     end
 
-    xit 'has @total_cost value, which is rate * num of nights' do
-      @reservation.total_cost.must_equal 400
-      (@reservation.total_cost % @reservation.dates.length).must_equal 0
-    end
-
     it 'has 8-digit @reservation_id value where first 4 digits are checkin date' do
       @reservation.id.must_be_kind_of String
       @reservation.id.length.must_equal 8
       @reservation.id[0..3].must_equal "0905"
+    end
+    
+    it 'has @total_cost value, which is rate * num of nights' do
+      @reservation.total_cost.must_equal 400
+      (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
   end
 end
