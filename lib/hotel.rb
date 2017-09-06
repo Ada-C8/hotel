@@ -23,9 +23,9 @@ module Hotel
     end
 
     def reserve(start_date, end_date, room)
-      # TODO check if available and return true if added; else false
+      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.is_booked?(start_date, end_date)
 
-      room.reserve(start_date, end_date)
+      return room.reserve(start_date, end_date)
 
     end
 

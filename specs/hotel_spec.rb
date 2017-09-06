@@ -58,6 +58,11 @@ describe "Testing Hotel class" do
       new_res = Hotel::Reservation.new(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1.room_num)
       @room1.reservations[0].must_equal new_res
     end
+
+    it "Raises error when it tries to reserve a room that isn't available" do
+      @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,8), @room1)
+      proc { @hotel.reserve(Date.new(2017,9,7), Date.new(2017,9,8), @room1) }.must_raise ArgumentError
+    end
   end
 
   describe "#find_reservations_by_date" do

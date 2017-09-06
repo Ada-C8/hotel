@@ -37,7 +37,12 @@ module Hotel
     def reserve(start_date, end_date)
       # add reservation if room is available and return true; else false
       #if is_available
-      reservations << ::Hotel::Reservation.new(start_date, end_date, room_num)
+      if !is_booked?(start_date, end_date)
+        reservations << ::Hotel::Reservation.new(start_date, end_date, room_num)
+        return true
+      end
+
+      return false
     end
 
     def is_booked?(start_date, end_date = start_date.next_day)
@@ -51,7 +56,7 @@ module Hotel
           end
         end
       end
-      
+
       return false
 
       # reservations.each do |reservation|
