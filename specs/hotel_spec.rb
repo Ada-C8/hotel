@@ -11,9 +11,15 @@ describe "HotelClass" do
     it "Responds to rooms variable" do
       @hotel_test.must_respond_to :rooms
     end
+    it "Rooms variable is an array" do
+      @hotel_test.rooms.must_be_kind_of Array
+    end
+    it "Rooms variable has 20 rooms" do
+      @hotel_test.rooms.length.must_equal 20
+    end
   end
 
-  describe "Reserve_rooms method" do
+  describe "Reserve_room method" do
 
   end
   describe "Access_reservations method" do
