@@ -2,12 +2,12 @@ require 'pry'
 module Hotel
   class Admin
     #Wave 1
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations_rooms_hash
 
     def initialize
       # As an administrator, I can access the list of all of the rooms in the hotel
       @rooms = initialize_rooms # {ID : RoomObject}
-      @reservations = []
+      @reservations_rooms_hash = {} # key: reservation, value: hash
     end
 
     # As an administrator, I can reserve a room for a given date range
@@ -15,11 +15,13 @@ module Hotel
       # Given check_in and check_out (Date objects)...
       # Create a Reservation with those dates + assign a room
               #(.detect Enumerable would be useful since you just need the first instance where the room is avaiable)
+      raise ArgumentError.new("Passed in invalid dates.") if check_out <= check_in
+      raise ArgumentError.new("Room number passed is invalid.") if room_num > NUM_OF_ROOMS || room_num < 0
 
-      #TODO: what should an unsuccessful "reservation" return?
-      new_reservation = Hotel::Reservation.new(check_in, check_out, room_num, self) #successfully creates Reservation Object
-      raise ArgumentError.new("Room number does not exist.") if new_reservation == nil
-      @reservations << new_reservation
+      new_reservation = Hotel::Reservation.new(check_in, check_out)
+      associated_room = find_room(room_num)
+      @reservations_rooms_hash.merge!({new_reservation => associated_room})
+      return new_reservation
     end
 
     # As an administrator, I can access the list of reservations for a specific date
@@ -36,8 +38,9 @@ module Hotel
       # return
     end
 
+    #find a Room object that's available
     def find_room(room_num)
-      return @rooms.detect { |r| r.room_num == room_num }
+      return @rooms.detect { |r| r.available == true }
     end
 
     private
