@@ -15,6 +15,9 @@ describe Hotel::Room do
   end
 
   describe "atribute_readers" do
-    it ""
+    it "can retrieve the room number using .number" do
+      room = Hotel::Room.new(5)
+      room.number.must_equal 5
+    end
   end
 end

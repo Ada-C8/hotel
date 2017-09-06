@@ -1,9 +1,9 @@
 module Hotel
   class Room
-    # attr_reader :room_number
+    attr_reader :number
 
-    def initialize(room_number)
-      @room_number = check_room_number(room_number)
+    def initialize(number)
+      @number = check_room_number(number)
     end
 
 
@@ -12,11 +12,11 @@ module Hotel
     private
 
     # Raises ArgumentError if room number supplied is already taken by a room or if number supplied is not an Integer. Otherwise, sets the room number.
-    def check_room_number(room_number)
-      if room_number.is_a?(Integer) == false
+    def check_room_number(number)
+      if number.is_a?(Integer) == false
         raise ArgumentError.new "room number must be an integer"
       else
-        @room_number = room_number
+        @number = number
       end
     end
 
