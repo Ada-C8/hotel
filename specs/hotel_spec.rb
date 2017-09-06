@@ -57,6 +57,27 @@ describe "Hotel" do
       first_reservation = @new_hotel.make_reservation(@date_range)
       @new_hotel.all_reservations.length.must_equal 1
     end
+    it "Pick the next available room out of all rooms" do
+      hotel = BookingSystem::Hotel.new(2)
+      check_in = Date.new(2017,9,15)
+      check_out = Date.new(2017,9,17)
+      second_check_in = Date.new(2017,9,17)
+      second_check_out = Date.new(2017,9,19)
+      third_check_in = Date.new(2017,9,15)
+      third_check_out = Date.new(2017,9,17)
+      date_range = BookingSystem::DateRange.new(check_in, check_out)
+      second_date_range = BookingSystem::DateRange.new(second_check_in, second_check_out)
+      third_date_range = BookingSystem::DateRange.new(third_check_in, third_check_out)
+      first_reservation = hotel.make_reservation(date_range)
+      hotel.all_reservations[0].room.must_equal 1
+      hotel.room_unavailable(1).length.must_equal 2
+      second_reservation = hotel.make_reservation(second_date_range)
+      hotel.room_unavailable(1).length.must_equal 4
+      hotel.room_unavailable(2).length.must_equal 0
+      third_reservation = hotel.make_reservation(third_date_range)
+      hotel.room_unavailable(1).length.must_equal 4
+      hotel.room_unavailable(2).length.must_equal 2
+    end
   end
 
 

@@ -24,12 +24,28 @@ module BookingSystem
     end #end of method
 
     def find_room(date_range)
+      # puts "Checking #{date_range}, #{date_range.dates_within_range}"
       available_room = nil
       @rooms.each_with_index do |room, i|
-        if !room_unavailable(i + 1).include?(date_range.dates_within_range)
+        booked_dates = room_unavailable(i + 1) #array of dates
+        # puts "Room #{room} unavailable dates #{booked_dates}"
+
+        count = 0
+        date_range.dates_within_range.each do |date|
+          if !booked_dates.include?(date)
+            count += 1
+          end
+        end
+        if count == date_range.dates_within_range.length
           available_room = room
           break
         end
+
+        # if !booked_dates.include?(date_range.dates_within_range)
+        #   available_room = room
+        #   puts room
+        #   break
+        # end
       end
       return available_room #room number
     end #end of method
@@ -37,7 +53,7 @@ module BookingSystem
     def make_reservation(date_range)
       room = find_room(date_range)
       if room == nil
-        raise ArgumentError.new("No room is available on these dates")
+        raise ArgumentError.new("No room is available on given dates")
       end
       if room != nil
         new_reservation = Reservation.new(date_range, room)
