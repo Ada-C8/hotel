@@ -78,7 +78,7 @@ Remember that your job is only to build the classes that store information and h
 
 ### Error Handling
 
-- Your code should raise an error when an invalid date range is provided
+- _Your code should raise an error when an invalid date range is provided_
 
 ### Hints
 
@@ -88,8 +88,8 @@ Remember that your job is only to build the classes that store information and h
 
 ### User Stories
 
-- As an administrator, I can view a list of rooms that are not reserved for a given date range
-- As an administrator, I can reserve an available room for a given date range
+- _As an administrator, I can view a list of rooms that are not reserved for a given date range_
+- _As an administrator, I can reserve an available room for a given date range_
 
 ### Constraints
 

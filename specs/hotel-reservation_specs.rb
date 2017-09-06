@@ -41,8 +41,13 @@ describe "Hotel::Reservation" do
 
     it "throws error when room is not available" do
       Hotel::Reservation.new(@start_date,@end_date,@room_1)
-      ap Hotel::Reservation.list_for_date(@start_date)
       proc{Hotel::Reservation.new(@start_date,@end_date,@room_1)}.must_raise ArgumentError
+      proc{Hotel::Reservation.new(@start_date+1,@end_date+1,@room_1)}.must_raise ArgumentError
+    end
+
+    it "can reserve a room on same day as another reservation ends" do
+      room_reserved = Hotel::Reservation.new(@end_date,@end_date+3,@room_1)
+      room_reserved.must_be_instance_of Hotel::Reservation
     end
   end
 
