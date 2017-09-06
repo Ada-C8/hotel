@@ -106,8 +106,17 @@ describe "hotel" do
       output = Hotel.available_rooms([2017,10,2], [2017,10,4])
       output.each {|element| element.must_be_instance_of Hotel::Room}
     end
-
-
-
+  end
+  describe "Hotel.reserve_room(begin_date, end_date)" do
+    it "should respond to reserve_room" do
+      Hotel.must_respond_to :reserve_room
+    end
+    it "should return an instance of a reservation" do
+      output = Hotel.reserve_room([2017,12,22], [2017,12, 25])
+      output.must_be_instance_of Hotel::Reservation
+    end
+    it "should raise an error if there are unavailable_rooms" do
+      #TODO: probably update csv for this 
+    end
   end
 end
