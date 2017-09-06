@@ -24,6 +24,24 @@ module BookingSystem
       return dates #array of dates on which this room is unavailable
     end #end of method
 
+    def list_of_available_rooms(date_range)
+      available_rooms = []
+      @rooms.each_with_index do |room, i|
+        booked_dates = room_unavailable(i + 1) #array of dates
+
+        count = 0
+        date_range.dates_within_range.each do |date|
+          if !booked_dates.include?(date)
+            count += 1
+          end
+        end
+        if count == date_range.dates_within_range.length
+          available_rooms << room
+        end
+      end
+      return available_rooms #array of rooms as integers
+    end #end of method
+
     def find_room(date_range)
       available_room = nil
       @rooms.each_with_index do |room, i|
@@ -55,17 +73,12 @@ module BookingSystem
     end #end of method
 
     def list_of_reservations(date)
-      list = []
-      @all_reservations.each do |reservation|
-        if reservation.date_range.dates_within_range.include?(date)
-          list << reservation
-        end
-      end
+      list = @all_reservations.map { |reservation| reservation if reservation.date_range.dates_within_range.include?(date) }
 
-      # list = @all_reservations.map { |reservation| reservation if reservation.date_range.dates_within_range.include?(date) }
-
-      return list
+      return list #array of reservations
     end #end of method
+
+
 
   end #end of class
 
