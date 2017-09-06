@@ -3,6 +3,8 @@ require 'Date'
 module Hotel
   class Block
 
+    extend Overlapping
+
     attr_reader :start_date, :end_date, :discount, :rooms, :block_id
 
     @@blocks = []
@@ -36,9 +38,7 @@ module Hotel
         self.overlapping?(start_date, end_date, block.start_date, block.end_date) == true
       end
       overlapping_blocks.each do |block|
-        block.rooms.each do |room|
-          available_rooms.delete(room) if available_rooms.include?(room)
-        end
+        available_rooms -= block.rooms
       end
       return available_rooms
     end
@@ -50,16 +50,6 @@ module Hotel
     def self.rooms_left(block_id)
       block = @@blocks.select { |a_block| a_block.block_id == block_id }[0]
       return Reservation.sample_available_rooms(block.start_date, block.end_date, block.rooms.length, block_id)
-    end
-
-    private
-
-    def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
-      # start date is within comparison date range
-      return true if start_date >= comparison_start_date && start_date < comparison_end_date
-      # end date is within comparison date range
-      return true if end_date >= comparison_start_date && end_date <= comparison_end_date
-      return false
     end
 
   end # Block class
