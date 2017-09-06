@@ -1,7 +1,7 @@
 module Hotel
   class Reservation
     require_relative 'date_range'
-    attr_reader :total_cost, :dates, :checkin, :checkout, :id, :hotel
+    attr_reader :total_cost, :dates, :checkin, :checkout, :id, :hotel, :room
 
     def initialize(room, checkin, checkout, hotel)
       @room = room
@@ -18,13 +18,15 @@ module Hotel
       @total_cost = @room.cost * num_nights
     end
 
-    # def includes_dates?(checkin, checkout)
-    # Date.parse????
-    # dates_to_check = DateRange::range(checkin, checkout)
-    # dates_to_check.each do |date|
-    # if @dates.include? date
-    # return true
-    # end
+    def includes_dates?(checkfirst, checklast)
+      dates_to_check = DateRange::range_to(checkfirst, checklast)
+      dates_to_check.each do |check_date|
+        @dates.each do |book_date|
+          return true if book_date.strftime == check_date.strftime
+        end
+      end
+      false
+    end
 
     private
 

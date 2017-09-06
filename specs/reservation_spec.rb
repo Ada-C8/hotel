@@ -29,4 +29,16 @@ describe 'Reservation' do
       (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
   end
+
+  describe '#includes_dates?' do
+    it 'returns true if provided date range overlaps' do
+      overlap = @reservation.includes_dates?('2017-09-06', '2017-09-07')
+      overlap.must_equal true
+    end
+
+    it 'returns false if provided date range does not overlap' do
+      overlap = @reservation.includes_dates?('2017-10-14', '2017-10-15')
+      overlap.must_equal false      
+    end
+  end
 end
