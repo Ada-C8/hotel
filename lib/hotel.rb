@@ -3,11 +3,16 @@ module Hotel
     attr_reader :rooms, :reservations
     def initialize
       # access the list of all of the rooms in the hotel
-      @rooms = []
+      @rooms = (1..20).to_a
       @reservations = []
     end
 
-    def reserve_rooms
+    def is_available?(room, date)
+      # loop through @rooms
+      return true
+    end
+
+    def reserve_room
       # reserve a room for a given date range
     end
 
