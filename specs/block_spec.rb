@@ -32,9 +32,8 @@ describe "Block" do
     it "should contain reservations if there are any for block" do
       output = Hotel.find_block(75)
       output.reservations.must_be_instance_of Array
-      # output.reservations.length.must_equal 0
+      output.reservations.length.must_equal 0
       output.add_reservations
-      binding.pry
       output.reservations[0].must_be_instance_of Hotel::Reservation
 
     end

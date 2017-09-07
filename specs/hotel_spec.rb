@@ -192,6 +192,15 @@ describe "hotel" do
       end
     end
 
+    describe "Hotel.reserve_block()" do
+    # nput_id, input_room_number, check_in_date, check_out_date, input_block_id
+      it "should return a block" do
+        output = Hotel.reserve_block(check_in_date, check_out_date, num_of_rooms)
+        output = Hotel.reserve_block()
+
+      end
+    end
+
     describe "Hotel.reserve_block_room(input_id)" do
       it "should return a reservation" do
         output = Hotel.reserve_block_room(75)
