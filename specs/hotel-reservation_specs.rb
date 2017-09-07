@@ -50,8 +50,8 @@ describe "Hotel::Reservation" do
 
   describe "Reservation methods" do
     it "can return total cost for a given reservation" do
-      Hotel::Reservation.new(@start_date+20,@end_date+20,@room_1)
-      room_reservation = Hotel::Reservation.list_all[0]
+      room_reservation = Hotel::Reservation.new(@start_date+20,@end_date+20,@room_1)
+      # room_reservation = Hotel::Reservation.list_all[0]
       room_reservation.must_respond_to :total_cost
       room_reservation.total_cost.must_equal (room_reservation.rate*3).round(2)
     end
