@@ -55,7 +55,7 @@ describe "Testing Hotel class" do
       @room1.reservations.must_equal []
 
       @hotel.reserve(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1)
-      new_res = Hotel::Reservation.new(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1.room_num)
+      new_res = Hotel::Reservation.new(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1)
       @room1.reservations[0].must_equal new_res
     end
 

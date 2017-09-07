@@ -5,6 +5,7 @@ module Hotel
   # NUM_ROOMS = 20
 
   class Room
+    include Comparable
 
     DEFAULT_RATE = 200
 
@@ -23,22 +24,14 @@ module Hotel
       @rate = rate
     end
 
-    # def self.all
-    #   # create a list of all hotel rooms
-    #   all_rooms = []
-    #
-    #   (1..Hotel::NUM_ROOMS).each do |num|
-    #     all_rooms << Room.new(num)
-    #   end
-    #
-    #   return all_rooms
-    # end
+    def <=>(other_room)
+      room_num <=> other_room.room_num
+    end
 
     def reserve(start_date, end_date)
       # add reservation if room is available and return true; else false
-      #if is_available
       if !is_booked?(start_date, end_date)
-        reservations << ::Hotel::Reservation.new(start_date, end_date, room_num)
+        reservations << ::Hotel::Reservation.new(start_date, end_date, self) # replacing room_num with self
         return true
       end
 
@@ -59,16 +52,23 @@ module Hotel
 
       return false
 
-      # reservations.each do |reservation|
-      #   if reservation.include?(date)
-      #     return true
-      #   end
-      # end
-      #
-      # return false
     end
 
     private
+
+    def to_s
+      # return human readable representation
+      s = "Room number: #{room_num}\n"
+      s += "Rate per night: $#{rate}\n"
+      s += "Reservations:\n"
+
+      reservations.each do |reservation|
+        s += reservation.to_s
+      end
+
+      return s
+
+    end
 
     # def valid_room_num?(num)
     #   return num >= 1 && num <= ::Hotel::Hotel::NUM_ROOMS

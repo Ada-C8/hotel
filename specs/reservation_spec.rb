@@ -3,7 +3,8 @@ require_relative 'spec_helper'
 describe "Testing Reservation class" do
   describe "#initialize" do
     before do
-      @res = Hotel::Reservation.new(Date.new(2017,9,4), Date.new(2017,9,7), 4)
+      @room = Hotel::Room.new(4)
+      @res = Hotel::Reservation.new(Date.new(2017,9,4), Date.new(2017,9,7), @room)
     end
 
     it "Creates a Reservation with a date range and room number" do
@@ -16,10 +17,10 @@ describe "Testing Reservation class" do
       check_in = Date.new(2017,9,5)
       check_out = Date.new(2017,8,5)
 
-      proc { Hotel::Reservation.new(check_in, check_out, 2) }.must_raise ArgumentError
+      proc { Hotel::Reservation.new(check_in, check_out, @room) }.must_raise ArgumentError
 
       check_out = Date.new(2017,9,5)
-      proc { Hotel::Reservation.new(check_in, check_out, 2) }.must_raise ArgumentError
+      proc { Hotel::Reservation.new(check_in, check_out, @room) }.must_raise ArgumentError
     end
 
     # move this to user interface
@@ -43,7 +44,7 @@ describe "Testing Reservation class" do
     before do
       @check_in = Date.new(2017,9,5)
       @check_out = Date.new(2017,9,8)
-      @res = Hotel::Reservation.new(@check_in, @check_out, 4)
+      @res = Hotel::Reservation.new(@check_in, @check_out, Hotel::Room.new(4))
     end
 
     it "Returns the total cost of the reservation" do
