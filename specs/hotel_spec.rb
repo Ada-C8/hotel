@@ -60,7 +60,7 @@ describe 'Hotel' do
     end
 
     it 'will not return rooms in a block' do
-      skip
+      # skip
       @hotel.make_reservation('2017-10-14', '2017-10-18')
       @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
       rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15')
@@ -68,8 +68,8 @@ describe 'Hotel' do
       rooms.length.must_equal 14
     end
 
-    it 'will return rooms in a provided block' do
-      skip
+    it 'will return rooms in a block when provided block ID' do
+      # skip
       block = @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
       rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15', block.id)
 
@@ -114,17 +114,32 @@ describe 'Hotel' do
     end
 
     it 'will not book a room that is part of a block' do
-      skip
+      # - If a room is set aside in a block, it is not available for reservation by the general public
       block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
       reservation = @hotel.make_reservation('2017-08-04', '2017-08-05')
 
       block.rooms.wont_include reservation.room
     end
 
+    it 'will book room in block if provided a block ID' do
+      # - As an administrator, I can reserve a room from within a block of rooms
+      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+      reservation = @hotel.make_reservation('2017-08-04', '2017-08-05', block.id)
+
+      block.rooms.must_include reservation.room
+    end
+
     it 'raises NoRoomError if no rooms are available' do
       # Your code should raise an exception when asked to reserve a room that is not available
       proc {
         21.times { @hotel.make_reservation('2017-09-05', '2017-09-08') }
+      }.must_raise NoRoomError
+    end
+
+    it 'raises NoRoomError if all rooms are in a block' do
+      @hotel.make_block('2017-09-05', '2017-09-08', 19, 20)
+
+      proc { @hotel.make_reservation('2017-09-05', '2017-09-08')
       }.must_raise NoRoomError
     end
   end
@@ -167,9 +182,21 @@ describe 'Hotel' do
         new_block.rooms.wont_include reservation.room
       end
     end
+
+    it 'will not overlap multiple blocks' do
+      # - If a room is set aside in a block, it cannot be included in another block
+      block2 = @hotel.make_block('2017-08-03', '2017-08-07', 5, 20)
+
+      @block.rooms.each do |room|
+        block2.rooms.wont_include room
+      end
+    end
+
+    it 'raises an error when there are not enough rooms to fill a block' do
+      proc { block2 = @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
+      }.must_raise NoRoomError
+    end
   end
 end
 
-# - If a room is set aside in a block, it is not available for reservation by the general public, nor can it be included in another block
 # - As an administrator, I can check whether a given block has any rooms available
-# - As an administrator, I can reserve a room from within a block of rooms

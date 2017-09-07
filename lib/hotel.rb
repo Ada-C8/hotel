@@ -48,22 +48,21 @@ module Hotel
     def find_available_rooms(checkin, checkout, block_id = false)
       # TODO: add block functionality
 
+      booked_rooms, available_rooms = [], []
+
       if block_id
         current_block = block(block_id)
         raise(RangeError,"Dates (#{checkin}, #{checkout}) do not fall within provided block #{current_block.id}") unless DateRange.overlap?(checkin, checkout, current_block.start_date, current_block.end_date)
-      end
-      #   @rooms.each do
-      #       booked_rooms << room unless room is in block
-      #     end
-      # else
-      #   blocks.each do |block|
-      #     if block.includes_dates?(checkin, checkout)
-      #       booked_rooms += block.rooms
-      #     end
-      #   end
-      # end
 
-      booked_rooms, available_rooms = [], []
+        @rooms.each do |room|
+          booked_rooms << room unless current_block.rooms.include? room
+        end
+      else # not in block
+        @blocks.each do |block|
+          booked_rooms += block.rooms if block.includes_dates?(checkin, checkout)
+        end
+      end
+
       @reservations.each do |reservation|
         if !(booked_rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
           booked_rooms << reservation.room
@@ -77,6 +76,7 @@ module Hotel
 
     def make_block(start_date, end_date, num_rooms, discount)
       rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
+      raise(NoRoomError, "Not enough available rooms for amount #{num_rooms}") if rooms.length < num_rooms
       block = Block.new(start_date, end_date, rooms, discount)
       @blocks << block
       block
