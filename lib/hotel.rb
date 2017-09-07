@@ -40,6 +40,11 @@ class Hotel
 		
   end
   
+  def getAllRooms
+	return @rooms
+  end
+  
+  
   
 end
 
