@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-describe "Room Class" do
+xdescribe "Room Class" do
   before do
     @suite1 = Hotel::Room.new(15)
   end

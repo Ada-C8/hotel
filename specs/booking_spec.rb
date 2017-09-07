@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-describe "Booking class" do
+xdescribe "Booking class" do
   before do
     id = 1
     rooms = [Hotel::Room.new(15),Hotel::Room.new(16)]
@@ -28,7 +28,7 @@ describe "Booking class" do
     end
   end
   describe "check_reservations method" do
-    # returns an array of the dates that are unavailable 
+    # returns an array of the dates that are unavailable
     it "" do
 
     end

@@ -8,7 +8,7 @@ require 'minitest/pride'
 require 'minitest/skip_dsl'
 require 'pry'
 require 'date'
-require 'pry-nav'
+# require 'pry-nav'
 
 
 # Require any classes

@@ -1,5 +1,5 @@
-require 'pry'
-require 'date'
+# require 'pry'
+# require 'date'
 
 module Hotel
   class Booking
