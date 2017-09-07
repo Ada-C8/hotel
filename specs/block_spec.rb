@@ -16,10 +16,10 @@ describe "Block" do
       @new_block.date_range.must_equal @date_range
     end
     it "Total cost should be an integer" do
-      @new_block.block_cost.must_be_kind_of Integer
+      @new_block.room_cost.must_be_kind_of Integer
     end
     it "Returns the rigth total cost" do
-      @new_block.block_cost.must_equal 1080
+      @new_block.room_cost.must_equal 180
     end
   end
 

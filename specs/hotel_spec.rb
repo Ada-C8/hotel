@@ -118,23 +118,7 @@ describe "Hotel" do
       proc { @hotel.create_block(@date_range, 4) }.must_raise BookingSystem::NoRoomAvailableError
     end
 
-    # describe "#has_available_rooms?" do
-    #   before do
-    #     @hotel = BookingSystem::Hotel.new(5)
-    #     @new_block = @hotel.create_block(@date_range, 3)
-    #   end
-    #   it "Returns true if there are available rooms in given block" do
-    #     @hotel.has_available_rooms?(@new_block).must_equal true
-    #   end
-    #   it "Returns false if there is no available rooms in given block" do
-    #     3.times do
-    #       @hotel.make_reservation_from_block(@new_block)
-    #     end
-    #     @hotel.has_available_rooms?(@new_block).must_equal false
-    #   end
-    # end
-
-    describe "#make_reservation_from_block" do
+  describe "#make_reservation_from_block" do
       before do
         @hotel = BookingSystem::Hotel.new(5)
         @new_block = @hotel.create_block(@date_range, 3)

@@ -85,29 +85,14 @@ module BookingSystem
       return new_block #an array of rooms as integers
     end #end of method
 
-    # def has_available_rooms?(block)
-    #   return block.rooms.length > 0
-    # end #end of method
-
-    # def make_reservation_from_block(block)
-    #   if !has_available_rooms?(block)
-    #     raise NoRoomAvailableError.new("No room is available on given dates")
-    #   end
-    #   date_range = block.date_range
-    #   room = block.rooms[0]
-    #   new_reservation_from_block = Reservation.new(date_range, room)
-    #   block.rooms.delete_at(0)
-    #   return new_reservation_from_block #instance of class Block
-    #
-    # end #end of method
-
     def make_reservation_from_block(block)
       if !block.has_available_rooms?
         raise NoRoomAvailableError.new("No room is available on given dates")
       end
       date_range = block.date_range
       room = block.rooms[0]
-      new_reservation_from_block = Reservation.new(date_range, room)
+      cost = block.room_cost
+      new_reservation_from_block = Reservation.new(date_range, room, cost)
       block.rooms.delete_at(0)
       return new_reservation_from_block #instance of class Block
 
