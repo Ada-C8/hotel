@@ -33,13 +33,13 @@ describe "Hotel::Reservation" do
     end
 
     it "throws error with wrong dates" do
-      proc{Hotel::Reservation.new(@start_date,@start_date-2,@room_1)}.must_raise ArgumentError
+      proc{Hotel::Reservation.new(@start_date,@start_date-2,@room_1)}.must_raise DateError
     end
 
     it "throws error when room is not available" do
       Hotel::Reservation.new(@start_date,@end_date,@room_1)
-      proc{Hotel::Reservation.new(@start_date,@end_date,@room_1)}.must_raise ArgumentError
-      proc{Hotel::Reservation.new(@start_date+1,@end_date+1,@room_1)}.must_raise ArgumentError
+      proc{Hotel::Reservation.new(@start_date,@end_date,@room_1)}.must_raise InvalidRoomError
+      proc{Hotel::Reservation.new(@start_date+1,@end_date+1,@room_1)}.must_raise InvalidRoomError
     end
 
     it "can reserve a room on same day as another reservation ends" do
@@ -68,12 +68,12 @@ describe "Hotel::Reservation" do
     it "throws error when block is over 5 rooms" do
       start_date = Date.new(2017,6,5)
       end_date = Date.new(2017,6,8)
-      proc{Hotel::Reservation.block_rooms(start_date, end_date, 10, 150, "Averi")}.must_raise ArgumentError
+      proc{Hotel::Reservation.block_rooms(start_date, end_date, 10, 150, "Averi")}.must_raise InvalidRoomError
     end
     it "throws error when block is under 1 room" do
       start_date = Date.new(2017,6,5)
       end_date = Date.new(2017,6,8)
-      proc{Hotel::Reservation.block_rooms(start_date, end_date, 0, 150, "Averi")}.must_raise ArgumentError
+      proc{Hotel::Reservation.block_rooms(start_date, end_date, 0, 150, "Averi")}.must_raise InvalidRoomError
     end
     it "will reduce number of rooms if not enough available" do
       start_date = Date.new(2010,6,5)
@@ -88,7 +88,7 @@ describe "Hotel::Reservation" do
       start_date = Date.new(2017,6,5)
       end_date = Date.new(2017,6,8)
       Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, "Dee")
-      proc{Hotel::Reservation.new(start_date,end_date,Hotel::Room.new(1))}.must_raise ArgumentError
+      proc{Hotel::Reservation.new(start_date,end_date,Hotel::Room.new(1))}.must_raise InvalidRoomError
     end
     it "can check if a block of rooms has availability" do
       start_date = Date.new(2017,6,19)
@@ -122,7 +122,7 @@ describe "Hotel::Reservation" do
       block_name = "Dee"
       Hotel::Reservation.block_rooms(start_date, end_date, 1, 150, block_name)
       Hotel::Reservation.reserve_block_room(block_name)
-      proc{Hotel::Reservation.reserve_block_room(block_name)}.must_raise ArgumentError
+      proc{Hotel::Reservation.reserve_block_room(block_name)}.must_raise InvalidRoomError
     end
   end
 end

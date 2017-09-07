@@ -1,6 +1,5 @@
 require 'Date'
-require 'Awesome_Print'
-
+require_relative 'hotel-errors'
 module Hotel
   class Reservation
     @@all_reservations = []
@@ -13,12 +12,12 @@ module Hotel
         @start_date = start_date
         @end_date = end_date
       else
-        raise ArgumentError.new "End date is before start date"
+        raise DateError.new "End date is before start date"
       end
       if room.available?(start_date, end_date)
         @room = room
       else
-        raise ArgumentError.new "Room is not available"
+        raise InvalidRoomError.new "Room is not available"
       end
       @number_of_nights = (@end_date - @start_date).to_i
       @total_cost = (rate * @number_of_nights)
@@ -54,7 +53,7 @@ module Hotel
     end
 
     def self.block_rooms(start_date, end_date, number_of_rooms, rate, name)
-      raise ArgumentError.new("Invalid number of rooms") if number_of_rooms > 5 || number_of_rooms < 1
+      raise InvalidRoomError.new("Invalid number of rooms") if number_of_rooms > 5 || number_of_rooms < 1
       available_rooms = Hotel::Room.all_available_rooms(start_date, end_date)
       if number_of_rooms > available_rooms.length
         puts "We don't have enough available rooms"
@@ -77,7 +76,7 @@ module Hotel
         puts "We have added your reservation"
         @@block_rooms[block_name].delete_at(0)
       else
-        raise ArgumentError.new "No rooms available in this block"
+        raise InvalidRoomError.new "No rooms available in this block"
       end
     end
 

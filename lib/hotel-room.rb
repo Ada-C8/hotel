@@ -1,3 +1,4 @@
+require_relative 'hotel-errors'
 module Hotel
   class Room
     #room has a number (1-20)
@@ -7,7 +8,7 @@ module Hotel
 
     def initialize(num)
       if num > NUMBER_OF_ROOMS || num <= 0
-        raise ArgumentError.new "Room number not valid"
+        raise InvalidRoomError.new "Room number not valid"
       else
         @number = num
       end
@@ -33,6 +34,9 @@ module Hotel
 
     def self.all_available_rooms(start_date, end_date)
       unavailable_rooms = []
+      if end_date < start_date
+        raise DateError.new "End date is before start date"
+      end
       (start_date...end_date).each do |date|
         list = Hotel::Reservation.list_for_date(date)
         list += Hotel::Reservation.blocklist_for_date(date)

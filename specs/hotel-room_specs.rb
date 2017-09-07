@@ -7,8 +7,8 @@ describe "Hotel::Room" do
     end
 
     it "can't create a room that is greater or lesser than number of rooms" do
-      proc{ Hotel::Room.new(0)}.must_raise ArgumentError
-      proc{ Hotel::Room.new(100)}.must_raise ArgumentError
+      proc{ Hotel::Room.new(0)}.must_raise InvalidRoomError
+      proc{ Hotel::Room.new(100)}.must_raise InvalidRoomError
     end
 
     it "responds to number" do
@@ -43,6 +43,10 @@ describe "Hotel::Room" do
       all_rooms = Hotel::Room.all_available_rooms(start_date, end_date)
       all_rooms.must_be_instance_of Array
       all_rooms.length.must_equal 18
+    end
+    it "throws error for date range" do
+      start_date = Date.new(2019,9,5)
+      proc{Hotel::Room.all_available_rooms(start_date, start_date-5)}.must_raise DateError
     end
 
   end
