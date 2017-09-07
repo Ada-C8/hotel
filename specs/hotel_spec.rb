@@ -31,7 +31,7 @@ describe "hotel class" do
         new_hotel.must_respond_to :add_20_rooms
       end
 
-
+# TODO
       it "Rooms array should have 20 rooms inside" do
         new_hotel = HotelManagment::Hotel.new
         new_hotel.add_20_rooms
@@ -39,11 +39,12 @@ describe "hotel class" do
       end
     end
 
+# TODO
     it "Should be able to access list of all available rooms" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.add_20_rooms
-      new_hotel.rooms[0].id.must_equal 1
-      new_hotel.rooms[19].id.must_equal 20
+      new_hotel.rooms[0].room_number.must_equal 1
+      new_hotel.rooms[19].room_number.must_equal 20
     end
   end
 
@@ -60,14 +61,14 @@ describe "hotel class" do
     end
 
     it "should be able to add a reservation" do
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_hotel = HotelManagment::Hotel.new
       new_hotel.reservations << new_reservation
       new_hotel.reservations.must_equal [new_reservation]
     end
 
     it "Should create a reservation with a specific date range" do
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 2)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 2)
 
       new_reservation.check_in_date.must_equal Date.new(2017,9,5)
       new_reservation.check_out_date.must_equal Date.new(2017,9,10)
@@ -75,24 +76,24 @@ describe "hotel class" do
     end
 
     it "Should have a room number" do
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 2)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 2)
       new_reservation.room_number.must_equal 2
     end
 
-    it "Should have a reservation number" do
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
-      new_reservation.reservation_number.must_equal 20
-    end
+    # it "Should have a reservation number" do
+    #   new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
+    #   new_reservation.reservation_number.must_equal 20
+    # end
 
     it "Should respond to check_in_date " do
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :check_in_date
 
     end
     it "text" do
 
 
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :check_out_date
     end
   end

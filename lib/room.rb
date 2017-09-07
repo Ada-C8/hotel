@@ -3,12 +3,11 @@ require 'awesome_print'
 
 module HotelManagment
   class Room
-    attr_reader :rooms, :id, :rate, :status
+    attr_reader :room_number, :rate
 
-    def initialize(id,status)
-      @id = id
+    def initialize(room_number, rate)
+      @room_number = room_number
       @rate = 200
-      @status = status
     end
   end #class end
 end #module end

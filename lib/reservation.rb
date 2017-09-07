@@ -4,16 +4,17 @@ require 'date'
 
 module HotelManagment
   class Reservation
-    attr_reader :first_name, :last_name, :check_in_date, :check_out_date, :reservation_number, :room_number, :cost
+    attr_reader :first_name, :last_name, :check_in_date, :check_out_date, :room_number, :cost
 
-    def initialize(first_name, last_name, check_in_date, check_out_date, reservation_number, room_number)
+    def initialize(first_name, last_name, check_in_date, check_out_date, room_number)
       @first_name = first_name
       @last_name = last_name
       @check_in_date = check_in_date
       @check_out_date = check_out_date
-      @reservation_number = reservation_number
+      # TODO
+      # get rid of room_number since its already in room class?
       @room_number = room_number
-      @cost
+      @cost = cost
     end
 
     def rate
