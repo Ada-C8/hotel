@@ -1,17 +1,25 @@
 require_relative 'spec_helper'
-require_relative '../lib/room'
-# Your code should raise an error
-#  when an invalid date range is provided
+require_relative '../lib/hotel'
 
-describe 'Room' do
-
-it "there should be 20 total rooms" do
-
+describe 'Hotel' do
+  
+before do
+  @test_hotel = Property::Hotel.new
 end
 
 it "can access the list of all of the rooms in the hotel" do
-
+@test_hotel.rooms.must_equal (1..20).to_a
 end
+
+it "there should be 20 total rooms" do
+  @test_hotel.rooms.count.must_equal 20
+end
+
+it "room always costs $200/night" do
+@test_hotel.room_price.must_equal 200
+end
+
+
 
 
 it "can reserve a room for a given date range" do

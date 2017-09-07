@@ -7,7 +7,7 @@
 # and you don't need to check whether reservations
 # conflict with each other (this will come in wave 2!)
 
-module Hotel
+module Property
 
   class Hotel
 
@@ -16,10 +16,14 @@ module Hotel
     def initialize
       @rooms = (1..20).to_a
       @room_price = 200
+      @reserved_rooms = [] #reservations
+      @reserved_blocks = []
     end
-
   end
 end
 
-hotel = Hotel::Hotel.new
-p hotel.rooms
+def reserve(room,check_in,check_out)
+  reservation = Property::Reservation.new(room, checkin, checkout, @room_price)
+  @reserved_rooms << reservation
+  return reservation
+end

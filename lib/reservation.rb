@@ -1,18 +1,4 @@
-# require_relative
-
-reservation_hash = {
-  num_guests: 0,
-  check_in_date: Date,
-  num_nights: 0,
-  room_nums: [],
-  res_name: "",
-  total_price: 0
-}
-
-
-
-  def self.find
-  end
+require_relative 'range'
 
 # I can access the list of all of the rooms in the hotel
 # I can reserve a room for a given date range
@@ -20,10 +6,23 @@ reservation_hash = {
 # I can get the total cost for a given reservation
 
 
-module Hotel
-  class Reservation
+module Property
 
-    # @max_occupants = 2 ???
+  class Reservation < Range
+
+
+    def initialize(room, check_in, check_out, total_price)
+      @room = room
+      @total_price = (@check_out - @check_in) * 200
+      # super(check_in, check_out)
+      @dates = Property::Range.new(check_in, check_out)
+    end
+
+    def reserve(room,check_in,check_out)
+      reservation = Reservation.new(room, checkin, checkout, @room_price)
+      @reserved_rooms << reservation
+      return reservation
+    end
 
 
   end
