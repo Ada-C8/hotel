@@ -38,8 +38,8 @@ module My_Hotel
       end
     end
 
-    def make_reservation(arrive, leave)
-      new_reservation = My_Hotel::Reservation.new(arrive, leave)
+    def make_reservation(first_night, last_night)
+      new_reservation = My_Hotel::Reservation.new(first_night, last_night)
       @all_reservations << new_reservation
       assign_room(new_reservation)
       set_cost(new_reservation)
@@ -48,10 +48,10 @@ module My_Hotel
     end
 
     def set_cost(reservation)
-      if reservation.nights.to_a.length <= 0
+      if reservation.nights_booked.nights.to_a.length <= 0
         return reservation.cost = 0
       else
-        number_of_nights = reservation.nights.to_a.length
+        number_of_nights = reservation.nights_booked.nights.to_a.length
         cost_per_night = ROOMS[reservation.room_number]
         cost = number_of_nights * cost_per_night
         reservation.cost = cost
@@ -63,7 +63,9 @@ module My_Hotel
     end
 
     def assign_room(reservation)
-      room_number = rand(20) + 1
+      rooms_available = find_unreserved_rooms(reservation.first_night..reservation.last_night)
+      room_number = rooms_available.keys.sample
+      # room_number = rand(20) + 1
       reservation.room_number = room_number
     end
 
@@ -77,29 +79,43 @@ module My_Hotel
       return nil
     end
 
-    def find_reserved_rooms(date)
-      reservations_on_date = find_reservations_by_date(date)
-      booked_rooms = []
-      reservations_on_date.each do |reservation|
-        booked_rooms << reservation.room_number
+    #given a range of nights, it will find rooms that are available for every night in the range.
+    #if no room is available for the whole range, returns an empty hash
+    def find_unreserved_rooms(nights)
+      array_of_rooms = []
+      nights.each do |night|
+        reservations_on_date = find_reservations_by_date(night)
+        free_rooms = ROOMS.dup
+        reservations_on_date.each do |reservation|
+          free_rooms.delete(reservation.room_number)
+        end
+        array_of_rooms << free_rooms
       end
-      return booked_rooms
-    end
 
+      free_for_range = {}
+      array_of_rooms[0].each do |room, cost|
+        free = true
+        array_of_rooms.each do |free_rooms|
+          free = free && (free_rooms[room] != nil)
+        end
+        if free == true
+          free_for_range[room] = cost
+        end
+      end
+      return free_for_range
+    end
 
     #given an array [year,month,day], it returns all the reservations on that day.
     #if there are no reservations on that day, returns an empty array
     def find_reservations_by_date(date)
-      # check_date = Date.civil(date[0], date[1], date[2])
       reservations_on_date = []
       @all_reservations.each do |reservation|
-        if reservation.nights.include?(date)
+        if reservation.nights_booked.nights.include?(date)
           reservations_on_date << reservation
         end
       end
       return reservations_on_date
     end
-
 
 
 
@@ -121,17 +137,6 @@ module My_Hotel
     # end
     # reservation_id
 
-
-
-
-    # def display_reservations
-    #   #puts out list of reservations
-    # end
-
-    #     def rooms_available_date(start_date, end_date)
-    # #display rooms available on that date
-    #     end
-
     #def make_block
     #define a block
     # make a random_id_number for block.
@@ -144,14 +149,29 @@ module My_Hotel
   end
 end
 
+# #
+# hotel_california= My_Hotel::Hotel.new
+# first_night = Date.civil(2017,2,1)
+# last_night = Date.civil(2017,2,5)
+# a = hotel_california.make_reservation(first_night, last_night)
+# first_night = Date.civil(2017,2,3)
+# last_night = Date.civil(2017,5,6)
+# b = hotel_california.make_reservation(first_night,last_night)
+# first_night = Date.civil(2017,4,3)
+# last_night = Date.civil(2017,4,6)
+# c = hotel_california.make_reservation(first_night, last_night)
 #
-# h= My_Hotel::Hotel.new
-# a = h.make_reservation([2017,2,1],[2017,2,5])
-# b = h.make_reservation([2017,2,3],[2017,2,6])
-# c = h.make_reservation([2017,4,3],[2017,4,6])
-# puts a.room_number
-# puts b.room_number
-# puts c.room_number
-# puts h.find_reserved_rooms([2017,2,3])
-# # puts
-# puts h.find_reservations_by_date([2017,2,3])
+# #
+# f = Date.civil(2017,2,4)
+# j = Date.civil(2017,2,5)
+# g = Date.civil(2017,2,6)
+#  puts a.room_number
+#  puts b.room_number
+# # puts e.room_number
+# # puts d.room_number
+#  puts hotel_california.find_reservations_by_date(j).class
+#  puts hj= hotel_california.find_unreserved_rooms(f..g)
+# # q = hotel_california.make_reservation(arrive,leave)
+# # puts q.room_number
+# # puts hj= hotel_california.find_unreserved_rooms(f..g)
+# # puts h.find_reservations_by_date([2017,2,3])
