@@ -1,6 +1,7 @@
 #Hotel.rb
 require 'awesome_print'
 require 'date'
+require 'pry'
 
 module Hotel_Chain
   class MyHotel
@@ -17,7 +18,7 @@ module Hotel_Chain
 
     #Method is called to print a list for the administrator
     #hotel = Hotel_Chain::MyHotel.new
-    #hotel.list_of_rooms
+    #hotel.list_rooms
     def list_rooms
       #myhotel = Hotel_Chain::MyHotel.all
       list_array = []
@@ -53,48 +54,38 @@ module Hotel_Chain
     #calculate length of stay
     #iterate through reservation to see if it
     def rooms_available(check_in_date, check_out_date)
-      rooms_available_array = []
+      available_rooms = []
       unavailable_rooms = []
 
-      check_in= Date.strptime(check_in_date, "%m/%d/%Y")
+      check_in = Date.strptime(check_in_date, "%m/%d/%Y")
       check_out = Date.strptime(check_out_date, "%m/%d/%Y")
-      length_of_stay = (check_out - check_in).to_i
+      #length_of_stay = (check_out - check_in).to_i
 
       #this doesn't work because it only looks at rooms with reservations, if any exist. But if a room doesn't have any reservations at all, it won't look at that room. The test would require it look at reservations for all rooms.
       @array_of_rooms.each do |room|
-        room_check = []
         @reservations_array.each do |reservation|
-          length_of_stay.times do |day|
-            if room.room_id == reservation.room_id
-              if !(reservation.check_in_date...reservation.check_out_date).cover?((check_in)+day)
-                rooms_available_array << room.room_id
-              else
-                unavailable_rooms << room.room_id
-              end
-            end
-          end
-          if room_check.length == length_of_stay
-            rooms_available_array << room_check[0]
+          # checks for unavailable rooms
+          if room.room_id == reservation.room_id && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+            unavailable_rooms << room
+          elsif room.room_id == reservation.room_id && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
+            unavailable_rooms << room
+          elsif room.room_id == reservation.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+            unavailable_rooms << room
+          elsif room.room_id == reservation.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
+            unavailable_rooms << room
+          else
+            available_rooms << room
           end
         end
       end
-
-
-      rooms_available_final = []
-      @array_of_rooms.each do |room|
-        if rooms_available_array.include?(room.room_id)
-          rooms_available_final << room
-        elsif !unavailable_rooms.include?(room.room_id)
-          rooms_available_final << room
-        end
-      end
-
-      ap "rooms_available_array: #{rooms_available_array}"
+      ap "available_rooms: #{available_rooms}"
       ap "unavailable_rooms: #{unavailable_rooms}"
-      ap "rooms_available_final #{rooms_available_final}"
-      return rooms_available_array
+      unique_available_rooms = available_rooms.uniq
+      ap "unique_available_rooms: #{unique_available_rooms}"
+      final_available_rooms = unique_available_rooms - unavailable_rooms
+      ap "final_available_rooms: #{final_available_rooms}"
+      return final_available_rooms
     end
-
 
 
 
@@ -107,12 +98,5 @@ module Hotel_Chain
     #   end
     #   puts array
     # end
-
-
-
-
-
-
-
-  end
-end
+  end #end of class
+end #end of module

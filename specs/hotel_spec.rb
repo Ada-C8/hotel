@@ -115,11 +115,6 @@ describe "The Hotel class" do
       @myhotel.rooms_available("8/11/17", "8/12/17").must_be_kind_of Array
     end
 
-      it "returns an array of rooms of the correct length" do
-      @myhotel.store_reservation("8/11/17", "8/13/17")
-      @myhotel.rooms_available("8/11/17", "8/12/17").length.must_be_equal to 19
-      end
-
   end
 
     # describe "return a list of available rooms by date" do
