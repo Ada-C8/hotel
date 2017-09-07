@@ -1,6 +1,7 @@
 class Hotel
-  attr_reader :delete_me_i_am_test
+  attr_reader :test
+
   def initialize
-    @delete_me_i_am_test = []
+    @test = []
   end
 end
