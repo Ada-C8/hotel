@@ -24,7 +24,7 @@ module ReservationSystem
       list = Array.new
 
       all_reservations.each do |res|
-        if res.dates_reserved.includes?(date)
+        if res.dates_reserved.include?(date)
           list << res
         end
       end
