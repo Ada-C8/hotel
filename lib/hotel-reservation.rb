@@ -21,7 +21,7 @@ module Hotel
         raise ArgumentError.new "Room is not available"
       end
       @number_of_nights = (@end_date - @start_date).to_i
-      @total_cost = (rate * @number_of_nights).round(2)
+      @total_cost = (rate * @number_of_nights)
       @rate = rate
       @@all_reservations << self
     end
@@ -66,7 +66,7 @@ module Hotel
         block << self.new(start_date, end_date, available_rooms[i], rate: rate)
       end
       @@block_rooms[name] = block
-      puts "You have blocked #{number_of_rooms} rooms for the rate of $#{rate} and for the dates of #{start_date}-#{end_date}, under the name of #{name}"
+      puts "You have blocked #{number_of_rooms} rooms for the rate of $#{rate} and for the dates of #{start_date} - #{end_date}, under the name of #{name}"
       return @@block_rooms
     end
 
@@ -90,6 +90,10 @@ module Hotel
       else
         return false
       end
+    end
+
+    def to_s
+      return "A reservation has been made for room ##{@room.number} during #{@start_date} - #{@end_date} with a rate of $#{@rate} for a total cost of $#{@total_cost}"
     end
 
   end
