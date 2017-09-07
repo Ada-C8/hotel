@@ -14,7 +14,7 @@ module Hotel
         @blocks = []
       end
 
-      def make_reservation(date1, *date2 #name = nil)
+      def make_reservation(date1, *date2) #name = nil)
         if view_available(date1, *date2).length != 0
           room_number = view_available(date1, *date2)[0]
           cost = 200
@@ -74,8 +74,10 @@ module Hotel
         end
 
         @blocks.each do |block|
-          if block.rooms.include? room_number #&& block.daterange.overlap? thisdaterange
-            return false
+          if block.rooms.include? room_number
+            if block.daterange.overlap? thisdaterange
+              return false
+            end
           end
         end
         return true

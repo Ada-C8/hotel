@@ -26,7 +26,7 @@ describe 'Hotel' do
     it 'creates a reservation object with one date and pushes to reservations' do
       @hotel.make_reservation(Date.new(2018,9,12)).must_be_kind_of Array
     end
-    it 'reservations is an array of reservation objects' do
+    it 'returns an array of reservation objects' do
       @hotel.reservations.each do |reservation|
         reservation.must_be_instance_of Hotel::Reservation
       end
@@ -39,10 +39,10 @@ end
       @date3 = Date.new(2018,9,13)
       @date4 = Date.new(2018,9,19)
       @hotel.make_reservation(@date1 , @date2)
-      @hotel.reservations.each do |reservation|
-        puts reservation
-        puts reservation.room_number
-      end
+      # @hotel.reservations.each do |reservation|
+      #   puts reservation
+      #   puts reservation.room_number
+      # end
       #@hotel.view_available(Date.new(2018,9,15)).must_respond_to :date1
       @hotel.view_available(@date1).must_be_kind_of Array
       @hotel.view_available(@date1).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
@@ -53,10 +53,10 @@ end
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
       @hotel.make_reservation(@date1, @date2)
       puts @hotel.reservations
-      @hotel.reservations.each do |reservation|
-        puts reservation
-        puts reservation.room_number
-      end
+      # @hotel.reservations.each do |reservation|
+      #   puts reservation
+      #   puts reservation.room_number
+      # end
       @hotel.view_available(@date1, @date2).must_equal [:room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
     end
@@ -88,15 +88,15 @@ end
 
   #REFACTOR SINCE CHANGING MAKE_RESERVATION
 
-  xdescribe 'make reservation for available room' do
+  describe 'make reservation for available room' do
     before do
       @date1 = Date.new(2018,9,12)
       @date2 = Date.new(2018,9,15)
     end
-    it 'raises BookingError if room is not available' do
-      @hotel.make_reservation(@date1, @date2)
-      proc {@hotel.make_reservation(@date1, @date2)}.must_raise BookingError
-    end
+    # it 'raises BookingError if room is not available' do
+    #   @hotel.make_reservation(@date1, @date2)
+    #   proc {@hotel.make_reservation(@date1, @date2)}.must_raise BookingError
+    # end
     it 'gives a unique id to each reservation' do
       @hotel.make_reservation(@date1, @date2)
       @hotel.make_reservation(@date1, @date2)
@@ -104,32 +104,39 @@ end
       x = 1
       @hotel.reservations.each do |reservation|
         reservation.id.must_equal x
-        puts reservation.id
         x+=1
       end
     end
 
+    it 'will  not reserve a room in a block if not intended' do
+      @hotel.make_block('Diane', Date.new(2018,9,12), 120, 5)
+      @hotel.make_reservation( Date.new(2018,9,12))
+      @hotel.reservations[0].room_number.must_equal :room6
+    end
+  end
+
+
 #REFACTOR SINCE CHANGING MAKE_RESERVATION
-    xdescribe 'make block' do
+    describe 'make block' do
       it 'returns an array' do
         @hotel.make_block('Diane', Date.new(2018,9,12), 120, 5).must_be_kind_of Array
       end
 
       it 'returns an array full of block objects' do
         @hotel.blocks.each do |block|
-            block.must_be_kind_of Hotel::Block
-          end
+          block.must_be_kind_of Hotel::Block
+        end
       end
 
       it 'returns a list of blocks that is the right length' do
         @hotel.make_block('Joyce', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
       end
-
-      it 'can make more than one block' do
-        @hotel.make_block('Diane', Date.new(2018,9,12), 120, 5).must_be_kind_of Array
-        @hotel.make_block('Joyce', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
-        @hotel.make_block('Roni', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
-      end
+      # MAKE AN ACTUAL TEST FOR THIS
+      # it 'can make more than one block' do
+      #   @hotel.make_block('Diane', Date.new(2018,9,12), 120, 5)
+      #   @hotel.make_block('Joyce', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+      #   @hotel.make_block('Roni', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+      # end
 
      it 'sends a booking error if there are no rooms available for a block' do
         @hotel.make_block('Lars', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
@@ -150,27 +157,25 @@ end
         block2[1].rooms.must_equal [:room5, :room6, :room7, :room8, :room9]
       end
 
-      it 'will not make a reservation for a blocked room' do
-        @hotel.make_block('Clem', Date.new(2018,10,10), Date.new(2018,10,12), 100, 3)
-        proc{@hotel.make_reservation(Date.new(2018,10,10), Date.new(2018,10,11))}.must_raise BookingError
-      end
+      # it 'will not make a reservation for a blocked room' do
+      #   @hotel.make_block('Clem', Date.new(2018,10,10), Date.new(2018,10,12), 100, 3)
+      #   proc{@hotel.make_reservation(Date.new(2018,10,10), Date.new(2018,10,11))}.must_raise BookingError
+      # end
 
       it 'will raise a BookingError if you try to make reservation when all of the rooms are blocked' do
         @hotel.make_block('Alec', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
         @hotel.make_block('Alanna', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
         @hotel.make_block('Molly', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
         @hotel.make_block('Claire', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
-        proc{@hotel.make_reservation(Date.new(2018,10,10), Date.new(2018,10,12), 200)}.must_raise BookingError
+        proc{@hotel.make_reservation(Date.new(2018,10,10), Date.new(2018,10,12))}.must_raise BookingError
+      end
+
+      it 'will return available rooms in a given block' do
+        @hotel.make_block('Sarah', Date.new(2019,11,11), Date.new(2019, 11, 15), 100, 3)
+        @hotel.make_reservation('Sarah', Date.new(2019,11,11), Date.new(2019, 11, 15))
       end
 
 
     end
-
-
-
-
-
-
-end
 
 end
