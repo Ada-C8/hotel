@@ -1,25 +1,38 @@
-require 'booking_error'
+require 'errors'
+# require 'pry'
+
 module Hotel
   class Hotel
 
-    attr_reader :reservations, :rooms
+    attr_reader :reservations, :rooms, :blocks
 
     def initialize
       @reservations = [] #where reservation objects are pushed
-      @rooms = {room1:200, room2:200, room3:200, room4:200, room5:200, room6:200, room7:200,
-        room8:200, room9:200, room10:200} #roomnumber:price
+      @rooms = [:room1, :room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
+        :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20] #roomnumber:price
         #CHANGE ROOMS TO CONSTANT??
+        @blocks = []
       end
 
-      def make_reservation(date1, *date2, room_number, cost)
+      def make_reservation(date1, *date2, room_number, cost) #name = nil)
         if is_available?(room_number, date1, *date2)
           id = @reservations.length + 1
           reservation = Reservation.new(id, date1, *date2, room_number, cost)
           @reservations << reservation
         else
-          raise BookingError.new("Room is already booked during daterange selected")
+          raise BookingError.new("Room is not available during daterange selected")
         end
       end
+
+      # def make_block_reservation(date1, *date2, room_number, cost, partyname)
+      #   @blocks.each do |block|
+      #     if block.name == name
+      #       reservation = Reservation.new(id, date1, *date2, room_number, cost, partyname)
+      #     end
+      #   end
+      # end
+
+
 
       def view_available(date1, *date2)
         available = [:room1, :room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
@@ -52,9 +65,35 @@ module Hotel
               return false
             end
           end
+
+          @blocks.each do |block|
+            if block.rooms.include? room_number #&& block.daterange.overlap? thisdaterange
+              return false
+            end
+          end
           return true
         end
 
+        def make_block(partyname, date1, *date2, discounted_rate, number_rooms)
+          block_rooms = []
+          index = 0
+          if number_rooms > 5
+            raise BookingError.new('You may only block off five rooms at a time')
+          end
+          # binding.pry
+          until block_rooms.length == number_rooms || block_rooms.length == 5
+            if is_available?(@rooms[index], date1, *date2)
+              block_rooms << @rooms[index]
+            end
+            index += 1
+            if index > 20
+              raise BookingError.new('There are no rooms available to make a block')
+            end
+          end
+          thisblock = Block.new(partyname, date1, *date2, discounted_rate, block_rooms)
+          @blocks << thisblock
+        end
+        # puts @blocks
 
       end #end of class
     end #end of module

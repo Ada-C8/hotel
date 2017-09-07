@@ -1,5 +1,5 @@
 require 'date'
-require 'booking_error'
+require 'errors'
 
 module Hotel
   class DateRange

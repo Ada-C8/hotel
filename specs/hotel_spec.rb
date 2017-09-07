@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-
+# require 'pry'
 describe 'Hotel' do
   before do
     @hotel = Hotel::Hotel.new
@@ -10,7 +10,7 @@ describe 'Hotel' do
     end
 
     it 'creates a hash of rooms' do
-      @hotel.rooms.must_be_kind_of Hash
+      @hotel.rooms.must_be_kind_of Array
     end
 
     it 'creates an array of reservations' do
@@ -59,7 +59,7 @@ end
       @date2 = Date.new(2018,9,15)
       @date3 = Date.new(2018,9,13)
       @date4 = Date.new(2018,9,19)
-      @hotel.make_reservation(@date1, @date2, :room4, 200)
+      @hotel.make_reservation(@date1, @date2, :room4, 20)
       @hotel.view_booked(@date1).must_be_kind_of Array
       @hotel.view_booked(@date1).must_equal [:room4]
       @hotel.make_reservation(@date1, @date2, :room5, 200)
@@ -97,7 +97,59 @@ end
         x+=1
       end
     end
-  end
 
+    describe 'make block' do
+      it 'returns an array' do
+        @hotel.make_block('Diane', Date.new(2018,9,12), 120, 5).must_be_kind_of Array
+      end
+
+      it 'returns an array full of block objects' do
+        @hotel.blocks.each do |block|
+            block.must_be_kind_of Hotel::Block
+          end
+      end
+
+      it 'returns a list of blocks that is the right length' do
+        @hotel.make_block('Joyce', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+      end
+
+      it 'can make more than one block' do
+        @hotel.make_block('Diane', Date.new(2018,9,12), 120, 5).must_be_kind_of Array
+        @hotel.make_block('Joyce', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+        @hotel.make_block('Roni', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+      end
+
+     it 'sends a booking error if there are no rooms available for a block' do
+        @hotel.make_block('Lars', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+        @hotel.make_block('Clark', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+        @hotel.make_block('Joyce', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+        @hotel.make_block('Maisie', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+        puts @hotel.blocks.rooms
+        proc{@hotel.make_block('Becca', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)}.must_raise BookingError
+      end
+
+      it 'raises booking error if more than 5 rooms are being blocked' do
+        proc{@hotel.make_block('Dionne', Date.new(2018,10,10), Date.new(2018,10,12), 100, 6)}.must_raise BookingError
+      end
+
+      it 'will skip over a reserved room to make a block' do
+        @hotel.make_block('Ruth', Date.new(2018,10,10), Date.new(2018,10,12), 100, 3)
+        @hotel.make_reservation(Date.new(2018,10,10), :room6, 200)
+        block = @hotel.make_block('Bree', Date.new(2018,10,10), Date.new(2018,10,12), 100, 5)
+
+        block[1].rooms.must_equal[:room4, :room5, :room6, :room7, :room8]
+      end
+
+      it 'will not make a reservation for a blocked room' do
+        @hotel.make_block('Clem', Date.new(2018,10,10), Date.new(2018,10,12), 100, 3)
+        proc{@hotel.make_reservation(Date.new(2018,10,10), Date.new(2018,10,11), :room1, 200)}.must_raise BookingError
+      end
+    end
+
+
+
+
+
+end
 
 end
