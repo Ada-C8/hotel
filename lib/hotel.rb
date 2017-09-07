@@ -30,14 +30,14 @@ module Hotel
     end
   end
 
-  # def self.find_reservation_by_block_id(input_id)
-  #   blocked_reservations = []
-  #   all_reservations = self.all_reservations
-  #   all_reservations.each do |reservation|
-  #     blocked_reservations << reservation if reservation.block_id == input_id
-  #   end
-  #   return blocked_reservations
-  # end
+  def self.find_reservation_by_block_id(input_id)
+    blocked_reservations = []
+    all_reservations = self.all_reservations
+    all_reservations.each do |reservation|
+      blocked_reservations << reservation if reservation.block_id == input_id
+    end
+    return blocked_reservations
+  end
 
   def self.all_reservations
     all_reservations = []

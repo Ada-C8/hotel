@@ -169,4 +169,10 @@ describe "hotel" do
         proc {Hotel.reserve_room([2017,11,24], [2017,11, 25])}.must_raise ArgumentError
       end
     end
+    describe "Hotel.block_available(input_id)" do
+      it "should return true or false" do
+        output = Hotel.block_available(56)
+        ([true,false].include? output).must_equal true
+      end
+    end
   end
