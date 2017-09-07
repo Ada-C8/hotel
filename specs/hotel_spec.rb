@@ -61,41 +61,38 @@ describe 'Hotel' do
   end
 
   describe '#make_reservation' do
-    # As an administrator, I can reserve a room for a given date range
-    # As an administrator, I can reserve an available room for a given date range
+    before do
+      @reservation1 = @hotel.make_reservation('2017-09-05', '2017-09-08')
+    end
     it 'creates a reservation and adds it to the @reservations array' do
-      @hotel.make_reservation('2017-09-05', '2017-09-08')
-      reservation = @hotel.reservations[0]
-      reservation.must_be_kind_of Hotel::Reservation
-      reservation.checkout.strftime.must_equal '2017-09-08'
+      # As an administrator, I can reserve a room for a given date range
+      @reservation1.must_be_kind_of Hotel::Reservation
+      @reservation1.checkout.strftime.must_equal '2017-09-08'
     end
 
     it 'will reserve the first available room' do
-      @hotel.make_reservation('2017-09-05', '2017-09-08')
-      @hotel.make_reservation('2017-09-05', '2017-09-08')
-      reservation1 = @hotel.reservations[0]
-      reservation2 = @hotel.reservations[1]
-
-      reservation1.room.wont_equal reservation2.room
+      # As an administrator, I can reserve an available room for a given date range
+      reservation2 = @hotel.make_reservation('2017-09-05', '2017-09-08')
+      @reservation1.room.wont_equal reservation2.room
     end
 
     it 'will book a room again after a reservation ends' do
-      @hotel.make_reservation('2017-09-05', '2017-09-08')
-      @hotel.make_reservation('2018-09-05', '2018-09-08')
-      reservation1 = @hotel.reservations[0]
-      reservation2 = @hotel.reservations[1]
+      reservation2 = @hotel.make_reservation('2018-09-05', '2018-09-08')
 
-      reservation1.room.must_equal reservation2.room
+      @reservation1.room.must_equal reservation2.room
     end
 
     it 'can book two consecutive reservations to the same room' do
       # A reservation is allowed start on the same day that another reservation for the same room ends
-      @hotel.make_reservation('2017-09-05', '2017-09-08')
-      @hotel.make_reservation('2017-09-08', '2017-09-11')
-      reservation1 = @hotel.reservations[0]
-      reservation2 = @hotel.reservations[1]
+      reservation2 = @hotel.make_reservation('2017-09-08', '2017-09-11')
 
-      reservation1.room.must_equal reservation2.room
+      @reservation1.room.must_equal reservation2.room
+    end
+
+    it 'will not book a room that is part of a block' do
+      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+      @hotel.make_reservation('2017-08-04', '2017-08-05')
+
     end
 
     it 'raises NoRoomError if no rooms are available' do
@@ -135,6 +132,7 @@ describe 'Hotel' do
     end
 
     it 'fills block with available rooms only' do
+      # - The collection of rooms should only include rooms that are available for the given date range
       3.times { @hotel.make_reservation('2017-10-05', '2017-10-07') }
       new_block = @hotel.make_block('2017-10-03', '2017-10-07', 10, 20)
       reserved = @hotel.view_reservations('2017-10-06')
@@ -146,7 +144,6 @@ describe 'Hotel' do
   end
 end
 
-# - The collection of rooms should only include rooms that are available for the given date range
 # - If a room is set aside in a block, it is not available for reservation by the general public, nor can it be included in another block
 # - As an administrator, I can check whether a given block has any rooms available
 # - As an administrator, I can reserve a room from within a block of rooms
