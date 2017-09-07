@@ -1,17 +1,7 @@
 require_relative 'room'
 
 module ReservationSystem
-  #
-  #   class Building
-  #     attr_accessor :rooms
-  #
-  #     def initialize
-  #       @rooms = [] #NOTE As an administrator, I can access the list of all the rooms in the hotel"
-  #
-  #       20.times do |num|
-  #         @rooms << Hotel::Room.new(num + 1)
-  #       end
-  #     end
+
   #
   #     def self.search_date(date)
   #       list = []
@@ -35,15 +25,22 @@ module ReservationSystem
 
   #============== OLD WORK ====================#
   class Hotel
-    attr_accessor :hotel
+    attr_accessor :hotel, :all_reservations, :new_reservation
 
     def initialize
-      @hotel = []
+      @hotel = Array.new
+      @all_reservations = Array.new
 
       20.times do |num|
         @hotel << ReservationSystem::Room.new(num + 1)
       end
-    end
+    end # initialize
+
+    def reserve(check_in, nights)
+      @new_reservation = ReservationSystem::Reservation.new(check_in, nights)
+      all_reservations << @new_reservation
+
+    end # reserve
 
   end #Hotel class
 
