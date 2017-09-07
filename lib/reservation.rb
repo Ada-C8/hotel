@@ -6,7 +6,7 @@ require 'date'
 module Hotel_Chain
   class Reservation
 
-    attr_accessor :check_in_date, :check_out_date, :room_id, :HOTEL, :cost
+    attr_accessor :check_in_date, :check_out_date, :room, :HOTEL, :cost
 
     HOTEL = Hotel_Chain::MyHotel.new
 
@@ -19,7 +19,7 @@ module Hotel_Chain
       begin
         @check_in_date = Date.strptime(check_in_date, "%m/%d/%Y")
         @check_out_date = Date.strptime(check_out_date, "%m/%d/%Y")
-        @room_id = HOTEL.array_of_rooms.sample.room_id
+        @room = HOTEL.array_of_rooms.sample #CHANGE THIS FROM room_ID to room because I want it to store the object of the room, not just the ID.
         @cost = (@check_out_date - @check_in_date) * 200
         #(rate will eventually reference the rate associated with the room_id)
         #puts "Check-in date: #{@check_in_date}"

@@ -48,9 +48,9 @@ describe "The Hotel class" do
 
     it "it stores a reservation and returns the array length" do
     #every time a new reservation is created in the reservation class, it calls the store_reservation method and stores that reservation object"
-    @myhotel.store_reservation("8/13/17", "8/16/17")
-    @myhotel.store_reservation("9/25/17", "9/29/17")
-    @myhotel.reservations_array.length.must_equal 2
+      @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.store_reservation("9/25/17", "9/29/17")
+      @myhotel.reservations_array.length.must_equal 2
     end
 
   end
@@ -148,10 +148,18 @@ describe "The Hotel class" do
       @myhotel.find_rooms_available("8/8/17", "8/15/17").length.must_equal 18
     end
 
-
   end #end of describe "find_rooms_available method"
 
+  describe "make a reservation for date range for an available room" do
 
+    it "adds a reservation to the @reservations_array" do
+      @myhotel.store_reservation("8/9/17", "8/11/17")
+      @myhotel.reservations_array.length.must_equal 1
+      @myhotel.store_reservation("8/13/17", "8/14/17")
+      @myhotel.reservations_array.length.must_equal 2
+    end
+
+  end
 
 
 end

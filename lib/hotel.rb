@@ -32,8 +32,27 @@ module Hotel_Chain
 
     # admin would enter the following to create a new reservation:
     # hotel.store_reservation(check_in_date, check_out_date)
+
+    #NOTE TO SELF: Do you want to reserve a particular room here or in the reservation method, which now just randomly chooses a room, regardless if it's available or not?
     def store_reservation(check_in_date, check_out_date)
-      @reservations_array << Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+      available_rooms = []
+      if @reservations_array.length == 0 #i.e. there are no reservations at all
+        new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+        new_reservation.room = @array_of_rooms[0]
+        @reservations_array << new_reservation
+        ap "new_reservation when it was empty before: #{new_reservation}"
+        ap "@reservations_array when it was empty before: #{@reservations_array}"
+      elsif @reservations_array.length > 0 
+        available_rooms = find_rooms_available(check_in_date, check_out_date)
+        new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+        new_reservation.room = available_rooms[0]
+        @reservations_array << new_reservation
+        ap "new_reservation if there was already data: #{new_reservation}"
+        ap "@reservations_array if there was already data: #{@reservations_array}"
+        return new_reservation
+      else
+        puts "There are no rooms available for that date range"
+      end
     end
 
     #Finds all reservations for a given date
@@ -51,27 +70,25 @@ module Hotel_Chain
     end
 
 
-    #calculate length of stay
-    #iterate through reservation to see if it
     def find_rooms_available(check_in_date, check_out_date)
       available_rooms = []
       unavailable_rooms = []
 
       check_in = Date.strptime(check_in_date, "%m/%d/%Y")
       check_out = Date.strptime(check_out_date, "%m/%d/%Y")
-      #length_of_stay = (check_out - check_in).to_i
 
-      #this doesn't work because it only looks at rooms with reservations, if any exist. But if a room doesn't have any reservations at all, it won't look at that room. The test would require it look at reservations for all rooms.
+      #ap "@array_of_rooms: #{@array_of_rooms}"
+
       @array_of_rooms.each do |room|
         @reservations_array.each do |reservation|
           # checks for unavailable rooms
-          if room.room_id == reservation.room_id && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+          if room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
             unavailable_rooms << room
-          elsif room.room_id == reservation.room_id && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
+          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
             unavailable_rooms << room
-          elsif room.room_id == reservation.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
             unavailable_rooms << room
-          elsif room.room_id == reservation.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
+          elsif room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
             unavailable_rooms << room
           else
             available_rooms << room
@@ -86,6 +103,8 @@ module Hotel_Chain
       ap "final_available_rooms: #{final_available_rooms}"
       return final_available_rooms
     end
+
+    #NOTE TO SELF: You don't need the "available rooms" array - just use @array_of_rooms
 
 
 

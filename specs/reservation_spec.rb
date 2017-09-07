@@ -17,7 +17,7 @@ describe "Reservation Class" do
     end
 
     it "creates a room object and assigns it to the reservation" do
-      @reservation.room_id.must_be_kind_of Integer
+      @reservation.room.room_id.must_be_kind_of Integer
     end
 
     it "a reservation has a check-in date" do
