@@ -1,13 +1,13 @@
 require_relative 'spec_helper'
 describe "Reservations class" do
   before do
-    room3 = [Hotel::Room.new(3)]
-    @res1 = Hotel::Booking.new(1, [Hotel::Room.new(1),Hotel::Room.new(2)], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
-    @res2 = Hotel::Booking.new(2,room3, Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
-    @res3 = Hotel::Booking.new(3, [Hotel::Room.new(4)], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8)))
-    @res4 = Hotel::Booking.new(4, room3, Hotel::DateRange.new(Date.new(2017,9,6),Date.new(2017,9,7)))
-    res_arr = [@res1,@res2,@res3,@res4]
     @hotel = Hotel::Reservations.new
+    @res1 = Hotel::Booking.new(1, [@hotel.all_rooms[0],@hotel.all_rooms[1]], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
+    @res2 = Hotel::Booking.new(2,[@hotel.all_rooms[2]], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
+    @res3 = Hotel::Booking.new(3, [@hotel.all_rooms[3]], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8)))
+    @res4 = Hotel::Booking.new(4, [@hotel.all_rooms[2]], Hotel::DateRange.new(Date.new(2017,9,6),Date.new(2017,9,7)))
+    res_arr = [@res1,@res2,@res3,@res4]
+
     res_arr.each do |res|
       @hotel.all_reservations << res
     end
@@ -54,8 +54,10 @@ describe "Reservations class" do
   end
   describe "check_availability" do
     it "returns an array of room objects" do
+
     end
     it "returns a list of rooms available, rooms should be unique" do
+
     end
   end
 end
