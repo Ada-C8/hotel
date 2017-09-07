@@ -53,7 +53,7 @@ module Hotel_Chain
 
     #calculate length of stay
     #iterate through reservation to see if it
-    def rooms_available(check_in_date, check_out_date)
+    def find_rooms_available(check_in_date, check_out_date)
       available_rooms = []
       unavailable_rooms = []
 

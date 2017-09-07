@@ -104,7 +104,7 @@ describe "The Hotel class" do
   #
   # end
 
-  describe "rooms_available method" do
+  describe "find_rooms_available method" do
 
     it "takes in a start date and end date and returns an array of rooms available" do
       @myhotel.store_reservation("8/13/17", "8/16/17")
@@ -112,24 +112,38 @@ describe "The Hotel class" do
       @myhotel.store_reservation("8/15/17", "8/30/17")
       @myhotel.store_reservation("8/10/17", "8/13/17")
       @myhotel.store_reservation("8/09/17", "8/14/17")
-      @myhotel.rooms_available("8/11/17", "8/12/17").must_be_kind_of Array
+      @myhotel.find_rooms_available("8/11/17", "8/12/17").must_be_kind_of Array
     end
 
-  end
+    it "returns an array of room objects" do
+      @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.find_rooms_available("8/11/17", "8/12/17")[0].must_be_instance_of Hotel_Chain::Room
+    end
 
-    # describe "return a list of available rooms by date" do
-    #
-    #   it "returns an array" do
-    #     @myhotel.store_reservation("8/13/17", "8/16/17")
-    #     @myhotel.store_reservation("9/25/17", "9/29/17")
-    #     @myhotel.store_reservation("8/15/17", "8/30/17")
-    #     @myhotel.
-    #   end
-    #
-    #   it "returns an array of room objects" do
-    #
-    #   end
-    # end
+    it "returns an array of 20 objects when searching for a date range that does not overlap with existing reservations" do
+      @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.store_reservation("9/25/17", "9/29/17")
+      @myhotel.store_reservation("8/15/17", "8/30/17")
+      @myhotel.find_rooms_available("8/11/17", "8/12/17").length.must_equal 20
+    end
+
+    it "returns an array of 20 objects when searching for a date range that overlaps with the last day of an existing reservations" do
+      @myhotel.store_reservation("8/9/17", "8/11/17")
+      @myhotel.find_rooms_available("8/11/17", "8/12/17").length.must_equal 20
+    end
+
+    it "returns an array of 20 objects when searching for a date range that overlaps with the first day of an existing reservations" do
+      @myhotel.store_reservation("8/9/17", "8/11/17")
+      @myhotel.find_rooms_available("8/5/17", "8/9/17").length.must_equal 20
+    end
+
+    it "returns an array of <20 objects when searching for a date range that overlaps with an existing reservations" do
+      @myhotel.store_reservation("8/9/17", "8/11/17")
+      @myhotel.find_rooms_available("8/8/17", "8/10/17").length.must_equal 19
+    end
+
+
+  end #end of describe "find_rooms_available method"
 
 
 
