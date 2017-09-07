@@ -31,7 +31,6 @@ describe Hotel::Hotel do
     end
   end #end of initailize Hotel::Hotel tests
 
-
   describe "can make and retrieve reservations" do
     before do
       @hilton = Hotel::Hotel.new
@@ -56,6 +55,21 @@ describe Hotel::Hotel do
       davenport = Hotel::Hotel.new
       davenport.reservations.length.must_equal 0
       davenport.reservations.must_be_kind_of Array
+    end
+
+    it "can make a reservation with room object by inputing the room number" do
+      hotel = Hotel::Hotel.new
+      hotel.make_reservation("guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 13 )
+    end
+
+    it "raises an ArgumentError when trying to make a reservation for a room that is already reserved" do
+      victoria = Hotel::Hotel.new
+      victoria.make_reservation("
+      guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), )
+      vi
+
+
+
     end
   end # end of make and retrieve reservations
 
@@ -89,16 +103,46 @@ describe Hotel::Hotel do
       reservations_10th.length.must_equal 4
       reservations_may.length.must_equal 0
       reservations_30th.length.must_equal 0
-
-
-
-
-
     end
-
 
   end # end get_res_by_date
 
 
 
+  ########### HOW TO TEST THIS METHOD?? #########
+  ## CURRENTLY TESTING FOR LENGTH  ##
+  describe "get_available_rooms method" do
+
+    it "returns an Array of Rooms" do
+      hotel = Hotel::Hotel.new
+      check_in = Date.new(2018, 4, 12)
+      check_out = Date.new(2018, 4, 25)
+
+      hotel.get_available_rooms(check_in, check_out).must_be_kind_of Array
+    end
+
+    it "returns 17 rooms when there are three room conflicts" do
+      hotel = Hotel::Hotel.new
+      hotel.make_reservation("guest", Date.new(2018, 9, 10), Date.new(2018, 9, 17))
+      hotel.make_reservation("guest", Date.new(2018, 9, 15), Date.new(2018, 9, 23))
+      hotel.make_reservation("guest", Date.new(2018, 9, 16), Date.new(2018, 9, 28))
+      hotel.make_reservation("guest", Date.new(2018, 4, 16), Date.new(2018, 4, 18))
+
+      hotel.get_available_rooms(Date.new(2018, 9, 14), Date.new(2018, 9, 20)).length.must_equal 17
+    end
+
+  end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+#This is a comment to stop the blinking

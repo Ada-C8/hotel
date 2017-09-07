@@ -1,12 +1,13 @@
 module Hotel
   class Reservation
 
-  attr_reader :total_nights, :check_in, :check_out
+  attr_reader :total_nights, :check_in, :check_out, :room
 
-  def initialize(guest, check_in, check_out)
+  def initialize(guest, check_in, check_out, room)
     @guest = guest
     @check_in = check_in_date(check_in)
     @check_out = check_out_date(check_out)
+    @room = room
     @total_nights = calculate_res_length
   end
 

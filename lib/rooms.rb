@@ -6,9 +6,6 @@ module Hotel
       @number = check_room_number(number)
     end
 
-
-
-
     private
 
     # Raises ArgumentError if room number supplied is already taken by a room or if number supplied is not an Integer. Otherwise, sets the room number.

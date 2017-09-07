@@ -9,32 +9,32 @@ describe Hotel::Reservation do
     it "can be created" do
       check_in = Date.new(2017, 11, 14)
       check_out = Date.new(2017, 11, 17)
-      reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+      reservation = Hotel::Reservation.new(@guest, check_in, check_out, Hotel::Room.new(1))
       reservation.must_be_instance_of Hotel::Reservation
     end
 
     it "raises an ArgumentError for invalid check_in and check_out arguments" do
       check_in = [2017, 11, 14]
       check_out = [2017, 11, 16]
-      proc{Hotel::Reservation.new(@guest, check_in, check_out)}.must_raise ArgumentError
+      proc{Hotel::Reservation.new(@guest, check_in, check_out, Hotel::Room.new(5))}.must_raise ArgumentError
     end
 
     it "accurately calculates the length of a stay of 1 night" do
       check_in = Date.new(2017, 11, 14)
       check_out = Date.new(2017, 11, 17)
-      reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+      reservation = Hotel::Reservation.new(@guest, check_in, check_out, Hotel::Room.new(3))
       reservation.total_nights.must_equal 3
     end
 
     it "accurately calculates the length of a stay of 1 year" do
       check_in = Date.new(2017, 11, 14)
       check_out = Date.new(2018, 11, 14)
-      reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+      reservation = Hotel::Reservation.new(@guest, check_in, check_out, Hotel::Room.new(9))
       reservation.total_nights.must_equal 365
     end
 
     it "accurately calculates the length of stay of 7 days" do
-          reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 19))
+          reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 19), Hotel::Room.new(12))
 
           reservation.total_nights.must_equal 7
     end
@@ -44,7 +44,7 @@ describe Hotel::Reservation do
     before do
       check_in = Date.new(2018, 4, 1)
       check_out = Date.new(2018, 4, 22)
-      @reservation = Hotel::Reservation.new(@guest, check_in, check_out)
+      @reservation = Hotel::Reservation.new(@guest, check_in, check_out, Hotel::Room.new(17))
     end
 
     it "can retrieve the total_nights" do
@@ -59,6 +59,11 @@ describe Hotel::Reservation do
       @reservation.check_out.must_equal Date.new(2018, 4, 22)
     end
 
+    it "can retreive the room and room number" do
+      @reservation.room.must_be_kind_of Hotel::Room
+      @reservation.room.number.must_equal 17
+    end
+
     # it "can retrieve the room" do
     #
     # end
@@ -66,11 +71,12 @@ describe Hotel::Reservation do
 
   describe "method include_date?" do
     before do
-      @reservation = Hotel::Reservation.new("guest", Date.new(2018, 2, 15), Date.new(2018, 2, 23))
+      @reservation = Hotel::Reservation.new("guest", Date.new(2018, 2, 15), Date.new(2018, 2, 23), Hotel::Room.new(15))
     end
 
     it "returns true if the reservation includes that date" do
-      @reservation = Hotel::Reservation.new("guest", Date.new(2018, 2, 15), Date.new(2018, 2, 23))
+      @reservation = Hotel::Reservation.new("guest", Date.new(2018, 2, 15), Date.new(2018, 2, 23), Hotel::Room.new(9))
+
       @reservation.include_date?(Date.new(2018, 2, 20)).must_equal true
     end
 
