@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'Room' do
   before do
-    @puppy_room = Hotel::Room.new(13)
+    @puppy_room = Hotel::Room.new
   end # end before
 
   describe 'initialize' do
@@ -12,6 +12,12 @@ describe 'Room' do
   end # end #initialize
 
   describe 'assign_room' do
+    it 'removes unavailable rooms from the rooms_available array' do
+      all_rooms = @rooms_available
+      @puppy_room.assign_room
+      all_rooms.length.must_equal 19
+    end # end test
+
     xit 'assigns a room number from the rooms_available ARRAY' do
       @puppy_room.assign_room.must_equal rooms_available[0]
     end # end test
