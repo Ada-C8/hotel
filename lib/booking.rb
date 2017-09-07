@@ -42,6 +42,7 @@ module Hotel
         elsif num_rooms > availible.length
           raise BookingError.new("We don't have that many rooms availible for those dates. We only have #{availible.length} rooms availible for those dates. ")
         end # if/elsif
+
         dates_booked = Hotel::DateRange.new(start_date, end_date).nights_booked
         reservation_id = @all_reservations.length + 1
         rooms = []
@@ -49,10 +50,12 @@ module Hotel
         num_rooms.times do
           rooms << availible[i]
           i += 1
+          # availible = availible_rooms(start_date, end_date)
         end
         cost = (num_rooms * dates_booked.length * 200.0)
 
         @all_reservations << Hotel::Reservation.new(reservation_id, cost, rooms, dates_booked)
+
       end # if/else
     end # make_reservation
 
@@ -65,7 +68,9 @@ module Hotel
       days.each do |day|
         @all_reservations.each do |res|
           if res.date_range.include?(day)
+            if !(date_reservations.include?(res))
             date_reservations << res
+          end
           end # if
         end # .each
       end #.each
@@ -115,3 +120,7 @@ module Hotel
 
   end # Booking
 end # Hotel
+
+
+# TODO
+  # make new methods for 

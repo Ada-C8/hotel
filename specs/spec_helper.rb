@@ -14,7 +14,7 @@ require_relative '../lib/room'
 require_relative '../lib/reservation'
 require_relative '../lib/date_range'
 require_relative '../lib/booking'
-# require_relative '../lib/'
+require_relative '../lib/block'
 
 # require_relative '../lib/'
 
