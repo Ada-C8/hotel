@@ -201,7 +201,7 @@ describe "hotel" do
         output = Hotel.reserve_block_room(75)
         block_check_in = Date.new(2017, 9, 20)
         block_check_out = Date.new(2017, 9, 22)
-        ouput.check_in.must_equal block_check_in
+        output.check_in.must_equal block_check_in
         output.check_out.must_equal block_check_out
       end
     end

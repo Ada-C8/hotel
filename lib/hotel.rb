@@ -141,4 +141,11 @@ module Hotel
     return rooms - taken.length
   end
 
+  def self.reserve_block_room(input_id)
+    block = self.find_block(input_id)
+    array_check_in = [block.check_in.year, block.check_in.month, block.check_in.day]
+    array_check_out =[block.check_out.year, block.check_out.month, block.check_out.day]
+    new_reservation = Hotel::Reservation.new(5, block.rooms[0].id, array_check_in, array_check_out, block.block_id)
+    return new_reservation
+  end
 end
