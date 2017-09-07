@@ -14,7 +14,7 @@ module BookingSystem
       @date_range = date_range
       @room = room
       @cost = cost
-      @total_cost = COST * date_range.dates_within_range.length
+      @total_cost = cost * date_range.dates_within_range.length
 
     end #end of initialize
 

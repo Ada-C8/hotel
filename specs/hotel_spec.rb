@@ -138,6 +138,21 @@ describe "Hotel" do
       end
     end
 
+    describe "Check total cost for two types of reservations" do
+      before do
+        @hotel = BookingSystem::Hotel.new(5)
+        @new_block = @hotel.create_block(@date_range, 3)
+        @general_reservation = @hotel.make_reservation(@date_range)
+        @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
+      end
+      it "Returns the right total cost for general reservation" do
+        @general_reservation.total_cost.must_equal 400
+      end
+      it "Returns the right total cost for reservation from block" do
+        @reservation_from_block.total_cost.must_equal 360
+      end
+    end
+
   end #end of describe
 
 

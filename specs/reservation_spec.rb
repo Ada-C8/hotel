@@ -22,7 +22,6 @@ describe "Reservation" do
     it "Returns the rigth total cost" do
       @new_reservation.total_cost.must_equal 400
     end
-
-  end
+    end
 
 end #end of discribe
