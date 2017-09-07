@@ -15,8 +15,6 @@ module Hotel
       else
         raise ArgumentError.new "End date is before start date"
       end
-      #move to script! Date.valid_date?()
-      # puts room.available?(start_date, end_date)
       if room.available?(start_date, end_date)
         @room = room
       else
@@ -56,10 +54,7 @@ module Hotel
     end
 
     def self.block_rooms(start_date, end_date, number_of_rooms, rate, name)
-      # names = @@block_rooms.map { |room| room.block }
-      # raise ArgumentError.new("Same block name") if names.include? name
       raise ArgumentError.new("Invalid number of rooms") if number_of_rooms > 5 || number_of_rooms < 1
-      # self.check_date(start_date, end_date)
       available_rooms = Hotel::Room.all_available_rooms(start_date, end_date)
       if number_of_rooms > available_rooms.length
         puts "We don't have enough available rooms"
