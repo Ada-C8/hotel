@@ -40,14 +40,18 @@ module Hotel_Chain
         new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
         new_reservation.room = @array_of_rooms[0]
         @reservations_array << new_reservation
+        puts "***STORE RESERVATION - NOTHING IN RESERVATIONS ARRAY ****"
         ap "new_reservation when it was empty before: #{new_reservation}"
+        ap "new_reservation's room when it was empty before: #{new_reservation.room.room_id}"
         ap "@reservations_array when it was empty before: #{@reservations_array}"
-      elsif @reservations_array.length > 0 
+      elsif @reservations_array.length > 0
         available_rooms = find_rooms_available(check_in_date, check_out_date)
         new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
         new_reservation.room = available_rooms[0]
         @reservations_array << new_reservation
+        puts "***STORE RESERVATION - SOMETHING IN RESERVATIONS ARRAY ****"
         ap "new_reservation if there was already data: #{new_reservation}"
+        ap "new_reservation's room if there was already data: #{new_reservation.room.room_id}"
         ap "@reservations_array if there was already data: #{@reservations_array}"
         return new_reservation
       else
@@ -90,17 +94,23 @@ module Hotel_Chain
             unavailable_rooms << room
           elsif room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
             unavailable_rooms << room
+          elsif room.room_id == reservation.room.room_id && reservation.check_in_date == check_in && reservation.check_out_date == check_out
+            unavailable_rooms << room
           else
             available_rooms << room
           end
         end
       end
-      ap "available_rooms: #{available_rooms}"
+      #ap "available_rooms: #{available_rooms}"
+      puts "***FIND ROOMS AVAILABLE ****"
       ap "unavailable_rooms: #{unavailable_rooms}"
-      unique_available_rooms = available_rooms.uniq
-      ap "unique_available_rooms: #{unique_available_rooms}"
-      final_available_rooms = unique_available_rooms - unavailable_rooms
-      ap "final_available_rooms: #{final_available_rooms}"
+      puts "***"
+      #unique_available_rooms = available_rooms.uniq
+      #puts "***"
+      #ap "unique_available_rooms: #{unique_available_rooms}"
+      final_available_rooms = @array_of_rooms - unavailable_rooms
+      puts "***"
+      ap "FINAL AVAILABLE ROOMS: #{final_available_rooms}"
       return final_available_rooms
     end
 
