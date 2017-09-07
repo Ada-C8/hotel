@@ -1,15 +1,19 @@
+require 'Booking'
+require 'DateRange'
+
 module Hotel
   class Reservations
     attr_reader :all_reservations
 
-    @all_reservations = []
     def initialize
+    @all_reservations = []
+
     #(1..20).to_a
     #@rooms_collection = []
     # @blocks_arr = []
     end
 
-    def self.all_rooms
+    def all_rooms
       @rooms_collection = []
       n = 1
 
@@ -21,7 +25,7 @@ module Hotel
       return @rooms_collection
     end
 
-    def self.all_reservations
+    def all_reservations
       return @all_reservations
     end
 
@@ -29,7 +33,7 @@ module Hotel
     #   @blocks_collection = []
     # end
 
-    def self.new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
+    def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
       @all_reservations << booking
       return booking
@@ -39,14 +43,15 @@ module Hotel
       date = Date.parse(date)
       list = []
       @all_reservations.each do |reservation|
-          if reservation.dates.include?(date)
+          dates = reservation.dates
+          if dates.include?(date)
             list << reservation
           end
       end
       return list
     end
 
-    def self.clear_reservations #Using this for testing purposes
+    def clear_reservations #Using this for testing purposes
       @all_reservations = []
     end
 

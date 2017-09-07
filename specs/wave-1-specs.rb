@@ -91,77 +91,76 @@ describe 'Reservations' do
 
   describe "collection of rooms" do
     it "has a collection of rooms" do
-      Hotel::Reservations.all_rooms.must_be_kind_of Array
+      @new_hotel.all_rooms.must_be_kind_of Array
     end
     ##TODO: write more tests here ##
   end
 
   describe 'all reservations' do
     it "has a collection of reservations" do
-      Hotel::Reservations.all_reservations.must_be_kind_of Array
+      @new_hotel.all_reservations.must_be_kind_of Array
     end
   end
 
   describe 'new reservation' do
 
     it 'must create a new booking' do
-      new_booking1 = Hotel::Reservations.new_reservation("2017-09-21", "2017-09-23")
+      new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
       new_booking1.must_be_instance_of Hotel::Booking
     end
   end
 
   describe 'all reservations' do
     before do
-      Hotel::Reservations.clear_reservations
-      @new_booking1 = Hotel::Reservations.new_reservation("2017-09-21", "2017-09-23")
-      @new_booking2 = Hotel::Reservations.new_reservation("2020-01-01", "2020-01-15")
-      @new_booking3 = Hotel::Reservations.new_reservation("2019-01-01", "2019-01-15")
+      @new_hotel.clear_reservations
+      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
+      @new_booking2 = @new_hotel.new_reservation("2020-01-01", "2020-01-15")
+      @new_booking3 = @new_hotel.new_reservation("2019-01-01", "2019-01-15")
     end
     it 'must be an array of all reservations' do
-      Hotel::Reservations.all_reservations.must_be_kind_of Array
+      @new_hotel.all_reservations.must_be_kind_of Array
     end
     it 'must contain correct number of reservations made' do
-      Hotel::Reservations.all_reservations.length.must_equal 3
+      @new_hotel.all_reservations.length.must_equal 3
     end
     it 'must contain the first reservation made' do
-      Hotel::Reservations.all_reservations[0].check_in.must_equal Date.parse("2017-09-21")
+      @new_hotel.all_reservations[0].check_in.must_equal Date.parse("2017-09-21")
     end
     it 'must contain the correct total cost of the reservation' do
-      Hotel::Reservations.all_reservations[0].total_cost.must_equal 400
+      @new_hotel.all_reservations[0].total_cost.must_equal 400
     end
   end
 
   describe 'list_reservations_by_date' do
     before do
-      @new_booking4 = Hotel::Reservations.new_reservation("2019-01-01", "2019-01-15")
+      @new_booking4 = @new_hotel.new_reservation("2019-01-01", "2019-01-15")
     end
     it "must be a method of Reservations" do
-      Hotel::Reservations.must_respond_to :list_reservations_by_date
+      @new_hotel.must_respond_to :list_reservations_by_date
     end
     it "must be an array" do
-
-      Hotel::Reservations.list_reservations_by_date("2019-01-01").must_be_kind_of Array
+      @new_hotel.list_reservations_by_date("2019-01-01").must_be_kind_of Array
     end
   end
 end
-
-describe 'DateRange' do
-  before do
-    @new_date_range = Hotel::DateRange.new("2019-01-01", "2019-01-04")
-    # @new_date_range2 = Hotel::DateRange.new("2017-01-02", "2017-01-03")
-    # @new_date_range3 = Hotel::DateRange.new("2017-02-04", "2017-02-07")
-  end
-  describe 'initialize' do
-    it 'will initialize' do
-      @new_date_range.must_be_instance_of Hotel::DateRange
-    end
-  end
-  describe 'dates method' do
-    it 'is an array' do
-      @new_date_range.dates.must_be_kind_of Array
-    end
-    it 'must include the correct number of dates' do
-      @new_date_range.dates.length.must_equal 4
-    end
-  end
-end
+#
+# describe 'DateRange' do
+#   before do
+#     @new_date_range = Hotel::DateRange.new("2019-01-01", "2019-01-04")
+#     # @new_date_range2 = Hotel::DateRange.new("2017-01-02", "2017-01-03")
+#     # @new_date_range3 = Hotel::DateRange.new("2017-02-04", "2017-02-07")
+#   end
+#   describe 'initialize' do
+#     it 'will initialize' do
+#       @new_date_range.must_be_instance_of Hotel::DateRange
+#     end
+#   end
+#   describe 'dates method' do
+#     it 'is an array' do
+#       @new_date_range.dates.must_be_kind_of Array
+#     end
+#     it 'must include the correct number of dates' do
+#       @new_date_range.dates.length.must_equal 4
+#     end
+#   end
+# end
