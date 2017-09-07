@@ -13,14 +13,11 @@ describe "reservations" do
 
   describe "initialize" do
     it "Should create an instance of a Reservation" do
-
       @reservation.must_be_kind_of Booking::Reservation
     end
 
 
-    it "date_range should be an instance of a Date class" do
-      # @reservation = Booking::Reservation.new(checkin, checkout, room_number)
-      # date_range = Booking::Date.new(date)
+    it "date_range should be an instance of a DateRange class" do
       @reservation.date_range.must_be_kind_of Booking::DateRange
     end
 
@@ -30,15 +27,12 @@ describe "reservations" do
       @reservation.room_number.must_be_kind_of Integer
     end
     it "should create a constant variable COST" do
-      # Booking::Reservation.must_respond_to ::COST
       Booking::Reservation::COST.must_equal 200
     end
   end
 
   describe "total_cost method" do
     it "should return total cost of the stay in the hotel" do
-      # reservation = Booking::Reservation.new(date_range, room_number)
-
       @reservation.total_cost.must_equal @number_of_nights * 200
     end
   end

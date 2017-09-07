@@ -15,5 +15,7 @@ module Booking
       return @date_range.number_of_nights * COST
     end
 
+    
+
   end
 end
