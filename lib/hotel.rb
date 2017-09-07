@@ -5,12 +5,13 @@ require_relative 'reservation'
 module Hotels
   # Contains the methods related to reserving rooms and viewing reservations
   class Hotel
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     def initialize
       # W1-C1 The hotel has 20 rooms, and they are numbered 1 through 20
       @rooms = Array.new(20) { |i| Hotels::Room.new(i + 1) }
       @reservations = []
+      @blocks = []
     end
 
     def list_rooms
@@ -33,7 +34,7 @@ module Hotels
 
     def check_reserved(date)
       # W1-US3 Can access the list of reservations for a specific date
-      @reservations.select { |obj| obj.dates.include? date }
+      @reservations.select { |obj| obj.dates.include? date } + @blocks.select { |obj| obj.dates.include? date }
     end
 
     def total_cost(reservation)
@@ -55,18 +56,39 @@ module Hotels
       permissable_rooms
     end
 
+    def book_block(checkin, checkout = nil, room_count)
+      # W3-US1 Can create a block of rooms
+      full?(checkin)
+      if valid_block?(room_count)
+        booked = Hotels::Reservation.new(checkin, checkout)
+        booked.block_id = block_id_gen(checkin, room_count)
+        random_room(booked, checkin, room_count)
+        booked.calc_total
+        @blocks << booked
+        booked
+      end
+    end
+
     def id_generator(checkin)
       initial_date = checkin.to_s.delete('-')
       random_alphabet = ('A'..'Z').to_a.sample(10).join
       random_digits = (0..9).to_a.shuffle.join
       "#{initial_date}#{random_alphabet}#{random_digits}"
-    end # generates and adds a room id number for a successful reservation
+    end # generates and adds a room id number for a normal reservation
 
-    def random_room(reservation, checkin)
+    def block_id_gen(checkin, room_count)
+      initial_date = checkin.to_s.delete('-')
+      random_digits = (0..9).to_a.shuffle.join
+      "#{initial_date}#{room_count}#{random_digits}"
+    end # generates and adds a block id number for a block reservation
+
+    def random_room(reservation, checkin, room_count = 1)
       unavailable = unavailable_rooms(checkin)
-      until reservation.rooms.length == 1
+      # unavailable_num = 
+      until reservation.rooms.length == room_count
         room_no = @rooms.sample(1)[0]
         reservation.rooms << room_no unless unavailable.include? room_no
+        # unavailable <<
       end
     end # adds a Room to the reservation
 
@@ -104,5 +126,31 @@ module Hotels
       end
       reservation
     end # returns the corresponding reservation to a given reservation ID
+
+    def valid_block?(room_count)
+      (1..5).include? room_count
+    end
   end # Hotel class
 end # Hotels module
+
+
+conrad = Hotels::Hotel.new
+checkin = Date.new(2017, 10, 31)
+checkout = Date.new(2017, 11, 4)
+
+
+conrad.book_block(checkin, checkout, 5)
+conrad.book_block(checkin, checkout, 5)
+
+conrad.reserve_room(checkin, checkout)
+conrad.reserve_room(checkin, checkout)
+conrad.reserve_room(checkin, checkout)
+conrad.reserve_room(checkin, checkout)
+conrad.reserve_room(checkin, checkout)
+
+
+puts conrad.reservations.length
+puts conrad.blocks.length
+# ap conrad.check_reserved(checkin)
+ap conrad.unavailable_rooms(checkin)
+ap conrad.check_unreserved(checkin)

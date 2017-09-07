@@ -5,7 +5,7 @@ module Hotels
 
     # W1-C2 Every room is identical, and a room always costs $200/night
     REGULAR_RATE = 200
-    BLOCK_RATE = 150
+    BLOCK_RATE = 100
 
     def initialize(room_number)
       @room_name = "Room #{room_number}"

@@ -37,13 +37,12 @@ module Hotels
 
     def calc_total
       # W1-C3 Guest should not be charged for the last day
-      if @block_id.zero?
-        nights_charged = @dates.length * @rooms.length
-        total = Hotels::Room::REGULAR_RATE * nights_charged
-        @total_cost = total
+      nights_charged = @dates.length * @rooms.length
+      if @block_id.to_i <= 0
+        @total_cost = Hotels::Room::REGULAR_RATE * nights_charged
+      else
+        @total_cost = Hotels::Room::BLOCK_RATE * nights_charged
       end
-      # elsif block_id > 0
-      # @total_cost = Hotels::Room::BLOCK_RATE * nights_charged
     end # changes the value of total cost depending on nightly rate
 
     def self.shovel_dates(checkin, checkout, array, mark = 0)
