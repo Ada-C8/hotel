@@ -11,7 +11,7 @@ module Hotel
       # @cost = Room.new.cost
       @all_rooms = []
       create_rooms(@all_rooms) # write test that rooms are created
-
+      @all_blocks = []
       @all_reservations = []
     end
 
@@ -64,9 +64,6 @@ module Hotel
 
 
     def check_reservations(checkin, checkout)
-      ##### write logic to check for blocks bc then it's not available 
-
-
       # need to check each find date
       # if reservation.date.include? (date_range[0])
       #   not_available << room
@@ -91,6 +88,10 @@ module Hotel
     end
 
     def check_availability(checkin, checkout)
+  ##### write logic to check for blocks bc then it's not available
+
+
+
       # this is the inverse of not_available array
       available = []
       @all_rooms.each do |room|
@@ -101,5 +102,17 @@ module Hotel
       # binding.pry
       return available
     end
+
+
+    def create_blocks
+    end
+
+    def check_blocks
+    end
+
+    def check_block_availability
+    end
+
+
   end
 end
