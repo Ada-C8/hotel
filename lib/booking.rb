@@ -29,6 +29,9 @@ module Hotel
     end # initialize
 
     def make_reservation(start_date, end_date, num_rooms )
+      # TODO: add functionality to only accept reservations when there is availibility
+      # TODO: will need to call the availible_rooms method to access the availible array
+      # TODO: will need to check that there are enough rooms in the availible array to make the reservation and raise ArgumentError if there is are not enough rooms
       if end_date < start_date
         raise ArgumentError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
       else
@@ -47,7 +50,6 @@ module Hotel
     end # make_reservation
 
     def check_date_for_reservations(start_date, end_date)
-      # TODO: change this to allow for a date range instead! Wave 2
       # it will have a method that checks if there is a reservation for the date(s) requested
       # iterate though @all_reservations for each day requested and if the day is included in the Booking then it will look at the Reservation that included that date and add the room(s) in that reservation to a new array not_availible.
       days = Hotel::DateRange.new(start_date, end_date).nights_booked

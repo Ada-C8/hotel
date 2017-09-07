@@ -88,7 +88,6 @@ describe "Booking" do
     end # it "should be able to be called on @booking" do
 
     it "should return an empty array is there are no reservations for the date given" do
-      #TODO: check for a date range as well in another test
       num_of_rooms = 3
       @booking.make_reservation(@checkin_day, @checkout_day, num_of_rooms )
 
