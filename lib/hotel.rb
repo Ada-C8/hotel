@@ -23,6 +23,13 @@ module Hotel
     return 5
   end
 
+  def self.find_reservation(input_id)
+    all_reservations = self.all_reservations
+    all_reservations.each do |reservation|
+      return reservation if reservation.id == input_id
+    end
+  end
+
   def self.all_reservations
     all_reservations = []
     CSV.read('support/reservations.csv').each do |row|

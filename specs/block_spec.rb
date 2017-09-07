@@ -24,6 +24,10 @@ describe "Block" do
       (output.rooms[0]).must_be_instance_of Hotel::Room
 
     end
+    it "should contain reservations in an array" do
+      output = Hotel::Block.new(0.5, 3, [2017,10,22], [2017,10,24], 60)
+      output.reservations.must_be_instance_of Array
+    end
     it "should only include rooms that are available for the given date range" do
       output = Hotel::Block.new(0.5, 3, [2017,10,3], [2017,10,5], 60)
       (output.rooms.include? Hotel::HOTEL_ROOMS[0]).must_equal false

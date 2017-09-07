@@ -35,6 +35,7 @@ describe "hotel" do
     end
   end
 
+
   describe "self.find_reservation(input_id)" do
     it "should return reservation with mathching reservation id" do
       reservation1 = Hotel.find_reservation(1785)
