@@ -22,7 +22,5 @@ describe 'Registration class' do
       newreservation = Hotel::Reservation.new(checkin, checkout)
       newreservation.totalcost.must_equal 600
     end
-
-    
   end
 end#describe Registratioin class

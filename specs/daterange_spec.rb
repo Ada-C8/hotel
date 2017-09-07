@@ -39,5 +39,31 @@ describe 'DateRange class' do
     end
   end
 
+  describe 'include?' do
+    before do
+      @checkin = Date.new(2017,9,10)
+      @checkout = Date.new(2017,9,13)
+      @newdaterange = Hotel::DateRange.new(@checkin, @checkout)
+    end
+
+    it 'returns true, if the date is include' do
+      date = Date.new(2017,9,11)
+      @newdaterange.include?(date).must_equal true
+    end
+
+    it 'returns true if the date is the checkin date' do
+      @newdaterange.include?(@checkin).must_equal true
+    end
+
+    it 'returns false for the checkout date' do
+      @newdaterange.include?(@checkout).must_equal false
+    end
+
+    it 'returns false for a date out of range' do
+      date = Date.new(2017,9,15)
+      @newdaterange.include?(date).must_equal false
+    end
+
+  end
 
 end#big descrbe

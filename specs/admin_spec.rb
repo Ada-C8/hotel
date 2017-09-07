@@ -1,4 +1,5 @@
 require_relative 'spec_helper.rb'
+require 'pry'
 
 describe 'Admin class' do
   before do
@@ -31,6 +32,36 @@ describe 'Admin class' do
   end
 
   describe "reservations_per_day" do
-    
+    before do
+      @date1 = Date.new(2018,01,25)
+      @date2 = Date.new(2018,02,22)
+      @date3 = Date.new(2018,01,31)
+      @date4 = Date.new(2018,02,05)
+      @date5 = Date.new(2018,01,29)
+      @administrator = Hotel::Admin.new
+      @administrator.add_reservation(@date1, @date3)
+      @administrator.add_reservation(@date1, @date4)
+
+      #terminar de hacer las reservaciones para los test
+
+    end
+
+    it 'Returns an array ' do
+     @administrator.reservations_per_day(@date1).must_be_instance_of Array
+    end
+
+    it 'Returns an array of reservations instances' do
+      @administrator.reservations_per_day(@date1)[0].must_be_instance_of Hotel::Reservation
+    end
+
+    it 'Returns all the reservations per day, when is not empty' do
+      @administrator.reservations_per_day(@date1).length.must_equal 2
+    end
+
+    it 'Returns empty array if that day there is no reservations' do
+      @administrator.reservations_per_day(@date2).must_equal []
+    end
+
+
   end
 end#describe class

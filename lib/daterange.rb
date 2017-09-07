@@ -21,5 +21,13 @@ module Hotel
       (@checkout - @checkin).to_i
     end
 
+    def include?(date)
+      if @checkin <= date && @checkout > date
+        return true
+      else
+        return false
+      end
+    end
+
   end
 end #module
