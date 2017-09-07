@@ -24,11 +24,14 @@ module Hotel
     end
 
     def make_reservation(checkin, checkout)
+      #TODO: add block functionality
       room_num = find_available_rooms(checkin, checkout).first
       if room_num.nil?
         raise(NoRoomError, "No available rooms for dates #{checkin} - #{checkout}")
       end
-      @reservations << Reservation.new(room_num, checkin, checkout, self)
+      reservation = Reservation.new(room_num, checkin, checkout, self)
+      @reservations << reservation
+      reservation
     end
 
     def room(num)
@@ -49,6 +52,7 @@ module Hotel
     end
 
     def find_available_rooms(checkin, checkout)
+      # TODO: add block functionality
       booked_rooms, available_rooms = [], []
       @reservations.each do |reservation|
         if !(booked_rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
@@ -59,6 +63,13 @@ module Hotel
         available_rooms << room unless booked_rooms.include? room
       end
       available_rooms
+    end
+
+    def create_block(start_date, end_date, num_rooms, discount)
+      # rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
+      # block = Block.new(start_date, end_date, rooms, discount)
+      # @blocks << block
+      # block
     end
   end
 end
