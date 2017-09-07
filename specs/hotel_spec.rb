@@ -47,19 +47,33 @@ describe 'Hotel' do
       # Hotel.all_reservations.must_be_kind_of Array
     end
 
-      it "raises an exception when asked to reserve a room that is not available" do
-        test_hotel= Hotel.new
-        check_out = Date.new(2017, 03, 14)
-        check_in = Date.new(2017, 03, 11)
-        test_hotel.create_reservation(1, check_in, check_out)
+    it "raises an exception when asked to reserve a room that is not available" do
+      test_hotel= Hotel.new
+      check_out = Date.new(2017, 03, 14)
+      check_in = Date.new(2017, 03, 11)
+      test_hotel.create_reservation(1, check_in, check_out)
 
-        # check availability for a date within the above reservation range
-        check_out = Date.new(2017, 03, 18)
-        check_in = Date.new(2017, 03, 13)
+      # check availability for a date within the above reservation range
+      check_out = Date.new(2017, 03, 18)
+      check_in = Date.new(2017, 03, 13)
 
 
-        proc { test_hotel.create_reservation(1, check_in, check_out) }.must_raise ArgumentError
-      end
+      proc { test_hotel.create_reservation(1, check_in, check_out) }.must_raise ArgumentError
+    end
+
+    it "a reservation is allowed to start on the same day that a reservation for another room ends" do
+      test_hotel= Hotel.new
+      check_out = Date.new(2017, 03, 14)
+      check_in = Date.new(2017, 03, 11)
+      test_hotel.create_reservation(1, check_in, check_out)
+
+      # add another reservation for above room with check_in day same as previous reservation's check_out day
+      check_out = Date.new(2017, 03, 18)
+      check_in = Date.new(2017, 03, 14)
+      test_hotel.create_reservation(1, check_in, check_out)
+
+      test_hotel.all_reservations.length.must_equal 2
+    end
 
   end
 
@@ -117,19 +131,19 @@ describe 'Hotel' do
       test_hotel.create_reservation(1, check_in, check_out)
 
       # the date_to_check does not fall in the below date range (check_out day not included)
-      check_out = Date.new(2017, 03, 12)
+      check_out = Date.new(2017, 03, 13)
       check_in = Date.new(2017, 03, 8)
       test_hotel.create_reservation(2, check_in, check_out)
 
-      # the date_to_check falls in the below date range and should be included
-      check_out = Date.new(2017, 03, 14)
-      check_in = Date.new(2017, 03, 11)
-      test_hotel.create_reservation(2, check_in, check_out)
-
-      # the date_to_check does not fall in the below date range
-      check_in = Date.new(2017, 04, 8)
-      check_out = Date.new(2017, 04, 11)
-      test_hotel.create_reservation(2, check_in, check_out)
+      # # the date_to_check falls in the below date range and should be included
+      # check_out = Date.new(2017, 03, 14)
+      # check_in = Date.new(2017, 03, 11)
+      # test_hotel.create_reservation(2, check_in, check_out)
+      #
+      # # the date_to_check does not fall in the below date range
+      # check_in = Date.new(2017, 04, 8)
+      # check_out = Date.new(2017, 04, 11)
+      # test_hotel.create_reservation(2, check_in, check_out)
 
       # two reservations are included in the date_to_check
       test_hotel.get_reservations_for_date(date_to_check).length.must_equal 2
@@ -142,13 +156,17 @@ describe 'Hotel' do
       check_in = Date.new(2017, 03, 11)
       test_hotel.create_reservation(1, check_in, check_out)
 
+      check_out = Date.new(2017, 03, 22)
+      check_in = Date.new(2017, 03, 14)
+      test_hotel.create_reservation(13, check_in, check_out)
+
       # check availability for a date within the above reservation range
       check_out = Date.new(2017, 03, 18)
       check_in = Date.new(2017, 03, 13)
 
-      #availability should return an array of all rooms except room 1
-      #which is booked during the preceding date_range
-      available_rooms = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+      #availability should return an array of all rooms except rooms 1 and 13
+      #which are booked during the provided date range
+      available_rooms = [2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20]
       test_hotel.availability(check_in, check_out).must_equal available_rooms
     end
   end

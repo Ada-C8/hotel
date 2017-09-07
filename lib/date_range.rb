@@ -15,12 +15,24 @@ class DateRange
     # @dates = alldays
   end
 
-  def include?(date, reservation)
-    if
-      date >= reservation.dates.start && date < reservation.dates.end
-      return true
-    end
-  end
+  # def include?(date, reservation)
+  #   if date >= reservation.dates.start && date < reservation.dates.end
+  #     return true
+  #   else
+  #     return false
+  #   end
+  # end
+
+  # def overlap?(date_range, reservation)
+  #
+  #   def overlaps?(other)
+  #     self.cover?(other.first) || other.cover?(first)
+  #   end
+  #   # if date >= reservation.dates.start && date < reservation.dates.end
+  #   #
+  #   # end
+  #
+  # end
 
   # def include?
   # Reservation.check_date(self.start)
