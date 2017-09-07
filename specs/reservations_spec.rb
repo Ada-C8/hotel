@@ -1,16 +1,11 @@
 require_relative 'spec_helper'
 describe "Reservations class" do
   before do
-    # rooms = [Hotel::Room.new(15),Hotel::Room.new(16)]
-    # check_in = Date.new(2017,9,5)
-    # check_out = Date.new(2017,9,6)
-    # dr1 = Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6))
-    # dr2 = Hotel::DateRange.new(Date.new(2017,9,6),Date.new(2017,9,7))
-    # dr3 = Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8))
+    room3 = [Hotel::Room.new(3)]
     @res1 = Hotel::Booking.new(1, [Hotel::Room.new(1),Hotel::Room.new(2)], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
-    @res2 = Hotel::Booking.new(2, [Hotel::Room.new(3),], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
-    @res3 = Hotel::Booking.new(3, [Hotel::Room.new(4),], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8)))
-    @res4 = Hotel::Booking.new(4, [Hotel::Room.new(3),], Hotel::DateRange.new(Date.new(2017,9,6),Date.new(2017,9,7)))
+    @res2 = Hotel::Booking.new(2,room3, Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,6)))
+    @res3 = Hotel::Booking.new(3, [Hotel::Room.new(4)], Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8)))
+    @res4 = Hotel::Booking.new(4, room3, Hotel::DateRange.new(Date.new(2017,9,6),Date.new(2017,9,7)))
     res_arr = [@res1,@res2,@res3,@res4]
     @hotel = Hotel::Reservations.new
     res_arr.each do |res|
@@ -32,8 +27,6 @@ describe "Reservations class" do
     end
   end
   describe "check_reservations" do
-    #put in a date range and see a list of the rooms booked on that date
-    #return a list of rooms booked on that date in an array
     it "will raise an error if invalid date range" do
       check_in = Date.new(2017,9,5)
       check_out = Date.new(2017,9,6)
@@ -45,19 +38,24 @@ describe "Reservations class" do
       @hotel.check_reservations(check_in,check_out)[0].must_be_kind_of Hotel::Room
       @hotel.check_reservations(check_in,check_out).must_be_kind_of Array
     end
-    it "return a list of rooms booked for a given date range" do
+    it "return a list of rooms booked for a given date range, rooms should be unique" do
       check_in = Date.new(2017,9,5)
       check_out = Date.new(2017,9,8)
-      binding.pry
-      @hotel.check_reservations(check_in,check_out).length.must_equal 4
-    end
-    it "returns a list of books rooms that is unique" do
-
+      arr_booked = @hotel.check_reservations(check_in,check_out)
+      arr_booked.length.must_equal 4
+      arr_booked_unique = arr_booked.uniq
+      arr_booked.length.must_equal arr_booked_unique.length
     end
     it "returns an empty array if nothing is booked" do
       check_in = Date.new(2017,10,5)
       check_out = Date.new(2017,10,6)
       @hotel.check_reservations(check_in,check_out).must_be_empty
+    end
+  end
+  describe "check_availability" do
+    it "returns an array of room objects" do
+    end
+    it "returns a list of rooms available, rooms should be unique" do
     end
   end
 end

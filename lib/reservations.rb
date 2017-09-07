@@ -39,13 +39,7 @@ module Hotel
           end
         end
       end
-      # binding.pry
       return booked_rooms
-      #1 take start_date and end_date and pass it to date range class, date range will validate user input
-      #@all_reservations check if each find date
-      #if reservation.date.include?(date_range[0])
-      #not_available << room
-      #return not_available
     end
 
     def check_availability
