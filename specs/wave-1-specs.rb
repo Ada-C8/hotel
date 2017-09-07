@@ -43,7 +43,7 @@ describe 'Booking' do
     end
     it "must have a check out date" do
       @new_booking.must_respond_to :check_out
-  end
+    end
     it "must have a room number" do
       @new_booking.must_respond_to :room_number
     end
@@ -130,11 +130,25 @@ describe 'Reservations' do
       Hotel::Reservations.all_reservations[0].total_cost.must_equal 400
     end
   end
+end
 
-  # ##TODO: write more tests
-  # end
-  # describe 'blocks' do
-  #   it "has a collection of blocks" do
-  #     @new_hotel.blocks_collection.must_be_kind of Array
-  #   end
+describe 'DateRange' do
+  before do
+    @new_date_range = Hotel::DateRange.new("2019-01-01", "2019-01-04")
+    # @new_date_range2 = Hotel::DateRange.new("2017-01-02", "2017-01-03")
+    # @new_date_range3 = Hotel::DateRange.new("2017-02-04", "2017-02-07")
+  end
+  describe 'initialize' do
+    it 'will initialize' do
+      @new_date_range.must_be_instance_of Hotel::DateRange
+    end
+  end
+  describe 'dates method' do
+    it 'is an array' do
+      @new_date_range.dates.must_be_kind_of Array
+    end
+    it 'must include the correct number of dates' do
+      @new_date_range.dates.length.must_equal 4
+    end
+  end
 end

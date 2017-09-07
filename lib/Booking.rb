@@ -10,7 +10,7 @@ module Hotel
       @check_out = Date.parse(check_out)
       #@date_range = date_range
       @room_rate = room_rate
-      @dates = DateRange.new(check_in, check_out)
+      @dates = Hotel::DateRange.new(check_in, check_out)
       # @num_days = (@check_out - @check_in).to_i
       # @total_cost = (@room_rate * @num_days)
       @discount = 0
