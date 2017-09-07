@@ -15,7 +15,16 @@ module BookingSystem
       @date_range = BookingSystem::DateRange.new(check_in, check_out).all_reservation_dates
     end
 
-    #The collection of rooms should only include rooms that are available for the given date range
+    # #The collection of rooms should only include rooms that are available for the given date range
+    # def collection_of_rooms
+    #
+    #   return []
+    # end
+
+    def block_total_cost
+
+      return DISCOUNTED_PRICE * @date_range.length * @number_of_rooms
+    end
 
   end
 end

@@ -9,6 +9,7 @@ require 'minitest/pride'
 
 
 
+
 # Require any classes
 # ex require_relative 'lib/foo.rb'
 require_relative '../lib/hotel'

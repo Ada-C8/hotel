@@ -40,5 +40,28 @@ describe "Block class" do
 
   end
 
+  describe "block_total_cost" do
+
+    it "Can be called" do
+      @test_ob.must_respond_to :block_total_cost
+    end
+
+    it "Returns an Integer" do
+      @test_ob.block_total_cost.must_be_instance_of Float
+    end
+  end
+
+  # describe "collection_of_rooms method" do
+  #
+  #   it "Can be called" do
+  #     @test_ob.must_respond_to :collection_of_rooms
+  #   end
+  #
+  #   it "Returns an array" do
+  #     @test_ob.collection_of_rooms.must_be_instance_of Array
+  #   end
+  #
+  # end
+
 
 end

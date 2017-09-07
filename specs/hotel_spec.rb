@@ -64,6 +64,13 @@ describe "Hotel class" do
 
   end
 
+  describe "block_reservation" do
+
+    it "Can be called" do
+      @test_ob.must_respond_to :block_reservation
+    end
+  end
+
   describe "reservations_for_specific_date" do
 
     before do

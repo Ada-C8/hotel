@@ -25,6 +25,10 @@ module BookingSystem
       end
     end
 
+    def block_reservation
+
+      
+    end
     def reservations_for_specific_date(date)
       reservations_for_specific_date = []
       @all_reservations.each do |res|
