@@ -2,7 +2,7 @@ module Hotel
 
   class Hotel
 
-    attr_reader :list_of_rooms, :price, :collection_of_reservations
+    attr_reader :list_of_rooms, :price, :reservation_collection
 
     def initialize(num_of_rooms, price)
       @list_of_rooms = []
@@ -13,7 +13,7 @@ module Hotel
       end #loop
 
       @price = price
-      @collection_of_reservations = []
+      @reservation_collection = []
     end #initialize
 
     # def list_of_rooms
@@ -22,7 +22,7 @@ module Hotel
     #   end
     # end #list_of_rooms
     # not needed for this more abstract hotel class
-    
+
 
   end #class
 

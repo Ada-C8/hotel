@@ -19,7 +19,7 @@ it "Can call on price of rooms" do
 end
 
 it "can call on collection of reservations array - will be empty" do
-Hotel::Hotel.new(20, 200).collection_of_reservations.must_be_instance_of Array
+Hotel::Hotel.new(20, 200).reservation_collection.must_be_instance_of Array
 end
 
 end #describe
