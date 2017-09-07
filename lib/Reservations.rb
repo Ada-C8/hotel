@@ -29,17 +29,21 @@ module Hotel
     #   @blocks_collection = []
     # end
 
-    def self.new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200, total_cost = 200)
-      booking = Hotel::Booking.new(check_in, check_out)
+    def self.new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
+      booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
       @all_reservations << booking
       return booking
     end
 
     def list_reservations_by_date(date)
       date = Date.parse(date)
+      list = []
       @all_reservations.each do |reservation|
-          reservation.dates
+          if reservation.dates.include?(date)
+            list << reservation
+          end
       end
+      return list
     end
 
     def self.clear_reservations #Using this for testing purposes

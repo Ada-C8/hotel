@@ -130,6 +130,19 @@ describe 'Reservations' do
       Hotel::Reservations.all_reservations[0].total_cost.must_equal 400
     end
   end
+
+  describe 'list_reservations_by_date' do
+    before do
+      @new_booking4 = Hotel::Reservations.new_reservation("2019-01-01", "2019-01-15")
+    end
+    it "must be a method of Reservations" do
+      Hotel::Reservations.must_respond_to :list_reservations_by_date
+    end
+    it "must be an array" do
+
+      Hotel::Reservations.list_reservations_by_date("2019-01-01").must_be_kind_of Array
+    end
+  end
 end
 
 describe 'DateRange' do
