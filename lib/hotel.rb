@@ -2,28 +2,6 @@ require_relative 'room'
 
 module ReservationSystem
 
-  #
-  #     def self.search_date(date)
-  #       list = []
-  #
-  #       @rooms.each do |room|
-  #         #if room.dates_reserved.includes date, add reservation object to the list
-  #         @rooms[room].reservations.each do |res, dates|
-  #           if dates.includes?(date)
-  #             list << res
-  #           end
-  #         end
-  #       end
-  #
-  #       return list
-  #     end
-  #
-  #   end # Building class
-  #
-  # end # Hotel module
-
-
-  #============== OLD WORK ====================#
   class Hotel
     attr_accessor :hotel, :all_reservations, :new_reservation
 
@@ -39,8 +17,20 @@ module ReservationSystem
     def reserve(check_in, nights)
       @new_reservation = ReservationSystem::Reservation.new(check_in, nights)
       all_reservations << @new_reservation
-
+      return @new_reservation
     end # reserve
+
+    def search_reservations_by_date(date)
+      list = Array.new
+
+      all_reservations.each do |res|
+        if res.dates_reserved.includes?(date)
+          list << res
+        end
+      end
+
+      return list
+    end # search_reservations_by_date
 
   end #Hotel class
 
