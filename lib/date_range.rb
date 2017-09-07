@@ -11,6 +11,7 @@ module Hotel
       @checkout = checkout
       @total_nights = (@checkout - @checkin).to_i
       @night_array = []
+      make_nights_array
     end
 
     def check_valid
@@ -21,7 +22,7 @@ module Hotel
     end
 
     def make_nights_array
-      if check_valid == true
+      if check_valid
         counter = 0
         @total_nights.times do
           @night_array << (@checkin + counter)
@@ -31,10 +32,11 @@ module Hotel
       return @night_array
     end
 
-    def overlap?
-    end
+    # def overlap?
+    # end
 
-    def include?
+    def include?(date)
+      return @night_array.include?(date)
     end
 
     #take in: checkin "5", checkout "7", and # of nights "2"

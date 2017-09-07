@@ -5,12 +5,16 @@ require 'pry'
 describe "Hotel" do
   describe "Room" do
 
-it "has a room number" do
-  room_test = Hotel::Room.new
-  room_test.room_number.must_be_kind_of Array
-  room_test.room_number.must_include 1
-  room_test.room_number.must_include 19
-end
+    it "has a room number" do
+      room_test = Hotel::Room.new(1)
+      room_test.must_be_instance_of Hotel::Room
+      room_test.number.must_equal 1
+      room_test.cost.must_equal 200
+    end
 
   end
 end
+
+#
+# room_test.room_number.must_be_kind_of Array
+#   room_test.room_number.must_include 19

@@ -18,10 +18,10 @@ describe "Hotel" do
     it "will calculate total cost" do
       @room1.define_total_cost.must_equal 400
     end
-    it "will have a room number" do
-      # binding.pry
-      @room1.rooms.must_be_kind_of Array
-      @room1.rooms.must_include 2
-    end
+    # it "will have a room number" do
+    #   # binding.pry
+    #   @room1.rooms.must_be_kind_of Array
+    #   @room1.rooms.must_include 2
+    # end
   end
 end

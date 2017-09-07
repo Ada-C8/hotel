@@ -5,9 +5,9 @@ describe "Hotel" do
   describe "DateRange" do
 
     before do
-      checkin = Date.new(2017,9,5)
-      checkout = Date.new(2017,9,7)
-      @trip = Hotel::DateRange.new(checkin, checkout)
+      @checkin = Date.new(2017,9,5)
+      @checkout = Date.new(2017,9,7)
+      @trip = Hotel::DateRange.new(@checkin, @checkout)
     end
 
     it "dates will be numbers" do
@@ -19,8 +19,7 @@ describe "Hotel" do
     it "raises error if given invalid date" do
       checkin = Date.new(2017,9,8)
       checkout = Date.new(2017,9,7)
-      @error_night = Hotel::DateRange.new(checkin, checkout)
-      proc {@error_night.check_valid}.must_raise StandardError
+      proc {Hotel::DateRange.new(checkin, checkout)}.must_raise StandardError
     end
 
     it "dates will be a date" do
@@ -36,6 +35,10 @@ describe "Hotel" do
       @trip.night_array.must_be_kind_of Array
       @trip.make_nights_array.must_be_kind_of Array
       # @trip.night_array.must_include [(2017)]
+    end
+
+    it "knows if date is included" do
+      @trip.include?(@checkin).must_equal true
     end
 
     # wrong date order
