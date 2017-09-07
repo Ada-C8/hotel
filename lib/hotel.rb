@@ -7,9 +7,9 @@ module Hotel_System
 
   class Hotel
 
-    attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number, :room_object, :room_price
+    attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number
 
-    attr_accessor :all_reservations
+    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list
 
     def initialize(num_of_rooms)
       @all_rooms = fill_hotel(num_of_rooms)
@@ -33,31 +33,46 @@ module Hotel_System
       @all_reservations << Reservations.new(room, check_in, check_out)
     end
 
-def reservations_by_date(date)
-  date = Date.parse(date)
-  @reservations_by_date = []
-  @all_reservations.each do |reservation|
-    if date >= reservation.check_in && date < reservation.check_out
-      @reservations_by_date << reservation
+    def reservations_by_date(date)
+      date = Date.parse(date)
+      @reservations_by_date = []
+      @all_reservations.each do |reservation|
+        if date >= reservation.check_in && date < reservation.check_out
+          @reservations_by_date << reservation
+        end
+      end
+      return @reservations_by_date
     end
-  end
-  return @reservations_by_date
-end
-    # def reservations_by_date(date)
-    #   date = Date.parse(date)
-    #   p date
-    #   @reservations_by_date = []
-    #   p @all_reservations
-    #   p @all_reservations.length
-    #   @all_reservations.each do |reservation|
-    #     if date >= reservation.check_in && date < reservation.check_out
-    #       @reservations_by_date << reservation
-    #     end
-    #     return @reservations_by_date
-    #   end
 
+    def available_room_hash
+      @available_rooms_hash = {}
+      (1..20).each do |num|
+        @available_rooms_hash[num] = :available
+      end
+      return @available_rooms_hash
+    end
 
-    # end
+    def availability_room_hash_by_date(date)
+      @list_of_rooms_avail_on_date = available_room_hash
+      if reservations_by_date(date).length == 0
+        return @list_of_rooms_avail_on_date
+      else
+        reservations_by_date(date).each do |res|
+          @list_of_rooms_avail_on_date[res.room.room_number] = :reserved
+        end
+      end
+      return @list_of_rooms_avail_on_date
+    end
+
+    def available_rooms_by_date(date)
+      @available_room_list = []
+      availability_room_hash_by_date(date).each do |k,v|
+        if v == :available
+          @available_room_list << k
+        end
+      end
+      return @available_room_list
+    end
 
     private
 

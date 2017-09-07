@@ -6,7 +6,7 @@ require_relative 'room.rb'
 module Hotel_System
 
   class Reservations
-    attr_accessor :all_rooms, :check_in, :check_out, :res_room_number, :hotel, :today, :num_of_nights, :all_reservations, :total_cost
+    attr_accessor :all_rooms, :check_in, :check_out, :room, :hotel, :today, :num_of_nights, :all_reservations, :total_cost
 
     def initialize(room, check_in, check_out)
       @room = room

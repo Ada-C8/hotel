@@ -61,7 +61,68 @@ describe "reservations by date" do
     list.length.must_equal 1
     list2 = @hotel2.reservations_by_date("2018-1-1")
     list2.length.must_equal 2
+  end
+end
 
+describe "available rooms list" do
+  # it "can return a list of room numbers of unreserved rooms" do
+  #   @hotel2 = Hotel_System::Hotel.new(20)
+    # res = @hotel2.make_reservation(1, "2018-1-1", "2018-1-5")
+    # res2 = @hotel2.make_reservation(2, "2017-12-25", "2018-1-4")
+  #   list = @hotel2.available_rooms("2018-1-1")
+  #   list.must_equal Array(2..20)
+  # end
+
+  it "available_room_hash produces a hash" do
+    @hotel = Hotel_System::Hotel.new(20)
+    @hotel.available_room_hash.must_be_instance_of Hash
+    @hotel.available_room_hash.length.must_equal 20
   end
 
+  it "available_room_hash returns correct value" do
+    @hotel = Hotel_System::Hotel.new(20)
+    @hotel.available_room_hash[1].must_equal :available
+    @hotel.available_room_hash[20].must_equal :available
+  end
+
+  it "availability_room_hash_by_date returns a hash" do
+    @hotel = Hotel_System::Hotel.new(20)
+    hash = @hotel.availability_room_hash_by_date("2017-9-30")
+    hash.must_be_instance_of Hash
+  end
+
+  it "availability_room_hash_by_date returns availabe for all rooms if no reservations" do
+    @hotel = Hotel_System::Hotel.new(20)
+    hash = @hotel.availability_room_hash_by_date("2017-9-30")
+    hash.each do |k, v|
+      v.must_equal :available
+    end
+  end
+
+  it "availability_room_hash_by_date returns reserved if that room is reserved on that date" do
+    @hotel = Hotel_System::Hotel.new(20)
+    res = @hotel.make_reservation(1, "2018-1-1", "2018-1-5")
+    hash = @hotel.availability_room_hash_by_date("2018-1-1")
+    hash[1].must_equal :reserved
+    hash2 = @hotel.availability_room_hash_by_date("2018-1-3")
+    hash2[1].must_equal :reserved
+  end
+
+  it "available_rooms_by_date returns array" do
+    @hotel = Hotel_System::Hotel.new(20)
+    res = @hotel.make_reservation(1, "2018-1-1", "2018-1-5")
+    list = @hotel.available_rooms_by_date("2018-1-1")
+    list.must_be_instance_of Array
+    list.length.must_equal 19
+  end
+
+  it "available_rooms_by_date returns list of all rooms available" do
+    @hotel = Hotel_System::Hotel.new(20)
+    res = @hotel.make_reservation(1, "2018-1-1", "2018-1-5")
+    res2 = @hotel.make_reservation(2, "2017-12-25", "2018-1-4")
+    list = @hotel.available_rooms_by_date("2018-1-1")
+    list.must_be_instance_of Array
+    list.length.must_equal 18
+    p list 
+end
 end
