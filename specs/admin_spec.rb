@@ -81,5 +81,32 @@ describe "class Admin" do
     end
   end
 
+  describe "reservations_by_name" do
+    before do
+    @tim_curry = Hotel::Admin.new
+
+    @reservation_1 = @tim_curry.reserve([2019, 11, 15], [2019, 11, 18], 4, "Kevin McCallister", "New York")
+
+    @reservation_2 = @tim_curry.reserve([2019, 11, 15], [2019, 11, 18], 8, "Sticky Bandits", "New York")
+  end
+
+    it "can find reservations by name" do
+      found_name = @tim_curry.reservations_by_name("Sticky Bandits")
+      found_name.wont_be_nil
+      found_name[0].name.must_equal "Sticky Bandits"
+    end
+
+    it "can find multiple entries with the same name" do
+      reservation_3 = @tim_curry.reserve([2019, 11, 22], [2019, 11, 30], 19, "Sticky Bandits",  "New York")
+
+      found_name = @tim_curry.reservations_by_name("Sticky Bandits")
+
+      found_name.length.must_equal 2
+      found_name[0].name.must_equal "Sticky Bandits"
+      found_name[1].name.must_equal "Sticky Bandits"
+
+    end
+  end
+
 
 end #end class Admin Describe

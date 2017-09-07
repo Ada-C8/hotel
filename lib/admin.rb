@@ -4,13 +4,12 @@ require 'date'
 require 'pry'
 module Hotel
 
-  #
-  # def get_date_range(check_in, check_out)
-  #   return  (check_in ... check_out).to_a
-  # end
 
   class Admin
     attr_reader :reservations_list, :all_rooms
+    # def get_date_range(check_in, check_out)
+    #   return  (check_in ... check_out).to_a
+    # end
 
     def initialize
       @reservations_list = []
@@ -24,10 +23,11 @@ module Hotel
       end
     end
 
-
+    #
     def get_date_range(check_in, check_out)
       return  (check_in ... check_out).to_a
     end
+
 
     def reserve(check_in, check_out, room, name, contact_info)
       #checks that the date hash't been previously reserved
@@ -61,13 +61,24 @@ module Hotel
 
         end
       end
-    return @all_rooms - reserved_rooms_for_dates
+      return @all_rooms - reserved_rooms_for_dates
     end#rooms_available
+
+    def reservation_finder(search_term, instance_variable)
+      reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
+    end
+
+    def reservations_by_name(name_request)
+      #go through reservations list and return array with all that contain the date
+      reservation_finder( name_request, :name )
+      #reservations_list.find_all{|reservation| reservation.name.include?(name)}
+    end#reservations_by_date
 
     def reservations_by_date(date)
       date_find = Date.new(date[0], date[1], date[2])
       #go through reservations list and return array with all that contain the date
-      reservations_list.find_all{|reservation| reservation.date_range.include?(date_find)}
+      reservation_finder(date_find, :date_range )
+      #  reservations_list.find_all{|reservation| reservation.date_range.include?(date_find)}
     end#reservations_by_date
   end #class Admin
 
