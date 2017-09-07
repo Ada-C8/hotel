@@ -4,6 +4,8 @@ require_relative 'reservation'
 module Hotel
   class Hotel
 
+    #@@reservations = []
+
     attr_reader :all_rooms #, :reservations
 
     def initialize
@@ -11,75 +13,63 @@ module Hotel
       #@reservations = [] #will contain reservation_objects
     end
 
-# As an administrator, I can access the list of all of the rooms in the hotel
+    # As an administrator, I can access the list of all of the rooms in the hotel
     # def show_rooms
     #   room_list = ""
     #   @all_rooms.each do |number, cost|
     #     room_list += "Room #{number}:\t$#{cost}\n"
     #   end
     #   return room_list
-    # end
-#@init_test = Hotel::Reservation.new(1111, 1, "2001/1/1", "2001/1/5")
-# - As an administrator, I can reserve a room for a given date range
+    # end #show rooms
+
+    # - As an administrator, I can reserve a room for a given date range
     def self.make_reservation(id, room, day_in, day_out)
       reservations << Reservation.new(id, room, day_in, day_out)
-      #@reservations << reservation
+      @reservations << reservation
       return reservations
-      #Reservation.new(id, room, day_in, day_out)
-    end
-#       def self.score(word)
-#   total = 0
-#   word.upcase.split('').each do |let|
-#     total += score_letter(let)
-#   end
-#   if word.length == 7
-#     total += 50
-#   end
-#   return total
-# end
-# def play(word)
-#   if @plays != [] && won?
-#     return false
-#   else
-#     @plays << word.upcase
-#     return Scoring.score(word)
-#   end
-# end
+    end #make_reservation
 
-      #what will my reservation object look like
-      #in my fictional interface
-      #check whether a room is available on desired dates using reservation list
-      #if available, should instantiate a new instance of reservation using the reservation class
-      #if not available, go to next room and check.
-      #if you reach the end of the list, report that no reservation is possible during that time
+    #what will my reservation object look like
+    #in my fictional interface
+    #check whether a room is available on desired dates using reservation list
+    #if available, should instantiate a new instance of reservation using the reservation class
+    #if not available, go to next room and check.
+    #if you reach the end of the list, report that no reservation is possible during that time
+
+    # def self.view_all_reservations
+    #
+    #   @@reservations.each do |reservation|
+    #     puts reservation
+    #   end
+    #end
 
 
     # - As an administrator, I can access the list of reservations for a specific date
     def view_reservations(date)
-      #enter a date
-      #list all rooms reserved for that date from reservation list
-    end
+      @@reservations.each do |reservation|
 
+      end
+      #list all rooms reserved for that date from reservation list
+    end #view_reservations
+
+    # - As an administrator, I can get the total cost for a given reservation
     def total_cost(reservation)
       #enter reservation ID number
       #return total cost for that reservation
-    end
-    # - As an administrator, I can get the total cost for a given reservation
-
-    # def is_avail(room, date)
-    #   #put in room number and single date
-    #   #should look at all the reservations for that room for that date
-    # end
-
-
-
+    end #total_cost
 
   end #class
 end #module
-binding.pry
+#binding.pry
 
 # find if rooms is open for a given date range
 # reserve room for that date range
+
+
+# def is_avail(room, date)
+#   #put in room number and single date
+#   #should look at all the reservations for that room for that date
+# end
 
 #rooms = {}
 #view_avail(Date)

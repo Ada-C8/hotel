@@ -1,15 +1,17 @@
 require 'pry'
+require_relative 'date_range'
 
 module Hotel
   class Reservation
 
-    attr_reader :id, :room, :check_in, :check_out
+    attr_reader :id, :room, :check_in, :check_out, :date_range
 
-    def initialize(id, room, day_in, day_out)
+    def initialize(id, room, day_in, day_out, date_range)
       @id = id
       @room = room
-      @check_in = day_in#Hotel::DateRange.check_in(day_in)
-      @check_out = day_out#Hotel::DateRange.check_out(date_out)
+      @check_in = Hotel::DateRange.check_in(day_in)#day_in
+      @check_out = Hotel::DateRange.check_out(day_out)#day_out
+      #@date_range = Hotel::DateRange.
     end
 
   end #class

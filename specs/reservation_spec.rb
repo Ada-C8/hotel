@@ -23,9 +23,9 @@ describe "Reservation class" do
     end #attributes
   end #Initialize
 
-  # describe "Calling Check_in and Check_out" do
-  #   it "can assign a date object to the check in variable" do
-  #     @res_test.day_in.must_be_kind_of Hotel::DateRange
-  #   end
-  #end
+  describe "Calling Check_in and Check_out" do
+    it "can assign a date object to the check in variable" do
+      @res_test.day_in.must_be_kind_of Date
+    end
+  end
 end #Reservation class
