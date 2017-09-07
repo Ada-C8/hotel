@@ -10,15 +10,22 @@ describe "My_Hotel::Date_Range" do
   describe "initialize" do
     it "can be created" do
       @holiday_dates.must_be_kind_of My_Hotel::Date_Range
-
       @holiday_dates.nights.must_be_kind_of Range
-      @holiday_dates.nights.to_a.length.must_equal 4
+      @holiday_dates.nights.to_a.length.must_equal 7
+    end
+
+    it "can make a one day date range" do
+      short_holiday = My_Hotel::Date_Range.new(@dec20, @dec20)
+      short_holiday.must_be_kind_of My_Hotel::Date_Range
+      short_holiday.nights.must_be_kind_of Array
+      puts short_holiday.nights.class
+      short_holiday.nights.length.must_equal 1
     end
   end
   #
   describe "overlap?" do
     it "must return true of the date overlaps with the reservation range" do
-        dec25 = Date.civil(2017,12,25)
+      dec25 = Date.civil(2017,12,25)
       @holiday_dates.overlap?(dec25).must_equal true # nominal case true
       @holiday_dates.overlap?(@dec20).must_equal true # checkin day
 

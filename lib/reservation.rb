@@ -1,12 +1,12 @@
 require_relative 'date_range'
 module My_Hotel
-  class Reservation
 
+  class Reservation
     attr_accessor :reservation_id, :block_id, :room_number, :cost, :nights_booked
     attr_reader :first_night, :last_night
 
 
-    def initialize(first_night,last_night)
+    def initialize(first_night, last_night)
       @first_night = first_night
       @last_night = last_night
       @reservation_id = nil
@@ -17,7 +17,30 @@ module My_Hotel
 
     end
 
+    def assign_room(rooms_avail)
+      if rooms_avail.length != 0
+        @room_number = rooms_avail.keys.sample
+      else
+        raise ArgumentError.new("Can't make reservation, there are no rooms available for those dates: #{@first_night} to #{@last_night}")
+      end
+    end
 
+    def set_cost
+      number_of_nights = @nights_booked.nights.to_a.length
+      if number_of_nights <= 0
+        return @cost = 0
+      else
+        cost_per_night = ROOMS[@room_number]
+        @cost = number_of_nights * cost_per_night
+      end
+      @cost
+    end
+
+    def set_reservation_id(reservation)
+      if Hotel.all_reservations !=[]
+        @reservation_id = all_reservations.length 
+      end
+    end
   end
 end
 

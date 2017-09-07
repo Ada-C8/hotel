@@ -1,27 +1,27 @@
 require_relative 'reservation'
 module My_Hotel
+  ROOMS = {1 => 200,
+    2 => 200,
+    3 => 200,
+    4 => 200,
+    5 => 200,
+    6 => 200,
+    7 => 200,
+    8 => 200,
+    9 => 200,
+    10 => 200,
+    11 => 200,
+    12 => 200,
+    13 => 200,
+    14 => 200,
+    15 => 200,
+    16 => 200,
+    17 => 200,
+    18 => 200,
+    19 => 200,
+    20 => 200
+  }
   class Hotel
-    ROOMS = {1 => 200,
-      2 => 200,
-      3 => 200,
-      4 => 200,
-      5 => 200,
-      6 => 200,
-      7 => 200,
-      8 => 200,
-      9 => 200,
-      10 => 200,
-      11 => 200,
-      12 => 200,
-      13 => 200,
-      14 => 200,
-      15 => 200,
-      16 => 200,
-      17 => 200,
-      18 => 200,
-      19 => 200,
-      20 => 200
-    }
 
     attr_reader :rooms, :all_reservations
 
@@ -40,48 +40,27 @@ module My_Hotel
 
     def make_reservation(first_night, last_night)
       new_reservation = My_Hotel::Reservation.new(first_night, last_night)
-      @all_reservations << new_reservation
-      assign_room(new_reservation)
-      set_cost(new_reservation)
+      rooms_avail = find_unreserved_rooms(first_night..last_night)
+      new_reservation.assign_room(rooms_avail)
+      new_reservation.set_cost
       set_reservation_id(new_reservation)
+      @all_reservations << new_reservation
       return new_reservation
     end
 
-    def set_cost(reservation)
-      if reservation.nights_booked.nights.to_a.length <= 0
-        return reservation.cost = 0
-      else
-        number_of_nights = reservation.nights_booked.nights.to_a.length
-        cost_per_night = ROOMS[reservation.room_number]
-        cost = number_of_nights * cost_per_night
-        reservation.cost = cost
-      end
-    end
-
     def set_reservation_id(reservation)
-      reservation.reservation_id = @all_reservations.length if @all_reservations != []
-    end
-
-    def assign_room(reservation)
-      rooms_available = find_unreserved_rooms(reservation.first_night..reservation.last_night)
-      room_number = rooms_available.keys.sample
-      # room_number = rand(20) + 1
-      reservation.room_number = room_number
-    end
-
-    #given the reservation_id, returns the reservation if it exists, or nill if it does not
-    def find_by_reservation_id(reservation_id)
-      @all_reservations.each do |reservation|
-        if reservation.reservation_id == reservation_id
-          return reservation
-        end
+      new_reservation_id = ""
+      6.times do
+        new_reservation_id = new_reservation_id + (rand(9)).to_s
       end
-      return nil
+      reservation.reservation_id = new_reservation_id
+      #TODO: make sure id is unique
     end
 
     #given a range of nights, it will find rooms that are available for every night in the range.
     #if no room is available for the whole range, returns an empty hash
     def find_unreserved_rooms(nights)
+      # for each nightof the reservation make an array of the available rooms.
       array_of_rooms = []
       nights.each do |night|
         reservations_on_date = find_reservations_by_date(night)
@@ -89,9 +68,14 @@ module My_Hotel
         reservations_on_date.each do |reservation|
           free_rooms.delete(reservation.room_number)
         end
+        if free_rooms.length == 0
+          return {} #If any night has no rooms available, return an empty hash.
+        end
         array_of_rooms << free_rooms
       end
-
+      #For each room that is free on the first night, check if it is free on the other nights.
+      #Return a hash with all the rooms => prices that are free on all nights.
+      #If no room is free on all nights, return an empty hash.
       free_for_range = {}
       array_of_rooms[0].each do |room, cost|
         free = true
@@ -103,6 +87,16 @@ module My_Hotel
         end
       end
       return free_for_range
+    end
+
+    #given the reservation_id, returns the reservation if it exists, or nill if it does not
+    def find_by_reservation_id(reservation_id)
+      @all_reservations.each do |reservation|
+        if reservation.reservation_id == reservation_id
+          return reservation
+        end
+      end
+      return nil
     end
 
     #given an array [year,month,day], it returns all the reservations on that day.

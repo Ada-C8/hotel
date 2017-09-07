@@ -22,22 +22,16 @@ describe "My_Hotel::Hotel" do
   end
 
   describe "make_reservation" do
-    it "can make a reservation" do
+    it "can make a multi-night reservation" do
       @ritz.must_be_kind_of My_Hotel::Hotel
       holiday = @ritz.make_reservation(@feb1, @feb5)
       holiday.must_be_kind_of My_Hotel::Reservation
-      #should reject bad dates
     end
 
-    it "calculates the cost" do
-      holiday = @ritz.make_reservation(@feb1, @feb5)
-      holiday.cost.must_equal 1000 #nominal case
-    end
-
-    it "assigns a room number" do
-      holiday = @ritz.make_reservation(@feb1, @feb5)
-      holiday.room_number.must_be_kind_of Integer
-      (1..20).must_include holiday.room_number
+    it "can make a one-night reservation" do
+      @ritz.must_be_kind_of My_Hotel::Hotel
+      holiday = @ritz.make_reservation(@feb1, @feb1)
+      holiday.must_be_kind_of My_Hotel::Reservation
     end
 
     it "updates the list_of_reservations" do
@@ -48,7 +42,19 @@ describe "My_Hotel::Hotel" do
       @ritz.all_reservations.length.must_equal 2
     end
   end
-  #
+
+  describe "set_reservation_id" do
+    it "creates a reservation id" do
+      new_reservation = My_Hotel::Reservation.new(@feb1, @feb5)
+      @ritz.all_reservations << new_reservation
+      @ritz.set_reservation_id(new_reservation)
+      new_reservation.reservation_id.must_be_kind_of String
+    end
+    # it "creates a unique id" do
+    # end
+
+  end
+
   describe "find_reservations_by_date" do
     it "given a date, it returns an array of reservations on that date" do
       @ritz.make_reservation(@feb1, @feb5)
@@ -73,8 +79,9 @@ describe "My_Hotel::Hotel" do
     it "given a reservation id, it returns that reservation" do
       first = @ritz.make_reservation(@feb1, @feb5)
       second = @ritz.make_reservation(@feb3,@may6)
-      @ritz.find_by_reservation_id(1).must_equal first
-      @ritz.find_by_reservation_id(2).must_equal second
+      first.reservation_id
+      @ritz.find_by_reservation_id(first.reservation_id).must_equal first
+      @ritz.find_by_reservation_id(second.reservation_id).must_equal second
     end
 
     it "given a reservation id, it returns nil if that reservation does not exist" do
@@ -91,26 +98,27 @@ describe "My_Hotel::Hotel" do
     end
 
     it "returns a hash of the available rooms" do
-      nights = (@feb1 .. @feb5)
       index = 1
       20.times do
         @ritz.make_reservation(@feb1, @feb5)
-        free_rooms = @ritz.find_unreserved_rooms(nights)
+        free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
         free_rooms.length.must_equal 20-index
         index += 1
       end
-      @ritz.make_reservation(@feb1, @feb5)
-      free_rooms = @ritz.find_unreserved_rooms(nights)
-      free_rooms.must_equal nil
+    end
+
+    it "if there are no available rooms it returns an empty hash" do
+      index = 1
+      20.times do
+        @ritz.make_reservation(@feb1, @feb5)
+        free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
+        free_rooms.length.must_equal 20-index
+        index += 1
+      end
+      @ritz.find_unreserved_rooms(@feb1..@feb5).must_be_kind_of Hash
+      @ritz.find_unreserved_rooms(@feb1..@feb5).length.must_equal 0
     end
   end
-  #
-  # I think I should split up find_unreserved rooms and
-  #reservation so that first the user can see if there are
-  #any unreserved rooms for that night.  If so, they can assign one of them by passing it as an argument into make_reservation
-  #
-  #
-  # end
 end
 
 
