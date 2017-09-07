@@ -27,10 +27,10 @@ describe "Hotel" do
 
   describe "#room_unavailable" do
     it "Returns an array of dates for given room number" do
-      @new_hotel.room_unavailable(5).must_be_kind_of Array
+      @new_hotel.room_unavailable(1).must_be_kind_of Array
     end
     it "Returns empty array if no reservations were made for given room number" do
-      @new_hotel.room_unavailable(5).length.must_equal 0
+      @new_hotel.room_unavailable(1).length.must_equal 0
     end
     it "Returns an array of one element if one reservation was made for given room number" do
       new_reservation = @new_hotel.make_reservation(@date_range)
@@ -131,6 +131,26 @@ describe "Hotel" do
           @hotel.make_reservation_from_block(@new_block)
         end
         @hotel.has_available_rooms?(@new_block).must_equal false
+      end
+    end
+
+    describe "#make_reservation_from_block" do
+      before do
+        @hotel = BookingSystem::Hotel.new(5)
+        @new_block = @hotel.create_block(@date_range, 3)
+        @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
+      end
+      it "Returns an instance of class Reservation" do
+        @reservation_from_block.must_be_kind_of BookingSystem::Reservation
+      end
+      it "Booked room should be removed from rooms in block" do
+        @new_block.rooms.length.must_equal 2
+      end
+      it "Raise an error if no available rooms for reservation from block" do
+        2.times do
+          @hotel.make_reservation_from_block(@new_block)
+        end
+        proc { @hotel.make_reservation_from_block(@new_block) }.must_raise BookingSystem::NoRoomAvailableError
       end
     end
 

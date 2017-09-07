@@ -96,9 +96,8 @@ module BookingSystem
       date_range = block.date_range
       room = block.rooms[0]
       new_reservation_from_block = Reservation.new(date_range, room)
-      # block.rooms = block.rooms[1..block.rooms.length-1]
       block.rooms.delete_at(0)
-      return new_reservation_from_block
+      return new_reservation_from_block #instance of class Block
 
     end #end of method
 
