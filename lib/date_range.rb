@@ -3,12 +3,10 @@ require 'date'
 module My_Hotel
   class Date_Range
 
-    attr_reader :arrive, :leave, :nights
+    attr_reader :nights
 
-    def initialize(arrive, leave)
-      @arrive = arrive
-      @leave = leave
-      @nights = (@arrive..(@leave.prev_day))
+    def initialize(first_night, last_night)
+      @nights = (first_night..last_night)
     end
 
 
@@ -26,12 +24,15 @@ module My_Hotel
 
   end
 end
-
-
+#
+#
 # arrive = Date.civil(2017, 12, 20)
 # leave = Date.civil(2017, 12, 23)
 # puts leave
 # puts leave.prev_day
-
+#
 # holiday = My_Hotel::Date_Range.new(arrive, leave)
-# puts holiday
+# puts holiday.nights.class
+# holiday.nights.each do |night|
+#   puts "x =1"
+# end
