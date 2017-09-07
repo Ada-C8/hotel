@@ -2,18 +2,22 @@ require_relative 'spec_helper'
 
 describe 'Reservation' do
   before do
-    @puppy_expo = Hotel::Reservation.new('Finn', '10/13/2017', '10/31/2017', 13)
+    @puppy_expo = Hotel::Reservation.new('Finn', Date.new(2017, 10, 13), Date.new(2017, 10, 31), 13)
   end # end before
 
   describe 'initialize' do
     it 'initializes with guest name, date range from DateRange, and room number' do
-      @puppy_expo.name.must_equal 'Finn'
-      @puppy_expo.dates.check_in.must_equal '10/13/2017'
-      @puppy_expo.dates.check_out.must_equal '10/31/2017'
-    end # end test 1
+      @puppy_expo.guest_name.must_equal 'Finn'
+      @puppy_expo.dates.check_in.to_s.must_equal "2017-10-13"
+      @puppy_expo.dates.check_out.to_s.must_equal "2017-10-31"
+      @puppy_expo.room_number.must_equal 13
+    end # end test
 
-    it 'room_number = its matching index (minus 1) in ROOMS array' do
-      @puppy_expo.room_number.must_equal Hotel::Reservation::ROOMS[13-1]
-    end # end test 2
   end # end #initialize
-end # end of all tests
+
+  describe 'reserve_dates' do
+    it 'returns the number of days to reserve' do
+      @puppy_expo.reserve_dates.must_equal 18
+    end # end test
+  end # end #reserve_dates
+end # end of all Reservation tests
