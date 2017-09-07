@@ -1,13 +1,13 @@
 require_relative './spec_helper'
 require_relative '../lib/hotel'
 require 'pry'
-
+#
 describe "#HOTEL" do
   before do
     @my_hotel = Hotel.new
 
     @reservation1 = {check_in: "January 4, 2018", check_out: "January 10, 2018", room: [@my_hotel.rooms[0]]}
-    puts "HELLO!!!!! #{@reservation1[:room].class}"
+
 
     @reservation2 = {check_in: "January 5, 2018", check_out: "January 10, 2018", room: [@my_hotel.rooms[1]]}
 
@@ -19,7 +19,7 @@ describe "#HOTEL" do
 
     @my_hotel.make_reservation(@reservation3[:check_in], @reservation3[:check_out], @reservation3[:room])
   end
-
+#
   describe "#INITIALIZE" do
     it "Hotel Can initialize with 20 rooms" do
       @my_hotel.must_be_instance_of Hotel
@@ -27,11 +27,11 @@ describe "#HOTEL" do
     end
 
 
+
     it "A list of ALL rooms can be displayed/accessed by the admin" do
       @my_hotel.rooms.must_be_instance_of Array
       @my_hotel.rooms.first.must_be_instance_of Room
     end
-
   end
 
 
@@ -43,11 +43,15 @@ describe "#HOTEL" do
       @my_hotel.reservations.first.room_numbers.first.must_equal 1
     end
 
+
+
     it "Can reserve rooms that are available" do
       @reservation4 = {check_in: "January 7, 2018", check_out: "January 11, 2018", room: [@my_hotel.rooms[19]]}
-      @my_hotel.make_reservation(@reservation4[:check_in], @reservation4[:check_out], [@reservation4[:room]])
+      @my_hotel.make_reservation(@reservation4[:check_in], @reservation4[:check_out], @reservation4[:room])
       @my_hotel.reservations.length.must_equal 4
     end
+
+
 
     it "Can book a reservation for a room the same day another reservation ends" do
       @reservation5 = {check_in: "January 10, 2018", check_out: "January 11, 2018", room: [@my_hotel.rooms[0]]}
@@ -58,7 +62,7 @@ describe "#HOTEL" do
 
     it "Rejects reservation attemps on rooms that are already reserved for the specified dates" do
       @reservation5 = {check_in: "January 7, 2018", check_out: "January 13, 2018", room: [@my_hotel.rooms[1]]}
-      @my_hotel.make_reservation(@reservation5[:check_in], @reservation5[:check_out], [@reservation5[:room]])
+      @my_hotel.make_reservation(@reservation5[:check_in], @reservation5[:check_out], @reservation5[:room])
       @my_hotel.reservations.length.must_equal 3
     end
 
@@ -90,19 +94,19 @@ describe "#HOTEL" do
   end
 end
 
-
-
-#CLI feature
-# it "#show_all_rooms returns a display of all of the available rooms" do
-#   @my_hotel.show_all_rooms.must_be_instance_of Array
-#   @my_hotel.show_all_rooms.length.must_equal 20
-#   @my_hotel.show_all_rooms.first.must_equal "{number: 1, rate: 200}"
-# end
-
 #
-#   xdescribe "check_status" do
-#     it "Returns the status of a room for the given date range" do
-#       #
-#     end
-#   end
-# end
+#
+# #CLI feature
+# # it "#show_all_rooms returns a display of all of the available rooms" do
+# #   @my_hotel.show_all_rooms.must_be_instance_of Array
+# #   @my_hotel.show_all_rooms.length.must_equal 20
+# #   @my_hotel.show_all_rooms.first.must_equal "{number: 1, rate: 200}"
+# # end
+#
+# #
+# #   xdescribe "check_status" do
+# #     it "Returns the status of a room for the given date range" do
+# #       #
+# #     end
+# #   end
+# # end

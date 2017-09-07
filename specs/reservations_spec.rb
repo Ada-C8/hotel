@@ -29,7 +29,7 @@ describe "#RESERVATION" do
 
     proc{Reservation.new("01-18-2018", "01-18-2018", @room)}.must_raise ArgumentError
   end
-
+#
   it "Can accurately report the number of nights in a reservation" do
     @new_reservation.num_nights.must_equal 2
   end
@@ -45,4 +45,4 @@ describe "#RESERVATION" do
   end
 
 
-end
+ end

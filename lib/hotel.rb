@@ -12,27 +12,28 @@ class Hotel
     end
   end
 
+
   def make_reservation(check_in, check_out, rooms)
     valid_date(check_in, check_out)
 
-    flag = true
-    unavailable_rooms = []
 
+    unavailable_rooms = []
+    flag = true
     rooms.each do |room|
-      if rooms_available(check_in, check_out).include?(room)
-        flag = false
+      if !(rooms_available(check_in, check_out).include?(room))
         unavailable_rooms.push(room.number)
+        flag = false
       end
     end
 
       if flag == true
-        new_reservation = Reservation.new(check_in, check_out, rooms)
-        @reservations.push(new_reservation)
+        @reservations.push(Reservation.new(check_in, check_out, rooms))
+
       else
         begin
           raise ArgumentError.new("Room: #{unavailable_rooms} not available: ")
         rescue ArgumentError => exception
-          puts "#{exception}: #{check_in}-#{check_out}"
+          puts "#{exception}: #{check_in} - #{check_out}"
         end
       end
   end
@@ -81,9 +82,9 @@ class Hotel
     return available_rooms
   end
 
-  # def block_reservation(check_in, check_out, rooms)
-  #   @reservations.push(Block.new(check_in, check_out, rooms))
-  # end
+  def block_reservation(check_in, check_out, rooms)
+    @reservations.push(Block.new(check_in, check_out, rooms))
+  end
 
 
 
@@ -101,12 +102,12 @@ class Hotel
     end
   end
 end
-
-#this is an interface feature
-# def show_all_rooms
-#   room_display = []
-#   @rooms.each do |room|
-#     return
-#   end
-#   return room_display
-# end
+#
+# #this is an interface feature
+# # def show_all_rooms
+# #   room_display = []
+# #   @rooms.each do |room|
+# #     return
+# #   end
+# #   return room_display
+# # end

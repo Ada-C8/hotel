@@ -13,14 +13,5 @@ describe "#rooms" do
       @my_room.rate.must_equal 200
       @my_room.number.must_equal 21
     end
-
-
-
-    xit "Can display a list of rooms reserved on a specific date" do
-
-    end
-
-    xit "Can show a list of reservations for a given room" do
-    end
   end
 end
