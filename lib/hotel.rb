@@ -39,7 +39,6 @@ module Hotel
       @rooms.each do |room|
         return room if room.number == num
       end
-
       nil
     end
 

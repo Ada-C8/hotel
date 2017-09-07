@@ -1,8 +1,7 @@
 module Hotel
   class Block
-    # @rooms
-    # @dates
-    # @discount_rate
+    attr_reader :rooms
+    
     def initialize(start_date, end_date, rooms, discount_rate)
       @start_date = start_date
       @end_date = end_date

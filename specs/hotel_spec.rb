@@ -121,16 +121,27 @@ describe 'Hotel' do
   end
 
   describe '#make_block' do
+    before do
+      @block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+    end
+
     # - As an administrator, I can create a block of rooms
     it 'returns a new Block object' do
-      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
-      block.must_be_kind_of Hotel::Block
+      @block.must_be_kind_of Hotel::Block
     end
 
     it 'adds to @blocks array' do
-      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
-
       @hotel.blocks.length.must_equal 1
+    end
+
+    it 'fills block with available rooms only' do
+      3.times { @hotel.make_reservation('2017-10-05', '2017-10-07') }
+      new_block = @hotel.make_block('2017-10-03', '2017-10-07', 10, 20)
+      reserved = @hotel.view_reservations('2017-10-06')
+
+      reserved.each do |reservation|
+        new_block.rooms.wont_include reservation.room
+      end
     end
   end
 end
