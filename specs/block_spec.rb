@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'spec_helper'
 # Hotel::Block.new(begin_date, end_date, num_of_rooms, discount_rate)
 
@@ -27,6 +28,15 @@ describe "Block" do
     it "should contain reservations in an array" do
       output = Hotel::Block.new(0.5, 3, [2017,10,22], [2017,10,24], 60)
       output.reservations.must_be_instance_of Array
+    end
+    it "should contain reservations if there are any for block" do
+      output = Hotel.find_block(75)
+      output.reservations.must_be_instance_of Array
+      # output.reservations.length.must_equal 0
+      output.add_reservations
+      binding.pry
+      output.reservations[0].must_be_instance_of Hotel::Reservation
+
     end
     it "should only include rooms that are available for the given date range" do
       output = Hotel::Block.new(0.5, 3, [2017,10,3], [2017,10,5], 60)

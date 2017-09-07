@@ -17,7 +17,7 @@ module Hotel
       @check_out = Date.new(check_out_date[0].to_i, check_out_date[1].to_i, check_out_date[2].to_i)
 
       @total_cost = cost
-      @block_id = input_block_id
+      @block_id = input_block_id.to_i
       raise ArgumentError.new "Invalid date range" if @check_in >= @check_out
     end
 

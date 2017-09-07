@@ -17,7 +17,7 @@ module Hotel
       @room_number = nil
       @room = nil
       @rooms = add_rooms(check_in_date, check_out_date)
-      @reservations =[]
+      @reservations = []
     end
 
     def add_rooms(begin_date, end_date)
@@ -29,6 +29,10 @@ module Hotel
        i+= 1
      end
       return block_rooms
+    end
+
+    def add_reservations
+      @reservations.replace(Hotel.find_reservation_by_block_id(@block_id))
     end
 
   end # => end of Block

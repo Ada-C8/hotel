@@ -188,7 +188,7 @@ describe "hotel" do
       end
       it "should return 1" do
         output = Hotel.block_available(75)
-        output.must_equal 2
+        output.must_equal 0
       end
     end
 

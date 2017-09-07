@@ -53,7 +53,8 @@ module Hotel
       room_num = row[1]
       check_in_date = row[2].split
       check_out_date = row[3].split
-      all_reservations.push(Hotel::Reservation.new(reservation_id, room_num, check_in_date, check_out_date))
+      block_id = row[4] ? row[4] : 0
+      all_reservations.push(Hotel::Reservation.new(reservation_id, room_num, check_in_date, check_out_date, block_id))
     end
     return all_reservations
   end
@@ -146,6 +147,7 @@ module Hotel
     array_check_in = [block.check_in.year, block.check_in.month, block.check_in.day]
     array_check_out =[block.check_out.year, block.check_out.month, block.check_out.day]
     new_reservation = Hotel::Reservation.new(5, block.rooms[0].id, array_check_in, array_check_out, block.block_id)
+    block.add_reservations
     return new_reservation
   end
 end
