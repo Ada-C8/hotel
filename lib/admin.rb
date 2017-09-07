@@ -48,6 +48,7 @@ module Hotel
       check_out_date = Date.new(check_out[0], check_out[1], check_out[2])
       wanted_dates = get_date_range(check_in_date, check_out_date)
       reserved_rooms_for_dates = []
+
       case
       when @reservations_list == []
         return @all_rooms
@@ -63,6 +64,11 @@ module Hotel
     return @all_rooms - reserved_rooms_for_dates
     end#rooms_available
 
+    def reservations_by_date(date)
+      date_find = Date.new(date[0], date[1], date[2])
+      #go through reservations list and return array with all that contain the date
+      reservations_list.find_all{|reservation| reservation.date_range.include?(date_find)}
+    end#reservations_by_date
   end #class Admin
 
 end #module Hotel
