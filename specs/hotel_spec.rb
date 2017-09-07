@@ -170,9 +170,9 @@ describe "hotel" do
       end
     end
     describe "Hotel.block_available(input_id)" do
-      it "should return true or false" do
+      it "should return number of rooms available" do
         output = Hotel.block_available(56)
-        ([true,false].include? output).must_equal true
+        output.must_be_instance_of Integer
       end
     end
   end
