@@ -3,7 +3,7 @@ require 'DateRange'
 
 module Hotel
   class Reservations
-    attr_reader :all_reservations
+    attr_reader
 
     def initialize
     @all_reservations = []
@@ -43,8 +43,10 @@ module Hotel
       date = Date.parse(date)
       list = []
       @all_reservations.each do |reservation|
-          dates = reservation.dates
-          if dates.include?(date)
+          #dates = reservation.dates
+          # if reservation.dates.include?(date)
+          #   list << reservation
+          if date >= reservation.check_in && date <= reservation.check_out
             list << reservation
           end
       end

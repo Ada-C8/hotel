@@ -9,11 +9,11 @@ module Hotel
     end
 
     def dates
-    dates = (@check_in..@check_out).map(&:to_s)
-      dates.each do |date|
-        date = Date.parse(date)
-      end
-    return dates
+    return Array(@check_in..@check_out)
+      # dates.each do |date|
+      #   date = Date.parse(date)
+      # end
+  
     end
   end
 end

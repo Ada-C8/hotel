@@ -133,13 +133,20 @@ describe 'Reservations' do
 
   describe 'list_reservations_by_date' do
     before do
-      @new_booking4 = @new_hotel.new_reservation("2019-01-01", "2019-01-15")
+      @new_hotel.clear_reservations
+      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
+      @new_booking2 = @new_hotel.new_reservation("2019-01-01", "2019-01-15")
+      @new_booking3 = @new_hotel.new_reservation("2019-01-02", "2019-01-12")
+      @new_booking4 = @new_hotel.new_reservation("2019-01-01", "2019-01-13")
     end
     it "must be a method of Reservations" do
       @new_hotel.must_respond_to :list_reservations_by_date
     end
     it "must be an array" do
       @new_hotel.list_reservations_by_date("2019-01-01").must_be_kind_of Array
+    end
+    it "must have the correct number of reservations for the date given" do
+      @new_hotel.list_reservations_by_date("2019-01-04").length.must_equal 3
     end
   end
 end
