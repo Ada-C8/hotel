@@ -6,6 +6,7 @@ describe "Hotel" do
 
     before do
       #fake reservations to run tests
+      # should this be a "let"?
       @hotel1 = Hotel::Reservations.new
       @checkin = Date.new(2017,9,5)
       @checkout = Date.new(2017,9,7)
@@ -14,6 +15,7 @@ describe "Hotel" do
     it "will create a reservation" do
       res = @hotel1.make_booking(@checkin, @checkout, 1)
       res.must_be_instance_of Hotel::Booking
+      # res.rooms.must_equal 20
     end
 
     it "cannot take more than 20 reservations" do
@@ -25,16 +27,44 @@ describe "Hotel" do
       end.must_raise ArgumentError
     end
 
-    it "can take exactly 20 reservations for a particular night" do
-      hotel2= Hotel::Reservations.new
-      checkin = Date.new(2017,9,5)
-      checkout = Date.new(2017,9,7)
-      hotel2.make_booking(checkin, checkout, 20)
-        #  binding.pry
-        # wednesday night: doesn't work. wants reservations to equal 40
-      hotel2.check_reservations(checkin, checkout).length.must_equal 20
-
+    it "can calculate cost of reservation" do
+      try_here = @hotel1.make_booking(@checkin, @checkout, 1)
+      try_here.total_cost.must_equal 400
     end
+
+    it "can calculate cost of multiple rooms booked in a reservation" do
+      # 2.times do
+      #   @hotel1.make_booking(@checkin, @checkout, 1)
+      # end
+
+      try_again = @hotel1.make_booking(@checkin, @checkout, 2)
+      # it is 2 nights and 2 rooms should = 800
+      try_again.total_cost.must_equal 800
+    end
+
+
+    it "can take exactly 20 bookings for a particular night and it's one reservation" do
+      hotel2= Hotel::Reservations.new
+      checkin2 = Date.new(2017,10,5)
+      checkout2 = Date.new(2017,10,7)
+      hotel2.make_booking(checkin2, checkout2, 20)
+      # binding.pry
+      hotel2.print_reservations.length.must_equal 1
+    end
+
+    it "can hold multiple bookings and count those reservations" do
+      hotel3 = Hotel::Reservations.new
+      checkin3 = Date.new(2017,11,2)
+      checkout3 = Date.new(2017,11,4)
+      hotel3.make_booking(checkin3, checkout3, 2)
+      hotel3.make_booking(checkin3, checkout3, 1)
+      hotel3.make_booking(checkin3, checkout3, 1)
+      hotel3.print_reservations.length.must_equal 3
+    end
+    # wednesday night: doesn't work. wants reservations to equal 40
+    # hotel2.check_reservations(checkin, checkout).must_equal 1
+
+
 
     it "stores an array of rooms" do
       @hotel1.all_rooms.must_be_kind_of Array

@@ -6,7 +6,10 @@ describe "Hotel" do
   describe "Booking" do
 
     before do
-      @room1 = Hotel::Booking.new(Date.new(2017,9,5), Date.new(2017,9,7), 1, 1)
+      rooms = [
+        Hotel::Room.new(2)
+      ]
+      @room1 = Hotel::Booking.new(Date.new(2017,9,5), Date.new(2017,9,7), rooms, 1)
     end
     # errors that that admin could mess up:
 
@@ -16,7 +19,7 @@ describe "Hotel" do
     end
 
     it "will calculate total cost" do
-      @room1.define_total_cost.must_equal 400
+      @room1.total_cost.must_equal 400
     end
     # it "will have a room number" do
     #   # binding.pry

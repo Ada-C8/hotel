@@ -10,15 +10,18 @@ module Hotel
     def initialize(checkin, checkout, rooms, id)
       @dates = DateRange.new(checkin, checkout)
       @id = id
-      @total_cost = 0
+      # @total_cost = 0
       @rooms = rooms
       # @cost = Room.new.cost
       # @rooms.each { |room| @total_cost += room.cost}
     end
 
-    def define_total_cost
-      @total_cost = (@dates.total_nights * Hotel::Room.new(1).cost)
-      return @total_cost
+    def total_cost
+      total_cost = 0
+      @rooms.each do |room|
+        total_cost += room.cost * @dates.total_nights
+      end
+      return total_cost
 
       #for blocks - do discount logic here
     end

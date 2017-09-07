@@ -24,6 +24,8 @@ module Hotel
     end
 
     # Booking.new(checkin, checkout, check_availablity[0])
+#Todo:
+    # return rooms that are reserved for that date
 
     def make_booking(checkin, checkout, num_of_rooms = 1)
       # do we have an availability?
@@ -34,15 +36,29 @@ module Hotel
       if availability.length < num_of_rooms
         raise ArgumentError.new "Sorry, we don't have enough rooms."
       elsif availability == []
-        raise ArgumentError.new "Sorry, we don't have any rooms avaialble."
+        raise ArgumentError.new "Sorry, there are no rooms available."
       end
 
       id = @all_reservations.length
       rooms = availability.take num_of_rooms
 
+      # puts "Rooms is #{rooms}, type is #{rooms.class}"
+
       booking = Booking.new(checkin, checkout, rooms, id)
       @all_reservations << booking
+
+# should I write a loop that tells it to make multiple bookings per num_of_rooms?
+      # if num_of_rooms > 1
+      #   num_of_rooms.times do
+      #     booking * num_of_rooms
+      #   end
+      # end
+
       return booking
+    end
+
+    def print_reservations
+      return @all_reservations
     end
 
 
@@ -65,6 +81,9 @@ module Hotel
           end
         end
       end
+      # if (checkin == Date.new(2017, 10, 5))
+      #   # binding.pry
+      # end
       return not_available
     end
 
@@ -76,6 +95,7 @@ module Hotel
           available << room
         end
       end
+      # binding.pry
       return available
     end
   end
