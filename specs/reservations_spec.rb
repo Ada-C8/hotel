@@ -34,6 +34,11 @@ describe "Reservations class" do
   describe "check_reservations" do
     #put in a date range and see a list of the rooms booked on that date
     #return a list of rooms booked on that date in an array
+    it "will raise an error if invalid date range" do
+      check_in = Date.new(2017,9,5)
+      check_out = Date.new(2017,9,6)
+      proc{@hotel.check_reservations(check_out,check_in)}.must_raise InvalidDateRangeError
+    end
     it "must be an array of room objects" do
       check_in = Date.new(2017,9,5)
       check_out = Date.new(2017,9,6)
@@ -42,8 +47,12 @@ describe "Reservations class" do
     end
     it "return a list of rooms booked for a given date range" do
       check_in = Date.new(2017,9,5)
-      check_out = Date.new(2017,9,6)
+      check_out = Date.new(2017,9,8)
+      binding.pry
       @hotel.check_reservations(check_in,check_out).length.must_equal 4
+    end
+    it "returns a list of books rooms that is unique" do
+
     end
     it "returns an empty array if nothing is booked" do
       check_in = Date.new(2017,10,5)

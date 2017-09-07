@@ -13,7 +13,7 @@ module Hotel
       end
     end
 
-    def make_reservation(start_date, end_date)
+    def make_reservation(check_in,check_out)
       #1 take start_date and end_date and pass it to date range class, date range will validate user input
 
       #2 do we have availability? If yes make a booking.new(range_of_dates) and push to all_reservations
@@ -22,9 +22,25 @@ module Hotel
       # Hotel::Booking.new(id, rooms, date_range)
     end
 
-    def check_reservations(start_date, end_date)
-      #start_date and end date must be an instance of the date class
-
+    def check_reservations(check_in,check_out)
+      # run through valid_date?
+      range = DateRange.new(check_in,check_out).nights_arr
+      booked_rooms = []
+      # binding.pry
+      range.each do |date|
+        @all_reservations.each do |booking|
+          # binding.pry
+          if booking.date_range.nights_arr.include?(date)
+            booking.rooms.each do |room|
+              if (!booked_rooms.include?(room))
+                booked_rooms << room
+              end
+            end
+          end
+        end
+      end
+      # binding.pry
+      return booked_rooms
       #1 take start_date and end_date and pass it to date range class, date range will validate user input
       #@all_reservations check if each find date
       #if reservation.date.include?(date_range[0])
