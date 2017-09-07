@@ -36,6 +36,7 @@ module Hotels
     end # checks if the selected date is older than the current date
 
     def calc_total
+      # W1-C3 Guest should not be charged for the last day
       if @block_id.zero?
         nights_charged = @dates.length * @rooms.length
         total = Hotels::Room::REGULAR_RATE * nights_charged

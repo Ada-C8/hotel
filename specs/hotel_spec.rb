@@ -50,19 +50,23 @@ describe Hotels::Hotel do
       nights = @conrad.reserve_room(@checkin, @checkout).dates.length
       assert_equal 4, nights
     end
-    it 'Cannot reserve more than 20 rooms for a date' do
+    it 'Will not allow users to book a duplicate room' do
       20.times { @conrad.reserve_room(@checkin) }
-      assert_nil @conrad.reserve_room(@checkin)
+      rooms = @conrad.reservations.map(&:rooms).flatten
+      assert_equal 20, rooms.uniq.length
     end
+    # W2-C1 A reservation can start when another reservation ends
     it 'Allows users to check-in on the check-out day of 20 reservations' do
       20.times { @conrad.reserve_room(@checkin, @checkout) }
       @conrad.reserve_room(@checkout)
       assert_equal 21, @conrad.reservations.length
     end
-    it 'Will not allow users to book a duplicate room' do
-      20.times { @conrad.reserve_room(@checkin) }
-      rooms = @conrad.reservations.map(&:rooms).flatten
-      assert_equal 20, rooms.uniq.length
+    # W2-E1 Raise an exception when asked to reserve unavailable room
+    it 'Will raise an error if trying to book a room on a full day' do
+      20.times { @conrad.reserve_room(@checkin, @checkout) }
+      proc {
+        @conrad.reserve_room(@checkin, @checkout)
+      }.must_raise ArgumentError
     end
   end # ------------------------- describe #reserve_room block
 
@@ -85,7 +89,6 @@ describe Hotels::Hotel do
       @conrad.reserve_room(@checkout)
       assert_equal 2, @conrad.check_reserved(@checkin).length
     end
-
   end # ------------------------- describe #check_reserved block
 
   describe '#total_cost' do
