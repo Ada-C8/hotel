@@ -67,6 +67,10 @@ describe "hotel class" do
     end
 
     it "Should create a reservation with a specific date range" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1, 2)
+
+      new_reservation.check_in_date.must_equal Date.new(2017,9,5)
+      new_reservation.check_out_date.must_equal Date.new(2017,9,10)
 
     end
 
@@ -82,14 +86,14 @@ describe "hotel class" do
 
     it "Should respond to check_in_date " do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
-      new_reservation.check_in_date.must_equal Date.new(2017,9,5)
+      new_reservation.must_respond_to :check_in_date
 
     end
+    it "text" do
 
-    it "Should respond to check_out_date" do
+
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 20, 1)
-      new_reservation.check_out_date.must_equal Date.new(2017,9,10)
+      new_reservation.must_respond_to :check_out_date
     end
-
   end
 end

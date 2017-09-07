@@ -3,22 +3,22 @@ require_relative 'spec_helper'
 describe "Room Class" do
   describe ""do
 
-    it "Can instantiate a room" do
-      id = 1
-      status = "available"
-      new_room = HotelManagment::Room.new(id,status)
-      new_room.must_be_instance_of HotelManagment::Room
+  it "Can instantiate a room" do
+    id = 1
+    status = "available"
+    new_room = HotelManagment::Room.new(id,status)
+    new_room.must_be_instance_of HotelManagment::Room
 
-    end
-
-    it "Room rate should be 200" do
-
-      new_room = HotelManagment::Room.new(1,"available")
-      new_room.must_be_instance_of HotelManagment::Room
-      new_room.rate.must_equal 200
-
-    end
   end
+
+  it "Room rate should be 200" do
+
+    new_room = HotelManagment::Room.new(1,"available")
+    new_room.must_be_instance_of HotelManagment::Room
+    new_room.rate.must_equal 200
+
+  end
+end
 end
 
 

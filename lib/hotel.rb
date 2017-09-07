@@ -21,18 +21,21 @@ module HotelManagment
     end
 
 
-    def self.all_rooms
-    end
-
-
     def create_reservation
       reservation = reservation.new(first_name, last_name, check_in_date,check_out_date, reservation_number, room_number)
       @reservations << reservation
     end
 
 
-    def self.all_reservations
+    def reservations_by_day_range
     end
+
+    # def self.all_reservations
+    # end
+
+    # def self.all_rooms
+    # end
+
 
 
   end #class end
