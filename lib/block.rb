@@ -16,6 +16,10 @@ module BookingSystem
 
    end #end of initialize
 
+   def has_available_rooms?
+     return @rooms.length > 0
+   end #end of method
+
 
  end #end of class
 end #end of module
