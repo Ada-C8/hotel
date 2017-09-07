@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 require 'date'
-require 'pry'
+
 
 describe "Booking" do
   before do
@@ -44,10 +44,10 @@ describe "Booking" do
   end # describe initialize
 
   describe "make_reservation" do
-    # TODO: need to add tests to make sure a room is never booked twice for a given date range
+
 
     it "Should raise an error if inproper dates are given" do
-      proc{@booking.make_reservation(@checkout_day, @checkin_day, @num_of_rooms)}.must_raise ArgumentError
+      proc{@booking.make_reservation(@checkout_day, @checkin_day, @num_of_rooms)}.must_raise BookingError
     end # it "Should raise an error if inproper dates are given" do
 
     it "should be able to be called on @booking" do
@@ -80,6 +80,41 @@ describe "Booking" do
       num_of_rooms = 3
       @booking.make_reservation(@checkin_day, @checkout_day, num_of_rooms )[0].total_cost.must_equal 1200 # (2 * 2 * 200.0)
     end # it "will have the right total cost for the reservation" do
+
+    # TODO: need to add tests to make sure a room is never booked twice for a given date range
+    # TODO: should raise argument error if more rooms are asked for then are availible
+
+    # TODO: add functionality to only accept reservations when there is availibility
+    # TODO: will need to call the availible_rooms method to access the availible array
+    # TODO: will need to check that there are enough rooms in the availible array to make the reservation and raise BookingError if there is are not enough rooms
+
+    it "should not reserve the same room more than once for a date range" do
+      @booking.make_reservation(@checkin_day, @checkout_day, 2) # room 1 and 2
+      @booking.make_reservation(@checkin_day, @checkout_day, 2) # room 3 and 4
+
+      availible = @booking.availible_rooms(@checkin_day, @checkout_day)
+
+      availible.must_equal [@booking.all_rooms[4], @booking.all_rooms[5], @booking.all_rooms[6], @booking.all_rooms[7], @booking.all_rooms[8], @booking.all_rooms[9], @booking.all_rooms[10], @booking.all_rooms[11], @booking.all_rooms[12], @booking.all_rooms[13], @booking.all_rooms[14], @booking.all_rooms[15], @booking.all_rooms[16], @booking.all_rooms[17], @booking.all_rooms[18], @booking.all_rooms[19]]
+    end # it "should not reserve the same room more than once for a date range" do
+
+    it "will add sequential rooms to the @all_reservation array" do
+      @booking.make_reservation(@checkin_day, @checkout_day, 2) # room 1 and 2
+      @booking.make_reservation(@checkin_day, @checkout_day, 2) # room 3 and 4
+
+       @booking.check_date_for_reservations(@checkin_day, @checkout_day).each do |res|
+         res.
+
+         # TODO: finish this test to make sure that the room numbers in the instances of Reservation in the array returned by the check_date_for_reservations method will be room 1, 2, 3, and 4! 
+    end # it "will add sequential rooms to the availe array" do
+
+    it "will raise BookingError if more rooms are asked for then the hotel has (>20)" do
+      proc{@booking.make_reservation(@checkin_day, @checkout_day, 21)}.must_raise BookingError
+    end # it "will raise BookingError if more than 20 rooms are asked for
+
+    it "will raise BookingError if more rooms are requested then are availible for that date range" do
+      @booking.make_reservation(@checkin_day, @checkout_day, 5)
+      proc{@booking.make_reservation(@checkin_day, @checkout_day, 18)}.must_raise BookingError
+    end # it "will raise BookingError if more rooms are requested then are availible
   end #  describe make_reservation
 
   describe "check_date_for_reservations" do
@@ -163,7 +198,6 @@ describe "Booking" do
 
     it "will include a room that is reserved at a differnt time" do
       room = @booking.make_reservation(@checkin_day, @checkout_day, @num_of_rooms)[0].res_rooms[0]
-      availible_rooms = @booking.availible_rooms(@start_date_to_check, @end_date_to_check)
 
       @booking.availible_rooms(@start_date_to_check, @end_date_to_check).must_include room
     end # it "will include a room that is reserved at t differnt time" do

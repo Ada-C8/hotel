@@ -15,6 +15,7 @@
 # then should create the inverse array of not_availible, which i'll call availible
 # In ithe make_reservation method: using the availible array we can iterate though the array to create a new Reservation for the date(s) requested with the right rooms (only the ones in the availible array)
 
+require_relative 'exceptions'
 
 module Hotel
   class Booking
@@ -31,18 +32,24 @@ module Hotel
     def make_reservation(start_date, end_date, num_rooms )
       # TODO: add functionality to only accept reservations when there is availibility
       # TODO: will need to call the availible_rooms method to access the availible array
-      # TODO: will need to check that there are enough rooms in the availible array to make the reservation and raise ArgumentError if there is are not enough rooms
+      # TODO: will need to check that there are enough rooms in the availible array to make the reservation and raise BookingError if there is are not enough rooms
       if end_date < start_date
-        raise ArgumentError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
+        raise BookingError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
       else
+        availible = availible_rooms(start_date, end_date)
+        if num_rooms > 20
+          raise BookingError.new("You can't book that many rooms because we only have 20 rooms in the hotel.")
+        elsif num_rooms > availible.length
+          raise BookingError.new("We don't have that many rooms availible for those dates. We only have #{availible.length} rooms availible for those dates. ")
+        end # if/elsif
         dates_booked = Hotel::DateRange.new(start_date, end_date).nights_booked
         reservation_id = @all_reservations.length + 1
         rooms = []
         i = 0
         num_rooms.times do
-          rooms << @all_rooms[i]
+          rooms << availible[i]
           i += 1
-        end # TODO: later I need to change this to pull from the availible rooms array (wave 2)
+        end
         cost = (num_rooms * dates_booked.length * 200.0)
 
         @all_reservations << Hotel::Reservation.new(reservation_id, cost, rooms, dates_booked)
