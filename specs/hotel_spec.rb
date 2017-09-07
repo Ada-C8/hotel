@@ -7,6 +7,7 @@ describe "Hotel" do
     @check_out = Date.new(2017,9,17)
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
   end
+
   describe "#initialize" do
     it "@rooms should be kind of array" do
       @new_hotel.rooms.must_be_kind_of Array
@@ -105,55 +106,60 @@ describe "Hotel" do
 
   describe "#create_block" do
     before do
-      @hotel = BookingSystem::Hotel.new(5)
-      @new_block = @hotel.create_block(@date_range, 3)
+      @hotel = BookingSystem::Hotel.new(7)
+      @new_block = @hotel.create_block(@date_range, 2)
+      @another_block = @hotel.create_block(@date_range, 7)
+    end
+    it "Should set number_of_rooms to 5 if given integer grater than 5" do
+      @another_block.rooms.length.must_equal 5
     end
     it "New block should be an instance of Block class " do
       @new_block.must_be_kind_of BookingSystem::Block
     end
     it "Created block should include given number of rooms" do
-      @new_block.rooms.length.must_equal 3
+      @new_block.rooms.length.must_equal 2
     end
     it "Raise an error if no rooms available for given date range" do
       proc { @hotel.create_block(@date_range, 4) }.must_raise BookingSystem::NoRoomAvailableError
     end
 
+  end
+
   describe "#make_reservation_from_block" do
-      before do
-        @hotel = BookingSystem::Hotel.new(5)
-        @new_block = @hotel.create_block(@date_range, 3)
-        @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
-      end
-      it "Returns an instance of class Reservation" do
-        @reservation_from_block.must_be_kind_of BookingSystem::Reservation
-      end
-      it "Booked room should be removed from rooms in block" do
-        @new_block.rooms.length.must_equal 2
-      end
-      it "Raise an error if no available rooms for reservation from block" do
-        2.times do
-          @hotel.make_reservation_from_block(@new_block)
-        end
-        proc { @hotel.make_reservation_from_block(@new_block) }.must_raise BookingSystem::NoRoomAvailableError
-      end
+    before do
+      @hotel = BookingSystem::Hotel.new(5)
+      @new_block = @hotel.create_block(@date_range, 3)
+      @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
     end
-
-    describe "Check total cost for two types of reservations" do
-      before do
-        @hotel = BookingSystem::Hotel.new(5)
-        @new_block = @hotel.create_block(@date_range, 3)
-        @general_reservation = @hotel.make_reservation(@date_range)
-        @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
-      end
-      it "Returns the right total cost for general reservation" do
-        @general_reservation.total_cost.must_equal 400
-      end
-      it "Returns the right total cost for reservation from block" do
-        @reservation_from_block.total_cost.must_equal 360
-      end
+    it "Returns an instance of class Reservation" do
+      @reservation_from_block.must_be_kind_of BookingSystem::Reservation
     end
+    it "Booked room should be removed from rooms in block" do
+      @new_block.rooms.length.must_equal 2
+    end
+    it "Raise an error if no available rooms for reservation from block" do
+      2.times do
+        @hotel.make_reservation_from_block(@new_block)
+      end
+      proc { @hotel.make_reservation_from_block(@new_block) }.must_raise BookingSystem::NoRoomAvailableError
+    end
+  end
 
-  end #end of describe
+  describe "Check total cost for two types of reservations" do
+    before do
+      @hotel = BookingSystem::Hotel.new(5)
+      @new_block = @hotel.create_block(@date_range, 3)
+      @general_reservation = @hotel.make_reservation(@date_range)
+      @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
+    end
+    it "Returns the right total cost for general reservation" do
+      @general_reservation.total_cost.must_equal 400
+    end
+    it "Returns the right total cost for reservation from block" do
+      @reservation_from_block.total_cost.must_equal 360
+    end
+  end
+
 
 
 

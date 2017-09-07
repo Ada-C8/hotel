@@ -75,6 +75,9 @@ module BookingSystem
     end #end of method
 
     def create_block(date_range, number_of_rooms)
+      if number_of_rooms > 5
+        number_of_rooms = 5
+      end
       if list_of_available_rooms(date_range).length < number_of_rooms
         raise NoRoomAvailableError.new("No room is available on given dates")
       end
@@ -82,7 +85,7 @@ module BookingSystem
         new_block = Block.new(date_range, block_rooms)
         @all_blocks << new_block
 
-      return new_block #an array of rooms as integers
+      return new_block #array of rooms as integers
     end #end of method
 
     def make_reservation_from_block(block)
