@@ -1,6 +1,6 @@
 module Hotel
   class Block
-    attr_reader :rooms, :id
+    attr_reader :rooms, :id, :start_date, :end_date, :dates
 
     def initialize(start_date, end_date, rooms, discount_rate)
       @start_date = Date.parse(start_date)
