@@ -48,9 +48,19 @@ describe 'DateRange' do
     it 'must identify the correct beginningning date' do
       @daterange.beginning.must_equal @date1
     end
+  end
 
-    it 'must raise DateError if beginning passed after ending' do
-      proc{@daterange2 = Hotel::DateRange.new(@date2, @date1)}.must_raise DateError
+  describe 'is_valid?' do
+    before do
+      @date1 = Date.new(2018,9,12)
+      @date2 = Date.new(2018,9,20)
+      @date3 = Date.new(2017,3,4)
+    end
+    it 'raises a DateError if someone inputs an end date before a begin date' do
+      proc{Hotel::DateRange.new(@date2, @date1)}.must_raise DateError
+    end
+    it 'raises a DateError if someone inputs a date in the past' do
+      proc{Hotel::DateRange.new(@date3)}.must_raise DateError
     end
   end
 

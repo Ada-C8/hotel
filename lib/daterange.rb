@@ -15,7 +15,7 @@ module Hotel
     end
 
     def is_valid?
-      if @beginning < Date.today or @ending < Date.today
+      if @beginning < Date.today #or @ending < Date.today
         raise DateError.new("You are living in the past, bud")
       end
       unless one_day?

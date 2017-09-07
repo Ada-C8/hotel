@@ -78,12 +78,24 @@ end
   end
 
   describe 'make reservation for available room' do
-    it 'raises BookingError if room is not available' do
+    before do
       @date1 = Date.new(2018,9,12)
       @date2 = Date.new(2018,9,15)
+    end
+    it 'raises BookingError if room is not available' do
       @hotel.make_reservation(@date1, @date2, :room4, 200)
       proc {@hotel.make_reservation(@date1, @date2, :room4, 200)}.must_raise BookingError
-
+    end
+    it 'gives a unique id to each reservation' do
+      @hotel.make_reservation(@date1, @date2, :room7, 200)
+      @hotel.make_reservation(@date1, @date2, :room8, 200)
+      @hotel.make_reservation(@date1, @date2, :room9, 200)
+      x = 1
+      @hotel.reservations.each do |reservation|
+        reservation.id.must_equal x
+        puts reservation.id
+        x+=1
+      end
     end
   end
 
