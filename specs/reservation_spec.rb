@@ -12,8 +12,8 @@ describe "Reservation" do
     start_date = Date.parse("1/9/2017")
     end_date = Date.parse("3/9/2017")
     room_count = 1
-    total_cost = 400.00
-    @reservation_test = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, reserv_id, start_date, end_date, room_count, total_cost)
+
+    @reservation_test = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, reserv_id, start_date, end_date, room_count)
   end
 
   describe "#initialize" do
@@ -38,15 +38,12 @@ describe "Reservation" do
       @reservation_test.room_rate.must_be_instance_of Float
     end
 
-    it "can take in reservation info as arguments: reserv_id, room_count, total_cost" do
+    it "can take in reservation info as arguments: reserv_id, room_count" do
       @reservation_test.reserv_id.must_equal 1221
       @reservation_test.reserv_id.must_be_instance_of Integer #arbitrarily deciding the id is an integer MAY NOT BE NECESSARY to include
 
       @reservation_test.room_count.must_equal 1
       @reservation_test.room_count.must_be_instance_of Integer
-
-      @reservation_test.total_cost.must_equal 400.00
-      @reservation_test.total_cost.must_be_instance_of Float
     end
 
     it "can take in reservation date objects as arguments: start_date, end_date" do
@@ -59,10 +56,15 @@ describe "Reservation" do
 
   end
 
-  # describe "#get_total_cost" do
-  #   it "can calculate a total " do
-  #
-  #   end
-  # end
+  describe "#get_total_cost" do
+    it "can calculate a total" do
+
+      @reservation_test.get_total_cost.must_equal 400.00
+      @reservation_test.get_total_cost.must_be_instance_of Float
+
+      @reservation_test.total_cost.must_equal 400.00
+      @reservation_test.total_cost.must_be_instance_of Float
+    end
+  end
 
 end#of_"Reservation"
