@@ -13,8 +13,14 @@ module Hotel
       end
     end
 
-    def make_reservation(check_in,check_out)
+    def make_reservation(check_in,check_out,num_rooms)
+      date_range = DateRange.new(check_in,check_out)
+      id = (@all_reservations.length + 1)
+      booking = Booking.new(id, num_rooms,date_range)
+
+      @all_reservations << booking
       #1 take start_date and end_date and pass it to date range class, date range will validate user input
+      #make sure you have enough rooms available
 
       #2 do we have availability? If yes make a booking.new(range_of_dates) and push to all_reservations
       # check_reservation
@@ -42,8 +48,13 @@ module Hotel
       return booked_rooms
     end
 
-    def check_availability
+    def check_availability(check_in,check_out)
+      booked_rooms = check_reservations(check_in,check_out)
+      available_rooms = []
+
+
       # return the inverse not_available
+
     end
   end
 end
