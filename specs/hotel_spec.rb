@@ -58,6 +58,14 @@ describe 'Hotel' do
 
       rooms.length.must_equal 18
     end
+
+    it 'will not return rooms in a block' do
+
+    end
+
+    it 'will return rooms in a provided block' do
+
+    end
   end
 
   describe '#make_reservation' do

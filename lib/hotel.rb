@@ -53,6 +53,20 @@ module Hotel
 
     def find_available_rooms(checkin, checkout, block = false)
       # TODO: add block functionality
+
+      # if block
+      #   raise exception if search dates dont match block dates
+      #   @rooms.each do
+      #       booked_rooms << room unless room is in block
+      #     end
+      # else
+      #   blocks.each do |block|
+      #     if block.includes_dates?(checkin, checkout)
+      #       booked_rooms += block.rooms
+      #     end
+      #   end
+      # end
+
       booked_rooms, available_rooms = [], []
       @reservations.each do |reservation|
         if !(booked_rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
