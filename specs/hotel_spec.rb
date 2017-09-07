@@ -60,11 +60,27 @@ describe 'Hotel' do
     end
 
     it 'will not return rooms in a block' do
+      skip
+      @hotel.make_reservation('2017-10-14', '2017-10-18')
+      @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
+      rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15')
 
+      rooms.length.must_equal 14
     end
 
     it 'will return rooms in a provided block' do
+      skip
+      block = @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
+      rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15', block.id)
 
+      rooms.length.must_equal 5
+    end
+
+    it 'raises an error if dates do not fall within given block' do
+      block = @hotel.make_block('2017-08-03', '2017-08-08', 5, 20)
+
+      proc { @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
+      }.must_raise RangeError
     end
   end
 
@@ -98,6 +114,7 @@ describe 'Hotel' do
     end
 
     it 'will not book a room that is part of a block' do
+      skip
       block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
       reservation = @hotel.make_reservation('2017-08-04', '2017-08-05')
 

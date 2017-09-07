@@ -35,12 +35,6 @@ module Hotel
       reservation
     end
 
-    def room(num)
-      @rooms.each do |room|
-        return room if room.number == num
-      end
-      nil
-    end
 
     def view_reservations(date)
       date = DateRange.validate(date)
@@ -51,11 +45,13 @@ module Hotel
       reservations
     end
 
-    def find_available_rooms(checkin, checkout, block = false)
+    def find_available_rooms(checkin, checkout, block_id = false)
       # TODO: add block functionality
 
-      # if block
-      #   raise exception if search dates dont match block dates
+      if block_id
+        current_block = block(block_id)
+        raise(RangeError,"Dates (#{checkin}, #{checkout}) do not fall within provided block #{current_block.id}") unless DateRange.overlap?(checkin, checkout, current_block.start_date, current_block.end_date)
+      end
       #   @rooms.each do
       #       booked_rooms << room unless room is in block
       #     end
@@ -84,6 +80,20 @@ module Hotel
       block = Block.new(start_date, end_date, rooms, discount)
       @blocks << block
       block
+    end
+
+    def room(num)
+      @rooms.each do |room|
+        return room if room.number == num
+      end
+      nil
+    end
+
+    def block(id)
+      @blocks.each do |block|
+        return block if block.id == id
+      end
+      nil
     end
   end
 end
