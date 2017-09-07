@@ -7,8 +7,8 @@ describe 'DateRange' do
 
   describe 'initialize' do
     it 'takes a check in date and a check out date' do
-      @puppy_dates.check_in.to_s.must_equal "2017-10-13"
-      @puppy_dates.check_out.to_s.must_equal "2017-10-31"
+      @puppy_dates.check_in.to_s.must_equal '2017-10-13'
+      @puppy_dates.check_out.to_s.must_equal '2017-10-31'
     end # end test
 
     it 'passes check_in and check_out in as Date objects' do

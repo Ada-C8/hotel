@@ -8,11 +8,9 @@ describe 'Reservation' do
   describe 'initialize' do
     it 'initializes with guest name, date range from DateRange, and room number' do
       @puppy_expo.guest_name.must_equal 'Finn'
-      @puppy_expo.dates.check_in.to_s.must_equal "2017-10-13"
-      @puppy_expo.dates.check_out.to_s.must_equal "2017-10-31"
-      @puppy_expo.room.room_number.must_equal 13
-    end # end test
-
+      @puppy_expo.dates.check_in.to_s.must_equal '2017-10-13'
+      @puppy_expo.dates.check_out.to_s.must_equal '2017-10-31'
+    end # end testr
   end # end #initialize
 
   describe 'reserve_dates' do

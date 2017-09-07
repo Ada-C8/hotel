@@ -12,18 +12,14 @@ describe 'Room' do
   end # end #initialize
 
   describe 'assign_room' do
-    it 'removes unavailable rooms from the rooms_available array' do
-      all_rooms = @rooms_available
+    it 'removes unavailable rooms from the rooms_available array each time a room is booked' do
+      @puppy_room.rooms_available.length
       @puppy_room.assign_room
-      all_rooms.length.must_equal 19
+      @puppy_room.rooms_available.length.must_equal 19
     end # end test
 
     xit 'assigns a room number from the rooms_available ARRAY' do
       @puppy_room.assign_room.must_equal rooms_available[0]
-    end # end test
-
-    xit 'room_number = its matching index (room_number minus 1) in rooms_available array' do
-      @puppy_room.assign_room.must_equal Hotel::Room::rooms_available[13-1]
     end # end test
   end # end assign_room
 end # end all Room tests

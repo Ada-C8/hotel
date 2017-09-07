@@ -4,7 +4,7 @@ require_relative 'room'
 
 module Hotel
   class Reservation
-
+    COST = 200 # per night
     attr_reader :guest_name, :dates, :room
 
     def initialize(guest_name, check_in, check_out)
