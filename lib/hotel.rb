@@ -15,18 +15,27 @@ module Hotel
   end
 
   def make_reservation(guest, check_in, check_out, room_requested = nil)
-    if room.is_a? (Integer)
-      @rooms.each do |room|
-        if room.number = room_number
-          room_requested = room
+    room = assign_room(check_in, check_out, room_requested)
+    reservations << Reservation.new(guest, check_in, check_out, room)
+  end
+
+  def assign_room(check_in, check_out, room_requested)
+    available_rooms = get_available_rooms(check_in, check_out)
+
+    if room_requested.is_a? (Integer)
+      available_rooms.each do |free_room|
+        if free_room.number == room_requested
+          return free_room
         end
       end
-    else 
-      available_rooms = get_available_rooms(check_in, check_out)
-      room_requested = available_rooms[0]
+      raise StandardError.new "This room in unavailable"
+    else
+      room = available_rooms[0]
+      return room
     end
-    reservations << Reservation.new(guest, check_in, check_out, room_requested)
+
   end
+
 
   def get_res_by_date(date)
     res_by_date = []
@@ -42,7 +51,7 @@ module Hotel
     available_rooms = @rooms.clone
 
     @reservations.each do |res|
-      overlap = (res.check_in..res.check_out).to_a & (date_begin..date_end).to_a
+      overlap = (res.check_in..res.check_out - 1).to_a & (date_begin..date_end).to_a
 
       if overlap[0] != nil
         available_rooms.delete(res.room)

@@ -59,16 +59,23 @@ describe Hotel::Hotel do
 
     it "can make a reservation with room object by inputing the room number" do
       hotel = Hotel::Hotel.new
-      hotel.make_reservation("guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 13 )
+      hotel.make_reservation("guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 13)
     end
 
-    it "raises an ArgumentError when trying to make a reservation for a room that is already reserved" do
+    it "raises a StnadardError when trying to make a reservation for a room that is already reserved" do
       victoria = Hotel::Hotel.new
       victoria.make_reservation("
-      guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), )
-      vi
+      guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 11)
 
+      proc{victoria.make_reservation("guest", Date.new(2018, 6, 6), Date.new(2018, 6, 20), 11)}.must_raise StandardError
+    end
 
+    it "will not raise an exception when trying to make a reservation for a room that starts on the same day another reservation ends" do
+      korpela = Hotel::Hotel.new
+      korpela.make_reservation("
+      guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 11)
+
+      korpela.make_reservation("guest", Date.new(2018, 6, 15), Date.new(2018, 6, 20), 11).must_be_instance_of Hotel::Reservation
 
     end
   end # end of make and retrieve reservations
