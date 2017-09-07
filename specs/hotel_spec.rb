@@ -137,9 +137,15 @@ describe "The Hotel class" do
       @myhotel.find_rooms_available("8/5/17", "8/9/17").length.must_equal 20
     end
 
-    it "returns an array of <20 objects when searching for a date range that overlaps with an existing reservations" do
+    it "returns an array of 19 objects when searching for a date range that overlaps with an existing reservations" do
       @myhotel.store_reservation("8/9/17", "8/11/17")
       @myhotel.find_rooms_available("8/8/17", "8/10/17").length.must_equal 19
+    end
+
+    it "returns an array of 18 objects when searching for a date range that overlaps with an existing reservations" do
+      @myhotel.store_reservation("8/9/17", "8/11/17")
+      @myhotel.store_reservation("8/13/17", "8/14/17")
+      @myhotel.find_rooms_available("8/8/17", "8/15/17").length.must_equal 18
     end
 
 
