@@ -4,6 +4,11 @@ require 'date'
 require 'pry'
 module Hotel
 
+  #
+  # def get_date_range(check_in, check_out)
+  #   return  (check_in ... check_out).to_a
+  # end
+
   class Admin
     attr_reader :reservations_list, :all_rooms
 
@@ -20,9 +25,6 @@ module Hotel
     end
 
 
-    # def get_date_range(check_in, check_out)
-    #   return  (Date.new(check_in[0], check_in[1], check_in[2]) ... Date.new(check_out[0], check_out[1], check_out[2])).to_a
-    # end
     def get_date_range(check_in, check_out)
       return  (check_in ... check_out).to_a
     end

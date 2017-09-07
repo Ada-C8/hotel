@@ -31,11 +31,16 @@ describe "class Admin" do
 
     it "puts the correct number of reservations in the @reservations_list" do
       @tim_curry.reservations_list.length.must_equal 2
-
-
     end
 
   end#end "reserve" describe
+
+  describe "checking for rooms_available" do
+    
+
+
+
+  end
 
 
 end #end class Admin Describe
