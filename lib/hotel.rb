@@ -10,6 +10,17 @@ module Tools
     end
   end # valid_date? method
 
+  class PositiveIntegerError < StandardError
+  end
+
+  def positive_integer?(num)
+    unless (num.kind_of? Integer) && num > 0
+      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.")
+    end
+  end # positive_integer? method
+
+  # TODO rescue valid_date and positive_integer
+
 end # Tools module
 
 module ReservationSystem
@@ -29,12 +40,15 @@ module ReservationSystem
 
     def reserve(check_in, nights)
       valid_date?(check_in)
+      positive_integer?(nights)
       @new_reservation = ReservationSystem::Reservation.new(check_in, nights)
       all_reservations << @new_reservation
       return @new_reservation
     end # reserve
 
     def search_reservations_by_date(date)
+      valid_date?(date)
+
       list = Array.new
 
       all_reservations.each do |res|

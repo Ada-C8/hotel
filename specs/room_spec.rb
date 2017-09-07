@@ -8,7 +8,7 @@ describe "Room" do
       room.must_be_instance_of ReservationSystem::Room
       room.number.must_equal 1
 
-      another = ReservationSystem::Room.new(100) 
+      another = ReservationSystem::Room.new(100)
       another.number.must_equal 100
     end # "Creates a room instance object with a room number"
 
