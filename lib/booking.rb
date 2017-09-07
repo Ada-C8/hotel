@@ -10,9 +10,7 @@ module Hotel
       @rooms = rooms
       @date_range = date_range
       @nights = date_range.nights
-      @total_cost = ''
+      @total_cost = (@nights * rooms.inject(0){|sum,room| sum + room.cost})
     end
-    # figure out total cost method and them put it in initialize
-    #@rooms = @rooms.each {|room| @total_cost += room.cost}
   end
 end

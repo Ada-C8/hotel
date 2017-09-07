@@ -20,9 +20,11 @@ describe "Booking class" do
       @reservation.must_respond_to :date_range
       @reservation.must_respond_to :nights
     end
-    it "total cost must return the appropriate amount, and be an Integer" do
+    it "total cost must return the appropriate amount for 2 rooms, and be an Integer" do
+      @reservation.total_cost.must_equal 1200
+    end
+    it "total cost must be an integer" do
       @reservation.total_cost.must_be_kind_of Integer
-      @reservation.total_cost.must_equal 200
     end
   end
 end
