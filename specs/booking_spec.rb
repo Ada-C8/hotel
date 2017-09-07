@@ -27,4 +27,10 @@ describe "Booking class" do
       @reservation.total_cost.must_be_kind_of Integer
     end
   end
+  describe "check_reservations method" do
+    # returns an array of the dates that are unavailable 
+    it "" do
+
+    end
+  end
 end
