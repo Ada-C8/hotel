@@ -2,7 +2,7 @@ require 'date'
 
 module Hotel
   class Reservation
-    attr_reader :client, :arrival_date, :departure_date, :number_of_rooms
+    attr_reader :client, :arrival_date, :departure_date, :number_of_rooms, :type
 
     def initialize(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
       @client = client.gsub(/[A-Za-z']+/,&:capitalize)
@@ -10,6 +10,7 @@ module Hotel
       @departure_date = Date.new(departure_year.to_i, departure_month.to_i, departure_day.to_i)
       @number_of_rooms = number_of_rooms.to_i
       @room_price = 200.00
+      @type = "Regular"
     end
 
     def stay_length

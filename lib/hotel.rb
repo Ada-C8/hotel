@@ -5,6 +5,7 @@ module Hotel
     def initialize(number_of_rooms)
       @number_of_rooms = number_of_rooms.to_i
       @reservations = []
+      # @room_block = []
       @list_of_rooms = create_list_of_rooms
     end
 
@@ -17,14 +18,31 @@ module Hotel
     end
 
     def make_reservation(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
-      @reservations << Reservation.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
-      if available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day) == "No avaibility at these dates."
+      available_rooms = available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
+      if available_rooms == "No avaibility at these dates."
         raise NoAvailableRoomError.new("No avaibility at these dates.")
+      elsif available_rooms.length < number_of_rooms.to_i
+        raise NoAvailableRoomError.new("Only #{available_rooms.length} rooms available at these dates.")
       else
         number_of_rooms.to_i.times do |i|
           available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).first.booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
         end
       end
+      @reservations << Reservation.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
+    end
+
+    def create_block(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
+      available_rooms = available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
+      if available_rooms == "No avaibility at these dates."
+        raise NoAvailableRoomError.new("No avaibility at these dates.")
+      elsif available_rooms.length < number_of_rooms.to_i
+        raise NoAvailableRoomError.new("Only #{available_rooms.length} rooms available at these dates.")
+      else
+        number_of_rooms.to_i.times do |i|
+          available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).first.booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
+        end
+      end
+      @reservations << RoomBlock.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
     end
 
     def reservations_by_date(year, month, day)
@@ -37,6 +55,8 @@ module Hotel
       end
       return reservations_at_date
     end
+
+
 
     def available_at_date(year, month, day)
       date = Date.new(year.to_i, month.to_i, day.to_i)
@@ -70,11 +90,6 @@ module Hotel
           if arrival_date < stay_hash["departure"] || departure_date > stay_hash["arrival"]
             booked = true
           end
-
-          # #########CHANGE THIS !!!!!!!!!!
-          # if arrival_date > stay_hash["arrival"] && date < stay_hash["departure"]
-          #   return booked = true
-          # end
         end
         available_rooms << room if booked == false
       end

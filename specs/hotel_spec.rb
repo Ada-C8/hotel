@@ -78,11 +78,18 @@ describe "Hotel" do
       @hotel = Hotel::Hotel.new(20)
       @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 20)
       proc {@hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)}.must_raise Hotel::NoAvailableRoomError
+
       @hotel = Hotel::Hotel.new(20)
       20.times do
         @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
       end
       proc {@hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)}.must_raise Hotel::NoAvailableRoomError
+
+      @hotel = Hotel::Hotel.new(20)
+      19.times do
+        @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+      end
+      proc {@hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 2)}.must_raise Hotel::NoAvailableRoomError
     end
 
     it "has a reservations_by_date method" do
@@ -148,6 +155,41 @@ describe "Hotel" do
         @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
       end
       @hotel.available_at_period(2017,9,17, 2017,9,19).must_equal "No avaibility at these dates."
+    end
+
+    it "Hotel has a create_block method" do
+      @hotel.must_respond_to :create_block
+    end
+
+    it "the create_block method adds reservations to the reservations array" do
+      @hotel.create_block("Marcel Luedtke", 2017,9,17, 2017,9,19, 2)
+      @hotel.reservations.count.must_equal 1
+      @hotel.reservations[0].type.must_equal "Block"
+      @hotel.make_reservation("Marcel Luedtke", 2017,9,17, 2017,9,19, 2)
+      @hotel.reservations.count.must_equal 2
+      @hotel.reservations[0].type.must_equal "Block"
+      @hotel.reservations[1].type.must_equal "Regular"
+    end
+
+    it "The create_block method won't let you create a block if there are not enough rooms" do
+        @hotel = Hotel::Hotel.new(20)
+        19.times do
+          @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+        end
+        proc {@hotel.create_block("marcel luedtke", 2017,9,17, 2017,9,19, 2)}.must_raise Hotel::NoAvailableRoomError
+
+        @hotel = Hotel::Hotel.new(20)
+        20.times do
+          @hotel.make_reservation("marcel luedtke", 2017,9,17, 2017,9,19, 1)
+        end
+        proc {@hotel.create_block("marcel luedtke", 2017,9,17, 2017,9,19, 2)}.must_raise Hotel::NoAvailableRoomError
+    end
+
+    it "The create_block updates the status of the rooms booked in the block" do
+      @hotel = Hotel::Hotel.new(20)
+      @hotel.create_block("marcel luedtke", 2017,9,17, 2017,9,19, 2)
+      @hotel.list_of_rooms[0].booked.wont_be_empty
+      @hotel.list_of_rooms[0].booked[0]["arrival"].mday.must_equal 17
     end
 
 
