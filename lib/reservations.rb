@@ -3,7 +3,16 @@ require 'date'
 
 module Hotel
   class Reservations
-    #@allrooms - initializes with 20 instances of the room class
+    attr_reader :all_rooms, :all_reservations
+    def initialize
+      @all_rooms = []
+      @all_reservations = []
+      20.times do |i|
+        i += 1
+        @all_rooms << Hotel::Room.new(i)
+      end
+    end
+    #@all_rooms - initializes with 20 instances of the room class
     #all_reservations - array of instances of the booking class
 
     def make_reservation(start_date, end_date)
