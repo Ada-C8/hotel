@@ -56,5 +56,15 @@ describe 'Hotel' do
         @my_hotel.find_avail_rooms(@date_to_find).wont_include @my_hotel.rooms[9]
       end
     end
+    describe "create_block" do
+      it 'does not allow block creation if there are not enough available rooms' do
+        20.times { |i| @my_hotel.rooms[i].reserve(@check_in, @check_out)}
+        proc {@my_hotel.create_block(@check_in, @check_out, 1, 0.70)}.must_raise ArgumentError
+      end
+      it 'returns a new instance of Block' do
+        @my_hotel.create_block(@check_in, @check_out, 1, 0.70).must_be_instance_of Array
+        @my_hotel.blocks.each {|block| block.must_be_instance_of Hotel_System::Block}
+      end
+    end
   end
 end

@@ -1,14 +1,16 @@
 require_relative 'room'
+require_relative 'block'
 
 module Hotel_System
   class Hotel
-    attr_reader :number_of_rooms, :rooms
+    attr_reader :number_of_rooms, :rooms, :blocks
     def initialize(number_of_rooms)
       @number_of_rooms = number_of_rooms
       @rooms = []
       number_of_rooms.times do |i|
         @rooms << Hotel_System::Room.new(i + 1)
       end
+      @blocks = []
     end
 
     def reservations
@@ -34,6 +36,16 @@ module Hotel_System
       reserved_rooms = date_reservations.map {|reservation| reservation.room }
       avail_rooms = self.rooms.reject {|room| reserved_rooms.include?(room.room_number)}
       return avail_rooms
+    end
+
+    def create_block(check_in, check_out, size, rate_adjustor)
+      blockable_rooms = @rooms.select {|room| room.available?(check_in, check_out)}
+      if blockable_rooms.length < size
+        raise ArgumentError.new("Block of this size not available")
+      end
+      rooms = blockable_rooms.sample(size)
+      @blocks << Hotel_System::Block.new(check_in, check_out, rooms, rate_adjustor)
+
     end
   end
 end
