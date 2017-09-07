@@ -62,8 +62,11 @@ module Hotel
     end
 
 
-    ##########################
+
     def check_reservations(checkin, checkout)
+      ##### write logic to check for blocks bc then it's not available 
+
+
       # need to check each find date
       # if reservation.date.include? (date_range[0])
       #   not_available << room

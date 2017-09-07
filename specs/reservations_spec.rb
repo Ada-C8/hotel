@@ -36,7 +36,6 @@ describe "Hotel" do
       # 2.times do
       #   @hotel1.make_booking(@checkin, @checkout, 1)
       # end
-
       try_again = @hotel1.make_booking(@checkin, @checkout, 2)
       # it is 2 nights and 2 rooms should = 800
       try_again.total_cost.must_equal 800
@@ -64,12 +63,40 @@ describe "Hotel" do
     # wednesday night: doesn't work. wants reservations to equal 40
     # hotel2.check_reservations(checkin, checkout).must_equal 1
 
-
+    it "can list out all of the rooms in the hotel" do
+      @hotel1.all_rooms.length.must_equal 20
+    end
 
     it "stores an array of rooms" do
       @hotel1.all_rooms.must_be_kind_of Array
       @hotel1.all_rooms.length.must_equal 20
     end
+
+    it "can print out the list of reservations for a given date" do
+      hotel3 = Hotel::Reservations.new
+      checkin3 = Date.new(2017,11,2)
+      checkout3 = Date.new(2017,11,4)
+      hotel3.make_booking(checkin3, checkout3, 2)
+      hotel3.make_booking(checkin3, checkout3, 1)
+      hotel3.make_booking(checkin3, checkout3, 1)
+      # binding.pry
+      hotel3.all_reservations[0].id.must_equal 0
+    end
+    ########## tests still working on: ########
+
+    it "can view a list of available rooms for a given date" do
+      hotel3 = Hotel::Reservations.new
+      checkin3 = Date.new(2017,11,2)
+      checkout3 = Date.new(2017,11,4)
+      hotel3.make_booking(checkin3, checkout3, 2)
+      hotel3.make_booking(checkin3, checkout3, 1)
+      hotel3.make_booking(checkin3, checkout3, 1)
+      hotel3.check_availability(checkin3, checkout3).length.must_equal 16
+      # binding.pry
+      hotel3.check_reservations(checkin3, checkout3).length.must_equal 8
+    end
+
+
     #book 20 rooms and then try to make one more
     #book 20 rooms for one night and 20 rooms for different night
     # can list the current reservations
