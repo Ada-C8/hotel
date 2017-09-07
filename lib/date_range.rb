@@ -1,12 +1,18 @@
+require 'pry'
+
 module Hotel
 
   class DateRange
 
     attr_reader :check_in, :check_out
 
-    def initialize(year_1, month_1, date_1, year_2, month_2, date_2)
-      @check_in = Date.new(year_1, month_1, date_1)
-      @check_out = Date.new(year_2, month_2, date_2)
+    def initialize(check_in, check_out)
+      @check_in = Date.parse(check_in)
+      @check_out = Date.parse(check_out)
+
+      if @check_in > @check_out
+        raise ArgumentError.new("Invalid date range")
+      end
     end
 
 

@@ -1,24 +1,23 @@
 require_relative 'spec_helper'
 
 describe "DateRange class" do
-  # let(:check_in) {Date.new(2017, 9, 4)}
-  # let(:check_out) {Date.new(2017, 9, 9)}
-
-  #no longer needed because changed the structure of my initialize parameters
-  # it "Can be instantiated" do
-  #   # check_in = Date.new(2017, 9, 4)
-  #   # check_out = Date.new(2017, 9, 9)
-  #   Hotel::DateRange.new(check_in, check_out).must_be_instance_of Hotel::DateRange
-  # end
+  let(:check_in) {"Sept 9 2017"}
+  let(:check_out) {"Sept 15 2017"}
 
   it "Can be instantiated" do
-    Hotel::DateRange.new(2017, 9, 4, 2017, 9, 9).must_be_instance_of Hotel::DateRange
+    Hotel::DateRange.new(check_in, check_out).must_be_instance_of Hotel::DateRange
   end
 
   it "Allows access to check_in instance variable" do
-    new_hotel = Hotel::DateRange.new(2017, 9, 4, 2017, 9, 9)
+    new_hotel = Hotel::DateRange.new(check_in, check_out)
     new_hotel.check_in.must_be_instance_of Date
     new_hotel.check_out.must_be_instance_of Date
+  end
+
+  it "Checks for invalid date entry - if check in is after check out date" do
+    check_in_1 = "Sept 9 2017"
+    check_out_1 = "Sept 8 2017"
+    proc {Hotel::DateRange.new(check_in_1, check_out_1)}.must_raise ArgumentError
   end
 
 
