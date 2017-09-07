@@ -46,22 +46,26 @@ module Hotel
       end # if/else
     end # make_reservation
 
-    def check_date_for_reservations(date)
+    def check_date_for_reservations(start_date, end_date)
       # TODO: change this to allow for a date range instead! Wave 2
       # it will have a method that checks if there is a reservation for the date(s) requested
       # iterate though @all_reservations for each day requested and if the day is included in the Booking then it will look at the Reservation that included that date and add the room(s) in that reservation to a new array not_availible.
+      days = Hotel::DateRange.new(start_date, end_date).nights_booked
       date_reservations = []
-      @all_reservations.each do |res|
-        if res.date_range.include?(date)
-          date_reservations << res
-        end # if
-      end # .each
+
+      days.each do |day|
+        @all_reservations.each do |res|
+          if res.date_range.include?(day)
+            date_reservations << res
+          end # if
+        end # .each
+      end #.each
       return date_reservations
     end # check_date_for_reservations
 
-    def print_reservations(date)
+    def print_reservations(start_date, end_date)
       # Not sure if we need this and if simply calling check_date_for_reservations is enough for the user to be able to access all the reservations for a given date(range)
-      reservations = check_date_for_reservations(date)
+      reservations = check_date_for_reservations(start_date, end_date)
       nice_format_reservations = []
       reservations.each do |res|
         loop_array = []
@@ -76,7 +80,29 @@ module Hotel
         nice_format_reservations << loop_array
       end
       return nice_format_reservations
-
     end #print_reservations
+
+    def availible_rooms(start_date, end_date)
+      reservations = check_date_for_reservations(start_date, end_date)
+      reserved = []
+      availible = []
+
+      #creates an array of all the rooms that are reserved for the given date range
+      reservations.each do |res|
+        res.res_rooms.each do |room|
+          reserved << room
+        end # .each
+      end # .each
+
+      # creates an array of all the availible rooms for the given date range
+      @all_rooms.each do |room|
+        if !(reserved.include?(room))
+          availible << room
+        end # if
+      end # .each
+
+      return availible
+    end # availible_rooms
+
   end # Booking
 end # Hotel
