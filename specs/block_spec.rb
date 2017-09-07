@@ -30,5 +30,15 @@ describe "Testing Block class" do
 
       proc {Hotel::Block.new(@check_in, @check_out, 0.2, @rooms) }.must_raise ArgumentError
     end
+
+    it "Raises an error if it tries to include an unavailable room for the given dates in the block" do
+      unavail_room = @rooms[0]
+      unavail_room.reserve(@check_in, @check_out)
+
+      proc { Hotel::Block.new(@check_in, @check_out, 0.2, @rooms) }.must_raise ArgumentError
+
+    end
   end
+
+
 end

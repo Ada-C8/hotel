@@ -1,10 +1,12 @@
 require 'date'
 require_relative 'room'
+require_relative 'reservable'
 
 module Hotel
 
   class Reservation
     include Comparable
+    include Reservable
 
     attr_accessor :check_in, :check_out, :room_num, :rate
 
@@ -16,12 +18,14 @@ module Hotel
       #
       # raise ArgumentError.new("Invalid date(s)") if check_in == nil || check_out == nil
 
-      raise ArgumentError.new("Check out must be later than check in") if check_in >= check_out
+      # raise ArgumentError.new("Check out must be later than check in") if check_in >= check_out
       # @reservation_id = rand(100000..999999)
       @check_in = check_in
       @check_out = check_out
       @room_num = room.room_num
       @rate = room.rate
+
+      valid_dates?
 
     end
 
@@ -29,21 +33,15 @@ module Hotel
       return check_in == other_reservation.check_in && check_out == other_reservation.check_out && room_num == other_reservation.room_num
     end
 
-    def include?(date)
-      return date >= check_in && date < check_out
-    end
-
-    # def self.find(date)
-    #   # returns a list of all reservations for given date
-    #   # does not include reservations where check-out date == date
-    #
+    # def include?(date)
+    #   return date >= check_in && date < check_out
     # end
 
-    def total_cost
-      num_nights = (check_out - check_in).to_i
-      # return num_nights * ::Hotel::Room::DEFAULT_RATE
-      return num_nights * rate
-    end
+    # def total_cost
+    #   num_nights = (check_out - check_in).to_i
+    #   # return num_nights * ::Hotel::Room::DEFAULT_RATE
+    #   return num_nights * rate
+    # end
 
     private
 
