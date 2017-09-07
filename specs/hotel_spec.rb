@@ -119,4 +119,23 @@ describe 'Hotel' do
       end
     end
   end
+
+  describe '#make_block' do
+    # - As an administrator, I can create a block of rooms
+    it 'returns a new Block object' do
+      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+      block.must_be_kind_of Hotel::Block
+    end
+
+    it 'adds to @blocks array' do
+      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+
+      @hotel.blocks.length.must_equal 1
+    end
+  end
 end
+
+# - The collection of rooms should only include rooms that are available for the given date range
+# - If a room is set aside in a block, it is not available for reservation by the general public, nor can it be included in another block
+# - As an administrator, I can check whether a given block has any rooms available
+# - As an administrator, I can reserve a room from within a block of rooms

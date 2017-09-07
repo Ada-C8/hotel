@@ -6,7 +6,7 @@ module Hotel
   require_relative 'no_room_error'
 
   class Hotel
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
     ROOM_COST = 200
 
     def initialize(num_rooms)
@@ -15,6 +15,7 @@ module Hotel
         @rooms << Room.new(i + 1, ROOM_COST)
       end
       @reservations = []
+      @blocks = []
     end
 
     def all_rooms
@@ -65,11 +66,11 @@ module Hotel
       available_rooms
     end
 
-    def create_block(start_date, end_date, num_rooms, discount)
-      # rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
-      # block = Block.new(start_date, end_date, rooms, discount)
-      # @blocks << block
-      # block
+    def make_block(start_date, end_date, num_rooms, discount)
+      rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
+      block = Block.new(start_date, end_date, rooms, discount)
+      @blocks << block
+      block
     end
   end
 end
