@@ -20,28 +20,28 @@ module Hotel
     end
 
 
-      def get_date_range(check_in, check_out)
-        return  (Date.new(check_in) ... Date.new(check_out)).to_a
-      end
+    def get_date_range(check_in, check_out)
+      return  (Date.new(check_in[0], check_in[1], check_in[2]) ... Date.new(check_out[0], check_out[1], check_out[2])).to_a
+    end
 
-    def self.reserve(check_in, check_out, room, name, contact_info)
+    def reserve(check_in, check_out, room, name, contact_info)
       #checks that the date hash't been previously reserved
 
       raise ArgumentError.new("This room is already reserved on these days") if rooms_available?(check_in, check_out).include?(room) == false
-      new_reservation = Hotel::Reservation.new(check_in, nights, room, name, contact_info)
+      new_reservation = Hotel::Reservation.new(check_in, check_out, room, name, contact_info)
 
       @reservations_list << new_reservation
 
 
     end#reserve
 
-    def self.rooms_available?(check_in, check_out)
+    def rooms_available?(check_in, check_out)
       # #searches through the reservation list to find available rooms
       # #not sure if this will work  the .each.each is a little crazy TODO check for some sort of sweeeeeet enumerable to use on this bad boy.
       wanted_dates = get_date_range(check_in, check_out)
       reserved_rooms_for_dates = []
       case
-      when @reservations_list = []
+      when @reservations_list == []
         return @all_rooms
       else
         @reservations_list.each do |reservation|
