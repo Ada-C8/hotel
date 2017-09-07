@@ -2,7 +2,7 @@ require 'csv'
 require 'awesome_print'
 
 #info_hash{id: 1, cost: 200}
-module Hotel
+module BookingSystem
   class Room
     attr_accessor :id, :cost
 
@@ -25,8 +25,8 @@ module Hotel
       return all_rooms
     end
 
-  end#of_Room_class
-end#of_module_Hotel
+  end#of_Reservation_class
+end#of_module_BookingSystem
 
 #TESTING
 #ap Hotel::Room.all #will access the list of all of the rooms in the hotel

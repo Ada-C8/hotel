@@ -5,8 +5,8 @@ require 'minitest'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require_relative '../lib/room'
-# require_relative '../lib/'
-# require_relative '../lib/'
+require_relative '../lib/reservation'
+require_relative '../lib/hotel'
 
 
 
