@@ -109,12 +109,12 @@ If you are not familiar with what a block of hotel rooms, here is a brief descri
 
 ### User Stories
 
-- As an administrator, I can create a block of rooms
+- _As an administrator, I can create a block of rooms_
     - _To create a block you need a date range, collection of rooms and a discounted room rate_
     - _The collection of rooms should only include rooms that are available for the given date range_
-    - If a room is set aside in a block, it is not available for reservation by the general public, nor can it be included in another block
-- As an administrator, I can check whether a given block has any rooms available
-- As an administrator, I can reserve a room from within a block of rooms
+    - _If a room is set aside in a block, it is not available for reservation by the general public, nor can it be included in another block_
+- _As an administrator, I can check whether a given block has any rooms available_
+- _As an administrator, I can reserve a room from within a block of rooms_
 
 ### Constraints
 
@@ -126,6 +126,6 @@ If you are not familiar with what a block of hotel rooms, here is a brief descri
 
 You should not be working on these (or even thinking about them) until you have fully completed wave 3.
 
-- Allow a user to set different rates for different rooms
+- _Allow a user to set different rates for different rooms_
 - Read/write CSV files for each piece of data that your system is storing
 - Create a CLI to interact with your hotel system

@@ -1,6 +1,5 @@
 module Hotel
   class Room
-    #list of rooms - self method?
     #room has a number (1-20)
     NUMBER_OF_ROOMS = 20
 
@@ -22,21 +21,13 @@ module Hotel
       return hotel_rooms
     end
 
-    # def self.list_all
-    #   #NOTE: may be repeat of self.all, do I need to recreate everytime I want to show a list?
-    #   return @@hotel_rooms
-    # end
-
     def available?(start_date, end_date)
       rooms_available = self.class.all_available_rooms(start_date, end_date)
-      # ap rooms_available
       rooms_available.each do |room|
-        # ap "#{room.number} and #{@number}"
         if room.number == @number
           return true
         end
       end
-      # puts "this is returning false"
       return false
     end
 
@@ -49,7 +40,6 @@ module Hotel
       end
       unavailable_rooms.flatten!.uniq!
       available_room_numbers = (1..NUMBER_OF_ROOMS).to_a - unavailable_rooms
-      # ap available_room_numbers
       available_rooms = []
       available_room_numbers.each do |i|
         available_rooms << self.new(i)
