@@ -4,7 +4,6 @@ require 'date'
 describe "Hotel" do
 
   before do
-
     @hotel = BookingSystem::Hotel.new
   end
 
@@ -33,11 +32,11 @@ describe "Hotel" do
   describe "#create_reservation" do
     # TODO: Must write a regex to check input format from the user
     xit "should pass in a check_in and check_out date in a specific format" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
-      @hotel.create_reservation(check_in, check_out)
-      check_in.must_be_kind_of String
-      check_out.must_be_kind_of String
+      # check_in = '2001-02-03'
+      # check_out = '2001-02-04'
+      # @hotel.create_reservation(check_in, check_out)
+      # check_in.must_be_kind_of String
+      # check_out.must_be_kind_of String
     end
 
     it "should add only one Reservation instance to the @reservations array" do
@@ -48,7 +47,7 @@ describe "Hotel" do
       @hotel.reservations.length.must_equal 1
     end
 
-    it "should be an instance of Reservation" do
+    it "should return an instance of Reservation" do
       check_in = '2001-02-03'
       check_out = '2001-02-04'
       @hotel.create_reservation(check_in, check_out)
@@ -58,18 +57,27 @@ describe "Hotel" do
 
   describe "#all_reservations(date)" do
     it "should return an array of all Reservations instances with the requested date" do
-      10.times do
-        @hotel.create_reservation('2001-02-03', '2001-02-05')
-      end
+      @hotel.create_reservation('2001-02-03', '2001-02-05')
+      @hotel.create_reservation('2001-02-01', '2001-02-03')
+      @hotel.create_reservation('2001-02-05', '2001-02-07')
       # @reservations is now filled with Reservation objects
       current_reservations = @hotel.all_reservations_on('2001-02-03')
-      current_reservations.length.must_equal 10
+      current_reservations.length.must_equal 1
       current_reservations.must_be_kind_of Array
     end
   end # Describe
 
-  describe "#check_avail_rooms_for(date)" do
-    it "should "
+  describe "#check_avail_rooms_for(check_in, check_out)" do
+    it "should return an Array no room Integers based on the range of dates" do
+      @hotel.create_reservation('2001-02-03', '2001-02-05')
+      # @reservations array is full
+      check_in = '2001-02-03'
+      check_out = '2001-02-05'
+      @hotel.check_avail_rooms_for(check_in, check_out).must_be_kind_of Array
+    end
+
+    xit "should allow no include the check_out day" do
+    end
   end
 
 end # Describe

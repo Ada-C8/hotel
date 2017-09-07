@@ -3,10 +3,10 @@ require_relative 'spec_helper'
 describe "Reservation" do
 
   before do
-    rooms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     check_in = '2001-02-03'
-    check_out = '2001-02-04'
-    @reservation = BookingSystem::Reservation.new(rooms, check_in, check_out)
+    check_out = '2001-02-05'
+    @reservation = BookingSystem::Reservation.new(1, check_in, check_out)
+    # This has @stay_dates, @room_num, @total_cost
   end
 
   describe "#initialize" do
@@ -25,9 +25,14 @@ describe "Reservation" do
     end
   end # Describe
 
-  describe "#total_cost" do
+  describe "#calculate_cost" do
     it "should return an integer" do
-      @reservation.total_cost.must_be_kind_of Integer
+      @reservation.calculate_cost.must_be_kind_of Integer
+    end
+
+    it "should return the cost of the Reservation, not including the check_out day" do
+      @reservation.calculate_cost.must_equal 400
     end
   end # Describe
+
 end # Describe
