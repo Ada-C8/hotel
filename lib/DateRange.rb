@@ -9,6 +9,9 @@ module Hotel
 
     def dates
     @dates = (@check_in..@check_out).map(&:to_s)
+      @dates.each do |date|
+        date = Date.parse(date)
+      end
     return @dates
     end
   end
