@@ -1,10 +1,10 @@
 module Hotel
   class Block
-    attr_reader :rooms
+    attr_reader :rooms, :id
 
     def initialize(start_date, end_date, rooms, discount_rate)
-      @start_date = start_date
-      @end_date = end_date
+      @start_date = Date.parse(start_date)
+      @end_date = Date.parse(end_date)
       @dates = DateRange.range_to(@start_date, @end_date)
       @rooms = rooms
       @discount_rate = (100 - discount_rate) / 100
