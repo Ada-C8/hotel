@@ -35,6 +35,10 @@ module Hotel
         raise ArgumentError.new("Please provide a valid date")
       end
 
+      if check_out < check_in
+        raise ArgumentError.new("Invalid Date Range: Check out date is earlier than check-in date.")
+      end
+
       (check_in...check_out).each do |date|
         return false if @all_dates.include?(date)
       end
@@ -71,6 +75,18 @@ module Hotel
       raise ArgumentError.new "Sorry, we don't have a room matching that ID number."
     end
 
+
+    def available_all_days?(check_in_str, check_out_str)
+      check_in = Date.parse(check_in_str)
+      check_out = Date.parse(check_out_str)
+
+      (check_in...check_out).each do |date|
+        return false if @all_dates.include?(date)
+      end
+
+      return true
+    end
+
   end
 
 end
@@ -83,9 +99,10 @@ end
 # def available?(date_str)
 #   #date format is year, month, day
 #   date = Date.parse(date_str)
-#   return false if @reserv_id_and_dates.values.include?(date)
+#   return false if @all_dates.include?(date)
 #   return true
 # end
+
 #
 # def available_all_days?(check_in_str, check_out_str)
 #   check_in = Date.parse(check_in_str)

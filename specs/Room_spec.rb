@@ -59,13 +59,21 @@ describe "Hotel::Room class" do
       proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
     end
 
-    it "raises an error if the check-in or check-out date is invalidt" do
+    it "raises an error if the check-in or check-out date is invalid" do
       room = Hotel::Room.new(123)
       check_in_str = "February 30, 2018"
       check_out_str = "February 31, 2018"
 
       proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
 
+    end
+
+    it "raises an error if the check-out dates is earlier than the check-in date" do
+      room = Hotel::Room.new(123)
+      check_in_str = "March 3, 2018"
+      check_out_str = "February 20, 2018"
+
+      proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
     end
 
   end #end reserve_room
@@ -88,6 +96,37 @@ describe "Hotel::Room class" do
 
 
   end #end self.all
+
+  describe "available_all_days?" do
+    it "returns the correct Boolean value" do
+      room1 = Hotel::Room.all[0]
+
+      check_in = "2018-03-14"
+      check_out = "2018-03-18"
+
+      room1.available_all_days?(check_in, check_out).must_equal true
+      room1.available_all_days?(check_in, check_out).must_be_instance_of TrueClass
+
+      room1.reserve_room(check_in, check_out, 1, 2)
+
+      check_in2 = "2018-03-16"
+      check_out2= "2018-03-17"
+
+      room1.available_all_days?(check_in2, check_out2).must_equal false
+      room1.available_all_days?(check_in2, check_out2).must_be_instance_of FalseClass
+
+      #### can make reservations that check-in on the same day that somebody checks out
+      check_in3 = "2018-03-18"
+      check_out3 = "2018-03-21"
+
+      room1.available_all_days?(check_in3, check_out3).must_equal true
+      room1.available_all_days?(check_in3, check_out3).must_be_instance_of TrueClass
+
+    end
+
+
+
+  end #end available_all_days
 
 
 end #end Hotel::Room class tests
