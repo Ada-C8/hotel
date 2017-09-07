@@ -14,5 +14,10 @@ module Hotel
     def create_id
       format('B%.2d%.2d%.4d', @start_date.month, @start_date.day, rand(9999))
     end
+
+    def includes_dates?(checkfirst, checklast)
+      DateRange.overlap?(checkfirst, checklast, @start_date, @end_date)
+    end
+
   end
 end

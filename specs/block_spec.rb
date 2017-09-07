@@ -15,4 +15,6 @@ describe 'Block' do
     @block.id.length.must_equal 9
     @block.id[0..4].must_equal 'B0803'
   end
+
+  #TODO: test includes_dates?
 end
