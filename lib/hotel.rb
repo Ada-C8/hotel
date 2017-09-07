@@ -19,9 +19,6 @@ module Hotel
     end
   end
 
-  def self.find_by_date(input_date)
-    return 5
-  end
 
   def self.find_reservation(input_id)
     all_reservations = self.all_reservations
@@ -72,10 +69,10 @@ module Hotel
     return all_blocks
   end
 
-  def self.cost(input_reservation)
+  def self.cost(input_reservation_id)
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|
-      return (reservation.total_cost) if reservation.id == input_reservation
+      return (reservation.total_cost) if reservation.id == input_reservation_id
     end
   end
 
@@ -137,7 +134,7 @@ module Hotel
 
   def self.reserve_block(rate, num_of_rooms, check_in_date, check_out_date, input_block_id)
     available_rooms = truly_available(check_in_date, check_out_date)
-    raise ArgumentError.new "No rooms are available for this date range" if available_rooms.length == 0
+    raise ArgumentError.new "Not enough rooms are available for this date range" if available_rooms.length < num_of_rooms.to_i
     return Hotel::Block.new(rate, num_of_rooms, check_in_date, check_out_date, input_block_id)
   end
 
