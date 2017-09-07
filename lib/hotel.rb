@@ -13,9 +13,32 @@ class Hotel
 		@rooms << Room.new(i)
 		@reservations[i] = []
 	end
-	
   end
   
+  def reserve_room(room_number, date)
+	current_reservations = @reservations_by_room[room_number]
+	
+	current_reservations.each do |i|
+		if date.start_date < i.start_date  
+			#end date happens after the start of an existing reservation
+			if (date.end_date - i.start_date).to_i > 0 
+				raise ArgumentError, "This room is booked during the dates requested"
+			end
+			#if the start dates are the same, or the start date is less than the end date
+		elsif date.start_date == i.start_date || (date.start_date - i.end_date).to_i < 0 
+			raise ArgumentError, "This room is booked during the dates requested"
+		end
+	end
+	new_reservation = Reservation.new(room_number, date)
+	@reservations_by_room[room_number] << new_reservation
+	
+	if @reservations_by_date.key?(date.start_date)
+		@reservations_by_date[date.start_date] << new_reservation
+	else
+		@reservations_by_date[date.start_date] = [new_reservation]
+	end
+		
+  end
   
   
 end
