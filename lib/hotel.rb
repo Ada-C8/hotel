@@ -35,7 +35,8 @@ module Hotel_Chain
       @reservations_array << Hotel_Chain::Reservation.new(check_in_date, check_out_date)
     end
 
-    def make_reservations_by_date_array(date)
+    #Finds all reservations for a given date
+    def find_reservations_by_date(date)
       reservations_on_date = []
       @reservations_array.each do |reservation|
         if (reservation.check_in_date...reservation.check_out_date).cover?(Date.strptime(date, "%m/%d/%Y"))
@@ -53,18 +54,22 @@ module Hotel_Chain
     #iterate through reservation to see if it
     def rooms_available(check_in_date, check_out_date)
       rooms_available_array = []
+      unavailable_rooms = []
 
       check_in= Date.strptime(check_in_date, "%m/%d/%Y")
       check_out = Date.strptime(check_out_date, "%m/%d/%Y")
       length_of_stay = (check_out - check_in).to_i
 
+      #this doesn't work because it only looks at rooms with reservations, if any exist. But if a room doesn't have any reservations at all, it won't look at that room. The test would require it look at reservations for all rooms.
       @array_of_rooms.each do |room|
         room_check = []
         @reservations_array.each do |reservation|
           length_of_stay.times do |day|
             if room.room_id == reservation.room_id
-              if (reservation.check_in_date...reservation.check_out_date).cover?((check_in)+day)
-                room_check << reservation.room_id
+              if !(reservation.check_in_date...reservation.check_out_date).cover?((check_in)+day)
+                rooms_available_array << room.room_id
+              else
+                unavailable_rooms << room.room_id
               end
             end
           end
@@ -73,7 +78,20 @@ module Hotel_Chain
           end
         end
       end
-      puts "rooms_available_array: #{rooms_available_array}"
+
+
+      rooms_available_final = []
+      @array_of_rooms.each do |room|
+        if rooms_available_array.include?(room.room_id)
+          rooms_available_final << room
+        elsif !unavailable_rooms.include?(room.room_id)
+          rooms_available_final << room
+        end
+      end
+
+      ap "rooms_available_array: #{rooms_available_array}"
+      ap "unavailable_rooms: #{unavailable_rooms}"
+      ap "rooms_available_final #{rooms_available_final}"
       return rooms_available_array
     end
 

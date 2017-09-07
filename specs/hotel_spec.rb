@@ -56,7 +56,7 @@ describe "The Hotel class" do
   end
 
 
-  describe "make_reservations_by_date_array method" do
+  describe "find_reservations_by_date method" do
     #you can input a specific date
     #it returns any reservations which occur on a specific date
     #it iterates through all reservation object
@@ -65,29 +65,29 @@ describe "The Hotel class" do
     it "returns an array" do
     @myhotel.store_reservation("8/13/17", "8/16/17")
     @myhotel.store_reservation("9/25/17", "9/29/17")
-    @myhotel.make_reservations_by_date_array("8/14/17").must_be_kind_of Array
+    @myhotel.find_reservations_by_date("8/14/17").must_be_kind_of Array
     end
 
     it "it can list all reservations by date - range middle date" do
     @myhotel.store_reservation("8/13/17", "8/16/17")
     @myhotel.store_reservation("9/25/17", "9/29/17")
-    @myhotel.make_reservations_by_date_array("8/14/17").length.must_equal 1
+    @myhotel.find_reservations_by_date("8/14/17").length.must_equal 1
     end
 
     it "it can list all reservations by date - range start date" do
     @myhotel.store_reservation("8/13/17", "8/16/17")
     @myhotel.store_reservation("9/25/17", "9/29/17")
-    @myhotel.make_reservations_by_date_array("9/25/17").length.must_equal 1
+    @myhotel.find_reservations_by_date("9/25/17").length.must_equal 1
     end
 
     it "it returns an empty array for searches on the reservation's end date" do
     @myhotel.store_reservation("8/13/17", "8/16/17")
     @myhotel.store_reservation("9/25/17", "9/29/17")
-    @myhotel.make_reservations_by_date_array("8/16/17").length.must_equal 0
+    @myhotel.find_reservations_by_date("8/16/17").length.must_equal 0
     end
 
     it "it returns an empty array for searches outside the range of any reservations" do
-    @myhotel.make_reservations_by_date_array("8/12/17").length.must_equal 0
+    @myhotel.find_reservations_by_date("8/12/17").length.must_equal 0
     end
 
   end
@@ -98,7 +98,7 @@ describe "The Hotel class" do
   #     @myhotel.store_reservation("8/13/17", "8/16/17")
   #     @myhotel.store_reservation("9/25/17", "9/29/17")
   #     @myhotel.store_reservation("8/15/17", "8/30/17")
-  #     @myhotel.make_reservations_by_date_array("8/15/17").length.must_equal 2
+  #     @myhotel.find_reservations_by_date("8/15/17").length.must_equal 2
   #     @myhotel.print_reservations_by_date("8/15/17").length.must_equal 2
   #   end
   #
@@ -108,13 +108,17 @@ describe "The Hotel class" do
 
     it "takes in a start date and end date and returns an array of rooms available" do
       @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.store_reservation("9/25/17", "9/29/17")
+      @myhotel.store_reservation("8/15/17", "8/30/17")
+      @myhotel.store_reservation("8/10/17", "8/13/17")
+      @myhotel.store_reservation("8/09/17", "8/14/17")
       @myhotel.rooms_available("8/11/17", "8/12/17").must_be_kind_of Array
     end
 
-      # it "returns an array of rooms of the correct length" do
-      # @myhotel.store_reservation("8/11/17", "8/13/17")
-      # @myhotel.rooms_available("8/11/17", "8/12/17").length.must_be_equal to 19
-      # end
+      it "returns an array of rooms of the correct length" do
+      @myhotel.store_reservation("8/11/17", "8/13/17")
+      @myhotel.rooms_available("8/11/17", "8/12/17").length.must_be_equal to 19
+      end
 
   end
 
