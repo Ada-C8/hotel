@@ -6,9 +6,11 @@ require 'pry'
 module Hotel
 PRICE_PER_NIGHT = 200
 
-  def Hotel.get_date_range(check_in, check_out)
-    return  (Date.new(check_in) ... Date.new(check_out)).to_a
-  end
+
+    def get_date_range(check_in, check_out)
+      return  (Date.new(check_in[0], check_in[1], check_in[2]) ... Date.new(check_out[0], check_out[1], check_out[2])).to_a
+    end
+
 
   class Reservation
 
@@ -16,8 +18,8 @@ PRICE_PER_NIGHT = 200
 
     def  initialize(check_in, check_out, room, name, contact_info)
 
-      @check_in = Date.new(check_in)
-      @check_out = Date.new(check_out)
+      @check_in = Date.new(check_in[0], check_in[1], check_in[2])
+      @check_out = Date.new(check_out[0], check_out[1], check_out[2])
       @date_range = get_date_range(check_in, check_out)
       @room = room
       @name = name
@@ -26,11 +28,13 @@ PRICE_PER_NIGHT = 200
     end
 
 
-      def get_date_range(check_in, check_out)
-        return  (Date.new(check_in) ... Date.new(check_out)).to_a
-      end
-      
-    def self.nights_reserved
+
+        def get_date_range(check_in, check_out)
+          return  (Date.new(check_in[0], check_in[1], check_in[2]) ... Date.new(check_out[0], check_out[1], check_out[2])).to_a
+        end
+
+
+    def nights_reserved
       @date_range
     end #end available?
 
