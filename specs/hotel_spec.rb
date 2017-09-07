@@ -32,8 +32,8 @@ describe Hotels::Hotel do
     it 'Must contain 20 data entries' do
       assert_equal 20, @conrad.list_rooms.length
     end
-    it 'Should contain only room numbers (Integers)' do
-      @conrad.list_rooms[5].must_be_kind_of Integer
+    it 'Should contain room names (String)' do
+      @conrad.list_rooms[5].must_be_kind_of String
     end
   end # ------------------------- describe #list_rooms block
 
@@ -46,9 +46,23 @@ describe Hotels::Hotel do
       @conrad.reserve_room(@checkin, @checkout)
       assert_equal 1, @conrad.reservations.length
     end
-    it 'Reserves the room for the correct number of nights' do
+    it 'Reserves a Room for the correct number of nights' do
       nights = @conrad.reserve_room(@checkin, @checkout).dates.length
       assert_equal 4, nights
+    end
+    it 'Cannot reserve more than 20 rooms for a date' do
+      20.times { @conrad.reserve_room(@checkin) }
+      assert_nil @conrad.reserve_room(@checkin)
+    end
+    it 'Allows users to check-in on the check-out day of 20 reservations' do
+      20.times { @conrad.reserve_room(@checkin, @checkout) }
+      @conrad.reserve_room(@checkout)
+      assert_equal 21, @conrad.reservations.length
+    end
+    it 'Will not allow users to book a duplicate room' do
+      20.times { @conrad.reserve_room(@checkin) }
+      rooms = @conrad.reservations.map(&:rooms).flatten
+      assert_equal 20, rooms.uniq.length
     end
   end # ------------------------- describe #reserve_room block
 
@@ -56,7 +70,11 @@ describe Hotels::Hotel do
     it 'Returns an Array' do
       @conrad.check_reserved(@checkin).must_be_kind_of Array
     end
-    it 'Returns a Reservation' do
+    it 'Returns no Reservations without #reserve_room being called' do
+      @conrad.check_reserved(@checkin)
+      assert_nil @conrad.check_reserved(@checkin)[0]
+    end
+    it 'Returns Reservations inside the Array' do
       @conrad.reserve_room(@checkin, @checkout)
       first_reservation = @conrad.check_reserved(@checkin)[0]
       first_reservation.must_be_instance_of Hotels::Reservation
@@ -67,10 +85,7 @@ describe Hotels::Hotel do
       @conrad.reserve_room(@checkout)
       assert_equal 2, @conrad.check_reserved(@checkin).length
     end
-    it 'Cannot reserve more than 20 rooms for a date' do
-      20.times { @conrad.reserve_room(@checkin) }
-      assert_nil @conrad.reserve_room(@checkin)
-    end
+
   end # ------------------------- describe #check_reserved block
 
   describe '#total_cost' do
@@ -99,4 +114,38 @@ describe Hotels::Hotel do
       assert_nil @conrad.total_cost('20171031ABCEDFGHIJ0123456789')
     end
   end # ------------------------- describe #total_cost block
+
+  describe '#check_unreserved' do
+    it 'Returns an Array' do
+      @conrad.reserve_room(@checkin, @checkout)
+      free_rooms = @conrad.check_unreserved(@checkin, @checkout)
+      free_rooms.must_be_kind_of Array
+    end
+    it 'Produces an Array of Hashes with Dates and vacant Rooms' do
+      @conrad.reserve_room(@checkin, @checkout)
+      free_rooms = @conrad.check_unreserved(@checkin, @checkout)
+      free_rooms[0].must_be_kind_of Hash
+      free_rooms[0].keys[0].must_be_kind_of Date
+      free_rooms[0].values.flatten[0].must_be_kind_of Hotels::Room
+    end
+    it 'Shows the correct free Rooms for a Date' do
+      @conrad.reserve_room(@checkin)
+      free_rooms = @conrad.check_unreserved(@checkin)
+      assert_equal 19, free_rooms[0].values.flatten.length
+    end
+    it 'Shows the correct free Rooms for multiple Dates' do
+      @conrad.reserve_room(@checkin, @checkout)
+      @conrad.reserve_room(@checkin, @checkout)
+      @conrad.reserve_room(@checkin, @checkout)
+      @conrad.reserve_room(@checkout)
+      @conrad.reserve_room(@checkin)
+
+      day1_free = @conrad.check_unreserved(@checkin)
+      assert_equal 16, day1_free[0].values.flatten.length
+      day2_free = @conrad.check_unreserved(@checkin + 1)
+      assert_equal 17, day2_free[0].values.flatten.length
+      day5_free = @conrad.check_unreserved(@checkout)
+      assert_equal 19, day5_free[0].values.flatten.length
+    end
+  end # ------------------------- describe #check_unreserved block
 end # ------------------------- describe Hotels::Hotel block
