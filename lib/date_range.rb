@@ -8,8 +8,8 @@ module Hotel
     attr_reader :check_in, :check_out, :date_range
 
     def initialize
-      @check_in = Date.new
-      @check_out = Date.new
+      # @check_in = Date.new
+      # @check_out = Date.new
       @date_range = []
     end
 
@@ -18,12 +18,12 @@ From hotel class, enter two dates (as strings)
 call DateRange and use those strings to create a Date objects for check in and check out and then an array of dates
 =end
     #Your code should raise an error when an invalid date range is provided
-    def check_in(date)
+    def self.check_in(date)
       @check_in = Date.parse(date)
       return @check_in
     end
 
-    def check_out(date)
+    def self.check_out(date)
       @check_out = Date.parse(date)
       return @check_out
     end

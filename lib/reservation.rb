@@ -3,13 +3,13 @@ require 'pry'
 module Hotel
   class Reservation
 
-    attr_reader :id, :room, :check_in, :check_out
+    attr_reader :id, :room, :day_in, :day_out
 
-    def initialize #(id, room, check_in, check_out)
-      @ID = id
-      @room = room
-      @check_in = check_in
-      @check_out = check_out
+    def initialize(day_in, day_out)
+      @ID = 1
+      @room = 2
+      @day_in = Hotel::DateRange.check_in(day_in)
+      @day_out = Hotel::DateRange.check_out(date_out)
     end
 
 
