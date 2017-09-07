@@ -14,8 +14,15 @@ class DateRange
     @nights = (check_out-check_in)
     # @dates = alldays
   end
-  #
-  def include?
+
+  def include?(date, reservation)
+    if
+      date >= reservation.dates.start && date < reservation.dates.end
+      return true
+    end
+  end
+
+  # def include?
   # Reservation.check_date(self.start)
   #   Reservation.all.each_with_index do |reservation, i|
   #     reservation.dates.nights.times do
@@ -28,7 +35,7 @@ class DateRange
   #
   #     end
   #   end
-  end
+  # end
   #
   # def overlap?
   #

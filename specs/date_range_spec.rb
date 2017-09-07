@@ -5,7 +5,7 @@ describe 'DateRange' do
   describe "initialize" do
     it "creates a new instance of DateRange" do
       check_in = Date.new(2017, 03, 11)
-      check_out = Date.new(2017, 04, 11)
+      check_out = Date.new(2017, 03, 15)
       DateRange.new(check_in, check_out).must_be_instance_of DateRange
     end
 

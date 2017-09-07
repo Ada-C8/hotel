@@ -11,6 +11,9 @@ class Reservation
     @total_cost = @price_night * @dates.nights
   end
 
+
+  
+
   # def add_reservation
   #   @@reservations << self
   # end
