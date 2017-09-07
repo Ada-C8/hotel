@@ -35,7 +35,11 @@ module Hotel
       return booking
     end
 
-    def list_reservations_by_date
+    def list_reservations_by_date(date)
+      date = Date.parse(date)
+      @all_reservations.each do |reservation|
+          reservation.dates
+      end
     end
 
     def self.clear_reservations #Using this for testing purposes
