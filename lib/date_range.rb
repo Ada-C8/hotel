@@ -10,7 +10,7 @@ module BookingSystem
       @check_in = check_in
       @check_out = check_out
 
-      if @check_in.class != Date || @check_out.class != Date || @check_in > @check_out
+      if @check_in.class != Date || @check_out.class != Date || @check_in > @check_out || @check_in < Date.today
         raise ArgumentError.new("Invalid date or date range")
       end
     end #end of initialize

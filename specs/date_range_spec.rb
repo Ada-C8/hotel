@@ -5,6 +5,7 @@ describe "DateRange" do
     @check_in = Date.new(2017,9,15)
     @check_out = Date.new(2017,9,17)
     @new_date_range = BookingSystem::DateRange.new(@check_in, @check_out)
+    @past_date = Date.new(2015,5,3)
   end
 
   describe "#initialize" do
@@ -17,6 +18,9 @@ describe "DateRange" do
     end
     it "Raise an error if given check_out date is before check_in date" do
       proc { BookingSystem::DateRange.new(@check_out, @check_in) }.must_raise ArgumentError
+    end
+    it "Raise an error if given date is in the past" do
+      proc { BookingSystem::DateRange.new(@past_date, @check_out) }.must_raise ArgumentError
     end
   end
 
