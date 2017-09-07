@@ -13,6 +13,21 @@ module Hotel
       end
     end
 
+    def self.search_date(date)
+      list = []
+
+      @rooms.each do |room|
+        #if room.dates_reserved.includes date, add reservation object to the list
+        @rooms[room].reservations.each do |res, dates|
+          if dates.includes?(date)
+            list << res
+          end
+        end
+      end
+
+      return list
+    end
+
   end # Building class
 
 end # Hotel module

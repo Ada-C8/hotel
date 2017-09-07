@@ -24,6 +24,13 @@ describe "Room" do
       room.dates_reserved.must_be_kind_of Array
       room.dates_reserved.must_equal []
     end
+
+    it "Creates a room with an empty array of reservations" do
+      room = Hotel::Room.new(1)
+
+      room.reservations.must_be_kind_of Array
+      room.reservations.must_equal []
+    end
   end
 
   describe "reserve method" do
@@ -37,10 +44,16 @@ describe "Room" do
       room.dates_reserved.wont_include Date.parse('2017-10-11')
       room.dates_reserved.wont_include Date.parse('2017-10-15')
 
+      #TODO test for updated structure
+
     end
 
     it "Creates a reservation instance" do
       # TODO next!! Probably in reservations
+    end
+
+    it "Adds a hash of reservation and dates_reserved to a reservations list" do
+      # TODO
     end
   end
 end

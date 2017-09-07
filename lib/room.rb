@@ -2,7 +2,7 @@ module Hotel
 
   class Room
     #attr
-    attr_reader :number, :rate, :dates_reserved, :check_in, :check_out, :reservation
+    attr_reader :number, :rate, :dates_reserved, :check_in, :check_out, :reservations, :reservation
 
     #constants
     #TODO 2. decide on ROOM_RATE constant?
@@ -12,17 +12,20 @@ module Hotel
       @number = number
       @rate = 200
       @dates_reserved = Array.new
+      @reservations = Array.new
     end
     #class methods
 
     #instance methods
     def reserve(check_in, nights)
 
-      nights.times do |date|
-        @dates_reserved << Date.parse(check_in) + date
+      nights.times do |day|
+        @dates_reserved << Date.parse(check_in) + day
       end
 
       @reservation = Hotel::Reservation.new(check_in, nights, self)
+      # @reservations << @reservation
+      @reservations << {@reservation => @dates_reserved}
 
     end
 

@@ -14,4 +14,22 @@ describe "Building" do
     end
 
   end
+
+  describe "search_date" do
+    it "Can list all reservations occuring on a specific date" do
+      #Reservation list will go through Rooms and pull up their reservations then sort by date. NOTE This seems like it is tied to Room class, but should be in rervations??
+      # Setup
+      ada_inn = Hotel::Building.new
+      date = '2017-06-12'
+      5.times do |i|
+        ada_inn.rooms[i + 1].reserve(date[0..-2] + 'i', i * 2)
+      end
+
+      date_to_check = '2017-02-17'
+
+      #Testing
+      Hotel::Building.search_date(date_to_check).must_be_kind_of Array
+      Hotel::Building.search_date(date_to_check)[0].must_be_instance_of Hotel::Reservation
+    end
+  end
 end
