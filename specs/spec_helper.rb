@@ -12,6 +12,6 @@ require_relative '../lib/reservation'
 require_relative '../lib/hotel'
 
 reporter_options = { color:true}
-Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new(reporter_options)
+# Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new(reporter_options)
 
-# Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new

@@ -1,8 +1,21 @@
 require_relative 'room'
 
-module ReservationSystem
+module Tools
+  class DateError < StandardError
+  end #DateError class
 
+  def valid_date?(date)
+    unless date.kind_of? Date
+      raise DateError.new("Invalid Date! You submitted #{date}, which is not a Date object.")
+    end
+  end # valid_date? method
+
+end # Tools module
+
+module ReservationSystem
   class Hotel
+    include Tools
+
     attr_accessor :hotel, :all_reservations, :new_reservation
 
     def initialize
@@ -15,6 +28,7 @@ module ReservationSystem
     end # initialize
 
     def reserve(check_in, nights)
+      valid_date?(check_in)
       @new_reservation = ReservationSystem::Reservation.new(check_in, nights)
       all_reservations << @new_reservation
       return @new_reservation

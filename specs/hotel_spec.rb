@@ -37,6 +37,19 @@ describe "Hotel" do
         ada_inn.all_reservations.must_include @res1 && @res2
       end # "creates a reservation"
 
+      it "Raises an error if date submitted is not a valid Date object" do
+        proc {ada_inn.reserve(2017, 7)}.must_raise Tools::DateError
+        proc {ada_inn.reserve('2017-06-12', 7)}.must_raise Tools::DateError
+        proc {ada_inn.reserve(:pie, 1)}.must_raise Tools::DateError
+        proc {ada_inn.reserve(123.40, 2)}.must_raise Tools::DateError
+        proc {ada_inn.reserve([123.40, "a"], 2)}.must_raise Tools::DateError
+
+      end
+
+      it "Raises an error if nights is not a positive integer" do
+
+      end
+
     end # "reserve"
 
     describe "search_reservations_by_date" do

@@ -15,7 +15,7 @@ module ReservationSystem
         @dates_reserved << check_in_date + i
       end
 
-    end
+    end # initialize
 
   end # Reservation class
 
