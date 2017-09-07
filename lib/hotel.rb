@@ -40,14 +40,44 @@ class Hotel
 		
   end
   
-  def getAllRooms
+  def get_all_rooms
 	return @rooms
   end
   
+  def get_open_rooms(date)
+	available_rooms = []
+	20.times do |i|
+		available_rooms[i] = true
+	end
+	
+	current_date = date.start_date
+	while current_date < date.end_date do
+		if @reservations_by_date.key?(current_date)
+			current_reservations = @reservations_by_date[current_date]
+			current_reservations.each do  |this_room|
+				available_rooms[this_room.room_number] = false
+			end
+		end
+		current_date += 1
+	end
+	
+	atleast_one_open_room = 0
+	available_rooms.each do |i|
+		if i == true
+			atleast_one_open_room += 1
+		end
+	end
+	
+	if atleast_one_open_room == 0
+		raise ArgumentError, "There are no open rooms for the dates in question"
+	end	
+	
+	return available_roooms
+  end
   
   
 end
 
-date1 = Date.new(2007,1,1)
-date2 = Date.new(2008,5,2)
-print (date2 - date1).to_i
+#date1 = Date.new(2007,1,1)
+#date2 = Date.new(2008,5,2)
+#print (date2 - date1).to_i
