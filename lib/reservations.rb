@@ -2,17 +2,20 @@ require 'date'
 require_relative 'rooms'
 
 class Reservation
-  attr_reader :check_in, :check_out, :nights, :bill, :num_nights, :room_number, :reservation_id, :room
-  def initialize(check_in, check_out, room)
+  attr_reader :check_in, :check_out, :nights, :bill, :num_nights, :room_numbers, :reservation_id, :rooms
+  def initialize(check_in, check_out, rooms_array)
+    puts "Are you an array? #{rooms_array.class}"
     @reservation_id = rand(100000..999999)
     @check_in = Date.parse(check_in)
     @check_out = Date.parse(check_out)
-
     @nights = populate_nights(@check_in, @check_out)
+
     @num_nights = @nights.length
-    @room_number = room.number
-    @bill = @num_nights * room.rate
-    @room = room
+    @rooms = rooms_array
+    puts "BYEEEE! #{rooms_array.class}"
+    @rate = rooms_array.map {|room| room.rate}
+    @bill = @num_nights * @rate.sum
+    @room_numbers = rooms_array.map {|room| room.number}
   end
 
 

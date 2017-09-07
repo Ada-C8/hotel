@@ -12,20 +12,29 @@ class Hotel
     end
   end
 
-  def make_reservation(check_in, check_out, room)
+  def make_reservation(check_in, check_out, rooms)
     valid_date(check_in, check_out)
-    begin
+
+    flag = true
+    unavailable_rooms = []
+
+    rooms.each do |room|
       if rooms_available(check_in, check_out).include?(room)
-        new_reservation = Reservation.new(check_in, check_out, room)
+        flag = false
+        unavailable_rooms.push(room.number)
+      end
+    end
+
+      if flag == true
+        new_reservation = Reservation.new(check_in, check_out, rooms)
         @reservations.push(new_reservation)
       else
         begin
-        raise ArgumentError.new("That room is not available.")
+          raise ArgumentError.new("Room: #{unavailable_rooms} not available: ")
         rescue ArgumentError => exception
           puts "#{exception}: #{check_in}-#{check_out}"
         end
       end
-    end
   end
 
   def reservation_by_date(date)
@@ -43,8 +52,11 @@ class Hotel
 
   def rooms_reserved(date)
     reserved_rooms = []
+
     reservation_by_date(date).each do |reservation|
-      reserved_rooms.push(reservation.room)
+      reservation.rooms.each do |room|
+        reserved_rooms.push(room)
+      end
     end
     return reserved_rooms
   end
@@ -55,19 +67,24 @@ class Hotel
     available_rooms = Array.new(@rooms)
 
     reservation_by_date(check_in).each do |reservation|
-      available_rooms.delete(reservation.room)
+      reservation.rooms.each do |room|
+        available_rooms.delete(room)
+      end
     end
 
     reservation_by_date(last_night.to_s).each do |reservation|
-      available_rooms.delete(reservation.room)
+      reservation.rooms.each do |room|
+        available_rooms.delete(room)
+      end
     end
 
     return available_rooms
   end
 
-  def block_reservation(check_in, check_out, rooms)
-    @reservations.push(Block.new(check_in, check_out, rooms))
-  end
+  # def block_reservation(check_in, check_out, rooms)
+  #   @reservations.push(Block.new(check_in, check_out, rooms))
+  # end
+
 
 
   private

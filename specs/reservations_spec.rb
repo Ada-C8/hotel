@@ -3,8 +3,9 @@ require_relative '../lib/reservations'
 
 describe "#RESERVATION" do
   before do
-    @room = Room.new(1, 200)
+    @room = [Room.new(1, 200)]
     @new_reservation = Reservation.new("January 16, 2018", "January 18, 2018", @room)
+
     @new_reservation1 = Reservation.new("15-05-2018", "22-05-2018", @room)
   end
 
@@ -12,7 +13,7 @@ describe "#RESERVATION" do
     @new_reservation.must_be_instance_of Reservation
     @new_reservation.check_in.must_be_instance_of Date
     @new_reservation.check_out.must_be_instance_of Date
-    @new_reservation.room_number.must_equal 1
+    @new_reservation.room_numbers.first.must_equal 1
     @new_reservation.must_respond_to :reservation_id
 
   end
