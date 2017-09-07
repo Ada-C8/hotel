@@ -61,6 +61,18 @@ describe "hotel" do
       end
     end
   end
+
+  describe "self.find_block(input_id)" do
+    it "should return a block" do
+      output = Hotel.find_block(15)
+      output.must_be_instance_of Hotel::Block
+    end
+    it "should return a block with matching ID" do
+      output = Hotel.find_block(15)
+      output.block_id.must_equal 15
+    end
+  end
+
     describe "self.all_reservations" do
       it "returns an array" do
         output = Hotel.all_reservations
