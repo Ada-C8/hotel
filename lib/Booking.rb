@@ -4,6 +4,10 @@ require 'pry'
 require_relative 'Reservation'
 require_relative 'Room'
 
+#TODO 09/07/2017:Design logic: Rooms have reservations, have dates, BUT CURRENTLY, Rooms store reservations and all dates on which they are reserved, and that is used to check quickly what rooms are available.
+#Rooms also store a hash of Reservation id keys, with their corresponding dates as values, which seems superfluous. RECONSIDER THIS DESIGN. Should Rooms hold Reservation objects only? Reservation objects and dates reserved? maybe just reservation ids and dates? Maybe just reservation ids and helper method that will retrieve the reservation as needed? Think through
+
+
 module Hotel
   # NUMBER_OF_ROOMS = 20  ### might not want to use constant, especially if we have subclasses of rooms (by type), and each room subclass might have a different number. may best be a constant defined by class/subclass
 
@@ -14,6 +18,15 @@ module Hotel
       @all_rooms = Hotel::Room.all # returns an array or hash of Room objects
       @all_reservations = []
 
+    end
+
+    def available_rooms(check_in,check_out)
+      #check_in and #check_out are strings
+      #TODO: below
+      # confirm check_out date availability logic
+      #error handling
+      #message if no rooms are available?
+      @all_rooms.select {|room| room.available_all_days?(check_in, check_out)}
     end
 
     def make_reservation(guest_id, check_in,check_out,room_id)
@@ -45,17 +58,3 @@ end
 # binding.pry
 
 #########WAVE 2 #####
-
-# def available_rooms(check_in,check_out)
-#   # confirm check_out date availability logic
-#   available_rooms  = []
-#
-#   candidates = @all_rooms.select {|room| room.available?(check_in) && room.available?(check_out)}
-#
-#   candidates.each do |room|
-#     available_rooms << room if room.available_all_days?(check_in, check_out)
-#   end
-#
-#   return available_rooms if available_rooms.count > 0
-#   return false
-# end
