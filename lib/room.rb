@@ -1,4 +1,7 @@
 class Room
-PRICE = $200
-BLOCK_PRICE = $185
+	attr_reader :room_number
+	
+	def initialize(i) 
+		@room_number = i
+	end
 end 
