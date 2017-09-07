@@ -91,8 +91,9 @@ describe 'Hotel' do
 
     it 'will not book a room that is part of a block' do
       block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
-      @hotel.make_reservation('2017-08-04', '2017-08-05')
+      reservation = @hotel.make_reservation('2017-08-04', '2017-08-05')
 
+      block.rooms.wont_include reservation.room
     end
 
     it 'raises NoRoomError if no rooms are available' do
