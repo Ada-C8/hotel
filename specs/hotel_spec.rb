@@ -183,8 +183,26 @@ describe "hotel" do
     end
     describe "Hotel.block_available(input_id)" do
       it "should return number of rooms available" do
-        output = Hotel.block_available(56)
+        output = Hotel.block_available(75)
         output.must_be_instance_of Integer
+      end
+      it "should return 1" do
+        output = Hotel.block_available(75)
+        output.must_equal 2
+      end
+    end
+
+    describe "Hotel.reserve_block_room(input_id)" do
+      it "should return a reservation" do
+        output = Hotel.reserve_block_room(75)
+        output.must_be_instance_of Hotel::Reservation
+      end
+      it "should have the same check in and checkout dates as the block" do
+        output = Hotel.reserve_block_room(75)
+        block_check_in = Date.new(2017, 9, 20)
+        block_check_out = Date.new(2017, 9, 22)
+        ouput.check_in.must_equal block_check_in
+        output.check_out.must_equal block_check_out
       end
     end
   end

@@ -134,4 +134,11 @@ module Hotel
     return Hotel::Reservation.new(10, available_rooms[0].id, begin_date, end_date)
   end
 
+  def self.block_available(input_id)
+    block = self.find_block(input_id)
+    rooms = block.rooms.length
+    taken = self.find_reservation_by_block_id(input_id)
+    return rooms - taken.length
+  end
+
 end
