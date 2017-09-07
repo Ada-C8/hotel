@@ -11,5 +11,12 @@ module Hotel
       @room.change_availability
     end
 
+    def to_s
+      puts "Reservation: "
+      puts "  Check-in: #{check_in}"
+      puts "  Check-out: #{check_out}"
+      puts "  Room: ##{room.room_number}"
+    end
+
   end
 end

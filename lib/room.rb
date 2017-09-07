@@ -5,7 +5,7 @@ module Hotel
   NUM_OF_ROOMS = 20
 
   class Room
-    attr_reader :available, :cost, :room_num
+    attr_reader :available, :cost, :room_number
 
     def initialize(room_number)
       @available = true
