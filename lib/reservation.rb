@@ -3,6 +3,7 @@ module Hotel
     attr_reader :id
     def initialize(id)
       @id = id
+      @date_range = Hotel::DateRange.new
     end
 
     # def reserve_room(date_range, hotel)
@@ -14,7 +15,6 @@ module Hotel
       # reserve a room for a given date range
       # reservation = {}
       # reservation[@id] = date_range
-      @date_range = date_range
       hotel.reservations << self
       # call new instance of hotel in Booker class
     end
