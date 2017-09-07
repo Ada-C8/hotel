@@ -56,7 +56,29 @@ describe 'DateRange' do
     end
   end
 
-  describe 'validate' do
+  describe 'self.overlap?' do
+    it 'returns true if provided date range overlaps' do
+      overlap = DateRange.overlap?('2017-09-06', '2017-09-07', '2017-09-06', '2017-09-07')
+      overlap.must_equal true
+    end
+
+    it 'returns false if provided date range does not overlap' do
+      overlap = DateRange.overlap?('2017-10-14', '2017-10-15', '2017-09-06', '2017-09-07')
+      overlap.must_equal false
+    end
+
+    it 'returns true for partial overlap' do
+      overlap = DateRange.overlap?('2017-09-06', '2017-09-10', '2017-09-8', '2017-09-20')
+      overlap.must_equal true
+    end
+
+    it 'allows one range to end the day the next starts' do
+      overlap = DateRange.overlap?('2017-09-06', '2017-09-10', '2017-09-10', '2017-09-20')
+      overlap.must_equal false
+    end
+  end
+
+  describe 'self.validate' do
     it 'returns input unchanged if input is a Date object' do
       DateRange.validate(@before).must_equal @before
     end

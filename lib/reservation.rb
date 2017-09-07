@@ -19,13 +19,7 @@ module Hotel
     end
 
     def includes_dates?(checkfirst, checklast)
-      dates_to_check = DateRange.range_to(checkfirst, checklast)
-      dates_to_check.each do |check_date|
-        @dates.each do |book_date|
-          return true if book_date.strftime == check_date.strftime
-        end
-      end
-      false
+      DateRange.overlap?(checkfirst, checklast, @checkin, @checkout)
     end
 
     private
