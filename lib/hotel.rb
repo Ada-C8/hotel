@@ -48,6 +48,39 @@ module Hotel_Chain
       return reservations_on_date
     end
 
+
+    #calculate length of stay
+    #iterate through reservation to see if it
+    def rooms_available(check_in_date, check_out_date)
+      rooms_available_array = []
+
+      check_in= Date.strptime(check_in_date, "%m/%d/%Y")
+      check_out = Date.strptime(check_out_date, "%m/%d/%Y")
+      length_of_stay = (check_out - check_in).to_i
+
+      @array_of_rooms.each do |room|
+        room_check = []
+        @reservations_array.each do |reservation|
+          length_of_stay.times do |day|
+            if room.room_id == reservation.room_id
+              if (reservation.check_in_date...reservation.check_out_date).cover?((check_in)+day)
+                room_check << reservation.room_id
+              end
+            end
+          end
+          if room_check.length == length_of_stay
+            rooms_available_array << room_check[0]
+          end
+        end
+      end
+      puts "rooms_available_array: #{rooms_available_array}"
+      return rooms_available_array
+    end
+
+
+
+
+
     # def print_reservations_by_date(date)
     #   array = []
     #   reservations_on_date = self.make_reservations_by_date_array(date)

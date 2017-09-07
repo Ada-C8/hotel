@@ -1,5 +1,6 @@
 #hotel_spec.rb
 require_relative 'spec_helper.rb'
+require 'date'
 describe "The Hotel class" do
 
   before do
@@ -97,11 +98,40 @@ describe "The Hotel class" do
   #     @myhotel.store_reservation("8/13/17", "8/16/17")
   #     @myhotel.store_reservation("9/25/17", "9/29/17")
   #     @myhotel.store_reservation("8/15/17", "8/30/17")
-  #     #@myhotel.make_reservations_by_date_array("8/15/17").length.must_equal 2
+  #     @myhotel.make_reservations_by_date_array("8/15/17").length.must_equal 2
   #     @myhotel.print_reservations_by_date("8/15/17").length.must_equal 2
   #   end
   #
   # end
+
+  describe "rooms_available method" do
+
+    it "takes in a start date and end date and returns an array of rooms available" do
+      @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.rooms_available("8/11/17", "8/12/17").must_be_kind_of Array
+    end
+
+      # it "returns an array of rooms of the correct length" do
+      # @myhotel.store_reservation("8/11/17", "8/13/17")
+      # @myhotel.rooms_available("8/11/17", "8/12/17").length.must_be_equal to 19
+      # end
+
+  end
+
+    # describe "return a list of available rooms by date" do
+    #
+    #   it "returns an array" do
+    #     @myhotel.store_reservation("8/13/17", "8/16/17")
+    #     @myhotel.store_reservation("9/25/17", "9/29/17")
+    #     @myhotel.store_reservation("8/15/17", "8/30/17")
+    #     @myhotel.
+    #   end
+    #
+    #   it "returns an array of room objects" do
+    #
+    #   end
+    # end
+
 
 
 
