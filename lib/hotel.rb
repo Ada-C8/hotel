@@ -1,6 +1,5 @@
 require_relative 'reservations'
 require_relative 'rooms'
-require 'awesome_print'
 
 
 module Hotel
@@ -51,7 +50,7 @@ module Hotel
     available_rooms = @rooms.clone
 
     @reservations.each do |res|
-      overlap = (res.check_in..res.check_out - 1).to_a & (date_begin..date_end).to_a
+      overlap = (res.check_in...res.check_out).to_a & (date_begin...date_end).to_a
 
       if overlap[0] != nil
         available_rooms.delete(res.room)

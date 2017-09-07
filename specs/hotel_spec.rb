@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'pry'
 
 describe Hotel::Hotel do
   describe "a hotel instance can be created" do
@@ -74,9 +75,10 @@ describe Hotel::Hotel do
       korpela = Hotel::Hotel.new
       korpela.make_reservation("
       guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 11)
+      
+      korpela.make_reservation("guest", Date.new(2018, 6, 15), Date.new(2018, 6, 20), 11)
 
-      korpela.make_reservation("guest", Date.new(2018, 6, 15), Date.new(2018, 6, 20), 11).must_be_instance_of Hotel::Reservation
-
+      korpela.reservations.length.must_equal 2
     end
   end # end of make and retrieve reservations
 
