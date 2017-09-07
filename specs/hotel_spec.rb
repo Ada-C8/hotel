@@ -193,11 +193,12 @@ describe "hotel" do
     end
 
     describe "Hotel.reserve_block()" do
-    # nput_id, input_room_number, check_in_date, check_out_date, input_block_id
       it "should return a block" do
-        output = Hotel.reserve_block(check_in_date, check_out_date, num_of_rooms)
-        output = Hotel.reserve_block()
-
+        output = Hotel.reserve_block(0.5, 3, [2018, 11, 5], [2018, 11,10], 83)
+        output.must_be_instance_of Hotel::Block
+      end
+      it "should raise error if not enough rooms are available during that reservation" do
+        proc {Hotel.reserve_block(0.5, 3, [2017, 11, 24], [2017, 11, 25], 83)}.must_raise ArgumentError
       end
     end
 

@@ -135,6 +135,12 @@ module Hotel
     return Hotel::Reservation.new(10, available_rooms[0].id, begin_date, end_date)
   end
 
+  def self.reserve_block(rate, num_of_rooms, check_in_date, check_out_date, input_block_id)
+    available_rooms = truly_available(check_in_date, check_out_date)
+    raise ArgumentError.new "No rooms are available for this date range" if available_rooms.length == 0
+    return Hotel::Block.new(rate, num_of_rooms, check_in_date, check_out_date, input_block_id)
+  end
+
   def self.block_available(input_id)
     block = self.find_block(input_id)
     rooms = block.rooms.length
