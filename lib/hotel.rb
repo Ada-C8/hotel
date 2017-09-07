@@ -39,6 +39,13 @@ module Hotel
     return blocked_reservations
   end
 
+  def self.find_block(input_id)
+    all_blocks = self.all_blocks
+    all_blocks.each do |block|
+      return block if block.block_id == input_id
+    end
+  end
+
   def self.all_reservations
     all_reservations = []
     CSV.read('support/reservations.csv').each do |row|
