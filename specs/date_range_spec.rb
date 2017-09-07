@@ -22,15 +22,15 @@ describe "DateRange Class" do
 
   describe "Check In, Check Out, and Range Objects" do
     it "can create a date object for a check in date: " do
-      @date_test.check_in("2001/1/1").must_be_kind_of Date
+      Hotel::DateRange.check_in("2001/1/1").must_be_kind_of Date
     end #check in
 
     it "can create a date object for a check out date: " do
-      @date_test.check_out("2001/1/10").must_be_kind_of Date
+      Hotel::DateRange.check_out("2001/1/10").must_be_kind_of Date
     end #check_out
 
     it "can create an array of dates between the check-in and check out" do
-      @date_test.create_range.must_be_kind_of Array
+      Hotel::DateRange.create_range.must_be_kind_of Array
     end #date_range
   end #check_in, check_out, range
 

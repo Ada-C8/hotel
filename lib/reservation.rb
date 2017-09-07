@@ -6,12 +6,12 @@ module Hotel
 
     attr_reader :id, :room, :check_in, :check_out, :date_range
 
-    def initialize(id, room, day_in, day_out, date_range)
+    def initialize(id, room, day_in, day_out)
       @id = id
       @room = room
-      @check_in = Hotel::DateRange.check_in(day_in)#day_in
-      @check_out = Hotel::DateRange.check_out(day_out)#day_out
-      #@date_range = Hotel::DateRange.
+      @check_in = DateRange.check_in(day_in)#day_in
+      @check_out = DateRange.check_out(day_out)#day_out
+      @date_range = DateRange.create_range
     end
 
   end #class

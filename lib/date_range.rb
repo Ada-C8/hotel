@@ -8,9 +8,9 @@ module Hotel
     attr_reader :check_in, :check_out, :date_range
 
     def initialize
-      @check_in = Date.new
-      @check_out = Date.new
-      @date_range = []
+      # @check_in = Date.new
+      # @check_out = Date.new
+      #@date_range = []
     end
 
 =begin
@@ -28,32 +28,13 @@ call DateRange and use those strings to create a Date objects for check in and c
       return @check_out
     end
     #
-    # def create_range
-    #   @check_in.upto(@check_out).each do |date|
-    #     @date_range << date
-    #   end
-    #   return @date_range
-    # end
-    #
-    # def self.test_range(check_in, check_out)
-    #   (Date.new(check_in)..Date.new(check_out)).each do |date|
-    #     return "Date: #{date}"
-    #   end
-    # end
-
-    # def self.test_range(yr,mo,day,yr2,mo2,day2)
-    #   check_in = Date.new(yr,mo,day)
-    #   check_out = Date.new(yr2,mo2,day2)
-    #   check_in.upto(check_out).each do |date|
-    #     puts "Date: #{date}"
-    #   end
-    #
-    # end
-
-    # Date.new(2012,01,01).upton(Date.new(2012,01,30) do |date| )
-    #   do stuff
-    #   end
-
+    def self.create_range
+      date_range = []
+      @check_in.upto(@check_out).each do |date|
+        date_range << date
+      end
+      return date_range
+    end
 
   end #date class
 end #module

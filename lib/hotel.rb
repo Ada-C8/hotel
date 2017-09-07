@@ -1,34 +1,27 @@
 require 'pry'
 require_relative 'reservation'
+require_relative 'date_range'
 
 module Hotel
   class Hotel
 
-    #@@reservations = []
+    @@reservations = []
 
-    attr_reader :all_rooms #, :reservations
+    attr_reader :all_rooms, :reservations
 
     def initialize
       @all_rooms = {1 => 200, 2 => 200, 3 => 200, 4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200}
-      #@reservations = [] #will contain reservation_objects
     end
-
-    # As an administrator, I can access the list of all of the rooms in the hotel
-    # def show_rooms
-    #   room_list = ""
-    #   @all_rooms.each do |number, cost|
-    #     room_list += "Room #{number}:\t$#{cost}\n"
-    #   end
-    #   return room_list
-    # end #show rooms
 
     # - As an administrator, I can reserve a room for a given date range
     def self.make_reservation(id, room, day_in, day_out)
-      reservations << Reservation.new(id, room, day_in, day_out)
-      @reservations << reservation
-      return reservations
+      @@reservations << Reservation.new(id, room, day_in, day_out)
+      return @@reservations
     end #make_reservation
 
+    def self.reservations
+      return @@reservations
+    end
     #what will my reservation object look like
     #in my fictional interface
     #check whether a room is available on desired dates using reservation list
@@ -57,6 +50,15 @@ module Hotel
       #enter reservation ID number
       #return total cost for that reservation
     end #total_cost
+
+    # As an administrator, I can access the list of all of the rooms in the hotel
+    # def show_rooms
+    #   room_list = ""
+    #   @all_rooms.each do |number, cost|
+    #     room_list += "Room #{number}:\t$#{cost}\n"
+    #   end
+    #   return room_list
+    # end #show rooms
 
   end #class
 end #module
