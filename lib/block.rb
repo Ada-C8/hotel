@@ -6,8 +6,8 @@ require_relative 'hotel'
 module Hotel
   class Block < Reservation
     attr_reader :block_id, :discount_rate, :num_of_rooms, :rooms
-    def initialize(input_id, input_room_number, check_in_date, check_out_date, input_block_id )
-      super(input_id, input_room_number, check_in_date, check_out_date)
+    def initialize(input_id, input_room_number, check_in_date, check_out_date, input_block_id = 0 )
+      super
       @block_id = input_block_id.to_i
       @discount_rate = input_id.to_f
       @num_of_rooms = input_room_number.to_i

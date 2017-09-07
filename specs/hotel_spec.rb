@@ -35,6 +35,13 @@ describe "hotel" do
     end
   end
 
+  describe "self.find_reservation(input_id)" do
+    it "should return reservation with mathching reservation id" do
+      reservation1 = Hotel.find_reservation(1785)
+      reservation1.id.must_equal 1785
+    end
+  end
+
   describe "self.all_reservations" do
     it "returns an array" do
       output = Hotel.all_reservations
@@ -69,6 +76,11 @@ describe "hotel" do
     it "should be filled with block objects" do
       output = Hotel.all_blocks
       output[0].must_be_instance_of Hotel::Block
+    end
+    it "should have a check_in date that i want " do
+      output = Hotel.all_blocks
+      expected_output = Date.new(2017, 9, 20)
+      output[0].check_in.must_equal expected_output
     end
   end
 
@@ -122,7 +134,7 @@ describe "hotel" do
       output.each {|element| element.must_be_instance_of Hotel::Room}
     end
     it "should check blocks to see if room is available" do
-      output = Hotel.truly_available([2017,9,20],[2017,9, 22])
+      output = Hotel.truly_available([2017,9,20],[2017,9,22])
       output[0].id.must_equal 3
     end
   end
