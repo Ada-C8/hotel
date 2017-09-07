@@ -35,7 +35,6 @@ module Hotel
 
   end
 
-
   def get_res_by_date(date)
     res_by_date = []
     @reservations.each do |res|
