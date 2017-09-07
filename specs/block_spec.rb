@@ -2,11 +2,11 @@ require_relative 'spec_helper'
 
 describe "Block" do
   before do
-    @number_of_rooms = 3
+    @rooms = [1, 2, 3]
     @check_in = Date.new(2017,9,15)
     @check_out = Date.new(2017,9,17)
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
-    @new_block = BookingSystem::Block.new(@date_range, @number_of_rooms)
+    @new_block = BookingSystem::Block.new(@date_range, @rooms)
   end
   describe "#initialize" do
     it "ID should be an integer" do

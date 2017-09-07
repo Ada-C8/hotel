@@ -103,6 +103,23 @@ describe "Hotel" do
     end
   end
 
+  describe "#create_block" do
+    before do
+      @hotel = BookingSystem::Hotel.new(5)
+      @new_block = @hotel.create_block(@date_range, 3)
+    end
+    it "New block should be an instance of Block class " do
+      @new_block.must_be_kind_of BookingSystem::Block
+    end
+    it "Created block should include given number of rooms" do
+      @new_block.rooms.length.must_equal 3
+    end
+    it "Raise an error if no rooms available for given date range" do
+      proc { @hotel.create_block(@date_range, 4) }.must_raise BookingSystem::NoRoomAvailableError
+    end
+
+  end #end of describe
+
 
 
 

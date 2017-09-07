@@ -10,6 +10,7 @@ module BookingSystem
     def initialize(number_of_rooms)
       @rooms = (1 .. number_of_rooms).to_a
       @all_reservations = [] #array of instances of class Reservation
+      @all_blocks = [] #array of instances of class Block
     end #end of initialize
 
     def room_unavailable(room)
@@ -21,8 +22,17 @@ module BookingSystem
           end
         end
       end
-      return dates #array of dates on which this room is unavailable
-    end #end of method
+      @all_blocks.each do |block|
+        block.rooms.each do |block_room|
+          if block_room == room
+            block.date_range.dates_within_range.each do |date|
+              dates << date
+            end
+          end
+        end
+      end
+      return dates.uniq #array of dates on which this room is unavailable
+      end #end of method
 
     def list_of_available_rooms(date_range)
       available_rooms = []
@@ -63,7 +73,16 @@ module BookingSystem
       return list #array of reservations
     end #end of method
 
-    
+    def create_block(date_range, number_of_rooms)
+      if list_of_available_rooms(date_range).length < number_of_rooms
+        raise NoRoomAvailableError.new("No room is available on given dates")
+      end
+        block_rooms = list_of_available_rooms(date_range)[0..number_of_rooms-1]
+        new_block = Block.new(date_range, block_rooms)
+        @all_blocks << new_block
+
+      return new_block #an array of rooms as integers
+    end #end of method
 
 
   end #end of class
