@@ -28,5 +28,3 @@ describe "Reservation" do
   end # "initialize"
 
 end # "Reservation"
-
-#============== OLD WORK ====================#

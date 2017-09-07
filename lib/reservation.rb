@@ -1,5 +1,5 @@
 require 'date'
-require_relative 'building'
+require_relative 'hotel'
 
 module ReservationSystem
 
