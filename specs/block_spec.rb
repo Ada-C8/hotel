@@ -9,4 +9,10 @@ describe 'Block' do
   it 'can be instantiated' do
     @block.must_be_kind_of Hotel::Block
   end
+
+  it 'has 9-character @id value' do
+    @block.id.must_be_kind_of String
+    @block.id.length.must_equal 9
+    @block.id[0..4].must_equal 'B0803'
+  end
 end

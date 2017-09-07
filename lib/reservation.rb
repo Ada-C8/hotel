@@ -31,7 +31,7 @@ module Hotel
     private
 
     def create_id
-      format('%.2d%.2d%.4d', @checkin.month, @checkin.day, rand(9999))
+      format('R%.2d%.2d%.4d', @checkin.month, @checkin.day, rand(9999))
     end
   end
 end
