@@ -1,25 +1,28 @@
 require_relative 'spec_helper'
 
 describe "Room Class" do
-  describe ""do
+
 
   it "Can instantiate a room" do
 
-    new_room = HotelManagment::Room.new(1, 200)
+    new_room = HotelManagment::Room.new(1)
     new_room.must_be_instance_of HotelManagment::Room
 
   end
 
-  it "Room rate should be 200" do
-
-    new_room = HotelManagment::Room.new(1, 200)
-    new_room.must_be_instance_of HotelManagment::Room
-    new_room.rate.must_equal 200
-
+  it "room_number should be an integer" do
+    new_room = HotelManagment::Room.new(1)
+    # new_room.must_be_instance_of HotelManagment::Room
+    new_room.room_number.must_be_instance_of Integer
   end
-end
-end
 
+  it "Room number should be equal to 1" do
+    new_room = HotelManagment::Room.new(1)
+    new_room.room_number.must_equal 1
+  end
 
-# As an administrator, I can access the list of all of the rooms in the hotel
-# As an administrator, I can get the total cost for a given reservation
+  it "rate should be equal to 200" do
+    HotelManagment::Room::RATE.must_equal 200
+  end
+
+end

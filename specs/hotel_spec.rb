@@ -19,27 +19,25 @@ describe "hotel class" do
     end
 
     it "Should be able to add a room" do
-      new_room = HotelManagment::Room.new(1,"available")
+      new_room = HotelManagment::Room.new(1)
       new_hotel = HotelManagment::Hotel.new
       new_hotel.rooms << new_room
       new_hotel.rooms.must_equal [new_room]
     end
+  end
 
-    describe "add_20_rooms method" do
-      it "Hotel should respond to add_20_rooms" do
-        new_hotel = HotelManagment::Hotel.new
-        new_hotel.must_respond_to :add_20_rooms
-      end
-
-# TODO
-      it "Rooms array should have 20 rooms inside" do
-        new_hotel = HotelManagment::Hotel.new
-        new_hotel.add_20_rooms
-        new_hotel.rooms.length.must_equal 20
-      end
+  describe "add_20_rooms method" do
+    it "Hotel should respond to add_20_rooms" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.must_respond_to :add_20_rooms
     end
 
-# TODO
+    it "Rooms array should have 20 rooms inside" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.add_20_rooms
+      new_hotel.rooms.length.must_equal 20
+    end
+
     it "Should be able to access list of all available rooms" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.add_20_rooms
@@ -72,7 +70,6 @@ describe "hotel class" do
 
       new_reservation.check_in_date.must_equal Date.new(2017,9,5)
       new_reservation.check_out_date.must_equal Date.new(2017,9,10)
-
     end
 
     it "Should have a room number" do
@@ -80,21 +77,28 @@ describe "hotel class" do
       new_reservation.room_number.must_equal 2
     end
 
-    # it "Should have a reservation number" do
-    #   new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
-    #   new_reservation.reservation_number.must_equal 20
-    # end
-
     it "Should respond to check_in_date " do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :check_in_date
 
     end
-    it "text" do
 
-
+    it "Should respond to check_out_date" do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :check_out_date
+    end
+    # TODO
+    it "Should respond to rate method" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
+      new_reservation.must_respond_to :rate
+    end
+
+    # TODO
+    it "Should return the cost of a reservation" do
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
+      value = new_reservation.rate
+      puts "Value is #{value}, type: #{value.class}"
+      value.must_equal 1000
     end
   end
 end

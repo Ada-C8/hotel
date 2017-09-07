@@ -41,34 +41,26 @@ describe "Reservaton Class" do
     end
   end
 
+# TODO
   describe "Rate Method" do
-    it "Must respond to rate  rate" do
+
+    it "Must respond to rate" do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :rate
     end
 
-    it "Rate should be an nstance of an Integer" do
-      rate = 200
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
-      nights = new_reservation.check_out_date - new_reservation.check_in_date
-      cost = nights.to_i * rate
-      cost.must_equal 1000
-    end
 
-    it "Rate should be an nstance of an Integer" do
-      rate = 200
-      new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
-      nights = new_reservation.check_out_date - new_reservation.check_in_date
-      cost = nights.to_i * rate
-      cost.must_be_instance_of Integer
-    end
+    # it "Rate method should return an instance of an Integer" do
+    #   new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
+    #
+    #   cost.must_be_instance_of Integer
+    # end
 
-    it "should return the rate based on the number of nights reserved" do
-      rate = 200
+    it "should return the total cost based on the number of nights reserved" do
+
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
-      nights = new_reservation.check_out_date - new_reservation.check_in_date
-      cost = nights.to_i * rate
-      cost.must_equal 1000
+      new_reservation.rate.must_equal 1000
+
     end
   end
 end
