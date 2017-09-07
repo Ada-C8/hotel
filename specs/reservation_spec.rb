@@ -10,7 +10,7 @@ describe 'Reservation' do
       @puppy_expo.guest_name.must_equal 'Finn'
       @puppy_expo.dates.check_in.to_s.must_equal "2017-10-13"
       @puppy_expo.dates.check_out.to_s.must_equal "2017-10-31"
-      @puppy_expo.room_number.must_equal 13
+      @puppy_expo.room.room_number.must_equal 13
     end # end test
 
   end # end #initialize

@@ -5,12 +5,12 @@ require_relative 'room'
 module Hotel
   class Reservation
 
-    attr_reader :guest_name, :dates, :room_number
+    attr_reader :guest_name, :dates, :room
 
     def initialize(guest_name, check_in, check_out, room_number)
       @guest_name = guest_name
       @dates = Hotel::DateRange.new(check_in, check_out)
-      @room_number = Hotel::Room.new(room_number)
+      @room = Hotel::Room.new(room_number)
     end # end initialize
 
     def reserve_dates
