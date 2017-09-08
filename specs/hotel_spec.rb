@@ -218,17 +218,17 @@ describe "The Hotel class" do
     it "returns a block with a reservations array with the correct number of reservations" do
       block = @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
       block.reservation_array.length.must_equal 4
-
     end
 
-
     it "returns the correct cost for the reservation made inside a block" do
-
+      block = @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      block.reservation_array
     end
 
     it "blocks_array" do
-      # @myhotel.blocks_array.must_be_kind_of Array
-      # @myhotel.blocks_array[0].must_equal block_A
+      newblock= @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      @myhotel.blocks_array.must_be_kind_of Array
+      @myhotel.blocks_array[0].must_equal newblock
     end
 
   end
