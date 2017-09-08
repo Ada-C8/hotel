@@ -14,9 +14,9 @@ require 'minitest/skip_dsl'
 # ex require_relative 'lib/foo.rb'
 
 require_relative '../lib/daterange'
-require_relative '../lib/hotel'
+require_relative '../lib/admin'
 require_relative '../lib/reservation'
-require_relative '../lib/room'
+
 
 
 
