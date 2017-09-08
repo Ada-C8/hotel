@@ -17,19 +17,20 @@ describe 'Reservation' do
       @reservation.dates.first.must_be_kind_of Date
     end
 
-    # it 'has 9-character @id value' do
-    #   @reservation.id.must_be_kind_of String
-    #   @reservation.id.length.must_equal 9
-    #   @reservation.id[0..4].must_equal 'R0905'
-    # end
-
     it 'has @total_cost value, which is rate * num of nights' do
       # As an administrator, I can get the total cost for a given reservation
       @reservation.total_cost.must_equal 400
       (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
 
-    #TODO: @total_cost for blocks
+    # TODO: various date formats 'August 31st, 2017'
+    # TODO: @total_cost discount for blocks
+
+    # it 'has 9-character @id value' do
+    #   @reservation.id.must_be_kind_of String
+    #   @reservation.id.length.must_equal 9
+    #   @reservation.id[0..4].must_equal 'R0905'
+    # end
   end
 
   describe '#includes_dates?' do
