@@ -8,3 +8,4 @@ class NoBlockError < StandardError
 end
 
 class DiscountError < StandardError
+end
