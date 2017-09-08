@@ -11,7 +11,7 @@ module Hotel
     def initialize(block_id = nil, start_date = Date.today, end_date = Date.today + 1, room_num = 0)
       check_input(block_id, start_date, end_date, room_num)
       set_reservation_dates(block_id, start_date, end_date)
-      room_num = Reservation.sample_available_rooms(start_date, end_date, 1, block_id).sample if room_num == 0
+      room_num = Reservation.sample_available_rooms(start_date, end_date, block_id).sample if room_num == 0
       raise NoRoomsAvailableError.new if room_num.class != Integer
       prevent_doublebooking(start_date, end_date, room_num)
       @room_num = room_num
@@ -68,7 +68,7 @@ module Hotel
       @end_date = block.end_date
     end
 
-    def self.sample_available_rooms(start_date, end_date, number_of_rooms, block_id)
+    def self.sample_available_rooms(start_date, end_date, block_id, number_of_rooms = 1)
       if block_id == nil
         room_numbers = Room.all.map { |room| room.room_num }
         blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
@@ -76,7 +76,7 @@ module Hotel
         available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
         return available_room_numbers.sample(number_of_rooms)
       else
-        room_numbers = Block.all.select { |block| block.block_id == block_id }[0].rooms
+        room_numbers = Block.all.find { |block| block.block_id == block_id }.rooms
         reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
         available_room_numbers = room_numbers - reserved_room_numbers
         return available_room_numbers.sample(number_of_rooms)

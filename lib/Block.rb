@@ -49,7 +49,7 @@ module Hotel
 
     def self.rooms_left(block_id)
       block = @@blocks.select { |a_block| a_block.block_id == block_id }[0]
-      return Reservation.sample_available_rooms(block.start_date, block.end_date, block.rooms.length, block_id)
+      return Reservation.sample_available_rooms(block.start_date, block.end_date, block_id, block.rooms.length)
     end
 
   end # Block class
