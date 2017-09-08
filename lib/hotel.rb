@@ -19,13 +19,26 @@ module Hotel
     reservations << Reservation.new(guest, check_in, check_out, room)
   end
 
-  def make_block(check_in, check_out, num_rooms, name)
-    rooms = []
-    num_rooms.times do
-      rooms << assign_room(check_in, check_out)
-    end
-    block = Block.new(check_in, check_out, rooms, name)
+  def make_block(check_in, check_out, num_rooms)
+    id = assign_id
+
+    block = Block.new(check_in, check_out, id)
+
     blocks << block
+
+    if num_rooms.between?(1, 5) == false
+      raise StandardError.new "only possible to book 5 rooms in a block"
+    end
+
+    num_rooms.times do
+      room = assign_room(check_in, check_out)
+      @blocks.each do |block_in_array|
+        if block.id == id
+          block.add_room(room)
+        end
+      end
+    end
+
   end
 
   def assign_room(check_in, check_out, room_requested = nil)
@@ -80,6 +93,18 @@ module Hotel
   end
 
   private
+
+
+  def assign_id
+    id = 111111
+
+    blocks.each do |block|
+      while block.id == id
+        id = rand(899999) + 100000
+      end
+    end
+  return id
+  end
 
   def create_rooms
     (1..20).each do |num|

@@ -87,11 +87,18 @@ describe Hotel::Hotel do
 
       motel8 = Hotel::Hotel.new
 
-      motel8.make_block(Date.new(2018, 5, 5), Date.new(2018, 5, 8), 4, "Chris")
+      motel8.make_block(Date.new(2018, 5, 5), Date.new(2018, 5, 8), 4)
 
       motel8.blocks.must_be_kind_of Array
 
       motel8.blocks.last.must_be_instance_of Hotel::Block
+    end
+
+    it "will generate a unique id for the block booking" do
+
+      ############ HOW??? ############
+
+
     end
 
     it "won't assign rooms to the block that aren't available during that date range" do
@@ -104,13 +111,25 @@ describe Hotel::Hotel do
         holidayinn.make_reservation("guest", check_in, check_out, num)
       end
 
-      holidayinn.make_block(check_in, check_out, 5, "guest")
+      holidayinn.make_block(check_in, check_out, 5)
 
       holidayinn.blocks.each do |block|
         block.rooms_in_block.each do |room|
           room.number.between?(1, 15).must_equal false
         end
       end
+    end
+
+    it "will only allow a block to reserve a maximum of five rooms" do
+      hotel = Hotel::Hotel.new
+
+      check_in = Date.new(2018, 7, 6)
+      check_out = Date.new(2018, 7, 8)
+
+      proc{hotel.make_block(check_in, check_out, 6)}.must_raise StandardError
+
+      proc{hotel.make_block(check_in, check_out, 0)}.must_raise StandardError
+
     end
 
     it "will make the rooms assigned to the block unavailable for reservation to the general public" do
@@ -120,7 +139,7 @@ describe Hotel::Hotel do
       check_in = Date.new(2018, 7, 6)
       check_out = Date.new(2018, 7, 8)
 
-      parador.make_block(check_in, check_out, 4, "guest")
+      parador.make_block(check_in, check_out, 4)
 
       room_numbers = []
 
@@ -129,9 +148,6 @@ describe Hotel::Hotel do
           room_numbers << room.number
         end
       end
-      # 
-      # binding.pry
-
 
       proc{parador.make_reservation("guest", check_in, check_out, room_numbers[0])}.must_raise StandardError
 
