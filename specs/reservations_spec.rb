@@ -127,13 +127,13 @@ describe "Hotel" do
       describe "reserve_room_from_block" do
         it "it will reserve a room from a block" do
           checkin8 = Date.new(2018,7,1)
-          checkout8 = Date.new(2018,7,4)
+          checkout8 = Date.new(2018,7,3)
           hotel8 = Hotel::Reservations.new
-          hotel8.make_block(checkin8, checkout8, 2, "wedding")
+          hotel8.make_block(checkin8, checkout8, 1, "wedding")
           h = hotel8.reserve_room_from_block("wedding")
           #  binding.pry
           h.must_be_kind_of Hotel::Block
-          h.block_total_cost.must_equal 960 # test passes BUT the discount should and it should
+          h.block_total_cost.must_equal 320
         end
       end
           # block8 = hotel8.make_block(checkin8, checkout8, [], "sweet_16")
