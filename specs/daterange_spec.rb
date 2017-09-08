@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 require 'date'
-
+# require 'pry'
 #FACTOR OUT BEFORE DO LOOPS
 
 describe 'DateRange' do
@@ -29,12 +29,13 @@ describe 'DateRange' do
       @daterange.one_day?.must_equal true
     end
 
-    it 'should return false if dates passed are not the same' do
+    it 'should return false if 2 dates are passed' do
       @daterange2.one_day?.must_equal false
     end
 
   end
 
+#NEED THIS??
   describe 'beginning' do
     before do
       @date1 = Date.new(2018,9,12)
@@ -64,6 +65,7 @@ describe 'DateRange' do
     end
   end
 
+#NEED THIS??
   describe 'ending' do
     before do
       @date1 = Date.new(2018,9,12)

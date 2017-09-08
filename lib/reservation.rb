@@ -1,11 +1,11 @@
-
+# require 'pry'
 module Hotel
   class Reservation
     attr_reader :id, :total_cost, :date1, :date2, :daterange, :room_number, :cost
 
-    def initialize(id, date1, *date2, room_number, cost) # partyname = nil)
+    def initialize(id, room_number, cost, date1, date2=nil) # partyname = nil)
       @id = id
-      @daterange = DateRange.new(date1, *date2)
+      @daterange = DateRange.new(date1, date2)
       @room_number = room_number
       @cost = cost
       # @name = *name

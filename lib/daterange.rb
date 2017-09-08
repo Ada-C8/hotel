@@ -1,20 +1,21 @@
 require 'date'
 require 'errors'
+# require 'pry'
 
 module Hotel
   class DateRange
     attr_reader :beginning, :ending, :number_days
 
-    def initialize(date1, date2=date1)
+    def initialize(date1, date2=nil)
       @beginning = date1
       @ending = date2
       one_day?
       is_valid?
-      beginning
-      ending
+      # binding.pry
     end
 
     def is_valid?
+      # binding.pry
       if @beginning < Date.today #or @ending < Date.today
         raise DateError.new("You are living in the past, bud")
       end
@@ -26,7 +27,7 @@ module Hotel
     end
 
     def one_day?
-      if @beginning == @ending
+      if @ending == nil
         return true
       else
         return false
@@ -43,7 +44,11 @@ module Hotel
 
 
     def include?(date)
-      if (one_day? && date == @beginning) || (@beginning <= date && date <= @ending)
+      if one_day? && date == @beginning
+        return true
+      elsif one_day? && date != @beginning
+        return false
+      elsif @beginning <= date && date <= @ending
         return true
       else
         return false

@@ -1,11 +1,11 @@
 require_relative 'spec_helper'
 require 'date'
-
+require 'pry'
 describe 'Reservation' do
   before do
-    @reservation = Hotel::Reservation.new(1, Date.new(2018,9,12), Date.new(2018,9,15), :room4, 200)
-    @reservation_for_one = Hotel::Reservation.new(1, Date.new(2018,9,12), :room4, 200)
-    Hotel::Hotel.new
+    @reservation = Hotel::Reservation.new(1, :room4, 200, Date.new(2018,9,12), Date.new(2018,9,15))
+    @reservation_for_one = Hotel::Reservation.new(1, :room4, 200, Date.new(2018,9,12))
+    # Hotel::Hotel.new
   end
   describe 'initialize' do
     it 'must be type of reservation' do
@@ -36,7 +36,10 @@ describe 'Reservation' do
       @reservation_for_one.get_cost.must_equal 200
     end
     it 'must return the correct cost for multinight stay' do
-      @reservation.get_cost.must_equal 800
+      # binding.pry
+      puts "NUMBER DAYS: #{@reservation.daterange.number_days}"
+      res = Hotel::Reservation.new(1, :room5, 200, Date.new(2018,11,11), Date.new(2018,11,16))
+      res.get_cost.must_equal 1200
     end
 
   end
