@@ -8,6 +8,8 @@ module Hotel
 
     def initialize(date1, date2=nil)
       @beginning = date1
+      #COULD DO @ENDING = DATE 2-1 TO CONVERT INPUT TO NIGHTS
+      #WOULD HAVE TO CHANGE EVERYTHING THAT JUST PASSED ONE DATE
       @ending = date2
       is_valid?
     end

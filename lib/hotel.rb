@@ -75,7 +75,6 @@ module Hotel
       #AVAILABLE OUTSIDE OF BLOCKS ONLY?
       def view_available(partyname: nil, date1: nil, date2: nil)
         available = []
-        # thisdaterange = DateRange.new(date1, date2)
         @rooms.each do |room|
           if is_available?(room, date1, date2)
             available << room
