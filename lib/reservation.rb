@@ -2,17 +2,24 @@ require_relative 'date_range'
 
 class Reservation
   # @@reservations = []
-  attr_reader :total_cost, :dates, :room
+  attr_reader :dates, :room
 
   def initialize(room, check_in, check_out)
     @room = room
     @dates = DateRange.new(check_in, check_out)
     @price_night = 200
-    @total_cost = @price_night * @dates.nights
   end
 
+# returns total_cost for stay
+def total_cost
+  total_cost = @price_night * @dates.nights
+  return total_cost
+end
 
-  
+end
+
+
+
 
   # def add_reservation
   #   @@reservations << self
@@ -74,5 +81,4 @@ class Reservation
 #
 #
 #
-end
 # puts Reservation.all[0].dates.start+1
