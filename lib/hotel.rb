@@ -38,28 +38,17 @@ module Hotel
 
     def find_reservation(day_in, day_out)
       dates = DateRange.create_range(day_in, day_out) #should create an array
-      puts dates
-      puts dates.class
       found_reservations = Array.new
       dates.each do |date|
-        puts date.class
         @reservations.reservation_list.each do |reservation|
-          puts "Reservation Object: #{reservation}."
-          puts "View Reservation Object: #{reservation.view_reservation}"
-          puts "View Room Number: #{reservation.room}"
-          puts "Date_Range: #{reservation.date_range}"
-          #puts reservation.date_range.include?(date)
-          # if reservation.date_range.include?(date)
-          #    found_reservations << reservation.view_reservation
-          #end #if statement
+          if reservation.date_range.include?(Date.parse(date))
+            found_reservations << reservation
+          end #if statement
         end #each reservation
       end #each date
-
       found_reservations = found_reservations.uniq
-          puts "#{found_reservations}"
+      #puts "Found Reservations are: #{found_reservations}"
       return found_reservations
-
-      #list all rooms reserved for that date from reservation list
     end #view_reservations
 
     # # - As an administrator, I can get the total cost for a given reservation
@@ -74,25 +63,15 @@ module Hotel
     end #end total cost
 
     #As an administrator, I can view a list of rooms that are not reserved for a given date range
-    # def open_rooms(day_in, day_out)
-    #   dates = DateRange.create_range(day_in, day_out) #should create an array
-    #   occupied_rooms = Array.new
-    #   dates.each do |date|
-    #     puts date
-    #     @reservations.reservation_list.each do |reservation|
-    #       occupied_rooms << reservation.room
-    #       if reservation.date_range.include?(date)
-    #          found_reservation << reservation.
-    #       end #if statement
-    #     end #each reservation
-    #   end #each date
-    #
-    #   found_reservations = found_reservations.uniq
-    #   all_rooms
-    #   occupied_rooms = Array.new
-    #   found_reservations.each do |reservation|
-    #     occupied_rooms << reservation.room
-    #   end
+    def open_rooms(day_in, day_out)
+      list = find_reservation(day_in, day_out)
+      occupied_rooms = Array.new
+      list.each do |reservation|
+        occupied_rooms << reservation.room
+      end
+      open_rooms = (@all_rooms.keys - occupied_rooms)
+      return open_rooms
+    end
 
 
 
@@ -121,10 +100,10 @@ module Hotel
     #   #list all rooms reserved for that date from reservation list
     # end #view_reservations
 
-#As an administrator, I can reserve an available room for a given date range
+    #As an administrator, I can reserve an available room for a given date range
   end #class
 end #module
-binding.pry
+#binding.pry
 #binding.pry
 # find if rooms is open for a given date range
 # reserve room for that date range
