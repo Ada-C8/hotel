@@ -104,16 +104,50 @@ describe "Hotel" do
         end
       end
     end
-############ tests above are for reservcations, below are for block reservations ##########
+    ############ tests above are for reservcations, below are for block reservations ##########
     describe "make_block" do
       it "will create a block" do
         checkin = Date.new(2018,9,1)
         checkout = Date.new(2018,9,7)
-
-        block1 = Hotel::Reservations.new.make_block(checkin, checkout, 5)
+        hotel6 = Hotel::Reservations.new
+        block1 = hotel6.make_block(checkin, checkout, 5, "wedding")
         block1.must_be_instance_of Hotel::Block
-        # binding.pry
+        hotel6.all_blocks.must_be_kind_of Array
       end
+    end
+    describe "check_block_for_availability" do
+      it "it will examine a date and see if it has a block" do
+        checkin7 = Date.new(2018,9,1)
+        checkout7 = Date.new(2018,9,7)
+        hotel7 = Hotel::Reservations.new
+        block7 = hotel7.make_block(checkin7, checkout7, 4, "bat_mitzvah")
+        block7.check_block_for_availability("bat_mitzvah").must_equal true
+      end
+
+      describe "reserve_room_from_block" do
+        it "it will reserve a room from a block" do
+          checkin8 = Date.new(2018,7,1)
+          checkout8 = Date.new(2018,7,4)
+          hotel8 = Hotel::Reservations.new
+          hotel8.make_block(checkin8, checkout8, 2, "wedding")
+          h = hotel8.reserve_room_from_block("wedding")
+          #  binding.pry
+          h.must_be_kind_of Hotel::Block
+          h.block_total_cost.must_equal 960 # test passes BUT the discount should and it should
+        end
+      end
+          # block8 = hotel8.make_block(checkin8, checkout8, [], "sweet_16")
+          #
+          # block8.reserve_room_from_block("sweet_16").must_equal true
+
+      # describe "check_block_for_availability" do
+      #   checkin = Date.new(2018,10,1)
+      #   checkout = Date.new(2018,10,7)
+      #   block2 = Hotel::Reservations.new.make_block(checkin, checkout, 5, "wedding")
+      #   block2.check_block_for_availability(checkin, checkout, "wedding").must_be_kind_of Array
+      # end
+
+
     end
   end
 end

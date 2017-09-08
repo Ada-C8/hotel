@@ -20,7 +20,7 @@ describe "Hotel" do
     end
 
     it "will calculate total cost" do
-      @room1.total_cost_with_discount.must_equal 480 #600-120
+      @room1.block_total_cost.must_equal 480 #600-120
     end
 
 

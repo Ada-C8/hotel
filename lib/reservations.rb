@@ -1,8 +1,9 @@
 require 'date'
+require 'pry'
 module Hotel
   class Reservations
 
-    attr_reader :all_reservations, :rooms, :all_rooms, :not_available, :available, :booking, :num_of_rooms, :collection_of_rooms, :block_id
+    attr_reader :all_reservations, :rooms, :all_rooms, :not_available, :available, :booking, :num_of_rooms, :collection_of_rooms_booked, :block_id, :all_blocks
 
     def initialize
       # @all_rooms = [1..20] # do I need all_rooms?
@@ -56,6 +57,7 @@ module Hotel
       #     booking * num_of_rooms
       #   end
       # end
+      # @check_block_id
 
       return booking
     end
@@ -105,117 +107,115 @@ module Hotel
       return available
     end
 
-    ################## ALL NEW THURSDAY NIGHT BLOCK LOGIC #######
-    ################## ALL NEW THURSDAY NIGHT BLOCK LOGIC #######
-    ################## ALL NEW THURSDAY NIGHT BLOCK LOGIC #######
+    ################## ALL NEW THURSDAY NIGHT BLOCK LOGIC
+    ################## ALL NEW THURSDAY NIGHT BLOCK LOGIC
+    ################## ALL NEW THURSDAY NIGHT BLOCK LOGIC
 
-#### don't need below ####
+    #### don't need below ####
     # def create_blocks(all_blocks)
     #   20.times do |i|
     #     num = i + 1
     #     all_blocks << Room.new(num)
     #   end
     # end
-#### don't need above ####
+    #### don't need above ####
 
 
-    def make_block(checkin, checkout, num_of_rooms) #collection_of_rooms
+    def make_block(checkin, checkout, how_many_rooms, block_id)
+      available = check_availability(checkin, checkout) #collection_of_rooms
       ###### attempt 2 #########
-      available = create_rooms(all_rooms)
-      if num_of_rooms > 10
-        raise ArgumentError.new "You cannot block more than 10 rooms."
-      elsif num_of_rooms > available
+      # available = create_rooms(all_rooms)
+      # block_id = block_id think about unique ids
+      if how_many_rooms > 5
+        raise ArgumentError.new "You cannot block more than 5 rooms."
+      elsif how_many_rooms > available.length
         raise ArgumentError.new "There are only  #{available.length} available for your dates."
       else
-        rooms = []
-        num_of_rooms.times do |i|
-          rooms << available[i]
-          @all_rooms_in_block << available[i]
+
+        collection_of_rooms_blocked = []
+        how_many_rooms.times do |i|
+          collection_of_rooms_blocked << available[i]
+          # @all_rooms_in_block << available[i]
         end
-        new_block = Hotel::Block.new(checkin, checkout, collection_of_rooms, block_id)
+        new_block = Hotel::Block.new(checkin, checkout, collection_of_rooms_blocked, block_id)
         @all_blocks << new_block
         return new_block
+        # binding.pry
       end
-    end
-
-    def check_block_for_availability
-      @all_blocks.each do |block|
-        block.room_booked.each do |yes_booked|
-          if yes_booked == true
-            return true
-          end
-        end
-      end
-      return false
     end
 
     def reserve_room_from_block(block_id)
-      if @all_blocks == []
-        raise ArgumentError.new "No room blocks"
-      else
-        @all_blocks.each do |block|
-          if block.id == block_id
-            if block.available.include?(false)
-              index = 0
-              block.yes_booked.each do |get_a_room|
-                if get_a_room[index] == false
-                  # checkin = ###
-                  # checkout = ###
-                  rooms = num_of_rooms ###figure out
-                  block_id = block.available[index].number
-                  new_rez = Booking.new(checkin, checkout, rooms, block_id)
-                  @all_blocks << new_rez
-                  get_a_room == true
-                end
-              end
-            else
-              puts "There are no rooms avaiable for this block"
-            end
-          end
+      @all_blocks.each do  |block|
+        puts "#{block} before block"
+        if block.check_block_for_availability(block_id) && block.check_block_id(block_id)
+            puts "#{block} middle block"
+          rooms = block.available_rooms.take block.how_many_rooms
+          rez = Hotel::Block.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
+          # rez = Hotel::Booking.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
+          @all_reservations << rez
+          return rez
+        else
+          puts "that block is not available"
+          # binding.pry
         end
       end
+      # return rez
     end
+
+    #### block_id will have an date range attached to it
   end
-      ###### end attempt 2 #########
-  #
-  #     #### ERROR MESSAGES TO THINK ABOUT WRITING
-  #     availability = check_block_availability(checkin, checkout)
-  #     # if availability.length a num_of_rooms
-  #     #   raise ArgumentError.new "Sorry, we don't have enough rooms."
-  #     # elsif availability == []
-  #     #   raise ArgumentError.new "Sorry, there are no rooms available."
-  #     # end
-  #     block_id = @all_blocks.length
-  #     collection_of_rooms = availability.take num_of_rooms
-  #     block = Block.new(checkin, checkout, collection_of_rooms, block_id)
-  #     @all_blocks << block
-  #     return block
-  #   end
-  #
-  #   def check_block(checkin, checkout)
-  #     check_against = DateRange.new(checkin, checkout).night_array
-  #     block_not_available = []
-  #     check_against.each do |date|
-  #       @all_blocks.each do |block|
-  #         if block.dates.include?(date)
-  #           block.rooms.each do |room|
-  #             not_available << room
-  #           end
-  #         end
-  #       end
-  #     end
-  #     return block_not_available
-  #   end
-  #
-  #   def check_block_availability(checkin, checkout)
-  #     block_available = []
-  #     @all_rooms.each do |room|
-  #       unless check_block(checkin, checkout).include?(room)
-  #         block_available << room
-  #       end
-  #     end
-  #     # binding.pry
-  #     return block_available
-  #   end
-  # end
 end
+
+
+# tester = Hotel::Reservations.new
+# tester.make_booking
+
+
+# block1 = Hotel::Reservations.new
+# checkin1 = Date.new(2018,9,1)
+# checkout1 = Date.new(2018,9,7)
+# block1.make_block(checkin1, checkout1, 5, "wedding")
+# puts block1
+
+###### end attempt 2 #########
+#
+#     #### ERROR MESSAGES TO THINK ABOUT WRITING
+#     availability = check_block_availability(checkin, checkout)
+#     # if availability.length a num_of_rooms
+#     #   raise ArgumentError.new "Sorry, we don't have enough rooms."
+#     # elsif availability == []
+#     #   raise ArgumentError.new "Sorry, there are no rooms available."
+#     # end
+#     block_id = @all_blocks.length
+#     collection_of_rooms = availability.take num_of_rooms
+#     block = Block.new(checkin, checkout, collection_of_rooms, block_id)
+#     @all_blocks << block
+#     return block
+#   end
+#
+#   def check_block(checkin, checkout)
+#     check_against = DateRange.new(checkin, checkout).night_array
+#     block_not_available = []
+#     check_against.each do |date|
+#       @all_blocks.each do |block|
+#         if block.dates.include?(date)
+#           block.rooms.each do |room|
+#             not_available << room
+#           end
+#         end
+#       end
+#     end
+#     return block_not_available
+#   end
+#
+#   def check_block_availability(checkin, checkout)
+#     block_available = []
+#     @all_rooms.each do |room|
+#       unless check_block(checkin, checkout).include?(room)
+#         block_available << room
+#       end
+#     end
+#     # binding.pry
+#     return block_available
+#   end
+# end

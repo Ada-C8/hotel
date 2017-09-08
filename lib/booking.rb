@@ -22,12 +22,17 @@ module Hotel
         total_cost += room.cost * @dates.total_nights
       end
       return total_cost
-
       #for blocks - do discount logic here
     end
-
   end
 end
+# def block_total_cost
+#   block_total_cost = 0
+#   @collection_of_rooms_blocked.each do |room|
+#     block_total_cost += room.cost * @dates.total_nights * 0.80
+#   end
+#   return block_total_cost
+# end
 
 
 
