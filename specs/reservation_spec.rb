@@ -6,14 +6,16 @@ describe "Reservation" do
   before do
     first_name = "Jane"
     last_name = "Doe"
+
     room_id = 1
     room_rate = 200.00
-    reserv_id = 1221
+
+    # reserv_id = 1221
     start_date = Date.parse("1/9/2017")
     end_date = Date.parse("3/9/2017")
-    room_count = 1
 
-    @reservation_test = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, reserv_id, start_date, end_date, room_count)
+
+    @reservation_test = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)
   end
 
   describe "#initialize" do
@@ -29,7 +31,7 @@ describe "Reservation" do
       @reservation_test.last_name.must_equal("Doe")
       @reservation_test.last_name.must_be_instance_of String
     end
-
+    
     it "can take in room info as arguments: room_id, room_rate" do
       @reservation_test.room_id.must_equal 1
       @reservation_test.room_id.must_be_instance_of Integer
@@ -38,13 +40,10 @@ describe "Reservation" do
       @reservation_test.room_rate.must_be_instance_of Float
     end
 
-    it "can take in reservation info as arguments: reserv_id, room_count" do
-      @reservation_test.reserv_id.must_equal 1221
-      @reservation_test.reserv_id.must_be_instance_of Integer #arbitrarily deciding the id is an integer MAY NOT BE NECESSARY to include
-
-      @reservation_test.room_count.must_equal 1
-      @reservation_test.room_count.must_be_instance_of Integer
-    end
+    # it "can take in reservation info as arguments: reserv_id" do
+    #   @reservation_test.reserv_id.must_equal 1221
+    #   @reservation_test.reserv_id.must_be_instance_of Integer #arbitrarily deciding the id is an integer MAY NOT BE NECESSARY to include
+    # end
 
     it "can take in reservation date objects as arguments: start_date, end_date" do
       @reservation_test.start_date.must_equal(Date.parse("1/9/2017"))
