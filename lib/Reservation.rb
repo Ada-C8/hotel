@@ -50,11 +50,7 @@ module Hotel
     end
 
     def prevent_doublebooking(start_date, end_date, room_num)
-      # prevent double booking
-      room_reservations = @@reservations.select { |reservation| reservation.room_num == room_num }
-      room_reservations.each do |reservation|
-        raise AlreadyBookedError if Hotel::Reservation.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
-      end
+      raise AlreadyBookedError if Reservation.available(start_date, end_date).include?(room_num) == false
     end
 
     def set_reservation_dates(block_id, start_date, end_date)
