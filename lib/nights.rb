@@ -1,9 +1,13 @@
+require_relative 'hotel'
+
 class Nights
   attr_reader :check_in, :check_out, :num_nights, :nights_reserved
   def initialize(check_in, check_out)
     valid_date(check_in, check_out)
+
     @check_in = Date.parse(check_in)
     @check_out = Date.parse(check_out)
+    #@check_out = Date.parse(check_out)
     @nights_reserved = populate_nights(@check_in, @check_out)
     @num_nights = @nights_reserved.length
   end

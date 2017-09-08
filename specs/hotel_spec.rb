@@ -79,9 +79,9 @@ describe "#HOTEL" do
 
   describe "#ROOMS" do
     it "Can find rooms reserved for a specific date" do
-      @my_hotel.rooms_reserved("January 9, 2018").must_be_instance_of Array
-      @my_hotel.rooms_reserved("January 9, 2018").length.must_equal 3
-      @my_hotel.rooms_reserved("January 9, 2018").first.must_be_instance_of Room
+      @my_hotel.rooms_reserved("January 9, 2018", "January 10, 2018").must_be_instance_of Array
+      @my_hotel.rooms_reserved("January 9, 2018", "January 10, 2018").length.must_equal 3
+      @my_hotel.rooms_reserved("January 9, 2018", "January 10, 2018").first.must_be_instance_of Room
 
     end
 

@@ -11,6 +11,7 @@ describe "NIGHTS" do
       @summer_somewhere_nights.must_be_instance_of Nights
     end
 
+
     it "Can accurately report the number of nights in a reservation" do
       @summer_somewhere_nights.num_nights.must_equal 7
     end

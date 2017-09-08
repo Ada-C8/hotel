@@ -10,6 +10,8 @@ class Reservation
     if rooms_array.length > MAX_ROOMS
       raise ArgumentError.new("The maximum number of rooms that can be reserved is 5")
     end
+    no_double_booking_rooms(rooms_array)
+
     @nights = Nights.new(check_in, check_out)
     @reservation_id = rand(100000..999999)
     @rooms = rooms_array
@@ -22,20 +24,16 @@ class Reservation
     @nights.num_nights * @rate.sum * @discount
   end
 
+
   private
-  # def check_rooms(rooms_array)
-  #   room_numbers = []
-  #   rooms_array.each do |room|
-  #     room_numbers.push(room.number)
-  #   end
-  #
-  #   if room_numbers.length != room_numbers.uniq
-  #     raise ArgumentError.new("You cannot book the same room number twice")
-  #   end
-  # end
-  #
+  def no_double_booking_rooms(rooms)
+    booking_rooms = rooms.map {|room| room.number}
+    unique_booking_rooms = booking_rooms.uniq
 
-
+    if booking_rooms != unique_booking_rooms
+      raise ArgumentError.new ("You cannot double-book a room.")
+    end
+  end
 end
 
 # begin

@@ -60,13 +60,15 @@ describe "#RESERVATIONS" do
     it "Will not create a block with more than 5 rooms." do
       @block2 = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [Room.new(25, 200), Room.new(26, 150), Room.new(27, 250), Room.new(28, 100), Room.new(29, 300), Room.new(30, 140)]}
 
-      proc{Reservation.new(@block2[:check_in], @block2[:check_out], @block2[:rooms])}.must_raise Exception
+      proc{Reservation.new(@block2[:check_in], @block2[:check_out], @block2[:rooms])}.must_raise ArgumentError
     end
 
-    xit "will not double-book a room in a block" do
-      @block_reserve = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [Room.new(25, 200), Room.new(25, 200), Room.new(27, 250)]}
+    it "will not double-book a room in a block" do
+      block_reserve = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [Room.new(25, 200), Room.new(25, 200), Room.new(27, 250)]}
 
-      proc {Reservation.new(@block_reserve[:check_in], @block_reserve[:check_out], @block_reserve[:rooms], 0.8)}.must_raise ArgumentError
+
+      proc {Reservation.new(block_reserve[:check_in], block_reserve[:check_out], block_reserve[:rooms], 0.8)}.must_raise ArgumentError
+
 
 
     end
