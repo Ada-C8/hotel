@@ -82,7 +82,7 @@ describe "Reservations class" do
     it "raise ArgumentError if you request more than 20 rooms" do
       proc{@hotel.make_reservation(@check_in-3,@check_out-3,21)}.must_raise InvalidRoomQuantity
     end
-    it "lets you book on the check out date" do
+    it "A reservation is allowed start on the same day that another reservation for the same room ends" do
       # books all room on a given date
       @hotel.make_reservation(@check_in + 1, @check_out + 1,20)
       # can book rooms on the following day AKA checkout day

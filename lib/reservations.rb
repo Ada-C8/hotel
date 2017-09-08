@@ -12,17 +12,23 @@ module Hotel
         @all_rooms << Hotel::Room.new(i)
       end
     end
+    #def make_block(check_in,check_out,num_rooms)
+    # check_availability(check_in,check_out)
+    # date_range = DateRange.new(check_in,check_out)
 
-    def make_reservation(check_in,check_out,num_rooms)
+    def make_reservation(check_in,check_out,num_rooms, block_info = nil)
       date_range = DateRange.new(check_in,check_out)
       id = (@all_reservations.length + 1)
       rooms_available = check_availability(check_in,check_out)
 
+      # make this in to separate method
       if rooms_available.length < num_rooms || num_rooms > 20
         raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms to handle your request of #{num_rooms} rooms.")
       end
+
+      # make this in to separate method
       rooms_to_book = rooms_available.shift(num_rooms)
-      booking = Booking.new(id,rooms_to_book,date_range)
+      booking = Booking.new(id,rooms_to_book,date_range, block_info)
       @all_reservations << booking
       return booking
     end
