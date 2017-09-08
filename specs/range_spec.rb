@@ -61,6 +61,12 @@ describe 'overlap?' do
     other_range = Property::Range.new(check_in, check_out)
     @range.overlap?(other_range).must_equal true
   end
+    it "returns true for date range that overlaps for reservation with much earlier check in date" do
+      check_in = Date.new(2017, 1, 1)
+      check_out = Date.new(2017, 2, 2)
+      other_range = Property::Range.new(check_in, check_out)
+      @range.overlap?(other_range).must_equal true
+  end
 
   it "returns true for date range that overlaps for longer reservations" do
     check_in = Date.new(2017, 2, 1)
@@ -79,6 +85,7 @@ describe 'num_nights' do
     range = Property::Range.new(check_in, check_out)
     range.num_nights.must_equal 3
   end
+
   it "error for 0 nights" do
     check_in = Date.new(2017, 5, 5)
     check_out = check_in
