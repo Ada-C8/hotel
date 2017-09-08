@@ -28,6 +28,8 @@ describe 'Reservation' do
       @reservation.total_cost.must_equal 400
       (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
+
+    #TODO: @total_cost for blocks
   end
 
   describe '#includes_dates?' do

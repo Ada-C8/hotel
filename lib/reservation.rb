@@ -10,6 +10,7 @@ module Hotel
       @dates = DateRange.range_to(@checkin, @checkout)
       @id = create_id
       @hotel = hotel
+      @block =
       get_total
     end
 
