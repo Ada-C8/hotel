@@ -20,16 +20,24 @@ describe "Hotel Class" do
     it "can create a hash of rooms" do
       @test_hotel.all_rooms.must_be_kind_of Hash
     end #rooms
+  end #Instantiation
 
+  describe "Make Reservation" do
     it "can create an array to hold reservations" do
       Hotel::Hotel.reservations.must_be_kind_of Array
     end #array
-  end #Instantiation
 
-  # describe "Make Reservation" do
-  #   it "Can call the Reservation Class:" do
-  #     Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15").must_be_kind_of Reservation
-  #   end #call class
-  # end #reservations
+    it "Can make a Reservation by calling the Reservation Class:" do
+      a = Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      a[0].must_be_kind_of Hotel::Reservation
+    end #call class
+  end #reservations
+
+  # describe "View Reservation" do
+  #   it "Can return a reservation for a certain date: " do
+  #     a = Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+  #     a.view_reservations.must_
+  #   end
+  #end
 
 end #admin

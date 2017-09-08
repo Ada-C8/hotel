@@ -27,5 +27,22 @@ describe "Reservation class" do
     it "can assign a date object to the check in variable" do
       @res_test.check_in.must_be_kind_of Date
     end
-  end
+
+    it "can assign a date object to the check out variable" do
+      @res_test.check_in.must_be_kind_of Date
+    end
+
+    it "can create a date_range given a check_in and check_out date" do
+      @res_test.date_range.length.must_equal 5
+    end
+  end #check_in, check_out
+
+  describe "Viewing Reservations" do
+    it "Can return a formatted string for a specific reservation" do
+      @res_test.view_reservation.must_equal "ID: 1111, Room: 1, Check in: 2001-01-01, Check Out: 2001-01-05, Total Nights: 4"
+    end #format
+  end#VR
+
+
+
 end #Reservation class

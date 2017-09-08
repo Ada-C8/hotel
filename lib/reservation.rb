@@ -14,6 +14,11 @@ module Hotel
       @date_range = DateRange.create_range
     end
 
+    def view_reservation
+      list = ""
+      list += "ID: #{@id}, Room: #{@room}, Check in: #{@check_in}, Check Out: #{@check_out}, Total Nights: #{@date_range.length - 1}"
+      return list
+    end
   end #class
 end #module
 #binding.pry
