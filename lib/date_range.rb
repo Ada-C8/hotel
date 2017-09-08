@@ -39,7 +39,7 @@ module DateRange
     elsif input.class == String
       return Date.parse(input)
     else
-      raise(InvalidDatesError, "Input #{input.class} cannot be converted into Date")
+      raise(ArgumentError, "Input #{input.class} cannot be converted into Date")
     end
   end
 

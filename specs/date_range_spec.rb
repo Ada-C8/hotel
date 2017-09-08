@@ -92,7 +92,7 @@ describe 'DateRange' do
     it 'raises an exception if input is neither Date or String' do
       proc {
         DateRange.validate(2017_10_14)
-      }.must_raise InvalidDatesError
+      }.must_raise ArgumentError
     end
   end
 end
