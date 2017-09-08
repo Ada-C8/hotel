@@ -14,14 +14,6 @@ describe "Reservation" do
 	  res.room_number.must_be_kind_of Integer
 	  res.room_number.must_equal 1
 	  
-	  res.must_respond_to :start_date
-	  res.start_date.must_equal start_date
-	  res.start_date.must_be_kind_of Date
-	  
-	  res.must_respond_to :end_date
-	  res.end_date.must_be_kind_of Date
-	  res.end_date.must_equal end_date
-	  
 	  res.must_respond_to :cost
 	  res.cost.must_be_kind_of Integer
 	  res.cost.must_equal 400
