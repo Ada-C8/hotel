@@ -180,27 +180,49 @@ describe "blocks" do
   end
 
   it "find_rooms_for_block raises error if insufficient rooms available" do
-  @hotel2 = Hotel_System::Hotel.new(5)
-  res = @hotel2.make_reservation(1, "2018-1-1", "2018-1-5")
-  res2 = @hotel2.make_reservation(2, "2017-12-25", "2018-1-4")
-  proc {@hotel2.find_rooms_for_block(5, "2018-1-1", "2018-1-3")}.must_raise ArgumentError
-  begin @hotel2.find_rooms_for_block(5, "2018-1-1", "2018-1-3")
-  rescue ArgumentError => e
-    e.message.must_equal("Insufficient number of rooms available")
-  end
+    @hotel2 = Hotel_System::Hotel.new(5)
+    res = @hotel2.make_reservation(1, "2018-1-1", "2018-1-5")
+    res2 = @hotel2.make_reservation(2, "2017-12-25", "2018-1-4")
+    proc {@hotel2.find_rooms_for_block(5, "2018-1-1", "2018-1-3")}.must_raise ArgumentError
+    begin @hotel2.find_rooms_for_block(5, "2018-1-1", "2018-1-3")
+    rescue ArgumentError => e
+      e.message.must_equal("Insufficient number of rooms available")
+    end
   end
 
-  it "can add a room to a block instatiated inside a hotel" do
+  it "can add a room to a block instantiated inside a hotel" do
     @hotel = Hotel_System::Hotel.new(20)
     block = @hotel.make_block(5, "1-1-2018", "1-5-2018", 0.8)
     block.must_be_instance_of Hotel_System::Block
     block.array_of_room_objects.length.must_equal 5
-    p @hotel.availability_room_hash_by_date("2018-1-2")
+    @hotel.availability_room_hash_by_date("2018-1-2")
   end
 
-  it "cannot reserve a room in a block" do
+  it "cannot reserve a room in a block through general reservation method" do
     @hotel = Hotel_System::Hotel.new(20)
     block = @hotel.make_block(5, "1-1-2018", "1-5-2018", 0.8)
     proc {@hotel.make_res_if_avail(2, "2017-12-25", "2018-1-4")}.must_raise ArgumentError
   end
+
+  it "make_block_reservation can make reservation if room is in block" do
+    @hotel = Hotel_System::Hotel.new(20)
+    block = @hotel.make_block(5, "1-1-2018", "1-5-2018", 0.8)
+    @hotel.make_block_reservation(1, "1-1-2018", "1-5-2018", block).must_be_instance_of Hotel_System::Reservations
+    @hotel.availability_room_hash_by_date("1-1-2018")[1].must_equal :reserved
+  end
+
+  it "make_block_res_if_avail will make reservation if room in block is not reserved" do
+    @hotel = Hotel_System::Hotel.new(20)
+    block = @hotel.make_block(5, "2018-1-1", "2018-1-5", 0.8)
+    @hotel.make_block_res_if_avail(2, "2018-1-1", "2018-1-5", block)
+    @hotel.availability_room_hash_by_date("1-1-2018")[2].must_equal :reserved
+  end
+
+  it "make_block_res_if_avail will raise argument error if room not available" do
+    @hotel = Hotel_System::Hotel.new(20)
+    block = @hotel.make_block(5, "2018-1-1", "2018-1-5", 0.8)
+    @hotel.make_block_res_if_avail(2, "2018-1-1", "2018-1-5", block)
+    proc {@hotel.make_block_res_if_avail(2, "2018-1-1", "2018-1-5", block)}.must_raise ArgumentError
+  end
+
 end

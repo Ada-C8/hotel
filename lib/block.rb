@@ -24,6 +24,8 @@ module Hotel_System
       @array_of_room_objects << room_number
     end
 
+
+
     def valid_date_range?
       if @check_in < today
         raise ArgumentError.new("Invalid check in date")

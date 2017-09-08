@@ -10,7 +10,7 @@ module Hotel_System
 
     attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number, :reservation
 
-    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list, :master_list, :block_rooms
+    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list, :master_list, :block_rooms, :list_of_room_numbers_in_block
 
     def initialize(num_of_rooms)
       @all_rooms = fill_hotel(num_of_rooms)
@@ -82,7 +82,6 @@ module Hotel_System
       @list_of_rooms_avail_on_date = available_room_hash
       if reservations_by_date(date).length == 0
         return @list_of_rooms_avail_on_date
-        #TODO need to add elsif to check if in a block here??
       else
         reservations_by_date(date).each do |res|
           if res.is_a? Hotel_System::Reservations
@@ -138,19 +137,44 @@ module Hotel_System
       end
     end
 
-    def make_block_res_if_avail(room_number, check_in, check_out)
+    def make_block_res_if_avail(room_number, check_in, check_out, block)
       date_range = inquiry_date_range_generator(check_in, check_out)
+      boolean = []
+      date_range.each do |date|
+        # p availability_room_hash_by_date(date)
+        if availability_room_hash_by_date(date)[room_number] == :block
+          boolean << true
+        else
+          boolean << false
+        end
+      end
+      if boolean.include? false
+        raise ArgumentError.new("Block room not available")
+      else
 
+        make_block_reservation(room_number, check_in, check_out, block)
+      end
     end
 
-    def make_block_reservation(room_number, check_in, check_out)
+    def list_of_room_numbers_in_block(block)
+      list_of_room_numbers_in_block = []
+      block.array_of_room_objects.each do |room|
+        list_of_room_numbers_in_block << room.room_number
+      end
+      return list_of_room_numbers_in_block
+    end
 
-    end 
+    def make_block_reservation(room_number, check_in, check_out, block)
+      if list_of_room_numbers_in_block(block).include? room_number
+        make_reservation(room_number, check_in, check_out)
+      else
+        raise ArgumentError.new("Room requested not included in block")
+      end
+    end
 
     def find_rooms_for_block(num_of_rooms, check_in, check_out)
       date_range = inquiry_date_range_generator(check_in, check_out)
       master_list = avail_rooms_by_daterange(date_range)
-      p "master list length #{master_list.length}"
       if master_list.length < num_of_rooms
         raise ArgumentError.new("Insufficient number of rooms available")
       else
