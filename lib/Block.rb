@@ -22,6 +22,12 @@ module My_Hotel
       @block_id = new_block_id
     end
 
+    # def set_cost
+    #   number_of_nights = @nights_booked.nights.to_a.length
+    #   cost_per_night = ROOMS[@room_number]
+    #   @cost = number_of_nights * cost_per_night * @discount
+    # end
+
     # def assign_room(rooms_available_in_block)
     #   if rooms_avail.length != 0
     #     @room_number = rooms_avail.keys.sample
