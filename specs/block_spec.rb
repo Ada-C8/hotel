@@ -6,15 +6,19 @@ describe 'Block' do
     @block = Hotel::Block.new('2017-08-03', '2017-08-07', 5, 20)
   end
 
-  it 'can be instantiated' do
-    @block.must_be_kind_of Hotel::Block
+  describe 'initialize' do
+    it 'can be instantiated' do
+      @block.must_be_kind_of Hotel::Block
+    end
+
+    it 'has 9-character @id value' do
+      @block.id.must_be_kind_of String
+      @block.id.length.must_equal 9
+      @block.id[0..4].must_equal 'B0803'
+    end
   end
 
-  it 'has 9-character @id value' do
-    @block.id.must_be_kind_of String
-    @block.id.length.must_equal 9
-    @block.id[0..4].must_equal 'B0803'
+  describe 'includes_dates?' do
+    #TODO: test includes_dates?
   end
-
-  #TODO: test includes_dates?
 end
