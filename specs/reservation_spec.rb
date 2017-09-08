@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe "Reservation class" do
   before do
-    @reservation_test = Hotel::Reservation.new(1, 2, "2017-9-12","2017-9-15")
+    @reservation_test = Hotel::Reservation.new(2, "2017-9-12","2017-9-15")
 
   end
   describe "Initialize Reservation class" do
