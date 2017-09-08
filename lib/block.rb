@@ -1,17 +1,17 @@
 module BookingSystem
   class Block
-    attr_reader :reserved_for, :check_in, :check_out, :reserved_rooms, :block_total, :avail_block_rooms
+    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :block_total, :avail_block_rooms
 
     DISCOUNT_RATE = 150
 
-    def initialize(reserved_for, check_in, check_out, reserved_rooms)
+    def initialize(reserved_for, check_in, check_out, avail_block_rooms)
       dates = DateRange.new(check_in, check_out)
       @reserved_for = reserved_for
       @check_in = dates.check_in
       @check_out = dates.check_out
-      @reserved_rooms = reserved_rooms # Blocked rooms is the reserved room numbers as an array
+      @avail_block_rooms = avail_block_rooms # Blocked rooms is the reserved room numbers as an array
       @block_total = 0
-      @avail_block_rooms = []
+      @booked_rooms_in_block = []
     end
 
   end # Block

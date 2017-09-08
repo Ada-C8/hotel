@@ -10,9 +10,8 @@ module BookingSystem
     end
 
     def create_reservation(check_in, check_out)
-      # Input validation method
-      #TODO: Need a valid input method here for date input to be parsed in date range if not, raise an argument error
-      #TODO: check_in date needs to be less than check_out date
+      ######## TODO: Need a valid input method here for date input to be parsed in date range if not, raise an argument error
+      ######## TODO: check_in date needs to be less than check_out date
       available_rooms = check_avail_rooms_for(check_in, check_out) # Returns array of all available rooms
       # if available_rooms.empty?
       #   puts "No room available for your requested dates. Please choose another date"
@@ -34,18 +33,29 @@ module BookingSystem
       return new_block # Returns all rooms in that block that are available
     end
 
-    def reserve_room_in_block(reserved_name)
-      # # Find block with the specific name it was reserved for
-      # @reservations.each do |reservation|
-      #   if reservation.class == BookingSystem::Class
-      #     found_block = BookingSystem::Class
-      #     if found_block.reserved_for == reserved_name
-      #
-      #
-      #
-      #   end
-      # end
-
+    # As an administrator, I can reserve a room from within a block of rooms
+    def reserve_room_in_block(reserved_name, num_to_book)
+      found_blocks = []
+      found_requested_block = nil
+      @reservations.each do |reservation|
+        if reservation.class == BookingSystem::Block
+          found_blocks << reservation
+        end
+      end
+      found_blocks.each do |block|
+        if block.reserved_for == reserved_name
+          found_requested_block = block
+      # I now have access to the instance of the requested block
+        end
+      end
+      # Returns all available room numbers for that block
+      avail_rooms = avail_rooms_in_block?(reserved_name)
+      # Book number of requested rooms in the current block
+      now_reserved_in_block = avail_rooms[0..num_to_book - 1]
+      # Need to update available block of rooms with the remaining rooms
+      remaining_rooms = avail_rooms - now_reserved_in_block
+      found_requested_block.avail_block_rooms = remaining_rooms
+      ##########TODO: Raise argument error. Must be greater than one and less than 5
     end
 
     def avail_rooms_in_block?(reserved_name)
@@ -58,18 +68,12 @@ module BookingSystem
       end
       found_blocks.each do |block|
         if block.reserved_for == reserved_name
-          return block.reserved_rooms
+          return block.avail_block_rooms
           # This is an array of all available rooms
         end
         #TODO: Raise ArgumentError if no name matches the block reservation
       end
-        # if reservation.reserved_for == reserved_name
-        #   puts reservation.reserved_for
-        #   return "I found this block reservation"
-        # end
-    end
-    # As an administrator, I can check whether a given block has any rooms available
-    # As an administrator, I can reserve a room from within a block of rooms
+    end # def
 
     # I can access the list of reservations for a specific date (single)
     def all_reservations_on(date) # UNAVAILABLE ROOMS
@@ -93,7 +97,7 @@ module BookingSystem
       end
     end
 
-    # private
+
     #
     # def valid_input?
     #

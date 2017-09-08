@@ -108,9 +108,17 @@ describe "Hotel" do
     end
   end # Describe
 
-  xdescribe "#reserve_room_in_block" do
-    it "should return integers for the available room numbers" do
+  describe "#reserve_room_in_block" do
+    xit "should ask how many rooms in the block they want to reserve" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_room_in_block("Bob", 5)
+      ###### TODO: num_to_book within block must be greater than 1 and less than 5
+    end
 
+    it "should be update the Block instance with the new available rooms" do
+      my_block = @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_room_in_block("Bob", 5)
+      my_block.avail_block_rooms.must_be_empty
     end
   end
 
@@ -142,7 +150,6 @@ describe "Hotel" do
     end
     ################ TODO:
     xit "should return all available rooms in the block after reserve_room_in_block method was ran" do
-
     end
 
   end
