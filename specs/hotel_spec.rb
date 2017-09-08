@@ -3,11 +3,15 @@ require_relative 'spec_helper'
 describe "Hotel class" do
 
   describe "UnavailableRoomError class" do
-
     it "Can be instantiated" do
       BookingSystem::Hotel::UnavailableRoomError.new.must_be_instance_of BookingSystem::Hotel::UnavailableRoomError
     end
+  end
 
+  describe "UnavailableBlockError class" do
+    it "Can be instantiated" do
+      BookingSystem::Hotel::UnavailableBlockError.new.must_be_instance_of BookingSystem::Hotel::UnavailableBlockError
+    end
   end
 
   before do
@@ -17,8 +21,7 @@ describe "Hotel class" do
     @check_out = Date.new(2017,9,12)
   end
 
-  describe "initalize method" do
-
+  describe "initialize method" do
     it "Can create a Hotel object" do
       @test_ob.must_be_instance_of BookingSystem::Hotel
     end
@@ -27,67 +30,93 @@ describe "Hotel class" do
       @test_ob.rooms.must_be_instance_of Array
     end
 
-    it "@rooms method holds Integers 1 to 20" do
+    it "@rooms holds Integers 1 to 20" do
       @test_ob.rooms[0].must_equal 1
       @test_ob.rooms[19].must_equal 20
     end
 
     it "Has an instance variable @all_single_reservations that holds objects (instances of Reservation class) in an Array" do
       @test_ob.all_single_reservations.must_be_instance_of Array
+
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
+      @test_ob.all_single_reservations[0].must_be_instance_of BookingSystem::Reservation
+    end
+
+    it "Has an instance variable @all_block_reservations that holds objects (instances of BlockReservation class) in an Array" do
+      @test_ob.all_single_reservations.must_be_instance_of Array
+
+      @test_ob.block_off_a_block(3, @check_in, @check_out)
+      @test_ob.block_reservation(1, @check_in, @check_out)
+      @test_ob.all_block_reservations[0].must_be_instance_of BookingSystem::BlockReservation
+      @test_ob.all_block_reservations.must_be_instance_of Array
     end
 
     it "Has an instance variable @all_blocks that holds objects (instances of Block class) in an Array" do
       @test_ob.all_blocks.must_be_instance_of Array
+
+      @test_ob.block_off_a_block(3, @check_in, @check_out)
+      @test_ob.all_blocks[0].must_be_instance_of BookingSystem::Block
     end
   end#initialize
 
-  describe "make_reservation method" do
-
+  describe "make_single_reservation method" do
     it "Can be called" do
-      @test_ob.must_respond_to :make_reservation
+      @test_ob.must_respond_to :make_single_reservation
     end
 
     it "Returns an instance of Reservation class when room is available" do
-      @test_ob.make_reservation(@room, @check_in, @check_out).must_be_instance_of BookingSystem::Reservation
+      @test_ob.make_single_reservation(@room, @check_in, @check_out).must_be_instance_of BookingSystem::Reservation
     end
 
     it "Increases @all_single_reservations by 1 for each new reservation" do
-      @test_ob.make_reservation(@room, @check_in, @check_out)
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
       @test_ob.all_single_reservations.length.must_equal 1
     end
 
     it "Raises an UnavailableRoomError if room is unavailable" do
-      @test_ob.make_reservation(@room, @check_in, @check_out)
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
 
-      proc { @test_ob.make_reservation(@room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+      proc { @test_ob.make_single_reservation(@room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
     end
 
   end
 
   describe "block_reservation" do
-
-    before do
-      @check_in = Date.new(2017,10,9)
-      @check_out = Date.new(2017,10,15)
-
-      @hotel_ob = BookingSystem::Hotel.new
-      @block_ob = @hotel_ob.block_off_a_block(4, @check_in, @check_out)
-
-    end
-
     it "Can be called" do
-      @hotel_ob.must_respond_to :block_reservation
+      @test_ob.must_respond_to :block_reservation
     end
 
-    it "Returns an instance of Block_Reservation" do
-      @hotel_ob.block_reservation(2, @check_in, @check_out).must_be_instance_of BookingSystem::BlockReservation
+    it "Raises UnavailableBlockError if there are no blocks available" do
+      proc { @test_ob.block_reservation(1, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
+    end
+
+    it "Raises UnavailableBlockError if there are no blocks that match date range" do
+      @test_ob.block_off_a_block(3, @check_in, @check_out)
+      proc { @test_ob.block_reservation(1, Date.new(2017,10,9), Date.new(2017,10,10)) }.must_raise BookingSystem::Hotel::UnavailableBlockError
+    end
+
+    it "Raises UnavailableRoomError if the room requested is not available" do
+      @test_ob.block_off_a_block(3, @check_in, @check_out)
+      proc { @test_ob.block_reservation(20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+    end
+
+    it "Returns an instance of BlockReservation" do
+      @test_ob.block_off_a_block(4, @check_in, @check_out)
+      @test_ob.block_reservation(2, @check_in, @check_out).must_be_instance_of BookingSystem::BlockReservation
     end
   end
 
   describe "block_off_a_block method" do
-
     it "Can be called" do
       @test_ob.must_respond_to :block_off_a_block
+    end
+
+    it "Raises UnavailableRoomError if number of rooms requested exceeds available rooms" do
+      4.times do
+        @test_ob.block_off_a_block(5, @check_in, @check_out)
+      end
+
+      proc { @test_ob.block_off_a_block(3, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
     end
 
     it "Returns an instance of Block class" do
@@ -113,9 +142,9 @@ describe "Hotel class" do
     end
 
     it "Returns an array of Reservation objects" do
-      @test_ob.make_reservation(@room, @check_in, @check_out)
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
 
-      @test_ob.make_reservation(2, Date.new(2017,9,11), Date.new(2017,9,15))
+      @test_ob.make_single_reservation(2, Date.new(2017,9,11), Date.new(2017,9,15))
 
       @test_ob.reservations_for_specific_date(Date.new(2017,9,10)).must_be_instance_of Array
 
@@ -144,7 +173,7 @@ describe "Hotel class" do
 
       @test_ob.available_rooms(@check_in, @check_out).length.must_equal 20
 
-      @test_ob.make_reservation(@room, @check_in, @check_out)
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
       @test_ob.available_rooms(@check_in, @check_out).length.must_equal 19
     end
 
@@ -168,7 +197,7 @@ describe "Hotel class" do
       block_check_in = Date.new(2017,10,9)
       block_check_out = Date.new(2017,10,12)
 
-      @test_ob.make_reservation(@room, @check_in, @check_out)
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
 
       @test_ob.send(:room_available?, @room, @check_in, @check_out).must_equal false
 
