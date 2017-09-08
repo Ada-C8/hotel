@@ -7,7 +7,6 @@ module Hotel
       @check_in = check_in
       @check_out = check_out
       @id = id
-      @discount = 0.1
       @rooms_in_block = []
     end
 

@@ -68,12 +68,25 @@ describe Hotel::Hotel do
       hotel.make_reservation("guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 13)
     end
 
-    it "raises a StnadardError when trying to make a reservation for a room that is already reserved" do
+    it "raises a StandardError when trying to make a reservation for a room that is already reserved" do
       victoria = Hotel::Hotel.new
       victoria.make_reservation("
       guest", Date.new(2018, 6, 2), Date.new(2018, 6, 15), 11)
 
       proc{victoria.make_reservation("guest", Date.new(2018, 6, 6), Date.new(2018, 6, 20), 11)}.must_raise StandardError
+    end
+
+    it "raises a StandardError when there are no available rooms left " do
+      sheraton = Hotel::Hotel.new
+
+      check_in = Date.new(2018, 7, 12)
+      check_out = Date.new(2018, 7, 15)
+
+      20.times do
+        sheraton.make_reservation("guest", check_in, check_out)
+      end
+      
+      proc{sheraton.make_reservation("guest", check_in, check_out)}.must_raise StandardError
     end
 
     it "will not raise an exception when trying to make a reservation for a room that starts on the same day another reservation ends" do
@@ -136,8 +149,6 @@ describe Hotel::Hotel do
       check_out = Date.new(2018, 9, 16)
       hotel.make_block(check_in, check_out, 3)
       block = hotel.blocks[0]
-
-      binding.pry
 
       3.times do
         hotel.make_reservation_from_block("guest", block.id)

@@ -24,6 +24,12 @@ describe Hotel::Pricing do
       Hotel::Pricing.calc_cost(res2).must_equal 1600
     end
 
+    it "returns a discounted value if room is reserved in a block" do
+      reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 14), Hotel::Room.new(18), 123456)
+
+      Hotel::Pricing.calc_cost(reservation).must_equal 360
+    end
+
 
   end
 

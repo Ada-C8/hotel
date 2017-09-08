@@ -48,21 +48,24 @@ module Hotel
     end
   end
 
+
+  #THERE HAS TO BE A BETTER WAY TO DO THIS.
   def assign_room(check_in, check_out, room_requested = nil)
     available_rooms = get_available_rooms(check_in, check_out)
 
+    raise StandardError.new "no more rooms available for that date" if available_rooms.empty?
+
     if room_requested.is_a? (Integer)
-      available_rooms.each do |free_room|
-        if free_room.number == room_requested
-          return free_room
+      available_rooms.each do |empty_room|
+        if empty_room.number == room_requested
+          return empty_room
         end
       end
-      raise StandardError.new "This room in unavailable"
+      raise StandardError.new "This room is unavailable"
     else
       room = available_rooms[0]
       return room
     end
-
   end
 
   def get_res_by_date(date)
@@ -121,6 +124,15 @@ module Hotel
       end
     end
     raise StandardError.new "this id doesn't exit"
+  end
+
+  def find_room_by_number(room_number)
+    rooms.each do |room|
+      if room.number == room_number
+        return room
+      end
+    end
+    raise StandardError.new "this room doesn't exist"
   end
 
   def assign_id
