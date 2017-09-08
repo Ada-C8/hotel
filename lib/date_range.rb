@@ -6,22 +6,24 @@ class DateRange
   def initialize(check_in, check_out)
     @start = check_in
     @end = check_out
+    @nights = (check_out-check_in)
 
     if @end <= @start
       raise ArgumentError.new("This is an invalid check-in/check-out combination")
     end
-
-    @nights = (check_out-check_in)
-    # @dates = alldays
+    
   end
 
-  # def include?(date, reservation)
-  #   if date >= reservation.dates.start && date < reservation.dates.end
-  #     return true
-  #   else
-  #     return false
-  #   end
-  # end
+  def include?(date)
+    if (self.start...self.end).include?(date)
+      return true
+    else
+      return false
+    end
+  end
+
+end
+
 
   # def overlap?(date_range, reservation)
   #
@@ -33,6 +35,17 @@ class DateRange
   #   # end
   #
   # end
+
+
+
+
+
+
+      # if date >= reservation.dates.start && date < reservation.dates.end
+      #   return true
+      # else
+      #   return false
+      # end
 
   # def include?
   # Reservation.check_date(self.start)
@@ -52,5 +65,3 @@ class DateRange
   # def overlap?
   #
   # end
-
-end

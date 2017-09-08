@@ -20,7 +20,6 @@ class Hotel
 
   # reserves an available room for a given date range
   def create_reservation(room, check_in, check_out)
-    # print @blocks
     if availability(check_in, check_out).include?(room)
       new_reservation = Reservation.new(room, check_in, check_out)
       @reservations << new_reservation
@@ -41,8 +40,7 @@ class Hotel
   def get_reservations_for_date(date)
     reservations_for_day = []
     all_reservations.each do |reservation|
-      if (reservation.dates.start...reservation.dates.end).include?(date)
-        # if reservation.dates.include?(date, reservation)
+      if reservation.dates.include?(date)
         reservations_for_day << reservation
       end
     end
@@ -53,46 +51,29 @@ class Hotel
   def availability(check_in, check_out)
     reserved_rooms = []
     blocked_rooms = []
-    # available_rooms = []
     date_range = DateRange.new(check_in, check_out)
     @reservations.each do |reservation|
       if ((reservation.dates.start < date_range.end) && (date_range.start < reservation.dates.end))
-        # if (reservation.dates.start...reservation.dates.end).cover?(date_range.start) || (reservation.dates.start...reservation.dates.end).cover?(date_range.end)
         reserved_rooms << reservation.room
-        # end
       end
     end
-    # puts reserved_rooms
-    puts @blocks
+
     @blocks.each do |block|
-      # puts date_range.end
-      # (x.first < y.last) and (y.first < x.last)
       if ((block.dates.start < date_range.end) && (date_range.start < block.dates.end))
-        #   if (block.dates.start...block.dates.end).cover?(date_range.start) || (block.dates.start...block.dates.end).cover?(date_range.end)
-        #     puts block
         block.rooms.each do |room|
           blocked_rooms << room
         end
       end
     end
-    print blocked_rooms
-    # puts blocked_rooms
-    # puts @blocks
-    # blocked_rooms = *blocked_rooms
-    # print blocked_rooms
-    # puts blocked_rooms
+
     available_rooms = @rooms - reserved_rooms - blocked_rooms
-    # available_rooms = available_rooms - blocked_rooms
-    # available_rooms = @rooms - reserved_rooms
-    print available_rooms
+
     return available_rooms
   end
 
   # creates a block for a given date range if rooms are available
   def create_block(rooms, check_in, check_out)
-    # print room
     rooms.each do |room|
-      # print ind_room
       if !(availability(check_in, check_out).include?(room))
         raise ArgumentError.new("That room is not available as a block")
       end
@@ -120,36 +101,36 @@ end
 #   available_rooms = @rooms - reserved_rooms
 #   return available_rooms
 # end
-
-bb = Hotel.new
-check_out = Date.new(2017, 03, 14)
-check_in = Date.new(2017, 03, 11)
-bb.create_reservation(1, check_in, check_out)
-
-check_in = Date.new(2017, 04, 8)
-check_out = Date.new(2017, 04, 11)
-bb.create_reservation(2, check_in, check_out)
-
-puts bb.all_reservations
-
-# check_in = Date.new(2017, 04, 17)
-# check_out = Date.new(2017, 04, 20)
-
-check_in = Date.new(2017, 04, 11)
-check_out = Date.new(2017, 04, 15)
-bb.create_block([3,2,5], check_in, check_out)
-
-# puts bb.all_blocks[0].dates.start
-# puts bb.all_blocks[0].dates.end
-
-
-# puts bb.all_blocks[0].room
-
-puts bb.all_reservations
-
-check_in = Date.new(2017, 04, 10)
-check_out = Date.new(2017, 04, 16)
-puts bb.availability(check_in, check_out)
+# 
+# bb = Hotel.new
+# check_out = Date.new(2017, 03, 14)
+# check_in = Date.new(2017, 03, 11)
+# bb.create_reservation(1, check_in, check_out)
+#
+# check_in = Date.new(2017, 04, 8)
+# check_out = Date.new(2017, 04, 11)
+# bb.create_reservation(2, check_in, check_out)
+#
+# puts bb.all_reservations
+#
+# # check_in = Date.new(2017, 04, 17)
+# # check_out = Date.new(2017, 04, 20)
+#
+# check_in = Date.new(2017, 04, 11)
+# check_out = Date.new(2017, 04, 15)
+# bb.create_block([3,2,5], check_in, check_out)
+#
+# # puts bb.all_blocks[0].dates.start
+# # puts bb.all_blocks[0].dates.end
+#
+#
+# # puts bb.all_blocks[0].room
+#
+# puts bb.all_reservations
+#
+# check_in = Date.new(2017, 04, 10)
+# check_out = Date.new(2017, 04, 16)
+# puts bb.availability(check_in, check_out)
 
 # check_in = Date.new(2017, 04, 14)
 # check_out = Date.new(2017, 04, 18)
