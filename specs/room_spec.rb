@@ -16,12 +16,5 @@ describe 'Room' do
     it 'has a cost' do
       @room.cost.must_equal 200
     end
-
-    describe 'comparable' do
-      it 'is equivalent to another room with the same number' do
-        room2 = Hotel::Room.new(5, 200)
-        (@room == room2).must_equal true
-      end
-    end
   end
 end
