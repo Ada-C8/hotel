@@ -31,7 +31,7 @@ module BookingSystem
       new_block = Block.new(reserved_for, check_in, check_out, reserved_room_nums)
       # Return only one block reservation and pass it into the @reservations array so that they cannot access the rooms
       @reservations << new_block
-      return new_block
+      return new_block # Returns all rooms in that block that are available
     end
 
     def reserve_room_in_block(reserved_name)
