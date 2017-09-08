@@ -40,7 +40,20 @@ module Hotel
 
 end
 
-
+# def available
+#   # greater than or equal than check_in date
+#   # and less than or equal to check_out date
+#   #
+#   # if the reservation dates contains the check_in date of an existing reservation it's already aproblem?
+#     @dates[0...-1].each do |date|
+#       list = Hotel::Reservations.list_reservations_by_date(date)
+#       list.each do |booking|
+#         if booking.room_number == room_number
+#           raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
+#         end
+#       end
+#     end
+# end
 
 
 # def valid_dates

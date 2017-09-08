@@ -32,19 +32,57 @@ module Hotel
       return @all_reservations
     end
 
-    def new_reservation(check_in, check_out, room_number = 0, room_rate = 200)
+    def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      auto_assign_room_number(room_number)
-      #booking.available?
+      #validate_room_number
+      #booking.assign_room_number
+      available(check_in, check_out, room_number)
       @all_reservations << booking
       return booking
     end
 
-    def available?
-      return true
-      # unless @rooms_collection.include?(room_number)
-      #   raise ArgumentError.new("#{room_number} is not a valid room number at this property.")
-      # end
+    def available(check_in, check_out, room_number)
+      date_range = DateRange.new(check_in, check_out).dates
+        date_range[0...-1].each do |date|
+          list_reservations_by_date(date).each do |booking|
+            if booking.room_number == room_number
+              raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
+            end
+          end
+        end
+    end
+
+    def list_rooms_available_by_date(date)
+      rooms_available = @rooms_collection
+
+      list_reservations_by_date(date).each do |booking|
+        if room_number == booking.room_number
+        rooms_available.delete(room_number)
+        end
+      end
+      return rooms_available
+    end
+
+    # def validate_room_number   #THIS DOESN"T WORK YET
+    #   validation = false
+    #   @rooms_collection.each do |room|
+    #     unless validation == true
+    #       if room.room_number == @room_number
+    #         validation = true
+    #       else validation = false
+    #       end
+    #     end
+    #   end
+    #   if validation == false
+    #     raise ArgumentError.new("#{room_number} is not a valid room number at this property.")
+    #     return false
+    #   else
+    #     return true
+    #   end
+    # end
+
+
+    #THIS DIDN"T WORK#
       # @dates[0...-1].each do |date|
       #   list_reservations_by_date(date)
       #   @list.each do |booking|
@@ -54,21 +92,24 @@ module Hotel
       #   end
       # end
 
-    end
+    #end
 
-    def auto_assign_room_number(room_number)
-      unless room_number > 0
-        @rooms_collection.each do |room|
-          if available?
-            room_number = room
-          else room_number = nil
-          end
-        end
-        if room_number == nil
-          raise ArgumentError.new("No rooms available for those dates.")
-        end
-      end
-    end
+    # def assign_room_number  #DOESN"T WORK YET
+    #   unless @room_number > 0
+    #     @rooms_collection.each do |room|
+    #       if available?
+    #         @room_number = room.room_number
+    #         return @room_number
+    #       else @room_number = nil
+    #       end
+    #     end
+    #     if @room_number == nil
+    #       raise ArgumentError.new("No rooms available for those dates.")
+    #     end
+    #   end
+    #     #room_number = @rooms_collection
+    #   #end
+    # end
 
     def list_reservations_by_date(date)
       date = Date.parse(date)

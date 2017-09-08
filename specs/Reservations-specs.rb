@@ -27,7 +27,7 @@ describe 'Reservations' do
   describe 'new reservation' do
 
     it 'must create a new booking' do
-      new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
+      new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23", 1)
       new_booking1.must_be_instance_of Hotel::Booking
     end
     it 'must raise an error if the check-in date is in the past' do
@@ -43,6 +43,51 @@ describe 'Reservations' do
       proc{new_booking = @new_hotel.new_reservation("2018-02-30", "2018-02-31")}.must_raise ArgumentError
     end
   end
+
+  describe 'available' do
+    before do
+      @new_hotel.clear_reservations
+      @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
+    end
+    after do
+      @new_hotel.clear_reservations
+    end
+    it 'must must raise argument error if room is not available' do
+      proc{new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-04", 1)}.must_raise ArgumentError
+    end
+  end
+
+  describe 'list rooms available by date' do
+    before do
+      @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
+      @new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 2)
+      @new_reservation3 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 10)
+    end
+    it 'must return an array' do
+      @new_hotel.list_rooms_available_by_date("2018-01-02").must_be_kind_of Array
+    end
+    it 'must return the correct number of rooms available' do
+      @new_hotel.list_rooms_available_by_date("2018-01-03").length.must_equal 17
+    end
+    it 'must return the correct rooms available' do
+
+    end
+  end
+  # describe 'assign room number' do
+  #   it 'will assign a room number if no room number is given' do
+  #     new_booking = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
+  #     new_booking.room_number.wont_equal 0
+  #   end
+  # end
+
+  # describe 'validate room number' do
+  #   after do
+  #     @new_hotel.clear_reservations
+  #   end
+  #   it 'must raise an error if a room number that does not exist is entered' do
+  #     proc{new_booking = @new_hotel.new_reservation("2017-09-21", "2017-09-30", 45)}.must_raise ArgumentError
+  #   end
+  # end
 
   describe 'all reservations' do
     before do
