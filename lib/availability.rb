@@ -66,5 +66,28 @@ class Availability
     return finalrooms
   end
 
+  def self.all_reservations(year, month, day)
+    check_date = Date.new(year,month,day)
+
+    bookedrooms = []
+
+      self.calendar.each do |days|
+        days.each do |date, roominfo|
+          if check_date == date
+            roominfo.each do |rooms|
+              rooms.each do |id, status|
+                if status == :booked
+                  bookedrooms << id
+                end
+              end
+            end
+          end
+        end
+      end
+
+    return bookedrooms
+  end
+
+
 
 end #end of class

@@ -29,7 +29,6 @@ def initialize(room_id, startyear, startmonth, startday, endyear, endmonth, endd
             rooms.each do |id, status|
               if id == room_id
                 rooms[id] = :booked
-                # binding.pry
               end
             end
           end
