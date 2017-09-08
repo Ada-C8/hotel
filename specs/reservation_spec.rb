@@ -12,6 +12,7 @@ describe "Administration#Reservation" do
       reservation.check_in.must_equal check_in
       reservation.check_in.must_be_kind_of Date
     end
+  end
 
   describe "#total_nights" do
     it "return the total number of nights for a date range" do
@@ -54,8 +55,15 @@ describe "Administration#Reservation" do
       reservation = Administration::Reservation.new(check_in, check_out)
       reservation.total_cost.must_equal 800
     end
-  end #end of total cost
+  end
 
+  describe "#reserved?" do
+    it "return true if the target date is in the date range" do
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      reservation = Administration::Reservation.new(check_in, check_out)
+      reservation.reserved?(Date.new(2017, 9, 3)).must_equal true
+    end
+  end
 
-  end #end of reservation wave 1
 end #end of module

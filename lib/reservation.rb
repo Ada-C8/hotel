@@ -20,5 +20,10 @@ module Administration
       return total_cost
     end
 
+    def reserved?(target_date)
+      return target_date >= @check_in && target_date < @check_out
+
+    end
+
   end #reservation
 end #module
