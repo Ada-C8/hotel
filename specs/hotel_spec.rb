@@ -63,16 +63,17 @@ describe "Hotel" do
   end # Describe
 
   describe "#reserve_block" do
-    it "should return one instance of BookingSystem::Block" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
-      @hotel.reserve_block(check_in, check_out, 5).must_be_kind_of Array
-      @hotel.reserve_block(check_in, check_out, 5).each do |reservation|
-        reservation.must_be_kind_of Integer
-      end
+    it "should create one instance of BookingSystem::Block" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5).must_be_instance_of BookingSystem::Block
     end
 
-    it "should"
+    it "should add BookingSystem::Block instance to all @reservations by one" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.reservations[0].must_be_instance_of BookingSystem::Block
+      @hotel.reservations.length.must_equal 1
+    end
+
+    #TODO: Write extra tests for this block
   end
 
   describe "#all_reservations(date)" do

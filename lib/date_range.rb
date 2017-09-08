@@ -1,5 +1,4 @@
 # require 'pry'
-
 module BookingSystem
   class DateRange
     attr_reader :check_in, :check_out

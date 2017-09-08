@@ -23,15 +23,23 @@ module BookingSystem
     end
 
     # As an administrator, I can create a block of rooms
-    def reserve_block(check_in, check_out, num_of_rooms)
+    def reserve_block(reserved_for, check_in, check_out, num_of_rooms)
+      # This is converted to a date object
       available_rooms = check_avail_rooms_for(check_in, check_out)
-      blocked_rooms = available_rooms[0..num_of_rooms - 1]
-      Block.new(check_in, check_out, blocked_rooms)
-      #TODO: START HERE TOMORROW
+      reserved_room_nums = available_rooms[0..num_of_rooms - 1] # Takes the first 5 rooms from all available rooms
+      new_block = Block.new(reserved_for, check_in, check_out, reserved_room_nums)
       # Return only one block reservation and pass it into the @reservations array so that they cannot access the rooms
-      # When they want to create a single reservation, the problem is
+      @reservations << new_block
+      return new_block
     end
 
+    def reserve_room_in_block(reserved_for)
+      # Find block with the specific name it was reserved for
+
+    end
+
+    def avail_rooms_in_block?
+    end
     # As an administrator, I can check whether a given block has any rooms available
     # As an administrator, I can reserve a room from within a block of rooms
 

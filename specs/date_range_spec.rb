@@ -5,18 +5,18 @@ describe "DateRange" do
   before do
     check_in = '2001-02-05'
     check_out = '2001-02-10'
-    @booking = BookingSystem::DateRange.new(check_in, check_out)
+    @range = BookingSystem::DateRange.new(check_in, check_out)
   end
 
   describe "#initialize" do
     it "should create an instance of DateRange" do
-      @booking.must_be_instance_of BookingSystem::DateRange
+      @range.must_be_instance_of BookingSystem::DateRange
 
-      @booking.must_respond_to :check_in
-      @booking.check_in.must_be_instance_of Date
+      @range.must_respond_to :check_in
+      @range.check_in.must_be_instance_of Date
 
-      @booking.must_respond_to :check_out
-      @booking.check_out.must_be_instance_of Date
+      @range.must_respond_to :check_out
+      @range.check_out.must_be_instance_of Date
     end
   end # Describe
 
