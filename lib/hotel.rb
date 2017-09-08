@@ -50,6 +50,9 @@ module My_Hotel
 
     def make_block(first_night, last_night, array_of_rooms, discount)
       new_block = My_Hotel::Block.new(first_night, last_night, array_of_rooms, discount)
+      if array_of_rooms.length > 4
+        raise ArgumentError.new "Only accepts blocks of 4 rooms or less, a block of #{array_of_rooms.length} was entered."
+      end
       new_block.set_block_id
       while unique_block_id?(new_block) == false
         new_block.set_block_id
@@ -57,6 +60,33 @@ module My_Hotel
       @all_blocks << new_block
       new_block
     end
+
+    def make_reservation_in_block(block_id)
+      current_block = find_by_block_id(block_id)
+      new_reservation = My_Hotel::Reservation.new(current_block.first_night, current_block.last_night)
+      rooms_avail = rooms_available_in_block(block_id)
+      new_reservation.assign_room(rooms_avail)
+      new_reservation.block_id = block_id
+      new_reservation.set_cost(current_block.discount)
+      new_reservation.set_reservation_id
+      while unique_reservation_id?(new_reservation) == false
+        new_reservation.set_reservation_id
+      end
+      @all_reservations << new_reservation
+      return new_reservation
+    end
+
+    def rooms_available_in_block(block_id)
+      rooms_in_block = find_rooms_in_block(block_id)
+      rooms_in_use = find_rooms_in_use_by_block_id(block_id)
+      free_room_numbers = rooms_in_block - rooms_in_use
+      free_rooms = {}
+      free_room_numbers.each do |number|
+        free_rooms[number] = ROOMS[number]
+      end
+      free_rooms
+    end
+
 
     def unique_block_id?(new_block)
       if @all_blocks.length != 0
@@ -84,7 +114,6 @@ module My_Hotel
     # all the roomnumbers that are available for every night in
     # the range. if no room is available for the whole range,
     # returns an empty array
-
     def find_all_unreserved_rooms(nights)
       if nights.class == Date
         nights = [nights]
@@ -138,10 +167,8 @@ module My_Hotel
         index = index + 1
         available_over_range << free_on_night
       end
-return available_over_range
+      return available_over_range
     end
-
-
 
     #Given a range of nights returns a hash with all
     #the rooms => prices that are free on all nights.
@@ -150,7 +177,7 @@ return available_over_range
       if nights.class == Date
         nights = [nights]
       end
-      array_of_rooms = find_all_unreserved_rooms(nights)
+      array_of_rooms = open_rooms(nights)
       free_for_range = {}
       array_of_rooms[0].each do |room, cost|
         free = true
@@ -181,6 +208,24 @@ return available_over_range
         end
       end
       return nil
+    end
+
+    def find_rooms_in_use_by_block_id(block_id)
+      rooms_in_use = []
+      if find_by_block_id(block_id) == nil
+        raise ArgumentError.new("Can not find block id #{block_id}")
+      end
+      @all_reservations.each do |reservation|
+        if reservation.block_id == block_id
+          rooms_in_use << reservation.room_number
+        end
+      end
+      return rooms_in_use
+    end
+
+    def find_rooms_in_block(block_id)
+      block = find_by_block_id(block_id)
+      block.room_numbers
     end
 
     #given a date returns all the reservations on that day.

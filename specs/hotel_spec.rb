@@ -83,7 +83,7 @@ describe "My_Hotel::Hotel" do
     end
 
     it "returns true if reservation_id is unique" do
-      first = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
       second = My_Hotel::Block.new(@feb6, @may6, [1,2,3,4], 0.75)
       @ritz.unique_block_id?(second).must_equal true
     end
@@ -147,15 +147,19 @@ describe "My_Hotel::Hotel" do
 
   describe "make_block" do
     it "can make a block of rooms with the same block_id" do
-      new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      new_block = @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       new_block.must_be_kind_of My_Hotel::Block
       new_block.block_id.must_be_kind_of String
     end
 
+    it "raises an argument if the user attempts to make a block with more than 4 rooms" do
+      proc{@ritz.make_block(@feb1, @feb5, [1, 2, 3, 4, 5], 0.75)}.must_raise ArgumentError
+    end
+
     it "updates all_blocks" do
-      new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      new_block = @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       @ritz.all_blocks.length.must_equal 1
-      new_block = @ritz.make_block(@feb6, @may6, [1,2,3,4], 0.75)
+      new_block = @ritz.make_block(@feb6, @may6, [1, 2, 3, 4], 0.75)
       @ritz.all_blocks.length.must_equal 2
     end
   end
@@ -263,7 +267,7 @@ describe "My_Hotel::Hotel" do
         @ritz.make_reservation(@feb1, @feb1)
       end
       none_available = @ritz.open_rooms(@feb1)
-      none_available.must_be_empty
+      none_available[0].length.must_equal 0
     end
 
     it "if you reserve a room, it is not available" do
@@ -315,8 +319,55 @@ describe "My_Hotel::Hotel" do
       end
       @ritz.find_continious_open_room(@feb1.. @feb5).must_be_empty
     end
+  end
+
+  describe "find_rooms_in_block" do
+    it "returns an array of rooms in that block" do
+      new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      @ritz.find_rooms_in_block(new_block.block_id).must_equal [1,2,3,4]
+    end
+  end
+
+  describe "find_rooms_in_use_by_block_id" do
+    it "returns an empty array if no reservations have been made in an existing block" do
+      new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      no_reservation = @ritz.find_rooms_in_use_by_block_id(new_block.block_id)
+      no_reservation.must_be_kind_of Array
+      no_reservation.must_be_empty
+    end
+
+    it "returns an array of rooms that are in use in an existing block" do
+      new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      mindy = @ritz.make_reservation_in_block(new_block.block_id)
+      reservation_in_block = @ritz.find_rooms_in_use_by_block_id(new_block.block_id)
+      puts reservation_in_block
+      reservation_in_block.length.must_equal 1
+      reservation_in_block[0].must_equal mindy.room_number
+
+      @ritz.make_reservation_in_block(new_block.block_id)
+      reservation_in_block = @ritz.find_rooms_in_use_by_block_id(new_block.block_id)
+      reservation_in_block.length.must_equal 2
+    end
+
+    it "returns an error if block does not exist" do
+      proc{@ritz.find_rooms_in_use_by_block_id(0000)}.must_raise ArgumentError
+    end
 
   end
+
+
+  describe "make_reservation_in_block" do
+    it "can make a reservation" do
+      new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      mindy = @ritz.make_reservation_in_block(new_block.block_id)
+      mindy.block_id.must_equal new_block.block_id
+      mindy.cost.must_equal 750
+      mindy.room_number.must_be :<, 5
+    end
+  end
+
+
+
 end
 
 
