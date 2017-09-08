@@ -80,7 +80,7 @@ describe 'Hotel' do
       block = @hotel.make_block('2017-08-03', '2017-08-08', 5, 20)
 
       proc { @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
-      }.must_raise RangeError
+      }.must_raise InvalidDatesError
     end
   end
 
