@@ -7,10 +7,10 @@ describe 'DateRange' do
   end
 
   describe 'self.range_to' do
-    it 'raises InvalidDatesError if start date is after end date' do
+    it 'raises DatesError if start date is after end date' do
       proc {
         DateRange.range_to(@after, @before)
-      }.must_raise InvalidDatesError
+      }.must_raise DatesError
     end
 
     it 'returns an array of Dates' do
@@ -35,7 +35,7 @@ describe 'DateRange' do
     it 'raises ArgumentError if start date is after end date' do
       proc {
         DateRange.range_with(@after, @before)
-      }.must_raise InvalidDatesError
+      }.must_raise DatesError
     end
 
     it 'returns an array of Dates' do

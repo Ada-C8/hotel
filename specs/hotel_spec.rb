@@ -160,19 +160,19 @@ describe 'Hotel' do
 
         proc {
           @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
-        }.must_raise InvalidDatesError
+        }.must_raise DatesError
       end
 
       it 'raises an error if dates are out of order' do
         proc {
           @hotel.find_available_rooms('2017-08-23', '2017-08-08')
-        }.must_raise InvalidDatesError
+        }.must_raise DatesError
       end
 
       it 'raises an error if dates do not span at least 1 night' do
         proc {
           @hotel.find_available_rooms('2017-08-08', '2017-08-08')
-        }.must_raise InvalidDatesError
+        }.must_raise DatesError
       end
     end
   end
@@ -238,10 +238,10 @@ describe 'Hotel' do
         }.must_raise ArgumentError
       end
 
-      it 'raises InvalidDatesError if dates are out of order' do
+      it 'raises DatesError if dates are out of order' do
         proc {
           reservation = @hotel.make_reservation('2017-09-08', '2017-09-05')
-        }.must_raise InvalidDatesError
+        }.must_raise DatesError
       end
 
       it 'raises NoBlockError if passed nonexistent block' do
@@ -371,16 +371,16 @@ describe 'Hotel' do
         }.must_raise ArgumentError
       end
 
-      it 'raises InvalidDatesError when dates are out of order' do
+      it 'raises DatesError when dates are out of order' do
         proc {
           @hotel.make_block('2017-09-07', '2017-09-05', 5, 25)
-        }.must_raise InvalidDatesError
+        }.must_raise DatesError
       end
 
-      it 'raises InvalidDiscountError when passed discount greater than 100%' do
+      it 'raises DiscountError when passed discount greater than 100%' do
         proc {
           @hotel.make_block('2017-09-07', '2017-09-010', 5, 125)
-        }.must_raise InvalidDiscountError
+        }.must_raise DiscountError
       end
 
     end
@@ -415,7 +415,7 @@ describe 'Hotel' do
       it 'raises an exception if the dates do not fall within the block' do
         proc {
           @hotel.block_availability?('2017-10-14','2017-10-15', @block.id)
-        }.must_raise InvalidDatesError
+        }.must_raise DatesError
       end
     end
 

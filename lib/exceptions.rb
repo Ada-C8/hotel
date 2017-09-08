@@ -1,10 +1,10 @@
 class NoRoomError < StandardError
 end
 
-class InvalidDatesError < StandardError
+class DatesError < StandardError
 end
 
 class NoBlockError < StandardError
 end
 
-class InvalidDiscountError < StandardError
+class DiscountError < StandardError

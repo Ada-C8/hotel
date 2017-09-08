@@ -29,7 +29,7 @@ module DateRange
     first = validate(first)
     second = validate(second)
     unless first < second
-      raise(InvalidDatesError, 'Start date must be at least 1 day before end date')
+      raise(DatesError, 'Start date must be at least 1 day before end date')
     end
   end
 
