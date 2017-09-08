@@ -9,7 +9,7 @@ module Hotel
       @checkout = Date.parse(checkout)
       @dates = DateRange.range_to(@checkin, @checkout)
       @id = create_id
-      @block =
+      @block = block
       get_total
     end
 
