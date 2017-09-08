@@ -26,10 +26,11 @@ def menu
 1. Find an available room
 2. Reserve a room
 3. View a list of reservations
-4. Create a block of rooms
-5. Check block rooms availability
-6. Reserve a block room
-7. View a list of rooms
+4. View a list of block rooms
+5. Create a block of rooms
+6. Check block rooms availability
+7. Reserve a block room
+8. View a list of rooms
 OK
   return menu
 end
@@ -132,7 +133,17 @@ while reply
         end
       end
     end
-  when 4 #create a block
+  when 4
+    puts "Let's view a list of block rooms!"
+    list = Hotel::Reservation.list_block
+    if list.empty?
+      puts "No block rooms"
+    else
+      list.each do |name,array|
+        puts "- #{name} with #{array.length} rooms"
+      end
+    end
+  when 5 #create a block
     puts "Let's reserve a block of rooms!"
     broken = true
     while broken
@@ -155,13 +166,13 @@ while reply
         broken = true
       end
     end
-  when 5 #check block availability
+  when 6 #check block availability
     puts "Let's check if there are any block rooms!"
     print "Request name: "
     name = gets.chomp
     available = Hotel::Reservation.block_availability(name)
     puts available ? "Yes, there are rooms available!" : "Sorry, there are no rooms under that name :("
-  when 6 #reserve a block room
+  when 7 #reserve a block room
     puts "Let's reserve a block room!"
     print "Request name: "
     name = gets.chomp
