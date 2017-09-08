@@ -8,9 +8,6 @@ module Hotel
     attr_reader :check_in, :check_out, :date_range
 
     def initialize
-      # @check_in = Date.new
-      # @check_out = Date.new
-      #@date_range = []
     end
 
 =begin

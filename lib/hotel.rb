@@ -58,12 +58,9 @@ module Hotel
       end #end each
     end #end total cost
 
-      #enter reservation ID number
-      #return total cost for that reservation
-
   end #class
 end #module
-binding.pry
+#binding.pry
 
 # find if rooms is open for a given date range
 # reserve room for that date range

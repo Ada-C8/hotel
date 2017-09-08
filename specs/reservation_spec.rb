@@ -39,7 +39,7 @@ describe "Reservation class" do
 
   describe "Viewing Reservations" do
     it "Can return a formatted string for a specific reservation" do
-      @res_test.view_reservation.must_equal "ID: 1111, Room: 1, Check in: 2001-01-01, Check Out: 2001-01-05, Total Nights: 4"
+      @res_test.view_reservation.must_equal "ID: 1111, Room: 1, Check in: 2001-01-01, Check Out: 2001-01-05, Total Nights: 4, Total Cost: 800"
     end #format
   end#VR
 

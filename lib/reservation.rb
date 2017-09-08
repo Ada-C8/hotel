@@ -13,7 +13,7 @@ module Hotel
       @check_out = DateRange.check_out(day_out)#day_out
       @date_range = DateRange.create_range
       @length_of_stay = @date_range.length - 1
-      @total_cost = [200 * @length_of_stay]
+      @total_cost = (200 * @length_of_stay).to_i
     end
 
     def view_reservation
