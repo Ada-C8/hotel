@@ -34,7 +34,7 @@ module Hotel
       rate = Room.all.find { |room| room.room_num == room_num }.rate
       discount = 0
       discount = Block.all.find { |block| block.block_id == block_id }.discount if block_id != nil
-      return (end_date- start_date) * rate * (1 - discount)
+      return ((end_date- start_date) * rate * (1 - discount)).to_i
     end
 
     private
