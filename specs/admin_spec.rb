@@ -61,7 +61,7 @@ describe 'Admin class' do
       20.times do
         @administrator.add_reservation(@day1,@day2)
       end
-      @administrator.add_reservation(@day1,@day2).must_equal "There is not avaliable rooms for that date range"
+      proc{@administrator.add_reservation(@day1,@day2)}.must_raise ArgumentError
     end
 
 

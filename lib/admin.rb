@@ -19,7 +19,7 @@ module Hotel
           return make_reservation
         end #if
       end #each
-      return "There is not avaliable rooms for that date range"
+      raise ArgumentError.new( "There are not avaliable rooms for that date range")
     end
 
     def reservations_per_day(date)#hacer esto
