@@ -6,13 +6,18 @@ require 'date'
 
 module Hotels 
 	class Hotel
-	  attr_reader :rooms, :reservation_by_room, :reservation_by_date
+	  attr_reader :rooms, :reservations_by_room, :reservation_by_date, :room_blocks
 
 	  def initialize
+		#this array will hold room objects for each room in the hotel
 		@rooms = []
+		#this is a hash that maps room numbers to reservations for that room
 		@reservations_by_room = {}
+		#this is a hash that maps dates to reservations on that date
 		@reservations_by_date = {}
+		#this array holds all of the blocks
 		@room_blocks = []
+		#this array holds all of the rooms that are currently a part of some block
 		@rooms_currently_in_block = []
 		20.times do |i|
 			@rooms << Hotels::Room.new(i)
@@ -21,12 +26,16 @@ module Hotels
 	  end
 	  
 	  def reserve_room(room_number, date)
-		#checks to see if the room in question is a part of a block 
-		##and if the dates conflict
+		#this will check if the given room number is a memeber of any block
 		if @rooms_currently_in_block.include?(room_number)
+			#iterate through each block
 			@room_blocks.each do |current_block|
+				#iterate through this blocks room variable
 				current_block.rooms.each do |current_room_in_block|
+					#if this room number matches the room number in question
 					if current_room_in_block.room_number == room_number
+						#checks if the start dates and end dates conflict,
+						#raises errors accordingly
 						if date.start_date > current_block.start_date && 
 						date.start_date < current_block.end_date
 							raise ArgumentException, "This room is part of a block. Change your start date"
@@ -38,10 +47,12 @@ module Hotels
 			end
 		end
 		
+		#pulls all array of all reservations of a given room
 		current_reservations = @reservations_by_room[room_number]
 		current_reservations.each do |i|
+			#if the requested start date is before the current reservations start date
 			if date.start_date < i.start_date  
-				#end date happens after the start of an existing reservation
+				#checks to see if the end date is also before the start date
 				if (date.end_date - i.start_date).to_i > 0 
 					raise ArgumentError, "This room is booked during the dates requested"
 				end
@@ -51,13 +62,16 @@ module Hotels
 			end
 		end
 		
-		
+		#makes new reservation
 		new_reservation = Hotels::Reservation.new(room_number, date)
 		@reservations_by_room[room_number] << new_reservation
 		
+		#if this day already has a reservation
 		if @reservations_by_date.key?(date.start_date)
+			#add it to the array
 			@reservations_by_date[date.start_date] << new_reservation
 		else
+			#other wise make a new array and add it
 			@reservations_by_date[date.start_date] = [new_reservation]
 		end
 			
@@ -70,25 +84,33 @@ module Hotels
 	  
 	  def get_open_rooms(date)
 		open_rooms = []
+		#makes a boolean array flagging all rooms as available
 		20.times do |i|
 			open_rooms[i] = true
 		end
 		
 		current_date = date.start_date
 		while current_date < date.end_date do
+			#if the current_date has a reservation
 			if @reservations_by_date.key?(current_date)
 				current_reservations = @reservations_by_date[current_date]
+				#iterate over each reservation
 				current_reservations.each do  |this_reservation|
+					#set value of the boolean array (where the index == room number) to false
 					open_rooms[this_reservation.room_number] = false
 				end
 			end
 			current_date += 1
 		end
 		
+		#this will hold the actual avaialble rooms
 		available_rooms = []
 		index = 0
+		
 		open_rooms.each do |value|
+			#if the value of the boolean array is true
 			if value == true
+				#append the room at the index to the available_rooms array
 				available_rooms << @rooms[index]
 			end
 			index += 1
@@ -114,6 +136,7 @@ module Hotels
 		end
 	  end
 	  
+	  #just looks for at least 1 avaialble room in a given block
 	  def check_block_for_availablity(block_id)
 		@room_blocks.each do |block|
 			if block.id == block_id
@@ -145,6 +168,7 @@ module Hotels
 		end
 	  end
 	  
+	  #private helper method to return an open room from a given block
 	  def get_open_room_from_block(block)
 		rooms = block.room_booked
 		rooms.each_with_index do |value, index|
@@ -158,16 +182,3 @@ module Hotels
 	  private :get_open_room_from_block
 	end
 end
-
-hotel = Hotels::Hotel.new()
-date = DateRange.new(Date.new(2007,1,1), Date.new(2007,5,2))
-puts (hotel.get_open_rooms(date)).length
-hotel.reserve_room(1, date)
-puts (hotel.get_open_rooms(date)).length
-hotel.make_new_block(2, date, 1)
-puts "###"
-hotel.reserve_room_from_block(1)
-puts "###"
-hotel.reserve_room_from_block(1)
-puts "###"
-hotel.reserve_room_from_block(1)
