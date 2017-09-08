@@ -37,7 +37,7 @@ module My_Hotel
 
     def make_reservation(first_night, last_night)
       new_reservation = My_Hotel::Reservation.new(first_night, last_night)
-      rooms_avail = find_unreserved_rooms(first_night..last_night)
+      rooms_avail = find_continious_unreserved_room(first_night..last_night)
       new_reservation.assign_room(rooms_avail)
       new_reservation.set_cost
       new_reservation.set_reservation_id
@@ -76,10 +76,12 @@ module My_Hotel
       return true
     end
 
-    #given a range of nights, it will find rooms that are available for every night in the range.
-    #if no room is available for the whole range, returns an empty hash
-    def find_unreserved_rooms(nights)
-      # for each nightof the reservation make an array of the available rooms.
+    # given a range of nights, it will return an array arrays of
+    # all the roomnumbers that are available for every night in
+    # the range. if no room is available for the whole range,
+    # returns an empty array
+
+    def find_all_unreserved_rooms(nights)
       array_of_rooms = []
       nights.each do |night|
         reservations_on_date = find_reservations_by_date(night)
@@ -87,14 +89,20 @@ module My_Hotel
         reservations_on_date.each do |reservation|
           free_rooms.delete(reservation.room_number)
         end
-        if free_rooms.length == 0
-          return {} #If any night has no rooms available, return an empty hash.
-        end
         array_of_rooms << free_rooms
       end
-      #For each room that is free on the first night, check if it is free on the other nights.
-      #Return a hash with all the rooms => prices that are free on all nights.
-      #If no room is free on all nights, return an empty hash.
+      return array_of_rooms
+    end
+
+
+    #Given a range of nights returns a hash with all
+    #the rooms => prices that are free on all nights.
+    #If no room is free on all nights, return an empty hash.
+    def find_continious_unreserved_room(nights)
+      array_of_rooms = find_all_unreserved_rooms(nights)
+      if array_of_rooms == 0
+        return {}
+      end
       free_for_range = {}
       array_of_rooms[0].each do |room, cost|
         free = true
@@ -107,6 +115,33 @@ module My_Hotel
       end
       return free_for_range
     end
+
+
+
+
+    #given a range of nights, it will find rooms that are available for every night in the range.
+    #if no room is available for the whole range, returns an empty hash
+    # def find_unreserved_rooms(nights)
+    #   # for each night of the reservation make a hash of the available rooms => cost
+    #
+
+
+
+    #For each room that is free on the first night, check if it is free on the other nights.
+    #Return a hash with all the rooms => prices that are free on all nights.
+    #If no room is free on all nights, return an empty hash.
+    # def free_for_range
+    #   array_of_rooms[0].each do |room, cost|
+    #     free = true
+    #     array_of_rooms.each do |free_rooms|
+    #       free = free && (free_rooms[room] != nil)
+    #     end
+    #     if free == true
+    #       free_for_range[room] = cost
+    #     end
+    #   end
+    #   return free_for_range
+    # end
 
     #given the reservation_id, returns the reservation if it exists, or nill if it does not
     def find_by_reservation_id(reservation_id)
@@ -127,7 +162,7 @@ module My_Hotel
       return nil
     end
 
-    #given an array [year,month,day], it returns all the reservations on that day.
+    #given a date returns all the reservations on that day.
     #if there are no reservations on that day, returns an empty array
     def find_reservations_by_date(date)
       reservations_on_date = []
