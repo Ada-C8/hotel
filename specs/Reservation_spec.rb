@@ -79,6 +79,7 @@ describe "Reservation class" do
     proc{Hotel::Reservation.new(nil, Date.today, Date.today + 2, 1)}.must_raise AlreadyBookedError
     proc{Hotel::Reservation.new(nil, Date.today + 2, Date.today + 5, 1)}.must_raise AlreadyBookedError
     proc{Hotel::Reservation.new(nil, Date.today, Date.today + 2, 1)}.must_raise AlreadyBookedError
+    proc{Hotel::Reservation.new(nil, Date.today, Date.today + 5, 1)}.must_raise AlreadyBookedError
 
     # it won't allow any room to be booked when they are all booked for those dates
     (2..@max).each { |num| Hotel::Reservation.new(nil, Date.today, Date.today + 1, num)}
