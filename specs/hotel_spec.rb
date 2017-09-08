@@ -152,10 +152,6 @@ describe "My_Hotel::Hotel" do
       new_block.block_id.must_be_kind_of String
     end
 
-    it "raises an argument if the user attempts to make a block with more than 4 rooms" do
-      proc{@ritz.make_block(@feb1, @feb5, [1, 2, 3, 4, 5], 0.75)}.must_raise ArgumentError
-    end
-
     it "updates all_blocks" do
       new_block = @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       @ritz.all_blocks.length.must_equal 1
@@ -365,6 +361,21 @@ describe "My_Hotel::Hotel" do
       mindy.room_number.must_be :<, 5
     end
   end
+
+  describe "check_block_array" do
+    it "raises an argument if the user attempts to make a block that includes rooms that are not available" do
+      @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+      proc{@ritz.check_block_array([1, 2, 3, 4], @feb1, @feb5)}.must_raise ArgumentError
+    end
+    it "raises an argument if the user attempts to make a block with more than 4 rooms" do
+      proc{@ritz.check_block_array([1, 2, 3, 4, 5], @feb1, @feb5)}.must_raise ArgumentError
+    end
+
+    it "does not raise an argument if inputs are OK" do
+      @ritz.check_block_array([1, 2, 3, 4], @feb1, @feb5)
+    end
+  end
+
 
 
 

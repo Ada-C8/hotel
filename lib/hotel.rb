@@ -35,7 +35,7 @@ module My_Hotel
       ROOMS.keys
     end
 
-    def make_reservation(first_night, last_night)
+    def make_reservation(first_night, last_night=first_night)
       new_reservation = My_Hotel::Reservation.new(first_night, last_night)
       rooms_avail = find_continious_open_room(first_night..last_night)
       new_reservation.assign_room(rooms_avail)
@@ -48,11 +48,9 @@ module My_Hotel
       return new_reservation
     end
 
-    def make_block(first_night, last_night, array_of_rooms, discount)
+    def make_block(first_night, last_night=first_night, array_of_rooms, discount)
+      check_block_array(array_of_rooms, first_night, last_night)
       new_block = My_Hotel::Block.new(first_night, last_night, array_of_rooms, discount)
-      if array_of_rooms.length > 4
-        raise ArgumentError.new "Only accepts blocks of 4 rooms or less, a block of #{array_of_rooms.length} was entered."
-      end
       new_block.set_block_id
       while unique_block_id?(new_block) == false
         new_block.set_block_id
@@ -61,6 +59,18 @@ module My_Hotel
       new_block
     end
 
+    def check_block_array(array_of_rooms, first_night, last_night)
+      if array_of_rooms.length > 4
+        raise ArgumentError.new "Only accepts blocks of 4 rooms or less, a block of #{array_of_rooms.length} was entered."
+      end
+      available = find_continious_open_room(first_night..last_night)
+      available = available.keys
+      if array_of_rooms - available != []
+        raise ArgumentError.new "Those rooms (#{array_of_rooms}) were not available for those dates (#{first_night..last_night})."
+      end
+    end
+
+#can be used for "As an administrator, I can reserve a room from within a block of rooms"
     def make_reservation_in_block(block_id)
       current_block = find_by_block_id(block_id)
       new_reservation = My_Hotel::Reservation.new(current_block.first_night, current_block.last_night)
@@ -76,6 +86,7 @@ module My_Hotel
       return new_reservation
     end
 
+#can be used for "As an administrator, I can check whether a given block has any rooms available"
     def rooms_available_in_block(block_id)
       rooms_in_block = find_rooms_in_block(block_id)
       rooms_in_use = find_rooms_in_use_by_block_id(block_id)
@@ -86,7 +97,6 @@ module My_Hotel
       end
       free_rooms
     end
-
 
     def unique_block_id?(new_block)
       if @all_blocks.length != 0
@@ -249,8 +259,6 @@ module My_Hotel
       end
       return blocks_on_date
     end
-
-
   end
 end
 
