@@ -160,63 +160,84 @@ describe 'Hotel' do
     end
   end
 
-  describe '#make_block' do
+  describe 'blocks' do
     before do
       @block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
     end
 
-    # - As an administrator, I can create a block of rooms
-    it 'returns a new Block object' do
-      @block.must_be_kind_of Hotel::Block
-    end
+    describe '#make_block' do
+      # - As an administrator, I can create a block of rooms
+      it 'returns a new Block object' do
+        @block.must_be_kind_of Hotel::Block
+      end
 
-    it 'adds to @blocks array' do
-      @hotel.blocks.length.must_equal 1
-    end
+      it 'adds to @blocks array' do
+        @hotel.blocks.length.must_equal 1
+      end
 
-    it 'fills block with available rooms only' do
-      # - The collection of rooms should only include rooms that are available for the given date range
-      3.times { @hotel.make_reservation('2017-10-05', '2017-10-07') }
-      new_block = @hotel.make_block('2017-10-03', '2017-10-07', 10, 20)
-      reserved = @hotel.view_reservations('2017-10-06')
+      it 'fills block with available rooms only' do
+        # - The collection of rooms should only include rooms that are available for the given date range
+        3.times { @hotel.make_reservation('2017-10-05', '2017-10-07') }
+        new_block = @hotel.make_block('2017-10-03', '2017-10-07', 10, 20)
+        reserved = @hotel.view_reservations('2017-10-06')
 
-      reserved.each do |reservation|
-        new_block.rooms.wont_include reservation.room
+        reserved.each do |reservation|
+          new_block.rooms.wont_include reservation.room
+        end
+      end
+
+      it 'will not overlap multiple blocks' do
+        # - If a room is set aside in a block, it cannot be included in another block
+        block2 = @hotel.make_block('2017-08-03', '2017-08-07', 5, 20)
+
+        @block.rooms.each do |room|
+          block2.rooms.wont_include room
+        end
+      end
+
+      it 'raises an error when there are not enough rooms to fill a block' do
+        proc {
+          @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
+        }.must_raise NoRoomError
       end
     end
 
-    it 'will not overlap multiple blocks' do
-      # - If a room is set aside in a block, it cannot be included in another block
-      block2 = @hotel.make_block('2017-08-03', '2017-08-07', 5, 20)
+    describe 'find_rooms_not_in_blocks' do
+      it 'returns array of rooms' do
+        rooms = @hotel.find_rooms_not_in_blocks('2017-10-14', '2017-10-18')
+        rooms.must_be_kind_of Array
+      end
 
-      @block.rooms.each do |room|
-        block2.rooms.wont_include room
+      it 'returns rooms that are not in block' do
+        rooms = @hotel.find_rooms_not_in_blocks('2017-08-05', '2017-08-07')
+        rooms.each do |room|
+          @block.rooms.wont_include room
+        end
       end
     end
 
-    it 'raises an error when there are not enough rooms to fill a block' do
-      proc {
-        @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
-      }.must_raise NoRoomError
-    end
-  end
+    describe 'block_availability?' do
+      it 'returns true if there are unbooked rooms within block for given dates' do
+        check = @hotel.block_availability?('2017-08-05', '2017-08-07', @block.id)
+        check.must_equal true
+      end
 
-  describe 'find_rooms_not_in_blocks' do
-    it 'returns array of rooms' do
-      rooms = @hotel.find_rooms_not_in_blocks('2017-10-14', '2017-10-18')
-      rooms.must_be_kind_of Array
-    end
+      it 'returns false if there are no unbooked rooms within block for given dates' do
+        10.times { @hotel.make_reservation('2017-08-03', '2017-08-07', @block.id) }
+        check = @hotel.block_availability?('2017-08-05', '2017-08-07', @block.id)
+        check.must_equal false
+      end
 
-    it 'returns rooms that are not in block' do
-      block = @hotel.make_block('2017-10-10', '2017-10-20', 5, 20)
-      rooms = @hotel.find_rooms_not_in_blocks('2017-10-14', '2017-10-18')
-      rooms.each do |room|
-        block.rooms.wont_include room
+      it 'raises an exception if the dates do not fall within the block' do
+        proc {
+          @hotel.block_availability?('2017-10-14','2017-10-15', @block.id)
+        }.must_raise InvalidDatesError
       end
     end
   end
 end
 
-# - As an administrator, I can check whether a given block has any rooms available
 
 # TODO: lots and lots of edge case testing
+
+# - As an administrator, I can check whether a given block has any rooms available

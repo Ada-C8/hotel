@@ -69,6 +69,10 @@ module Hotel
       block
     end
 
+    def block_availability?(checkin, checkout, block_id)
+      find_available_rooms(checkin, checkout, block_id) != []
+    end
+
     def room(num)
       @rooms.each { |room| return room if room.number == num }
       nil
