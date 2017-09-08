@@ -9,6 +9,8 @@ module Hotel
     def initialize
       @all_reservations = []
       @room_number = room_number
+      @rooms_collection = []
+      all_rooms
       #(1..20).to_a
       #@rooms_collection = []
       # @blocks_arr = []
@@ -32,55 +34,56 @@ module Hotel
 
     def new_reservation(check_in, check_out, room_number = 0, room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      # auto_assign_room_number
-      # available?
+      auto_assign_room_number(room_number)
+      #booking.available?
       @all_reservations << booking
       return booking
     end
 
     def available?
-      unless @rooms_collection.include?(@room_number)
-        raise ArgumentError.new("#{@room_number} is not a valid room number at this property.")
-      end
-      @dates[0...-1].each do |date|
-        list_reservations_by_date(date)
-        @list.each do |booking|
-          if booking.room_number == @room_number
-            return false
-          end
-        end
-      end
+      return true
+      # unless @rooms_collection.include?(room_number)
+      #   raise ArgumentError.new("#{room_number} is not a valid room number at this property.")
+      # end
+      # @dates[0...-1].each do |date|
+      #   list_reservations_by_date(date)
+      #   @list.each do |booking|
+      #     if booking.room_number == room_number
+      #       return false
+      #     end
+      #   end
+      # end
 
     end
 
-    def auto_assign_room_number
-      unless @room_number > 0
+    def auto_assign_room_number(room_number)
+      unless room_number > 0
         @rooms_collection.each do |room|
-          if room.available?
-            @room_number = room
-          else @room_number = nil
+          if available?
+            room_number = room
+          else room_number = nil
           end
         end
-        if @room_number == nil
+        if room_number == nil
           raise ArgumentError.new("No rooms available for those dates.")
         end
       end
     end
 
-      def list_reservations_by_date(date)
-        date = Date.parse(date)
-        @list = []
-        @all_reservations.each do |reservation|
-          if date >= reservation.check_in && date < reservation.check_out  #removed = so that it wont' include the check out date
-            list << reservation
-          end
+    def list_reservations_by_date(date)
+      date = Date.parse(date)
+      @list = []
+      @all_reservations.each do |reservation|
+        if date >= reservation.check_in && date < reservation.check_out  #removed = so that it wont' include the check out date
+          @list << reservation
         end
-        return @list
       end
-
-      def clear_reservations #Using this for testing purposes
-        @all_reservations = []
-      end
-
+      return @list
     end
+
+    def clear_reservations #Using this for testing purposes
+      @all_reservations = []
+    end
+
   end
+end
