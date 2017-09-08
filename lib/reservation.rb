@@ -15,7 +15,6 @@ module Hotel
 
     def reserve_dates
       @dates.find_range
-
     end # end #reserve_dates
   end # end of Reservation
 end # end of Hotel module

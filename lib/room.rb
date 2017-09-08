@@ -13,5 +13,12 @@ module Hotel
 
         # go through array and remove the first room available, (shorten the number of rooms available by shortening the array) then shovel back in as guests check out
     end # end #assign_room
+
+    def check_out_of_room
+      @rooms_available << @room_number
+    end # end #check_out_of_room
+
+    def is_available?(checkin, check_out)
+    end # end #is_available?
   end # end Room class
 end # Hotel module

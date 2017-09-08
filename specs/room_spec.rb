@@ -18,8 +18,8 @@ describe 'Room' do
       @puppy_room.rooms_available.length.must_equal 19
     end # end test
 
-    xit 'assigns a room number from the rooms_available ARRAY' do
-      @puppy_room.assign_room.must_equal rooms_available[0]
+    it 'assigns room number and not index number' do
+      @puppy_room.assign_room.must_equal 1
     end # end test
   end # end assign_room
 end # end all Room tests
