@@ -2,7 +2,6 @@ require 'Date'
 
 module Hotel
   class Reservation
-    extend Overlapping
 
     attr_reader :block_id, :start_date, :end_date, :room_num
 
@@ -39,6 +38,8 @@ module Hotel
     end
 
     private
+
+    extend Overlapping
 
     def check_input(block_id, start_date, end_date, room_num)
       raise InvalidDateError if start_date.class != Date || end_date.class != Date

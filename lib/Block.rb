@@ -3,8 +3,6 @@ require 'Date'
 module Hotel
   class Block
 
-    extend Overlapping
-
     attr_reader :start_date, :end_date, :discount, :rooms, :block_id
 
     @@blocks = []
@@ -25,6 +23,8 @@ module Hotel
     end
 
     private
+
+    extend Overlapping
 
     def collect_instance
       @@blocks.push(self)
