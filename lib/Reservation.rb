@@ -18,39 +18,6 @@ module Hotel
       collect_instance
     end
 
-    def collect_instance
-      @@reservations.push(self)
-    end
-
-    def set_reservation_dates(block_id, start_date, end_date)
-      if block_id == nil
-        @start_date = start_date
-        @end_date = end_date
-      else
-        set_block_dates(block_id)
-      end
-    end
-
-    def set_block_dates(block_id)
-      @start_date = Block.all.select { |block| block.block_id == block_id }[0].start_date
-      @end_date = Block.all.select { |block| block.block_id == block_id }[0].end_date
-    end
-
-    def self.sample_available_rooms(start_date, end_date, number_of_rooms, block_id)
-      if block_id == nil
-        room_numbers = Room.all.map { |room| room.room_num }
-        blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
-        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
-        available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
-        return available_room_numbers.sample(number_of_rooms)
-      else
-        room_numbers = Block.all.select { |block| block.block_id == block_id }[0].rooms
-        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
-        available_room_numbers = room_numbers - reserved_room_numbers
-        return available_room_numbers.sample(number_of_rooms)
-      end
-    end
-
     def total
       rate = 0
       Room.all.each do |room|
@@ -91,6 +58,39 @@ module Hotel
       room_reservations.each do |reservation|
         raise AlreadyBookedError if Hotel::Reservation.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
+    end
+
+    def set_reservation_dates(block_id, start_date, end_date)
+      if block_id == nil
+        @start_date = start_date
+        @end_date = end_date
+      else
+        set_block_dates(block_id)
+      end
+    end
+
+    def set_block_dates(block_id)
+      @start_date = Block.all.select { |block| block.block_id == block_id }[0].start_date
+      @end_date = Block.all.select { |block| block.block_id == block_id }[0].end_date
+    end
+
+    def self.sample_available_rooms(start_date, end_date, number_of_rooms, block_id)
+      if block_id == nil
+        room_numbers = Room.all.map { |room| room.room_num }
+        blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
+        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
+        available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
+        return available_room_numbers.sample(number_of_rooms)
+      else
+        room_numbers = Block.all.select { |block| block.block_id == block_id }[0].rooms
+        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
+        available_room_numbers = room_numbers - reserved_room_numbers
+        return available_room_numbers.sample(number_of_rooms)
+      end
+    end
+
+    def collect_instance
+      @@reservations.push(self)
     end
 
   end # Reservation class
