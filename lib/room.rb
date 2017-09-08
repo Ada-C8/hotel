@@ -2,12 +2,13 @@ require 'date'
 
 module Hotel
   class Room
-      @@rooms_available = (1..20).to_a
+      ROOMS = (1..20).to_a
 
     attr_reader :room_number, :rooms_available
 
     def initialize
       @room_number = room_number
+      @@rooms_available = ROOMS
     end # end #initialize
 
     def self.rooms_available
@@ -15,7 +16,8 @@ module Hotel
     end # end #rooms_available
 
     def assign_room
-      @room_number = @@rooms_available.shift # removes first element of array
+      @room_number = @@rooms_available[0]
+      @@rooms_available.shift # removes first element of array
 
         # go through array and remove the first room available, (shorten the number of rooms available by shortening the array) then shovel back in as guests check out
     end # end #assign_room
