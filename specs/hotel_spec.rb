@@ -18,6 +18,11 @@ describe "hotel class" do
       new_hotel.reservations.must_be_instance_of Array
     end
 
+    it "Should have found_reservations array" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.found_reservations.must_be_instance_of Array
+    end
+
     it "Should be able to add a room" do
       new_room = HotelManagment::Room.new(1)
       new_hotel = HotelManagment::Hotel.new
@@ -87,18 +92,48 @@ describe "hotel class" do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :check_out_date
     end
-    # TODO
+
     it "Should respond to rate method" do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.must_respond_to :rate
     end
 
-    # TODO
     it "Should return the cost of a reservation" do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       value = new_reservation.rate
-      puts "Value is #{value}, type: #{value.class}"
       value.must_equal 1000
     end
   end
+
+  describe "reservations_by_date" do
+
+    it "Should return the reservations that overlap with date given" do
+
+      start_date = Date.today
+
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.create_reservation("marisa", "morris", start_date + 5, start_date + 10, 1)
+      new_hotel.create_reservation("marisa", "morris", start_date + 11, start_date + 16, 1)
+      new_hotel.create_reservation("marisa", "morris", start_date + 20, start_date + 25, 1)
+
+
+      # new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
+      # new_hotel.create_reservation("marisa", "morris", Date.new(2017,10,5), Date.new(2017,10,10), 1)
+      # new_hotel.create_reservation("marisa", "morris", Date.new(2017,11,5), Date.new(2017,11,10), 1)
+
+      input = start_date + 5
+
+      new_hotel.reservations_by_date(input).must_equal [new_hotel.reservations[0]]
+    end
+
+    it "Raises ArgumentError if dates are Invalid" do
+      new_hotel = HotelManagment::Hotel.new
+
+      proc { new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,1), 1) }.must_raise ArgumentError
+
+
+    end
+
+  end
+
 end

@@ -12,8 +12,6 @@ module HotelManagment
       @last_name = last_name
       @check_in_date = check_in_date
       @check_out_date = check_out_date
-      # TODO
-      # get rid of room_number since its already in room class?
       @room_number = room_number
       @cost = cost
     end

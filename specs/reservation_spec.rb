@@ -41,7 +41,7 @@ describe "Reservaton Class" do
     end
   end
 
-# TODO
+
   describe "Rate Method" do
 
     it "Must respond to rate" do
@@ -50,11 +50,6 @@ describe "Reservaton Class" do
     end
 
 
-    # it "Rate method should return an instance of an Integer" do
-    #   new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
-    #
-    #   cost.must_be_instance_of Integer
-    # end
 
     it "should return the total cost based on the number of nights reserved" do
 
