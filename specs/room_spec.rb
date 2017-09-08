@@ -23,15 +23,18 @@ describe "Room" do
 
     # it "checks the first, tenth, and twentienth rooms can be retrieved" do
     #   rooms = Hotel::Room.all
-    #   puts rooms[0]
+    #   rooms.each do |room|
+    #     room[8].must_equal 7
+    #   end
+    #   # puts rooms[0]
     #   # rooms[0].must_equal Hotel::Room.all
     # end
 
     it "checks everything in the array is a room" do
-        rooms = Hotel::Room.all
-        rooms.each do |room|
-          room.must_be_instance_of Hotel::Room
-        end
+      rooms = Hotel::Room.all
+      rooms.each do |room|
+        room.must_be_instance_of Hotel::Room
+      end
     end
   end
 end
