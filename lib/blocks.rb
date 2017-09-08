@@ -1,4 +1,4 @@
-equire_relative 'reservation'
+require_relative 'reservation'
 require 'date'
 require 'pry'
 module Hotel
@@ -6,17 +6,17 @@ module Hotel
 
   class Block < Reservation
 
-    attr_accessor :date_range, :room, :name, :contact_info, :check_in, :check_out, :price
+    attr_accessor :date_range, :room, :name, :contact_info, :check_in, :check_out, :price, :discount
 
     def  initialize(check_in, check_out, room, name, contact_info, discount)
 
-      super
+      super(check_in, check_out, room, name, contact_info)
       @discount = calculate_discount(discount)
       @price = (@date_range.length) * PRICE_PER_NIGHT * @discount
     end
 
     def calculate_discount(number)
-      (100 - discount) * 0.01
+      (100 - number) * 0.01
     end
 
     def change_discount(discount)
