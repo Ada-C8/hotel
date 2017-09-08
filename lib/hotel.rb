@@ -1,10 +1,11 @@
+require 'pry'
 require_relative 'reservation'
 
 module Hotel
 
   class Hotel
 
-    attr_reader :list_of_rooms, :price, :reservation_collection
+    attr_reader :list_of_rooms, :price, :reservation_collection, :reservation_made
 
     def initialize(num_of_rooms, price)
       @list_of_rooms = []
@@ -18,9 +19,11 @@ module Hotel
       @reservation_collection = []
     end #initialize
 
-    def make_reservation
-      @reservation = Hotel::Reservation.new(check_in, check_out, room_num)
-      @reservation_collection << @reservation
+    def make_reservation(check_in, check_out, room_num)
+      @reservation_made = Reservation.new(check_in, check_out, room_num)
+      # binding.pry
+
+      @reservation_collection << @reservation_made
     end
 
     # def list_of_rooms
@@ -34,3 +37,8 @@ module Hotel
   end #class
 
 end #module
+
+# my_hotel = Hotel::Hotel.new(20, 200)
+# my_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
+# puts my_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
+# puts my_hotel.reservation.room_num.must_equal 4
