@@ -35,9 +35,7 @@ module Hotel
     def total
       rate = Room.all.find { |room| room.room_num == room_num }.rate
       discount = 0
-      print Block.all.find { |block| block.block_id == block_id }
       discount = Block.all.find { |block| block.block_id == block_id }.discount if block_id != nil
-      puts discount
       return (@end_date - @start_date) * rate * (1 - discount)
     end
 
