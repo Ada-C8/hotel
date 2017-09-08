@@ -68,6 +68,7 @@ describe 'Hotel' do
       it 'makes its constituent rooms unavailable' do
         @my_hotel.create_block(@check_in, @check_out, 1, 0.70).must_be_instance_of Array
         @my_hotel.blocks[0].rooms.each {|room| room.available?(@check_in, @check_out).must_equal false}
+        proc {@my_hotel.rooms[0].reserve}.must_raise ArgumentError
       end
     end
   end
