@@ -14,15 +14,13 @@ module Hotel
 
     def initialize(room_num, rate = DEFAULT_RATE)
 
-      if room_num > 0
-        @room_num = room_num
-      else
-        raise ArgumentError.new("Not a valid room number")
-      end
+      raise ArgumentError.new("Not a valid room number") if room_num < 1
 
+      @room_num = room_num
       @reservations = []
       @blocks = []
       @rate = rate
+
     end
 
     def <=>(other_room)
@@ -37,41 +35,20 @@ module Hotel
       reservations << new_reservation
 
       return new_reservation
-      
+
     end
 
     def is_booked?(start_date, end_date = start_date.next_day)
-      # don't include final date since check-out doesn't conflict with check-in of a new reservation
-      date_range = (start_date...end_date).to_a
 
-      reservations.each do |reservation|
-        date_range.each do |date|
-          if reservation.include?(date)
-            return true
-          end
-        end
-      end
-
-      return false
+      return array_include_date?(reservations, start_date, end_date)
 
     end
 
     def is_blocked?(start_date, end_date = start_date.next_day)
-      date_range = (start_date...end_date).to_a
 
-      blocks.each do |block|
-        date_range.each do |date|
-          if block.include?(date)
-            return true
-          end
-        end
-      end
-
-      return false
+      return array_include_date?(blocks, start_date, end_date)
 
     end
-
-    #private
 
     def to_s
       # return human readable representation
@@ -92,22 +69,22 @@ module Hotel
 
     end
 
-    # def valid_room_num?(num)
-    #   return num >= 1 && num <= ::Hotel::Hotel::NUM_ROOMS
-    # end
+    private
 
-    # def is_available?(start_date, end_date)
-    #   @reservations.each do |reservation|
-    #     check_in = reservation.check_in
-    #     check_out = reservation.check_out
-    #
-    #     if date >= check_in && date < check_out
-    #       return false
-    #     end
-    #   end
-    #
-    #   return true
-    # end
+    def array_include_date?(array, start_date, end_date)
+      # don't include final date since check-out doesn't conflict with check-in of a new reservation
+      date_range = (start_date...end_date).to_a
+
+      array.each do |item|
+        date_range.each do |date|
+          if item.include?(date)
+            return true
+          end
+        end
+      end
+
+      return false
+    end
 
   end # end of Room class
 
