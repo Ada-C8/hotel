@@ -9,7 +9,7 @@ module ReservationSystem
     attr_accessor :hotel, :all_reservations, :new_reservation
 
     BASE_ROOM_RATE = 200
-    
+
     def initialize
       @hotel = Array.new
       @all_reservations = Array.new
@@ -27,7 +27,7 @@ module ReservationSystem
         all_reservations << @new_reservation
         return @new_reservation
       else
-        raise UnavailableDate.new("This room is unavailable for #{nights} night(s) starting on #{check_in}")
+        raise UnavailableError.new("This room is unavailable for #{nights} night(s) starting on #{check_in}")
       end
 
     end # reserve

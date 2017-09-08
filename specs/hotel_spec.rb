@@ -56,9 +56,9 @@ describe "Hotel" do
       end #valid number error
 
       it "Raises an error if the room is unavailable for given date range" do
-          proc {ada_inn.reserve(Date.new(2017,10,13), 1, room_4)}.must_raise Reservable::UnavailableDate
-          proc {ada_inn.reserve(Date.new(2017,6,10), 5, room_5)}.must_raise Reservable::UnavailableDate
-          proc {ada_inn.reserve(Date.new(2017,6,10), 1, room_7)}.must_raise Reservable::UnavailableDate
+          proc {ada_inn.reserve(Date.new(2017,10,13), 1, room_4)}.must_raise Reservable::UnavailableError
+          proc {ada_inn.reserve(Date.new(2017,6,10), 5, room_5)}.must_raise Reservable::UnavailableError
+          proc {ada_inn.reserve(Date.new(2017,6,10), 1, room_7)}.must_raise Reservable::UnavailableError
 
           ada_inn.reserve(Date.new(2017,6,14), 20, room_6) #because there is no wont_raise
       end
