@@ -1,5 +1,3 @@
-# require 'date'
-
 module BookingSystem
   class DateRange
 

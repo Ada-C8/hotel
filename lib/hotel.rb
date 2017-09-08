@@ -1,5 +1,8 @@
+require_relative 'check_user_input'
+
 module BookingSystem
   class Hotel
+    include BookingSystem::CheckUserInput
 
     class UnavailableRoomError < StandardError
     end
@@ -9,16 +12,6 @@ module BookingSystem
       @rooms = (1..20).to_a
       @all_single_reservations = []
       @all_block_reservations = []
-    end
-
-    def check_user_input(user_input)
-      unless user_input.class == Integer
-        raise BookingSystem::Reservation::InvalidRoomError.new("Invalid room error, must enter an integer between 1-20 (given: #{user_input})")
-      end
-
-      unless user_input > 0 && user_input < 21
-        raise BookingSystem::Reservation::InvalidRoomError.new("Invalid room error, must enter an integer between 1-20 (given: #{user_input})")
-      end
     end
 
     def make_reservation(room, check_in, check_out)
@@ -41,14 +34,6 @@ module BookingSystem
       #https://stackoverflow.com/questions/25168005/how-to-select-the-first-n-elements-from-ruby-array-that-satisfy-a-predicate
 
       check_user_input(number_of_rooms)
-
-      # unless number_of_rooms.class == Integer
-      #   raise BookingSystem::Reservation::InvalidRoomError.new("Invalid room error, must enter an integer between 1-20 (given: #{number_of_room})")
-      # end
-      #
-      # unless number_of_rooms > 0 && room < 21
-      #   raise BookingSystem::Reservation::InvalidRoomError.new("Invalid room error, must enter an integer between 1-20 (given: #{number_of_rooms})")
-      # end
 
       all_available_rooms = []
       @rooms.each do |room_num|
@@ -102,14 +87,6 @@ module BookingSystem
 
     #check if room is available for selected dates
     def room_available?(room, check_in, check_out)
-
-      # unless room.class == Integer
-      #   raise BookingSystem::Reservation::InvalidRoomError.new("Invalid room error, must enter an integer between 1-20 (given: #{room})")
-      # end
-      #
-      # unless room > 0 && room < 21
-      #   raise BookingSystem::Reservation::InvalidRoomError.new("Invalid room error, must enter an integer between 1-20 (given: #{room})")
-      # end
 
       check_user_input(room)
 

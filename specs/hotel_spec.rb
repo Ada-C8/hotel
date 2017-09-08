@@ -143,13 +143,6 @@ describe "Hotel class" do
     end
 
     #https://stackoverflow.com/questions/16599256/testing-private-method-in-ruby-rspec
-    it "Raises an InvalidRoomError if input for room is not an Integer between 1-20" do
-      proc { @test_ob.send(:room_available?, 0, @check_in, @check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
-
-      proc { @test_ob.send(:room_available?, "one", @check_in, @check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
-
-      proc { @test_ob.send(:room_available?, 21, @check_in, @check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
-    end
 
     it "Returns true if room is available for requested dates" do
       @test_ob.send(:room_available?, @room, @check_in, @check_out).must_equal true

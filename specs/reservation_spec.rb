@@ -35,17 +35,6 @@ describe "Reservation class" do
       @test_ob.room.must_be_instance_of Integer
     end
 
-    it "Raises InvalidRoomError if room argument is not an Integer between 1-20" do
-      check_in = Date.new(2017,9,9)
-      check_out = Date.new(2017,9,12)
-
-      proc { BookingSystem::Reservation.new("one", check_in, check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
-
-      proc { BookingSystem::Reservation.new(0, check_in, check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
-
-      proc { BookingSystem::Reservation.new(21, check_in, check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
-    end
-
   end
 
   describe "total_cost method" do
