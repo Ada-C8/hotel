@@ -18,28 +18,25 @@ module Hotel
       collect_instance
     end
 
-    def total
-      rate = 0
-      Room.all.each do |room|
-        rate = room.rate if room.room_num == @room_num
-      end
-      return (@end_date - @start_date) * rate
-    end
-
     def self.all(date = nil)
       return @@reservations if date == nil
       return @@reservations.select { |reservation| reservation.start_date <= date && reservation.end_date >= date }
     end
 
     def self.available(start_date, end_date)
-      available_rooms = Room.all.map { |room| room.room_num }
-      overlapping_reservations = @@reservations.select do |reservation|
-        self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
+      all_rooms = Room.all.map { |room| room.room_num }
+      overlapping_rooms = @@reservations.map do |reservation|
+        reservation.room_num if self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
-      overlapping_reservations.each do |reservation|
-        available_rooms.delete(reservation.room_num) if available_rooms.include?(reservation.room_num)
+      return all_rooms - overlapping_rooms
+    end
+
+    def total
+      rate = 0
+      Room.all.each do |room|
+        rate = room.rate if room.room_num == @room_num
       end
-      return available_rooms
+      return (@end_date - @start_date) * rate
     end
 
     private
