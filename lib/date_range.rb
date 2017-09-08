@@ -26,14 +26,21 @@ module DateRange
   end
 
   def self.validate_order(first, second)
+    first = validate(first)
+    second = validate(second)
     unless first < second
       raise(InvalidDatesError, 'Start date must be at least 1 day before end date')
     end
   end
 
   def self.validate(input)
-    return input if input.class == Date
-    Date.parse(input)
+    if input.class == Date
+      return input
+    elsif input.class == String
+      return Date.parse(input)
+    else
+      raise(InvalidDatesError, "Input #{input.class} cannot be converted into Date")
+    end
   end
 
   def self.find_range(start_date, end_date, flag = false)
