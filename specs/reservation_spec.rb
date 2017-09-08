@@ -2,7 +2,8 @@ require_relative 'spec_helper'
 
 describe "Reservation class" do
   before do
-    @reservation_test = Hotel::Reservation.new("2017-9-12 to 2017-9-15")
+    @reservation_test = Hotel::Reservation.new(1, "2017-9-12","2017-9-15")
+
   end
   describe "Initialize Reservation class" do
     it "Reservation.new is an instance of Hotel module" do
@@ -12,4 +13,4 @@ describe "Reservation class" do
       @reservation_test.must_respond_to :date_range
     end
   end
-end # end Reservation class
+end # end describe Reservation class
