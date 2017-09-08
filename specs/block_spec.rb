@@ -38,5 +38,6 @@ describe "Block" do
       @booking.avail_block_rooms.must_be_empty
       @booking.avail_block_rooms.must_be_kind_of Array
     end
-  end
-end
+  end # Describe
+
+end # Describe

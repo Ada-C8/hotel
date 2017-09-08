@@ -73,7 +73,34 @@ describe "Hotel" do
       @hotel.reservations.length.must_equal 1
     end
 
-    #TODO: Write extra tests for this block
+    #TODO: Write extra tests for this block???
+  end
+
+  xdescribe "#reserve_room_in_block" do
+    it "should return integers for the available room numbers" do
+
+    end
+  end
+
+  describe "#avail_rooms_in_block" do
+    it "only one instance of BookingSystem::Block should be added to all reservations" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.avail_rooms_in_block?("Bob").must_be_kind_of Array
+      @hotel.reservations.length.must_equal 1
+      @hotel.reservations.each do |reservation|
+        reservation.must_be_instance_of BookingSystem::Block
+      end
+    end
+
+    it "should return 1 instance of Block if other single reservations are added" do
+      check_in = '2001-02-03'
+      check_out = '2001-02-04'
+      10.times do
+        @hotel.create_reservation(check_in, check_out)
+      end
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.avail_rooms_in_block?("Bob").must_be_kind_of Array
+    end
   end
 
   describe "#all_reservations(date)" do

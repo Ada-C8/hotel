@@ -33,12 +33,39 @@ module BookingSystem
       return new_block
     end
 
-    def reserve_room_in_block(reserved_for)
-      # Find block with the specific name it was reserved for
+    def reserve_room_in_block(reserved_name)
+      # # Find block with the specific name it was reserved for
+      # @reservations.each do |reservation|
+      #   if reservation.class == BookingSystem::Class
+      #     found_block = BookingSystem::Class
+      #     if found_block.reserved_for == reserved_name
+      #
+      #
+      #
+      #   end
+      # end
 
     end
 
-    def avail_rooms_in_block?
+    def avail_rooms_in_block?(reserved_name)
+      # Find block with the specific name it was reserved for
+      found_blocks = []
+      @reservations.each do |reservation|
+        if reservation.class == BookingSystem::Block
+          found_blocks << reservation
+        end
+      end
+      found_blocks.each do |block|
+        if block.reserved_for == reserved_name
+          return block.reserved_rooms
+          # This is an array of all available rooms
+        end
+        #TODO: Raise ArgumentError if no name matches the block reservation
+      end
+        # if reservation.reserved_for == reserved_name
+        #   puts reservation.reserved_for
+        #   return "I found this block reservation"
+        # end
     end
     # As an administrator, I can check whether a given block has any rooms available
     # As an administrator, I can reserve a room from within a block of rooms
