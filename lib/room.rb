@@ -9,7 +9,7 @@ module Hotel
 
     DEFAULT_RATE = 200
 
-    attr_reader :room_num, :reservations
+    attr_reader :room_num, :reservations, :blocks
     attr_accessor :rate
 
     def initialize(room_num, rate = DEFAULT_RATE)
@@ -21,6 +21,7 @@ module Hotel
       end
 
       @reservations = []
+      @blocks = []
       @rate = rate
     end
 
@@ -45,6 +46,21 @@ module Hotel
       reservations.each do |reservation|
         date_range.each do |date|
           if reservation.include?(date)
+            return true
+          end
+        end
+      end
+
+      return false
+
+    end
+
+    def is_blocked?(start_date, end_date = start_date.next_day)
+      date_range = (start_date...end_date).to_a
+
+      blocks.each do |block|
+        date_range.each do |date|
+          if block.include?(date)
             return true
           end
         end

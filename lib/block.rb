@@ -19,10 +19,20 @@ module Hotel
 
       @check_in = check_in
       @check_out = check_out
-      @discount = discount
+      @discount = discount  # rate of discount as a decimal (e.g. 0.2 for 20% off)
       @room_block = room_block # array of rooms
 
       valid_dates? # this seems not efficient/ideal
+    end
+
+    def is_available?(room)
+      raise ArgumentError.new("Room number #{room.room_num} isn't in the block") if !room_block.include?(room)
+
+      return !room.is_booked?(check_in, check_out)
+    end
+
+    def find_avail_in_block
+      return room_block.select { |room| is_available?(room) }
     end
 
   end # end of Block class

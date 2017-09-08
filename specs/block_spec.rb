@@ -40,5 +40,50 @@ describe "Testing Block class" do
     end
   end
 
+  describe "#is_available" do
+    let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
+    let(:check_in) { Date.new(2017,9,3) }
+    let(:check_out) { Date.new(2017,9,5) }
+    let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
+
+    it "Returns true if a room in the block is available" do
+      room1 = rooms[0]
+      block.is_available?(room1).must_equal true
+
+      room1.reserve(check_in, check_out)
+      block.is_available?(room1).must_equal false
+    end
+
+    it "Raises an argument error if room isn't in the block" do
+      wrong_room = Hotel::Room.new(6)
+      proc { block.is_available?(wrong_room) }.must_raise ArgumentError
+    end
+  end
+
+  describe "#find_avail_in_block" do
+    let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
+    let(:check_in) { Date.new(2017,9,3) }
+    let(:check_out) { Date.new(2017,9,5) }
+    let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
+
+    it "Returns a list of rooms that are available in the block" do
+      block.find_avail_in_block.must_equal rooms
+
+      rooms[0].reserve(check_in, check_out)
+      rooms[1].reserve(check_in, check_out)
+
+      block.find_avail_in_block.must_equal rooms[2..-1]
+    end
+
+    it "Returns an empty array if no rooms available" do
+      block.find_avail_in_block.must_equal rooms
+
+      5.times do |num|
+        rooms[num].reserve(check_in, check_out)
+      end
+
+      block.find_avail_in_block.must_equal []
+    end
+  end
 
 end
