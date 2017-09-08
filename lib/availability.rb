@@ -18,9 +18,12 @@ class Availability
     end
 
     until current_date == last_day
+      roominfo = Marshal.load(Marshal.dump(roominfo))
       @@calendar << {current_date => roominfo}
       current_date += 1
     end
+
+
   end
 
   def self.calendar
@@ -62,7 +65,6 @@ class Availability
         finalrooms << id
       end
     end
-
     return finalrooms
   end
 
