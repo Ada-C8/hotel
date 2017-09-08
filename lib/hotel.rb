@@ -94,6 +94,17 @@ class Hotel
 	end
   end
   
+  def check_block_for_availablity
+    @room_blocks.each do |block_of_rooms|
+		block_of_rooms.room_booked.each do |is_room_booked|
+			if is_room_booked == true
+				return true
+			end
+		end
+	end
+	return false
+  end
+  
 end
 
 #date1 = Date.new(2007,1,1)
