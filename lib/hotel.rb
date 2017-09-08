@@ -20,10 +20,11 @@ module ReservationSystem
     def reserve(check_in, nights, room)
       valid_date?(check_in)
       positive_integer?(nights)
-      # TODO validate room is available
+      #TODO room.available?
       @new_reservation = ReservationSystem::Reservation.new(check_in, nights, room)
       all_reservations << @new_reservation
       return @new_reservation
+
     end # reserve
 
     def search_reservations_by_date(date)
