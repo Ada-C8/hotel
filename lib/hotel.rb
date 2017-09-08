@@ -15,9 +15,13 @@ module Hotel
     end
 
     def new_reservation(checkin_date, checkout_date, room_number)
-      reservation = Reservation.new(checkin_date, checkout_date, room_number)
+      if rooms_available(checkin_date, checkout_date).any? { |room| room.number == room_number }
+        reservation = Reservation.new(checkin_date, checkout_date, room_number)
 
-      reservations << reservation
+        reservations << reservation
+      else
+        raise ArgumentError.new("Room is not available for those dates.")
+      end
     end
     # get list of all reservations on a given date
     def reservations_on(date)

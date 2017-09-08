@@ -37,6 +37,17 @@ describe "Hotel" do
       hotel.reservations.each { |reserv| reserv.must_be_instance_of Hotel::Reservation }
       hotel.reservations[0].checkin.must_equal Date.new(2017, 10, 1)
     end
+
+    it "raises an ArgumentError when a room is not available for a given range" do
+      proc { hotel.new_reservation("10-02-2017", "10-04-2017", 5) }.must_raise ArgumentError
+    end
+
+    it "allows reservation starting on checkout date" do
+      before = hotel.reservations.length
+      hotel.new_reservation("10-04-2017", "10-07-2017", 5)
+
+      hotel.reservations.length.must_equal (before + 1)
+    end
   end
 
   describe "reservations_on" do
