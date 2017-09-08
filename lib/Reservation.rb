@@ -12,6 +12,7 @@ module Hotel
       @block_id = block_id
       set_reservation_dates(block_id, start_date, end_date)
       room_num = Reservation.sample_available_rooms(start_date, end_date, block_id).sample if room_num == 0
+      prevent_booking_blocked(room_num, block_id)
       prevent_doublebooking(start_date, end_date, room_num)
       @room_num = room_num
       collect_instance
@@ -53,6 +54,14 @@ module Hotel
       raise AlreadyBookedError if Reservation.available(start_date, end_date).include?(room_num) == false
     end
 
+    def prevent_booking_blocked(room_num, block_id)
+      if block_id == nil
+        room_numbers = Room.all.map { |room| room.room_num }
+        blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
+        raise BlockedRoomError if blocked_room_numbers.include?(room_num)
+      end
+    end
+
     def set_reservation_dates(block_id, start_date, end_date)
       if block_id == nil
         @start_date = start_date
@@ -79,6 +88,7 @@ module Hotel
       reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
       available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
       raise NoRoomsAvailableError.new if available_room_numbers.length < 1
+      print available_room_numbers
       return available_room_numbers.sample(number_of_rooms)
     end
 
