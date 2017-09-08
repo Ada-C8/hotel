@@ -20,14 +20,17 @@ class Hotel
   end
   
   def reserve_room(room_number, date)
-	
+	#checks to see if the room in question is a part of a block 
+	##and if the dates conflict
 	if @rooms_currently_in_block.includes?(room_number)
 		@room_blocks.each do |current_block|
 			current_block.rooms.each do |current_room_in_block|
 				if current_room_in_block == room_number
 					if date.start_date > current_block.start_date && 
 					date.start_date < current_block.end_date
-						raise ArgumentException, "This room is part of a block"
+						raise ArgumentException, "This room is part of a block. Change your start date"
+					elsif date.end_date > current_block.start_date
+						raise ArgumentException, "This room is part of a block. Change your end date"
 					end
 				end
 			end
