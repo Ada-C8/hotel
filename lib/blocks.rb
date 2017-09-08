@@ -1,14 +1,17 @@
 require_relative 'reservation'
+require_relative './concerns/dateable'
 require 'date'
 require 'pry'
 module Hotel
 
 
   class Block < Reservation
+    include Hotel::Dateable::InstanceMethods
+
 
     attr_accessor :date_range, :room, :name, :contact_info, :check_in, :check_out, :price, :discount
 
-    def  initialize(check_in, check_out, room, name, contact_info, discount)
+    def  initialize(check_in, check_out, room = "TBD", name, contact_info, discount)
 
       super(check_in, check_out, room, name, contact_info)
       @discount = calculate_discount(discount)
