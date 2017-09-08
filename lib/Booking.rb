@@ -10,17 +10,17 @@ require_relative 'Block'
 
 ## THINK THROUGH: Does a Room create a Reservation based on availability vs. does a Reservation, once created, reserve a room?
 
-module Hotel
+module HotelBooking
   # NUMBER_OF_ROOMS = 20  ### might not want to use constant, especially if we have subclasses of rooms (by type), and each room subclass might have a different number. may best be a constant defined by class/subclass
 
-  class BookingProgram
+  class Hotel
     attr_reader :all_rooms, :all_reservations, :all_blocks
     NUM_STANDARD_ROOMS = 20
     #NUM_OTHER_ROOMS = 0
 
     def initialize # do we want to initialize with hotel name?
       # @all_rooms = Hotel::Room.all # returns an array or hash of Room objects
-      @all_rooms = Hotel::BookingProgram.setup_rooms
+      @all_rooms = HotelBooking::Hotel.setup_rooms
       @all_reservations = []
       @all_blocks = []
 
@@ -50,7 +50,7 @@ module Hotel
 
       block_id = @all_blocks.count + 1
 
-      block = Hotel::Block.new(check_in,check_out,room_ids,discounted_rate,block_id)
+      block = HotelBooking::Block.new(check_in,check_out,room_ids,discounted_rate,block_id)
       block.room_ids.each do |room_id|
         room = find_room_by_id(room_id)
         room.block_room(check_in,check_out,block_id)
@@ -85,11 +85,11 @@ module Hotel
         block_check_out= block.check_out.to_s
 
         #TODO: Think about if we want to make a block reservation id a +1 count of all reservations, or have separate ids for blocks
-        reservation = Hotel::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount)
+        reservation = HotelBooking::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount)
 
         reservation.block_id = block_id
       else
-        reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
+        reservation = HotelBooking::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
       end
 
       #TODO: How to incorporate reserve_room logic for Block Reservations
@@ -154,7 +154,7 @@ module Hotel
       standard_rooms = []
 
       until standard_rooms.count == NUM_STANDARD_ROOMS
-        room =  Hotel::Room.new(i)
+        room =  HotelBooking::Room.new(i)
         standard_rooms << room
         i += 1
       end

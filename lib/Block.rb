@@ -1,6 +1,6 @@
 require 'pry'
 
-module Hotel
+module HotelBooking
   class Block
     attr_accessor :id, :guest, :check_in, :check_out, :room_ids
     attr_reader :discounted_rate
@@ -11,7 +11,7 @@ module Hotel
       @room_ids = room_ids
       @discounted_rate = discounted_rate
       # room_ids.each do |id|
-      #   room = Hotel::BookingProgram.find_room_by_id(id)
+      #   room = HotelBooking::Hotel.find_room_by_id(id)
       #   # room.reserve_room(check_in,check_out,@id)
       #   @rooms << room
       # end

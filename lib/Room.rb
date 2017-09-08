@@ -4,7 +4,7 @@ require_relative 'Reservation'
 require_relative 'BlockReservation'
 require_relative 'Booking'
 
-module Hotel
+module HotelBooking
 
   class Room
     attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates, :block_id_and_dates
@@ -98,7 +98,7 @@ module Hotel
       all_rooms = []
 
       until all_rooms.count == @@total_num_rooms
-        room =  Hotel::Room.new(i)
+        room =  HotelBooking::Room.new(i)
         all_rooms << room
         i += 1
       end

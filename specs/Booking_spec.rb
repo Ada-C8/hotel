@@ -1,13 +1,13 @@
 require_relative 'spec_helper'
 
-describe "BookingProgram" do
+describe "Hotel" do
   describe "Initialize" do
     it "initializes with 20 rooms, numbered 1 through 20 and I can can access the list of all rooms " do
-      new_hotel = Hotel::BookingProgram.new
+      new_hotel = HotelBooking::Hotel.new
 
       new_hotel.all_rooms.must_be_instance_of Array
       new_hotel.all_rooms.each do |room|
-        room.must_be_instance_of Hotel::Room
+        room.must_be_instance_of HotelBooking::Room
       end
 
 
@@ -17,7 +17,7 @@ describe "BookingProgram" do
 
   describe "find_res_by_date" do
     it "Returns an array of Reservation objects" do
-      new_hotel =  Hotel::BookingProgram.new
+      new_hotel =  HotelBooking::Hotel.new
 
       new_hotel.make_reservation("2018-03-14", "2018-04-16", 3)
 
@@ -39,14 +39,14 @@ describe "BookingProgram" do
 
   describe "make reservation" do
     it "reserves a Room and makes a Reservation object " do
-      new_hotel =  Hotel::BookingProgram.new
+      new_hotel =  HotelBooking::Hotel.new
 
       new_hotel.make_reservation("2018-03-14", "2018-03-16", 3)
 
       new_reservation = new_hotel.all_reservations[0]
 
 
-      new_reservation.must_be_instance_of Hotel::Reservation
+      new_reservation.must_be_instance_of HotelBooking::Reservation
       new_reservation.id.must_equal 1
 
       new_res_room = new_hotel.find_room_by_id(new_reservation.room_id)
@@ -57,7 +57,7 @@ describe "BookingProgram" do
     end
 
     it "makes a BlockReservation object if given a block_id" do
-      new_hotel =  Hotel::BookingProgram.new
+      new_hotel =  HotelBooking::Hotel.new
       room_id = 3
       non_exist_block_id = 2
       block_id = 1
@@ -89,14 +89,14 @@ describe "BookingProgram" do
     it "creates a Block and reserves a room" do
       #note, need to fix: it shouldn't reserve room officially, but should be "Blocked off" test for this when the functionality is made
 
-      new_hotel =  Hotel::BookingProgram.new
+      new_hotel =  HotelBooking::Hotel.new
 
       new_hotel.make_block("2018-03-14", "2018-03-16",[18,19,20], 2)
 
       new_block = new_hotel.all_blocks[0]
 
 
-      new_block.must_be_instance_of Hotel::Block
+      new_block.must_be_instance_of HotelBooking::Block
       new_block.id.must_equal 1
 
       new_block.room_ids.each do |room_id|
@@ -113,7 +113,7 @@ describe "BookingProgram" do
 
   describe "available_rooms" do
     before do
-      @new_hotel = Hotel::BookingProgram.new
+      @new_hotel = HotelBooking::Hotel.new
       @check_in = "June 1, 2018"
       @check_out = "June 30, 2018"
       @june_rooms = @new_hotel.available_rooms(@check_in, @check_out)
@@ -124,7 +124,7 @@ describe "BookingProgram" do
       @june_rooms.must_be_instance_of Array
       @june_rooms.count.must_equal 20
       @june_rooms.each do |room|
-        room.must_be_instance_of Hotel::Room
+        room.must_be_instance_of HotelBooking::Room
       end
     end
 
@@ -167,14 +167,14 @@ describe "BookingProgram" do
 
   describe "self.find_block_by_id" do
     it "can find the first and last block" do
-      new_hotel = Hotel::BookingProgram.new
+      new_hotel = HotelBooking::Hotel.new
       # binding.pry
       # new_hotel.find_block_by_id(1).must_equal false
 
       new_hotel.make_block("2018-06-13", "2018-06-15", [3,4,5], 15)
 
       first_block = new_hotel.all_blocks[0]
-      first_block.must_be_instance_of Hotel::Block
+      first_block.must_be_instance_of HotelBooking::Block
       first_block.id.must_equal 1
 
       found_block = new_hotel.find_block_by_id(1)
@@ -185,14 +185,14 @@ describe "BookingProgram" do
 
   end
 
-  xdescribe "self.setup_rooms" do
+  describe "self.setup_rooms" do
     it "returns an array of all room objects, with the accurate number of rooms" do
-      test_all_rooms = Hotel::BookingProgram.setup_rooms
+      test_all_rooms = HotelBooking::Hotel.setup_rooms
 
       test_all_rooms.must_be_instance_of Array
 
       test_all_rooms.each do |room|
-        room.must_be_instance_of Hotel::Room
+        room.must_be_instance_of HotelBooking::Room
         room.nightly_rate.must_equal 200
       end
 
@@ -202,24 +202,22 @@ describe "BookingProgram" do
 
   end #end self.setup_rooms
 
-  # xdescribe "find_room_by_id" do
-  #   it "can find the first and last room" do
-  #     new_hotel = Hotel::BookingProgram.new
-  #
-  #     first_room_id =1
-  #     last_room_id = 20
-  #
-  #
-  #     first_room = new_hotel.find_room_by_id(first_room_id)
-  #     last_room = new_hotel.find_room_by_id(last_room_id)
-  #
-  #     first_room.must_be_instance_of Hotel::Room
-  #     first_room.id.must_equal 1
-  #
-  #     last_room.must_be_instance_of Hotel::Room
-  #     last_room.id.must_equal 20
-  #   end
-  # end
-end
+  describe "find_room_by_id" do
+    it "can find the first and last room" do
+      new_hotel = HotelBooking::Hotel.new
 
-binding.pry
+      first_room_id =1
+      last_room_id = 20
+
+
+      first_room = new_hotel.find_room_by_id(first_room_id)
+      last_room = new_hotel.find_room_by_id(last_room_id)
+
+      first_room.must_be_instance_of HotelBooking::Room
+      first_room.id.must_equal 1
+
+      last_room.must_be_instance_of HotelBooking::Room
+      last_room.id.must_equal 20
+    end
+  end
+end
