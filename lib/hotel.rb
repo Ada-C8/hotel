@@ -8,14 +8,13 @@ module BookingSystem
 
     attr_reader :rooms, :all_reservations, :cost, :block_discount
 
-    def initialize(number_of_rooms, cost=200, block_discount=10)
+    def initialize(number_of_rooms, cost, block_discount=10)
       @rooms = (1 .. number_of_rooms).to_a
       @all_reservations = [] #array of instances of class Reservation
       @all_blocks = [] #array of instances of class Block
+      cost = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150, 6 => 170, 7 => 180, 8 => 150, 9 => 190, 10 => 200, 11 => 220, 12 => 135, 13 => 200, 14 => 190, 15 => 220, 16 => 200, 17 => 220, 18 => 250, 19 => 200, 20 => 250}
       @cost = cost
       @block_discount = block_discount
-
-      # cost = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150, 6 => 170, 7 => 180, 8 => 150, 9 => 190, 10 => 200, 11 => 220, 12 => 135, 13 => 200, 14 => 190, 15 => 220, 16 => 200, 17 => 220, 18 => 250, 19 => 200, 20 => 250}
 
     end #end of initialize
 
@@ -67,7 +66,7 @@ module BookingSystem
       if room == nil
         raise NoRoomAvailableError.new("No room is available on given dates")
       end
-      cost = @cost
+      cost = @cost[room]
       new_reservation = Reservation.new(date_range, room, cost)
       @all_reservations << new_reservation
 
@@ -100,8 +99,9 @@ module BookingSystem
       end
       date_range = block.date_range
       room = block.rooms[0]
-      cost = @cost * (1 - @block_discount / 100.0)
-      puts cost
+      puts "room: #{room}"
+      cost = @cost[room] * (1 - @block_discount / 100.0)
+      puts "cost for room #{room} is #{cost}"
       new_reservation_from_block = Reservation.new(date_range, room, cost)
       block.rooms.delete_at(0)
       return new_reservation_from_block #instance of class Block

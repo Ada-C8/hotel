@@ -2,10 +2,11 @@ require_relative 'spec_helper'
 
 describe "Hotel" do
   before do
-    @new_hotel = BookingSystem::Hotel.new(2)
+    @new_hotel = BookingSystem::Hotel.new(2, 200)
     @check_in = Date.new(2017,9,15)
     @check_out = Date.new(2017,9,17)
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
+    @cost = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150}
   end
 
   describe "#initialize" do
@@ -106,7 +107,7 @@ describe "Hotel" do
 
   describe "#create_block" do
     before do
-      @hotel = BookingSystem::Hotel.new(7)
+      @hotel = BookingSystem::Hotel.new(7, @cost)
       @new_block = @hotel.create_block(@date_range, 2)
       @another_block = @hotel.create_block(@date_range, 7)
     end
@@ -127,7 +128,7 @@ describe "Hotel" do
 
   describe "#make_reservation_from_block" do
     before do
-      @hotel = BookingSystem::Hotel.new(5)
+      @hotel = BookingSystem::Hotel.new(5, @cost)
       @new_block = @hotel.create_block(@date_range, 3)
       @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
     end
@@ -147,16 +148,16 @@ describe "Hotel" do
 
   describe "Check total cost for two types of reservations" do
     before do
-      @hotel = BookingSystem::Hotel.new(5)
-      @new_block = @hotel.create_block(@date_range, 3)
+      @hotel = BookingSystem::Hotel.new(5, @cost)
+      @block = @hotel.create_block(@date_range, 3)
       @general_reservation = @hotel.make_reservation(@date_range)
-      @reservation_from_block = @hotel.make_reservation_from_block(@new_block)
+      @reservation_from_block = @hotel.make_reservation_from_block(@block)
     end
     it "Returns the right total cost for general reservation" do
-      @general_reservation.total_cost.must_equal 400
+      @general_reservation.total_cost.must_equal @cost[4] * @date_range.dates_within_range.length
     end
     it "Returns the right total cost for reservation from block" do
-      @reservation_from_block.total_cost.must_equal 360
+      @reservation_from_block.total_cost.must_equal @cost[1] * @date_range.dates_within_range.length * 0.9
     end
   end
 
