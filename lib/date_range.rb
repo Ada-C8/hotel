@@ -1,3 +1,5 @@
+# require 'pry'
+
 module BookingSystem
   class DateRange
     attr_reader :check_in, :check_out
@@ -7,17 +9,15 @@ module BookingSystem
       @check_out = Date.parse(check_out)
     end
 
-    def start_end
-      # Populates all dates in between check in and check out date
-      all_dates = (@check_in..@check_out).map { |date| date }
-      return all_dates
+    def overlap?(existing_reservations)
+      booked_rooms = []
+      existing_reservations.each do |reservation|
+        if @check_in >= reservation.check_in && @check_in < reservation.check_out
+          booked_rooms << reservation.room_num
+        end
+      end
+      return booked_rooms
     end
-
-    # def include?
-    # end
-    #
-    # def overlap?
-    # end
 
   end # DateRange
 end # BookingSystem
