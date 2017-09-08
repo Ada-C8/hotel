@@ -11,11 +11,14 @@ module BookingSystem
 
     def overlap?(existing_reservations)
       booked_rooms = []
-      existing_reservations.each do |reservation|
-        if @check_in >= reservation.check_in && @check_in < reservation.check_out
-          booked_rooms << reservation.room_num
+        existing_reservations.each do |reservation|
+          if @check_in >= reservation.check_in && @check_in < reservation.check_out
+            booked_rooms << reservation.room_num # Need to figure out how to get all rooms
+            # raise "This room is currently booked for your requested dates"
+            # If room_num is an array do something else else do normal
+            # Iterate over each room number and push it all into the booked rooms
+          end
         end
-      end
       return booked_rooms
     end
 

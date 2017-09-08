@@ -16,12 +16,24 @@ module BookingSystem
       available_rooms = check_avail_rooms_for(check_in, check_out) # Returns array of all available rooms
       # if available_rooms.empty?
       #   puts "No room available for your requested dates. Please choose another date"
-      #   return
       # end
       assigned_room = available_rooms[0]
       reservation = Reservation.new(assigned_room, check_in, check_out)
       @reservations << reservation
     end
+
+    # As an administrator, I can create a block of rooms
+    def reserve_block(check_in, check_out, num_of_rooms)
+      available_rooms = check_avail_rooms_for(check_in, check_out)
+      blocked_rooms = available_rooms[0..num_of_rooms - 1]
+      Block.new(check_in, check_out, blocked_rooms)
+      #TODO: START HERE TOMORROW
+      # Return only one block reservation and pass it into the @reservations array so that they cannot access the rooms
+      # When they want to create a single reservation, the problem is
+    end
+
+    # As an administrator, I can check whether a given block has any rooms available
+    # As an administrator, I can reserve a room from within a block of rooms
 
     # I can access the list of reservations for a specific date (single)
     def all_reservations_on(date) # UNAVAILABLE ROOMS

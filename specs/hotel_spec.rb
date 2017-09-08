@@ -62,6 +62,19 @@ describe "Hotel" do
     end
   end # Describe
 
+  describe "#reserve_block" do
+    it "should return one instance of BookingSystem::Block" do
+      check_in = '2001-02-03'
+      check_out = '2001-02-04'
+      @hotel.reserve_block(check_in, check_out, 5).must_be_kind_of Array
+      @hotel.reserve_block(check_in, check_out, 5).each do |reservation|
+        reservation.must_be_kind_of Integer
+      end
+    end
+
+    it "should"
+  end
+
   describe "#all_reservations(date)" do
     it "should return an array of all Reservations instances with the requested date" do
       @hotel.create_reservation('2001-02-03', '2001-02-05')
@@ -74,7 +87,7 @@ describe "Hotel" do
     end
   end # Describe
 
-  describe "#check_avail_rooms_for(check_in, check_out)" do
+  describe "#check_avail_rooms_for" do
     it "should return room numbers available as an Array of Integers" do
       @hotel.create_reservation('2001-02-03', '2001-02-05')
       # @reservations array is full!
