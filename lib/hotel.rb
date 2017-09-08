@@ -138,10 +138,10 @@ module Hotel
     return Hotel::Block.new(rate, num_of_rooms, check_in_date, check_out_date, input_block_id)
   end
 
-  def self.block_available(input_id)
-    block = self.find_block(input_id)
+  def self.block_available(block_id)
+    block = self.find_block(block_id)
     rooms = block.rooms.length
-    taken = self.find_reservation_by_block_id(input_id)
+    taken = self.find_reservation_by_block_id(block_id)
     return rooms - taken.length
   end
 
