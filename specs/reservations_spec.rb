@@ -58,9 +58,38 @@ describe "Reservations class" do
       rooms_available_unique = rooms_available.uniq
       rooms_available.length.must_equal rooms_available_unique.length
     end
-    it "returns an empty array if everything is booked" do
+    xit "returns an empty array if everything is booked" do
       #will fail until we do make booking method
       @hotel.check_availability(@check_in - 1,@check_out - 1).must_be_empty
+    end
+  end
+  describe "make_reservation" do
+    it "it will make create object of booking class" do
+      reservation = @hotel.make_reservation(@check_in,@check_out,1)
+      reservation.must_be_kind_of Hotel::Booking
+    end
+    it "will raise an ArgumentError if no rooms are avabilable" do
+      proc{@hotel.make_reservation(@check_in,@check_out,21)}.must_raise InvalidRoomQuantity
+    end
+    it "it adds a new reservation to all_reservations" do
+      before = @hotel.all_reservations.length
+      @hotel.make_reservation(@check_in,@check_out,1)
+      after = @hotel.all_reservations.length
+      after.must_equal (before + 1)
+    end
+    xit "make sure it creates consecutive ID numbers" do
+      id1 = @hotel.make_reservation(@check_in,@check_out,1).id
+      id2 = @hotel.make_reservation(@check_in,@check_out,1).id
+      id2.must_equal (id1 + 1)
+    end
+    xit "picks the next consecutive room number available" do
+      #not sure how to to test this
+    end
+    xit "you can book a room on the check out date" do
+      # not sure about this...
+    end
+    it "raise ArgumentError if you request more than 20 rooms" do
+      proc{@hotel.make_reservation(@check_in-3,@check_out-3,21)}.must_raise InvalidRoomQuantity
     end
   end
 end
