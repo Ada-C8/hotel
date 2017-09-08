@@ -26,4 +26,26 @@ describe "Room" do
     end
   end# "initialize"
 
+  describe "available?" do
+    before do
+      @hotel_california = ReservationSystem::Hotel.new
+      @fancy_room = @hotel_california.hotel[0]
+      @res1 = ReservationSystem::Reservation.new(d3, 3, @fancy_room)
+    end
+
+    let(:d1) {Date.new(2018,01,01)}
+    let(:d3) {Date.new(2018,01,03)}
+    let(:d6) {Date.new(2018,01,06)}
+
+    it "Returns true if a room is available for a given date range" do
+      @fancy_room.available?(d1,1).must_equal true
+      @fancy_room.available?(d6,20).must_equal true
+    end #returns true
+
+    it "Returns false if a room is not available on any day in a date range" do
+      @fancy_room.available?(d1,3).must_equal false
+      @fancy_room.available?(d3,20).must_equal false
+    end #returns false
+  end #available?
+
 end # "Room"

@@ -1,10 +1,10 @@
-require 'date'
+require_relative 'reservable'
 require_relative 'hotel'
 
 module ReservationSystem
 
   class Reservation
-    include Tools
+    include Reservable
 
     attr_reader :check_in, :nights, :dates_reserved, :room
 

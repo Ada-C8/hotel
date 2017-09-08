@@ -44,17 +44,17 @@ describe "Hotel" do
       end # "creates a reservation"
 
       it "Raises an error if date submitted is not a valid Date object" do
-        proc {ada_inn.reserve(2017, 7, room_5)}.must_raise Tools::DateError
-        proc {ada_inn.reserve('2017-06-12', 7, room_5)}.must_raise Tools::DateError
-        proc {ada_inn.reserve(:pie, 1, room_5)}.must_raise Tools::DateError
-        proc {ReservationSystem::Reservation.new(123.40, 2, room_5)}.must_raise Tools::DateError
-        proc {ada_inn.search_reservations_by_date([123.40, "a"])}.must_raise Tools::DateError
+        proc {ada_inn.reserve(2017, 7, room_5)}.must_raise Reservable::DateError
+        proc {ada_inn.reserve('2017-06-12', 7, room_5)}.must_raise Reservable::DateError
+        proc {ada_inn.reserve(:pie, 1, room_5)}.must_raise Reservable::DateError
+        proc {ReservationSystem::Reservation.new(123.40, 2, room_5)}.must_raise Reservable::DateError
+        proc {ada_inn.search_reservations_by_date([123.40, "a"])}.must_raise Reservable::DateError
       end #valid_date error
 
       it "Raises an error if nights is not a positive integer" do
-        proc {ada_inn.reserve(Date.new(2017,10,12), 0, room_5)}.must_raise Tools::PositiveIntegerError
-        proc {ReservationSystem::Reservation.new(Date.new(2017,10,12), -1, room_5)}.must_raise Tools::PositiveIntegerError
-        proc {ReservationSystem::Room.new(0.24)}.must_raise Tools::PositiveIntegerError
+        proc {ada_inn.reserve(Date.new(2017,10,12), 0, room_5)}.must_raise Reservable::PositiveIntegerError
+        proc {ReservationSystem::Reservation.new(Date.new(2017,10,12), -1, room_5)}.must_raise Reservable::PositiveIntegerError
+        proc {ReservationSystem::Room.new(0.24)}.must_raise Reservable::PositiveIntegerError
       end #valid number error
 
       #TODO change tests to their respective methods Reservation.new and search_reservations_by_date

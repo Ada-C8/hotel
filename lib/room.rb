@@ -1,9 +1,10 @@
+require_relative 'reservable'
 require_relative 'hotel'
 
 module ReservationSystem
 
   class Room
-    include Tools
+    include Reservable
 
     attr_reader :number, :rate
     attr_accessor :nights_reserved
@@ -14,6 +15,15 @@ module ReservationSystem
       @rate = 200 #TODO decide: could be a constant?
       @nights_reserved = Array.new
     end
+
+    def available?(start, nights = 1)
+      date_array = to_date_range(start, nights)
+      availability = true
+
+      date_array.each { |date| availability = false if self.nights_reserved.include?(date) }
+
+      return availability
+    end #available?
 
   end #class Room
 end #ReservationSystem module
