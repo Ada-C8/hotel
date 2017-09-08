@@ -6,19 +6,18 @@ require 'pry'
 module Hotel_Chain
   class MyHotel
 
-    attr_reader :array_of_rooms, :reservations_array
+    attr_reader :array_of_rooms, :reservations_array, :blocks_array
 
     def initialize(no_of_rooms = 20)
       @array_of_rooms = Array.new(no_of_rooms)
       no_of_rooms.times do |room|
         @array_of_rooms[room] = Room.new(room+1)
       @reservations_array = []
+      @blocks_array = []
       end
     end
 
     #Method is called to print a list for the administrator
-    #hotel = Hotel_Chain::MyHotel.new
-    #hotel.list_rooms
     def list_rooms
       #myhotel = Hotel_Chain::MyHotel.all
       list_array = []
@@ -55,7 +54,7 @@ module Hotel_Chain
     # hotel.store_reservation(check_in_date, check_out_date)
 
     #NOTE TO SELF: Do you want to reserve a particular room here or in the reservation method, which now just randomly chooses a room, regardless if it's available or not?
-    def store_reservation(check_in_date, check_out_date)
+    def store_reservation(check_in_date, check_out_date, status = "assigned")
       available_rooms = []
       if @reservations_array.length == 0 #i.e. there are no reservations at all
         new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
@@ -128,6 +127,35 @@ module Hotel_Chain
       return final_available_rooms
     end
 
+    def reserve_block(party_name, check_in, check_out, no_of_rooms, room_rate)
+      reservation_array = []
+      available_rooms = find_rooms_available(check_in, check_out)
+      ap available_rooms
+      if available_rooms.length < no_of_rooms
+        raise ArgumentError.new("There are not enough rooms available to reserve that block")
+      else
+        no_of_rooms.times do |room|
+          new_reservation = store_reservation(check_in, check_out, "unassigned")
+          new_reservation.room.rate = room_rate
+          ap "New reservation: #{new_reservation}"
+          reservation_array << new_reservation
+        end
+      end
+      puts "RESULT:"
+      ap "Reservation_array: reservation_array"
+      #I passed all these arguments to block becuse I want the block object to have these attributes for ease of reference.
+      @blocks_array << (new_block = Block.new(party_name, check_in, check_out, room_rate, reservation_array))
+      return new_block
+    end
+
+    def find_unassigned_block_reservations
+    end
+
+    def assign_block_reservation
+    end
+
+    def find_block_reservations_by_partyname
+    end
 
   end #end of class
 end #end of module

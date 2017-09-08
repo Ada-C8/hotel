@@ -190,6 +190,10 @@ describe "The Hotel class" do
       @myhotel.reservations_array[4].room.room_id.must_equal 5
     end
 
+    it "returns the correct cost for the reservation made outside a block" do
+
+    end
+
   end # end of describe
 
   describe "Error handling for trying to reserve an unavailable room" do
@@ -204,6 +208,30 @@ describe "The Hotel class" do
 
   end #end of describe
 
+  describe "Reserve_block method" do
+    it "Returns an instance of the Block class" do
+      newblock= @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      newblock.must_be_instance_of Hotel_Chain::Block
+
+    end
+
+    it "returns a block with a reservations array with the correct number of reservations" do
+      block = @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      block.reservation_array.length.must_equal 4
+
+    end
+
+
+    it "returns the correct cost for the reservation made inside a block" do
+
+    end
+
+    it "blocks_array" do
+      # @myhotel.blocks_array.must_be_kind_of Array
+      # @myhotel.blocks_array[0].must_equal block_A
+    end
+
+  end
 
 
 

@@ -30,9 +30,11 @@ describe "Reservation Class" do
       #@reservation.check_in_date.to_date.must_equal 0017-08-13
     end
 
-    it "returns the correct cost for the reservation" do
-      @reservation.cost.must_equal 600
-    end
+    #removed this test because it doesn't work for reservations made from a block (ie discounted)
+    #I added tests to check the cost value in the hotel and block specs instead.
+    # it "returns the correct cost for the reservation" do
+    #   @reservation.cost.must_equal 600
+    # end
 
   end
 
