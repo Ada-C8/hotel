@@ -9,7 +9,7 @@ class Reservation
     if rooms_array.length > MAX_ROOMS
       raise ArgumentError.new("The maximum number of rooms that can be reserved is 5")
     end
-    check_rooms(rooms_array)
+
 
     @reservation_id = rand(100000..999999)
     @check_in = Date.parse(check_in)
