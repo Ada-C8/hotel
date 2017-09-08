@@ -3,12 +3,13 @@ module Hotel
 
   attr_reader :total_nights, :check_in, :check_out, :room
 
-  def initialize(guest, check_in, check_out, room)
+  def initialize(guest, check_in, check_out, room, block_id = nil)
     @guest = guest
     @check_in = check_in_date(check_in)
     @check_out = check_out_date(check_out)
     @room = room
     @total_nights = calculate_res_length
+    @block_id = block_id
   end
 
   # Reservations that are checking out on that date will return false since they are not staying that night at the hotel

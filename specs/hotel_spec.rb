@@ -82,6 +82,39 @@ describe Hotel::Hotel do
     end
   end # end of make and retrieve reservations
 
+  describe "make_reservation_from_block" do
+    before do
+      @hotel = Hotel::Hotel.new
+      @check_in = Date.new(2018, 9, 7)
+      @check_out = Date.new(2018, 9, 13)
+      @hotel.make_block(@check_in, @check_out, 5)
+      @id = @hotel.blocks[0].id
+      @hotel.make_reservation_from_block("guest", @id)
+    end
+
+    it "can make a reservation from a block" do
+      @hotel.reservations.length.must_equal 1
+      @hotel.reservations[0].must_be_instance_of Hotel::Reservation
+    end
+
+    it "will make a reservation with a room that is reserved for the block" do
+      block_rooms = []
+      @hotel.blocks[0].rooms_in_block.each do |room|
+        block_rooms << room
+      end
+
+      block_rooms.include?(@hotel.reservations[0].room).must_equal true
+    end
+
+    it "will make a reservation with the same date range as the block" do
+      @hotel.reservations[0].check_in.must_equal @check_in
+
+      @hotel.reservations[0].check_out.must_equal @check_out
+
+    end
+  end
+
+
   describe "can make a block of rooms" do
     it "can make a block that is passed into an Array" do
 
@@ -129,7 +162,6 @@ describe Hotel::Hotel do
       proc{hotel.make_block(check_in, check_out, 6)}.must_raise StandardError
 
       proc{hotel.make_block(check_in, check_out, 0)}.must_raise StandardError
-
     end
 
     it "will make the rooms assigned to the block unavailable for reservation to the general public" do

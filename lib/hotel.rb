@@ -16,7 +16,31 @@ module Hotel
 
   def make_reservation(guest, check_in, check_out, room_requested = nil)
     room = assign_room(check_in, check_out, room_requested)
-    reservations << Reservation.new(guest, check_in, check_out, room)
+    reservations << Reservation.new(guest, check_in, check_out, room, false)
+  end
+
+  def make_reservation_from_block(guest, block_id)
+    available_rooms = nil
+    block_for_res = nil
+
+    blocks.each do |block|
+      if block.id == block_id
+        available_rooms = block.rooms_in_block
+        block_for_res = block
+      end
+    end
+
+    reservations.each do |res|
+      if res.block_id == block_id
+        available_rooms.each do |room|
+          available_rooms.delete(res.room)
+        end
+      end
+    end
+
+    room = available_rooms.first
+
+    reservations << Reservation.new(guest, block_for_res.check_in, block_for_res.check_out, room, block_id)
   end
 
   def make_block(check_in, check_out, num_rooms)
@@ -38,7 +62,6 @@ module Hotel
         end
       end
     end
-
   end
 
   def assign_room(check_in, check_out, room_requested = nil)
