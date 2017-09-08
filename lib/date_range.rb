@@ -17,6 +17,17 @@ module Hotel
         end
     end # end of initialize
 
+    def overlap?(start_date, end_date)
+      # comparing one instance of date to another
+      # start_date = Date.parse(start_date)
+      # end_date = Date.parse(start_date)
+
+      if (self.check_in < Date.parse(end_date)) && (self.check_out >= Date.parse(start_date))
+        return true
+      else
+        return false
+      end
+    end
     def return_date_range
       date_range = "#{@check_in} to #{@check_out}"
       # Hotel::HotelClass.reservations << date_range

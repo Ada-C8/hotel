@@ -31,6 +31,13 @@ describe "DateRange Class" do
       }.must_raise ArgumentError
     end
   end # end of describe Initialize DateRange Class
+  describe "Overlap? method" do
+    it "Checks for overlapping dates" do
+      @date_range_test = Hotel::DateRange.new("2017-9-12", "2017-9-15")
+      @date_range_test.overlap?("2017-9-13", "2017-9-14").must_equal true
+      @date_range_test.overlap?("2017-9-16", "2017-9-17").must_equal false
+    end
+  end
   describe "Return_date_range method" do
     it "Returns to a string" do
       @date_range_test.return_date_range.must_be_kind_of String
