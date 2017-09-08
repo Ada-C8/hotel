@@ -52,6 +52,11 @@ describe "Hotel Class" do
       @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
       @hotel.total_cost(2222).must_equal 600
     end #ID Number
+
+    it "Returns 'Reservation Not Found' if it can't find the ID number: " do
+      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.total_cost(2223).must_equal "Reservation Not Found"
+    end #Not Found
   end #Total Cost
 
 end #admin
