@@ -47,12 +47,20 @@ class Hotel
   def rooms_reserved(date)
     reserved_rooms = []
     reservation_by_date(date).each do |reservation|
-      reservation.rooms.each do |room|
-        reserved_rooms.push(room)
-      end
+      array_each_do(reservation.rooms, reserved_rooms)
     end
+
+    
+    # array_each_do(reservation_by_date(date), array_each_do(reserved_rooms, reservation_by_date(date)))
+
+    # reservation_by_date(date).each do |reservation|
+    #   reservation.rooms.each do |room|
+    #     push_to_array(reserved_rooms, room)
+    #   end
+    # end
     return reserved_rooms
   end
+
 
 
   def rooms_available(check_in, check_out)
@@ -89,6 +97,15 @@ class Hotel
     end
     return flag
   end
+
+  def push_to_array(array, arg)
+    array.push(arg)
+  end
+
+  def array_each_do(arr, array)
+    arr.each {|arg| push_to_array(array, arg)}
+  end
+
 
 end
 #
