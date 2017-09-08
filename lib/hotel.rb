@@ -3,7 +3,7 @@ module Hotel
   require_relative 'reservation'
   require_relative 'room'
   require_relative 'block'
-  require_relative 'no_room_error'
+  require_relative 'exceptions'
 
   class Hotel
     attr_reader :rooms, :reservations, :blocks
@@ -83,16 +83,12 @@ module Hotel
     end
 
     def room(num)
-      @rooms.each do |room|
-        return room if room.number == num
-      end
+      @rooms.each { |room| return room if room.number == num }
       nil
     end
 
     def block(id)
-      @blocks.each do |block|
-        return block if block.id == id
-      end
+      @blocks.each { |block| return block if block.id == id }
       nil
     end
   end
