@@ -11,7 +11,6 @@ describe 'Registration class' do
 
     it "doesn't initialize wrong dates" do
       checkin = Date.new(2017,9,10)
-      checkout = Date.new(2017,9,13)
       room_number = 1
       proc{Hotel::Reservation.new(checkin, checkin, room_number)}.must_raise ArgumentError
     end

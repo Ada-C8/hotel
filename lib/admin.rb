@@ -10,9 +10,16 @@ module Hotel
     end
 
     def add_reservation(checkin, checkout)
-      room_number = 1
-      newreservation = Hotel::Reservation.new(checkin, checkout, room_number)
-      @list_reservations << newreservation
+      dates_to_reserve = Hotel::DateRange.new(checkin, checkout)
+      @rooms.each do |room_number, dates|
+        if  is_room_avaliable?(room_number, dates_to_reserve)
+          @rooms[room_number] << dates_to_reserve
+          make_reservation = Hotel::Reservation.new(checkin, checkout, room_number)
+          @list_reservations << make_reservation
+          return make_reservation
+        end #if
+      end #each
+      return "There is not avaliable rooms for that date range"
     end
 
     def reservations_per_day(date)#hacer esto
@@ -30,6 +37,29 @@ module Hotel
         @rooms["#{i + 1}"] = []
       end
     end
+
+    def is_room_avaliable?(room_number, dates_to_reserve)
+      avaliable = true
+
+      @rooms[room_number].each do |busy_dates|
+        if dates_to_reserve.overlap?(busy_dates)
+          avaliable = false
+        end#if
+      end
+      return avaliable
+    end
+
+    def avaliable_rooms_daterange(checkin, checkout)
+      avaliable_rooms = []
+      date_range = Hotel::DateRange.new(checkin,checkout)
+      @rooms.each do |room_number, dates|
+        if is_room_avaliable?(room_number, date_range)
+          avaliable_rooms  << room_number
+        end
+      end
+      return avaliable_rooms
+    end
+
 
 
 
