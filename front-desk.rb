@@ -16,6 +16,7 @@ options:
 - catch room number error
 =end
 require 'artii'
+require 'pry'
 require_relative './lib/hotel-room.rb'
 require_relative './lib/hotel-reservation.rb'
 # User interface for hotel
@@ -45,9 +46,12 @@ def get_date(position)
   begin
     user_date = Date.parse(user)
   rescue ArgumentError
-    get_date(position)
+    user_date = get_date(position)
   end
   return user_date
+end
+def date_error_message
+  puts "Those dates don't sem right..."
 end
 a = Artii::Base.new :font => 'slant'
 
@@ -69,38 +73,73 @@ while reply
   case user
   when 1 #find a available room
     puts "Let's find an available room!"
-    start_date = get_date("start")
-    end_date = get_date("end")
-    all_rooms = Hotel::Room.all_available_rooms(start_date, end_date)
+    broken = true
+    while broken
+      start_date = get_date("start")
+      end_date = get_date("end")
+      begin
+        all_rooms = Hotel::Room.all_available_rooms(start_date, end_date)
+        broken = false
+      rescue DateError
+        date_error_message
+        broken = true
+      end
+    end
     print_rooms(all_rooms)
   when 2 #reserve a room
     puts "Let's reserve a room!"
-    start_date = get_date("start")
-    end_date = get_date("end")
-    print "Which room do you want to reserve? "
-    room_number = gets.chomp.to_i
-    room_reservation = Hotel::Reservation.new(start_date, end_date, Hotel::Room.new(room_number))
-    #TODO: add catch for room availability and dates
+    broken = true
+    while broken
+      start_date = get_date("start")
+      end_date = get_date("end")
+      print "Which room do you want to reserve? "
+      room_number = gets.chomp.to_i
+      begin
+        room_reservation = Hotel::Reservation.new(start_date, end_date, Hotel::Room.new(room_number))
+        broken = false
+      rescue DateError
+        date_error_message
+        broken = true
+      rescue InvalidRoomError
+        puts "That room isn't available..."
+        broken = true
+      end
+    end
     puts room_reservation.to_s
   when 3 #view a list of reservations
     puts "Let's view a list of reservations!"
     date = get_date("reservation")
     list = Hotel::Reservation.list_for_date(date)
-    list.each do |reservation|
-      puts "- #{reservation.to_s}"
+    if list.empty?
+      puts "No reservations for #{date}"
+    else
+      list.each do |reservation|
+        puts "- #{reservation.to_s}"
+      end
     end
   when 4 #create a block
     puts "Let's reserve a block of rooms!"
-    start_date = get_date("start")
-    end_date = get_date("end")
-    print "How many rooms? "
-    num = gets.chomp.to_i
-    print "Discounted rate: "
-    rate = gets.chomp.to_i
-    print "Request name: "
-    name = gets.chomp
-    Hotel::Reservation.block_rooms(start_date, end_date, num, rate, name)
-    #catch dates, number of room error,
+    broken = true
+    while broken
+      start_date = get_date("start")
+      end_date = get_date("end")
+      print "How many rooms? "
+      num = gets.chomp.to_i
+      print "Discounted rate: "
+      rate = gets.chomp.to_i
+      print "Request name: "
+      name = gets.chomp
+      begin
+        Hotel::Reservation.block_rooms(start_date, end_date, num, rate, name)
+        broken = false
+      rescue DateError
+        date_error_message
+        broken = true
+      rescue InvalidRoomError
+        puts "Invalid number of rooms..."
+        broken = true
+      end
+    end
   when 5 #check block availability
     puts "Let's check if there are any block rooms!"
     print "Request name: "
@@ -111,9 +150,13 @@ while reply
     puts "Let's reserve a block room!"
     print "Request name: "
     name = gets.chomp
-    reservation = Hotel::Reservation.reserve_block_room(name)
+    begin
+      reservation = Hotel::Reservation.reserve_block_room(name)
+      broken = false
+    rescue InvalidRoomError
+      puts "No rooms available in this block"
+    end
     puts reservation.to_s
-    #catch no rooms error
   else #view room list
     hotel = Hotel::Room.list_all
     print_rooms(hotel)
