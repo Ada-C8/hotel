@@ -25,7 +25,7 @@ module Hotels
       # W2-US2 Can reserve an available room for a given date range
       full?(checkin)
       reservation = Hotels::Reservation.new(checkin, checkout)
-      reservation.id = id_generator(checkin)
+      reservation.id = room_id_gen(checkin)
       random_room(reservation, checkin)
       reservation.calc_total
       @reservations << reservation
@@ -59,7 +59,7 @@ module Hotels
     def book_block(checkin, checkout = nil, room_count)
       # W3-US1 Can create a block of rooms
       full?(checkin)
-      if valid_block?(room_count)
+      if valid_room_count?(room_count)
         booked = Hotels::Reservation.new(checkin, checkout)
         booked.block_id = block_id_gen(checkin, room_count)
         random_room(booked, checkin, room_count)
@@ -69,7 +69,7 @@ module Hotels
       end
     end
 
-    def id_generator(checkin)
+    def room_id_gen(checkin)
       initial_date = checkin.to_s.delete('-')
       random_alphabet = ('A'..'Z').to_a.sample(10).join
       random_digits = (0..9).to_a.shuffle.join
@@ -83,24 +83,26 @@ module Hotels
     end # generates and adds a block id number for a block reservation
 
     def random_room(reservation, checkin, room_count = 1)
-      unavailable = unavailable_rooms(checkin)
-      # unavailable_num = 
+      full_rooms = unavailable_rooms(checkin)
+      room_nums = full_rooms.collect { |obj| obj.room_id}
       until reservation.rooms.length == room_count
-        room_no = @rooms.sample(1)[0]
-        reservation.rooms << room_no unless unavailable.include? room_no
-        # unavailable <<
+        room = @rooms.sample(1)[0]
+        room_num = room.room_id
+        reservation.rooms << room unless room_nums.include? room_num
+        full_rooms << room
+        room_nums << room_num
       end
     end # adds a Room to the reservation
 
-    def unreserved_rooms(date_range, array)
+    def unreserved_rooms(date_range, collection)
       date_range.each do |date|
         bad_rooms = unavailable_rooms(date)
         good_rooms = @rooms - bad_rooms
         ok_room = {}
         ok_room[date] = good_rooms
-        array << ok_room
+        collection << ok_room
       end
-    end # adds vacant Rooms during a Date range to the selected Array
+    end # adds vacant Rooms during a Date range to the collection
 
     def unavailable_rooms(date)
       reservations = check_reserved(date)
@@ -113,8 +115,8 @@ module Hotels
       no_vacancy
     end # returns an Array of reservations for the selected date
 
-    def full?(checkin)
-      raise ArgumentError if check_reserved(checkin).length == 20
+    def full?(date)
+      raise ArgumentError if check_reserved(date).length == 20
     end # returns T/F if all the hotel rooms are taken on the selected date
 
     def id_check(reservation)
@@ -127,30 +129,31 @@ module Hotels
       reservation
     end # returns the corresponding reservation to a given reservation ID
 
-    def valid_block?(room_count)
-      (1..5).include? room_count
-    end
+    def valid_room_count?(block_room_count)
+      (1..5).include? block_room_count
+    end # checks if the requested block room count is between 1 and 5
   end # Hotel class
 end # Hotels module
 
 
-conrad = Hotels::Hotel.new
-checkin = Date.new(2017, 10, 31)
-checkout = Date.new(2017, 11, 4)
-
-
-conrad.book_block(checkin, checkout, 5)
-conrad.book_block(checkin, checkout, 5)
-
-conrad.reserve_room(checkin, checkout)
-conrad.reserve_room(checkin, checkout)
-conrad.reserve_room(checkin, checkout)
-conrad.reserve_room(checkin, checkout)
-conrad.reserve_room(checkin, checkout)
-
-
-puts conrad.reservations.length
-puts conrad.blocks.length
-# ap conrad.check_reserved(checkin)
-ap conrad.unavailable_rooms(checkin)
-ap conrad.check_unreserved(checkin)
+# conrad = Hotels::Hotel.new
+# checkin = Date.new(2017, 10, 31)
+# checkout = Date.new(2017, 11, 4)
+#
+#
+# conrad.book_block(checkin, checkout, 5)
+# conrad.book_block(checkin, checkout, 5)
+#
+# conrad.reserve_room(checkin, checkout)
+# conrad.reserve_room(checkin, checkout)
+# conrad.reserve_room(checkin, checkout)
+# conrad.reserve_room(checkin, checkout)
+# conrad.reserve_room(checkin, checkout)
+#
+#
+# puts conrad.reservations.length
+# puts conrad.blocks.length
+# ap conrad.blocks
+# # ap conrad.check_reserved(checkin)
+# ap conrad.unavailable_rooms(checkin)
+# ap conrad.check_unreserved(checkin)
