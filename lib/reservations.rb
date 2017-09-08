@@ -18,10 +18,9 @@ module Hotel
       id = (@all_reservations.length + 1)
       rooms_available = check_availability(check_in,check_out)
 
-      if rooms_available.length < num_rooms && num_rooms > 20
-        raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms, in your date range, to handle your request of #{num_rooms} rooms.")
+      if rooms_available.length < num_rooms || num_rooms > 20
+        raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms to handle your request of #{num_rooms} rooms.")
       end
-      #rooms needs to be an arry of rooms
       rooms_to_book = rooms_available.shift(num_rooms)
       booking = Booking.new(id,rooms_to_book,date_range)
       @all_reservations << booking
@@ -31,7 +30,6 @@ module Hotel
     def check_reservations(check_in,check_out)
       booked_rooms = []
       range = DateRange.new(check_in,check_out).nights_arr
-
       range.each do |date|
         @all_reservations.each do |booking|
           if booking.date_range.nights_arr.include?(date)
@@ -49,8 +47,6 @@ module Hotel
     def check_availability(check_in,check_out)
       booked_rooms = check_reservations(check_in,check_out)
       available_rooms = []
-
-
       all_rooms.each do |room|
         if !(booked_rooms.include?(room))
           available_rooms << room
