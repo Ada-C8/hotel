@@ -7,9 +7,9 @@ module Hotel_System
 
   class Hotel
 
-    attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number
+    attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number, :reservation
 
-    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list
+    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list, :master_list
 
     def initialize(num_of_rooms)
       @all_rooms = fill_hotel(num_of_rooms)
@@ -30,11 +30,20 @@ module Hotel_System
 
     def make_reservation(room_number, check_in, check_out)
       room = return_room_object_by_num(room_number)
-      @all_reservations << Reservations.new(room, check_in, check_out)
+      @reservation = Reservations.new(room, check_in, check_out)
+      @all_reservations << @reservation
+      return @reservation
+    end
+
+    def date_object_checker(date)
+      if date.class != Date
+        date = Date.parse(date)
+      end
+      return date
     end
 
     def reservations_by_date(date)
-      date = Date.parse(date)
+      date = date_object_checker(date)
       @reservations_by_date = []
       @all_reservations.each do |reservation|
         if date >= reservation.check_in && date < reservation.check_out
@@ -72,6 +81,37 @@ module Hotel_System
         end
       end
       return @available_room_list
+    end
+
+    def avail_rooms_by_daterange(date_range)
+      @master_list = []
+      date_range.each do |date|
+        @master_list << available_rooms_by_date(date)
+      end
+      @master_list = @master_list.inject(:&)
+      # p @master_list
+    end
+
+    def inquiry_date_range_generator(check_in, check_out)
+      check_in = date_object_checker(check_in)
+      check_out = date_object_checker(check_out)
+      @inquiry_date_range = [check_in]
+      date = check_in
+      until date.next == check_out
+        date = date.next
+        @inquiry_date_range << date
+      end
+      return @inquiry_date_range
+    end
+
+    def avail_checker(room_number, check_in, check_out)
+      date_range = inquiry_date_range_generator(check_in, check_out)
+      boolean = avail_rooms_by_daterange(date_range).include? room_number
+      if boolean == false
+        raise ArgumentError.new("Room not available")
+      else
+        make_reservation(room_number, check_in, check_out)
+      end
     end
 
     private

@@ -6,7 +6,7 @@ describe "Hotel_System::Room" do
     room = Hotel_System::Room.new(1, 200)
     room.must_be_instance_of Hotel_System::Room
     room.must_respond_to :price
-    room.must_respond_to :room_number 
+    room.must_respond_to :room_number
   end
 
   it "given room must return accurate price" do
