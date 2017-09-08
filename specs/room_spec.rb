@@ -11,22 +11,27 @@ describe 'Room' do
     it "raises an Argument Error unless passed 2 Date objects" do
       proc {my_room.reserve("today", "tomorrow")}.must_raise ArgumentError
     end
+
     it "raises an Argument Error if check_out is earlier than or same day as check_in" do
       proc {my_room.reserve(check_in, check_in)}.must_raise ArgumentError
       proc {my_room.reserve(check_out, check_in)}.must_raise ArgumentError
     end
+
     it "creates a new reservation" do
       my_room.reserve(check_in, check_out).must_be_instance_of Hotel_System::Reservation
     end
+
     it "adds the reservation to the room's list of reservations" do
       my_room.reserve(check_in, check_out)
       my_room.reservations.must_be_instance_of Array
       my_room.reservations.length.must_equal 1
     end
+
     it "raises an error for attempt to reserve already-booked room" do
       my_room.reserve(check_in, check_out)
       proc {my_room.reserve(check_in, check_out)}.must_raise ArgumentError
     end
+
     it "allows you to reserve a room the day someone checks out" do
       my_room.reserve(check_in, check_out)
       my_room.reserve(check_out, later_date).must_be_instance_of Hotel_System::Reservation
@@ -42,6 +47,7 @@ describe 'Room' do
     it "returns true if Date argument does not overlap with existing reservation" do
       my_room.available?(date, later_date).must_equal true
     end
+    
     it 'returns false if Date argument does overlap with existing reservation' do
       my_room.reserve(date, later_date)
       my_room.available?(later_date, even_later_date).must_equal true
