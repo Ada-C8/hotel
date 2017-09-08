@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-# require 'pry'
+require 'pry'
 describe 'Hotel' do
   before do
     @hotel = Hotel::Hotel.new
@@ -121,7 +121,7 @@ end
 
 
 #REFACTOR SINCE CHANGING MAKE_RESERVATION
-    describe 'make block' do
+    xdescribe 'make block' do
       it 'returns an array' do
         @hotel.make_block('Diane', 120, 5, Date.new(2018,9,12)).must_be_kind_of Array
       end
@@ -161,10 +161,7 @@ end
         block2[1].rooms.must_equal [:room5, :room6, :room7, :room8, :room9]
       end
 
-      # it 'will not make a reservation for a blocked room' do
-      #   @hotel.make_block('Clem', Date.new(2018,10,10), Date.new(2018,10,12), 100, 3)
-      #   proc{@hotel.make_reservation(Date.new(2018,10,10), Date.new(2018,10,11))}.must_raise BookingError
-      # end
+
 
       it 'will raise a BookingError if you try to make reservation when all of the rooms are blocked' do
         @hotel.make_block('Alec', 100, 5, Date.new(2018,10,10), Date.new(2018,10,12))
@@ -175,13 +172,56 @@ end
       end
     end
 
-    # xdescribe "Show available rooms in a block"
-    #   it 'will return available rooms in a given block' do
-    #     @hotel.make_block('Sarah', Date.new(2019,11,11), Date.new(2019, 11, 15), 100, 3)
-    #     @hotel.make_reservation('Sarah', Date.new(2019,11,11), Date.new(2019, 11, 15))
-    #     @hotel.show_available_block.must_equal [:room2, :room3]
-    #   end
-    # end
+#BREAK UP AND MAKE MORE EDGE CASES
+#WHAT IF ITS A BLOCK RESERVATION BUT THERE IS ONLY ONE DATE???
+    describe 'make reservation in a block' do
+      it 'makes a reservation inside a block' do
+        @hotel.make_block('IzzieP', 120, 3, Date.new(2018,12,12), Date.new(2018,12,16) )
+        @res = @hotel.make_reservation(Date.new(2018,12,12), Date.new(2018,12,16), 'IzzieP')
+        @res[0].must_be_instance_of Hotel::Reservation
+        @res[0].partyname.must_equal 'IzzieP'
+        @res[0].cost.must_equal 120
+        print @res[0]
+        puts "***\n"
+      end
+
+      it 'makes a reservation inside a block for the second room' do
+        @hotel.make_block('Tuffanoo', 100, 3, Date.new(2018,12,12), Date.new(2018,12,16) )
+        @res = @hotel.make_reservation(Date.new(2018,12,12), Date.new(2018,12,16), 'Tuffanoo')
+        @res[0].must_be_instance_of Hotel::Reservation
+        @res[0].partyname.must_equal 'Tuffanoo'
+        @res[0].cost.must_equal 100
+        @res[0].room_number.must_equal :room1
+        @res2 = @hotel.make_reservation(Date.new(2018,12,12), Date.new(2018,12,16), 'Tuffanoo')
+        @res2[1].partyname.must_equal 'Tuffanoo'
+        @res2[1].room_number.must_equal :room2
+        @res3 = @hotel.make_reservation(Date.new(2018,12,12), Date.new(2018,12,16), 'Tuffanoo')
+        @res3[2].room_number.must_equal :room3
+        proc{@hotel.make_reservation(Date.new(2018,12,12), Date.new(2018,12,16), 'Tuffanoo')}.must_raise BookingError
+      end
+
+      # THIS NEEDS TO WORK WITHOUT NIL PLACEHOLDER!
+      it 'makes a reservation inside a block for a block with one date' do
+        @hotel.make_block('Charis', 100, 3, Date.new(2018,12,12))
+        @hotel.make_reservation(Date.new(2018,12,12), nil, 'Charis')
+      end
+
+      it 'makes a reservation inside a block with just block name' do
+        @hotel.make_block('Charis', 100, 3, Date.new(2018,12,12))
+        @hotel.make_reservation(nil, nil, 'Charis')
+      end
+
+
+    end
+
+#MORE EDGE CASES
+    describe "Show available rooms in a block" do
+      it 'will return available rooms in a given block' do
+        @hotel.make_block('Sarah', 120, 3, Date.new(2019,11,11), Date.new(2019, 11, 15))
+        @hotel.make_reservation(Date.new(2019,11,11), Date.new(2019, 11, 15), 'Sarah')
+        @hotel.view_available_in_block('Sarah', Date.new(2019,11,11), Date.new(2019, 11, 15) ).must_equal [:room2, :room3]
+      end
+    end
 
 
 end
