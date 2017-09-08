@@ -1,11 +1,11 @@
 require 'date'
-require_relative 'room'
+require 'date_range'
 
 module BookingSystem
   class Reservation
     attr_reader :first_name, :last_name, :room_id, :room_rate, :start_date, :end_date, :total_cost, :date_range
 
-    def initialize(first_name, last_name, room_id, room_rate, start_date, end_date) #assuming dates are already entered as objects using Date.parse("DD/MM/YYYY")
+    def initialize(first_name, last_name, room_id, room_rate, start_date, end_date)
 
       @first_name = first_name
       @last_name = last_name
@@ -15,7 +15,7 @@ module BookingSystem
 
       @start_date = start_date
       @end_date = end_date
-      @date_range = make_date_range_array
+      @date_range = DateRange.new(start_date, end_date)
       @total_cost = get_total_cost #returns grand_total, the result of get_total_cost
     end
 
@@ -25,10 +25,26 @@ module BookingSystem
       return grand_total
     end
 
-    def make_date_range_array
-      return (@start_date .. @end_date).map{|day| day}
-    end
-
-
   end#of_Reservation_class
 end#of_module_BookingSystem
+
+
+
+
+
+
+
+
+
+
+
+=begin
+NOTES:
+    #DATE RANGE METHOD (VERSION1)
+    # def make_date_range_array
+    #   return (@start_date .. @end_date).map{|day| day}
+    # end
+    #Modify: @date_range = make_date_range_array
+
+    #OUTPUTS: an array of the date range
+=end

@@ -3,35 +3,40 @@
 # As an administrator, I can access the list of reservations for a specific date
 # [X] As an administrator, I can get the total cost for a given reservation
 
+require 'date'
+require 'date_range'
+require_relative 'room'
+require_relative 'Reservation'
+
 module BookingSystem
   class HotelAdmin
 
-    attr_reader :hotel_rooms, :all_reservations
+    attr_reader :room_list, :reservation_list
 
     def initialize
       #hotel admin knows all collection of reservations
-      @all_reservations = []
+      @reservation_list = []
       #hotel admin knows all rooms in hotel
-      @hotel_rooms = BookingSystem::Room.all
+      @room_list = BookingSystem::Room.all
     end
 
-    def make_reservation(first_name, last_name, room_id, room_rate, start_date, end_date)
+    def reserve_room(first_name, last_name, room_id, room_rate, start_date, end_date)
 
-      # check if room is available based on date range
-      raise ArgumentError.new("Dates conflict with room requested") if @all_reservations.any? { |reservation|
-        reservation.room_id == room_id && start_date.between?(reservation.start_date, reservation.end_date) && start_date < reservation.end_date
-      }
-      # If the new reservation's start date exists in between the existing reservation's start and end dates, and does not land on its end date, then we reject the reservation.
-
-      reservation = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)
       #check if date range for room is available
-      @all_reservations << reservation
+      reservation = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)
+
+      @reservation_list << reservation
     end
+
+    # def check_availability
+    #   # check if room is available based on date range
+    #   raise ArgumentError.new("Dates conflict with room requested") if @all_reservations.any? { |reservation|
+    #     reservation.room_id == room_id && start_date.between?(reservation.start_date, reservation.end_date) && start_date < reservation.end_date
+    #   }
+    #   # If the new reservation's start date exists in between the existing reservation's start and end dates, and does not land on its end date, then we reject the reservation.
+    # end
 
     # private
-
-    #def generate_reservation_ids
-    #end
 
     # def check_availability
     #

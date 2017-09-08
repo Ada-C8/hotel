@@ -25,7 +25,6 @@ describe "Room" do
   describe "Room.all" do
     it "returns a list of all room instances as an array" do
       all_rooms = BookingSystem::Room.all
-
       all_rooms.must_be_instance_of Array
     end
   end

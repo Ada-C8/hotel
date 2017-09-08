@@ -10,9 +10,4 @@ require_relative '../lib/guest'
 require_relative '../lib/hotel_admin'
 
 
-
-
-
-
-
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new

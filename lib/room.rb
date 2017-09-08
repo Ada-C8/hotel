@@ -1,7 +1,5 @@
 require 'csv'
-require 'awesome_print'
 
-#info_hash{id: 1, cost: 200}
 module BookingSystem
   class Room
     attr_accessor :id, :cost
@@ -9,11 +7,10 @@ module BookingSystem
     def initialize(id, cost)
       @id = id
       @cost = cost
-      #@all_rooms = [] this way can't work
     end
 
     def self.all
-      room_info = CSV.read('./support/rooms.csv')
+      room_info = CSV.read('./support/rooms.csv', converters: :numeric)
 
       all_rooms = []
       room_info.each do |row|
@@ -21,7 +18,7 @@ module BookingSystem
         cost = row[1]
         all_rooms << Room.new(id, cost)
       end
-
+      
       return all_rooms
     end
 
@@ -29,7 +26,7 @@ module BookingSystem
 end#of_module_BookingSystem
 
 #TESTING
-#ap Hotel::Room.all #will access the list of all of the rooms in the hotel
+# Hotel::Room.all #will access the list of all of the rooms in the hotel
 
 #Jans-MBP:hotel janedrozo$ ruby lib/room.rb
 
