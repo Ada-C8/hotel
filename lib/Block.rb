@@ -36,8 +36,8 @@ module Hotel
 
     def sample_available_rooms(start_date, end_date, number_of_rooms)
       room_numbers = Room.all.map { |room| room.room_num }
-      blocked_room_numbers = room_numbers - Hotel::Block.available(start_date, end_date)
-      reserved_room_numbers = room_numbers - Hotel::Reservation.available(start_date, end_date)
+      blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
+      reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
       available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
       raise NoRoomsAvailableError if available_room_numbers.length < number_of_rooms
       return available_room_numbers.sample(number_of_rooms)
