@@ -108,6 +108,18 @@ describe 'Reservations' do
       new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
       new_booking1.must_be_instance_of Hotel::Booking
     end
+    it 'must raise an error if the check-in date is in the past' do
+      proc{new_booking = @new_hotel.new_reservation("2017-06-01", "2017-09-21")}.must_raise InvalidDateError
+    end
+    it 'must raise an error if the check-in date is the same as the check-out date' do
+      proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-20")}.must_raise InvalidDateError
+    end
+    it 'must raise an error if the check_in date is after the check-out date' do
+      proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-18")}.must_raise InvalidDateError
+    end
+    it 'must raise an error if the date is not valid on calendar' do
+      proc{new_booking = @new_hotel.new_reservation("2018-02-30")}.must_raise InvalidDateError
+    end
   end
 
   describe 'all reservations' do

@@ -1,5 +1,6 @@
 require 'Booking'
 require 'DateRange'
+require 'date'
 
 module Hotel
   class Reservations
@@ -28,10 +29,6 @@ module Hotel
     def all_reservations
       return @all_reservations
     end
-
-    # def self.all_blocks
-    #   @blocks_collection = []
-    # end
 
     def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)

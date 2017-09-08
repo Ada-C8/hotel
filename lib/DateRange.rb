@@ -2,18 +2,29 @@ require 'date'
 
 module Hotel
   class DateRange
+    #attr_reader :dates  Add this?
     def initialize(check_in, check_out)
       @check_in = check_in
       @check_out = check_out
       #@dates = []
     end
 
-    def dates
+    def dates  #Add @dates here?
     return Array(@check_in..@check_out)
-      # dates.each do |date|
-      #   date = Date.parse(date)
-      # end
-  
     end
+
+
+    # class InvalidCardNumberError < StandardError
+    # end
+    #
+    # def process_transaction(card_number, amount)
+    #   # card_is_valid? is defined elsewhere
+    #   unless card_is_valid?(card_number)
+    #     raise InvalidCardNumberError.new("Invalid credit card number #{card_number}")
+    #   end
+    #   # ... process the transaction ...
+    # end
+
+
   end
 end
