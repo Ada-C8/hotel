@@ -7,6 +7,7 @@ module Hotel
       @start_date = start_date
       @end_date = end_date
       @dates = (@start_date..@end_date).map(&:to_s)
+      # add a unique id
     end
 
   end #end of Reservation
