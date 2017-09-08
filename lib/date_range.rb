@@ -28,6 +28,7 @@ module Hotel
         return false
       end
     end
+    
     def return_date_range
       date_range = "#{@check_in} to #{@check_out}"
       # Hotel::HotelClass.reservations << date_range
