@@ -20,6 +20,16 @@ describe "DateRange Class" do
     it "Equals number_of_nights" do
       @date_range_test.number_of_nights.must_equal 3
     end
+    it "raises an ArgumentError if check_in date has passed" do
+      proc {
+        Hotel::DateRange.new("2017-9-1", "2017-9-12")
+      }.must_raise ArgumentError
+    end
+    it "raises an ArgumentError if check_out date is before check_in date" do
+      proc {
+        Hotel::DateRange.new("2017-9-15", "2017-9-12")
+      }.must_raise ArgumentError
+    end
   end # end of describe Initialize DateRange Class
   describe "Return_date_range method" do
     it "Returns to a string" do
