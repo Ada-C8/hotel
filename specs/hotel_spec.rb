@@ -38,6 +38,12 @@ describe "Hotel Class" do
       @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
       @hotel.reservations.reservation_list[0].must_be_kind_of Hotel::Reservation
     end #call class
+
+    it "Can check if a room is available before making a reservation for that room " do
+      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
+      @hotel.is_available?(1000, 4, "2012/12/13", "2012/12/19").must_equal true
+    end
   end #make reservations
 
   describe "Find Reservations" do
@@ -51,7 +57,7 @@ describe "Hotel Class" do
       @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
       @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
       @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
-      @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1 
+      @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
     end #open rooms
 
   end #find reservations

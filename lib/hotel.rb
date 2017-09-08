@@ -25,17 +25,14 @@ module Hotel
 
     # - As an administrator, I can reserve a room for a given date range
     def make_reservation(id, room, day_in, day_out)
-      @reservations.add(id, room, day_in, day_out)
-      #@@reservations << Reservation.new(id, room, day_in, day_out)
-      #return #Hotel::ReservationList.reservations
+      if is_available?(room, day_in, day_out)
+        @reservations.add(id, room, day_in, day_out)
+      else
+        return "Please choose a different date or room"
+      end
     end #make_reservation
 
     #As an administrator, I can access the list of reservations for a specific date
-
-    #Find include room? Then go through each date, if date matches and room matches return it
-    #pop off last date?
-    #then you'll just be searching for one?
-
     def find_reservation(day_in, day_out)
       dates = DateRange.create_range(day_in, day_out) #should create an array
       found_reservations = Array.new
@@ -47,7 +44,6 @@ module Hotel
         end #each reservation
       end #each date
       found_reservations = found_reservations.uniq
-      #puts "Found Reservations are: #{found_reservations}"
       return found_reservations
     end #view_reservations
 
@@ -73,38 +69,20 @@ module Hotel
       return open_rooms
     end
 
-
-
-    #   return found_reservations
-    #
-    #   #list all rooms reserved for that date from reservation list
-    # end #open rooms
-    #
-    # def find_reservation(day_in, day_out)
-    #   dates = DateRange.create_range(day_in, day_out) #should create an array
-    #   found_reservations = Array.new
-    #   dates.each do |date|
-    #     puts date
-    #     @reservations.reservation_list.each do |reservation|
-    #       found_reservations << reservation.view_reservation
-    #       if reservation.date_range.include?(date)
-    #          found_reservation << reservation.view_reservation
-    #       end #if statement
-    #     end #each reservation
-    #   end #each date
-    #
-    #   found_reservations = found_reservations.uniq
-    #       puts "#{found_reservations}"
-    #   return found_reservations
-    #
-    #   #list all rooms reserved for that date from reservation list
-    # end #view_reservations
-
     #As an administrator, I can reserve an available room for a given date range
+    def is_available?(room, day_in, day_out)
+      rooms = open_rooms(day_in, day_out)
+      if rooms.include?(room)
+        return true
+      else
+        return false
+      end  #if/else
+    end# is_available
   end #class
 end #module
 #binding.pry
 #binding.pry
+
 # find if rooms is open for a given date range
 # reserve room for that date range
 #what will my reservation object look like
@@ -165,7 +143,8 @@ end #module
 #   nested loops
 #   at end return array of all rooms minus array of occupied rooms
 #   =end
-
+#@@reservations << Reservation.new(id, room, day_in, day_out)
+#return #Hotel::ReservationList.reservations
 
 
 # def self.find_reservation(date)
