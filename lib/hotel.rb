@@ -2,17 +2,19 @@
 
 module BookingSystem
   class Hotel
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :block_reservations
 
     def initialize
       @rooms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
       @reservations = []
+      @block_reservations = []
     end
 
     def create_reservation(check_in, check_out)
       ######## TODO: Need a valid input method here for date input to be parsed in date range if not, raise an argument error
       ######## TODO: check_in date needs to be less than check_out date
       available_rooms = check_avail_rooms_for(check_in, check_out) # Returns array of all available rooms
+      ######## TODO Raise argument error here
       # if available_rooms.empty?
       #   puts "No room available for your requested dates. Please choose another date"
       # end
@@ -30,48 +32,40 @@ module BookingSystem
       new_block = Block.new(reserved_for, check_in, check_out, reserved_room_nums)
       # Return only one block reservation and pass it into the @reservations array so that they cannot access the rooms
       @reservations << new_block
-      return new_block # Returns all rooms in that block that are available
+      @block_reservations << new_block
+      return new_block # Returns all reserved rooms for a block from 1 to 5 as an array
     end
 
     # As an administrator, I can reserve a room from within a block of rooms
     def reserve_room_in_block(reserved_name, num_to_book)
-      found_blocks = []
       found_requested_block = nil
-      @reservations.each do |reservation|
-        if reservation.class == BookingSystem::Block
-          found_blocks << reservation
-        end
-      end
-      found_blocks.each do |block|
+      @block_reservations.each do |block|
         if block.reserved_for == reserved_name
           found_requested_block = block
-      # I now have access to the instance of the requested block
+          # This is an array of all available rooms
         end
+        ##########TODO: Raise ArgumentError if no name matches the block reservation
+        ##########TODO: Raise argument error. Must be greater than one and less than the number of available rooms
       end
       # Returns all available room numbers for that block
       avail_rooms = avail_rooms_in_block?(reserved_name)
       # Book number of requested rooms in the current block
       now_reserved_in_block = avail_rooms[0..num_to_book - 1]
-      # Need to update available block of rooms with the remaining rooms
       remaining_rooms = avail_rooms - now_reserved_in_block
-      found_requested_block.avail_block_rooms = remaining_rooms
-      ##########TODO: Raise argument error. Must be greater than one and less than 5
+      ############ Run update in Block class here here ################
+      puts "#{now_reserved_in_block} NOW RESERVED********"
+      puts "#{remaining_rooms} REMAINING ROOMS ********"
+      found_requested_block.update_block_rooms(remaining_rooms, now_reserved_in_block) # This is an array
     end
 
     def avail_rooms_in_block?(reserved_name)
       # Find block with the specific name it was reserved for
-      found_blocks = []
-      @reservations.each do |reservation|
-        if reservation.class == BookingSystem::Block
-          found_blocks << reservation
-        end
-      end
-      found_blocks.each do |block|
+      @block_reservations.each do |block|
         if block.reserved_for == reserved_name
           return block.avail_block_rooms
           # This is an array of all available rooms
         end
-        #TODO: Raise ArgumentError if no name matches the block reservation
+        ##########TODO: Raise ArgumentError if no name matches the block reservation
       end
     end # def
 
@@ -96,13 +90,6 @@ module BookingSystem
         return @rooms - existing_booked_rooms
       end
     end
-
-
-    #
-    # def valid_input?
-    #
-    #
-    # end
 
   end # Class
 end # BookingSystem

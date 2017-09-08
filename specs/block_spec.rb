@@ -30,14 +30,19 @@ describe "Block" do
       @booking.avail_block_rooms.must_be_kind_of Array
       @booking.avail_block_rooms.length.must_equal 5
 
+      @booking.must_respond_to :reserved_rooms
+      @booking.reserved_rooms.must_be_kind_of Array
+      @booking.reserved_rooms.must_be_empty
+
       @booking.must_respond_to :block_total
       @booking.block_total.must_be_kind_of Integer
       @booking.block_total.must_equal 0
-
-      # @booking.must_respond_to :avail_block_rooms
-      # @booking.avail_block_rooms.must_be_empty
-      # @booking.avail_block_rooms.must_be_kind_of Array
     end
   end # Describe
+
+  describe "#block_total" do
+    it "should return the discounted total of the rooms that were reserved within the block" do
+    end
+  end
 
 end # Describe

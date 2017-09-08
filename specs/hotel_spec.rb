@@ -12,13 +12,17 @@ describe "Hotel" do
     it "should create an instance of Hotel" do
       @hotel.must_be_instance_of BookingSystem::Hotel
 
-      @hotel.rooms.must_be_kind_of Array
       @hotel.must_respond_to :rooms
+      @hotel.rooms.must_be_kind_of Array
       @hotel.rooms.length.must_equal 20
 
-      @hotel.reservations.must_be_kind_of Array
       @hotel.must_respond_to :reservations
+      @hotel.reservations.must_be_kind_of Array
       @hotel.reservations.must_be_empty
+
+      @hotel.must_respond_to :block_reservations
+      @hotel.block_reservations.must_be_kind_of Array
+      @hotel.block_reservations.must_be_empty
     end
   end # Describe
 
@@ -71,6 +75,7 @@ describe "Hotel" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
       @hotel.reservations[0].must_be_instance_of BookingSystem::Block
       @hotel.reservations.length.must_equal 1
+      @hotel.block_reservations.length.must_equal 1
     end
 
     it "should return 4 instances of block if no other single reservations exist" do
@@ -109,18 +114,16 @@ describe "Hotel" do
   end # Describe
 
   describe "#reserve_room_in_block" do
-    xit "should ask how many rooms in the block they want to reserve" do
+    it "should return an instance of the requested block" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
       @hotel.reserve_room_in_block("Bob", 5)
-      ###### TODO: num_to_book within block must be greater than 1 and less than 5
-    end
+      block = @hotel.block_reservations[0]
 
-    it "should be update the Block instance with the new available rooms" do
-      my_block = @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
-      @hotel.reserve_room_in_block("Bob", 5)
-      my_block.avail_block_rooms.must_be_empty
+      @hotel.block_reservations[0].reserved_for.must_equal "Bob"
+      block.avail_block_rooms.must_be_empty
+      block.avail_block_rooms.must_be_kind_of Array
     end
-  end
+  end # Describe
 
   describe "#avail_rooms_in_block?" do
     it "should return an array of available room numbers for a specific block as Integers" do

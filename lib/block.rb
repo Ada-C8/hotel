@@ -1,6 +1,6 @@
 module BookingSystem
   class Block
-    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :block_total, :avail_block_rooms
+    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :block_total, :avail_block_rooms, :reserved_rooms
 
     DISCOUNT_RATE = 150
 
@@ -10,17 +10,23 @@ module BookingSystem
       @check_in = dates.check_in
       @check_out = dates.check_out
       @avail_block_rooms = avail_block_rooms # Blocked rooms is the reserved room numbers as an array
+      @reserved_rooms = [] # Reserved rooms with room numbers as an Array
       @block_total = 0
-      @booked_rooms_in_block = []
+    end
+
+    def update_block_rooms(remaining_rooms, now_reserved_in_block)
+      @avail_block_rooms = remaining_rooms
+      @reserved_rooms = now_reserved_in_block
+    end
+
+    def block_total
+      @block_total = ((@check_out - @check_in) * DISCOUNT_RATE * @reserved_rooms.length).to_i
     end
 
   end # Block
 end # BookingSystem
 
-# Block booking is a one reservation with 5 rooms
-# total = check_out - check_in * 150 * block_rooms.length
-# Reserve a room in a block!!!!!
-# Check to see what rooms within the block are available
+
 
 # Reserve block returns that instance of a block. Now what do i do?
 
