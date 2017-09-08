@@ -30,6 +30,27 @@ module Hotel_Chain
       return list_array
     end
 
+    #Finds all reservations for a given date
+    def find_reservations_by_date(date)
+      reservations_on_date = []
+      @reservations_array.each do |reservation|
+        if (reservation.check_in_date...reservation.check_out_date).cover?(Date.strptime(date, "%m/%d/%Y"))
+          reservations_on_date << reservation
+        end
+      end
+      return reservations_on_date
+    end
+
+    def print_reservations_by_date(date)
+      array = []
+      reservations_on_date = self.find_reservations_by_date(date)
+      reservations_on_date.each do |reservation|
+        array  << "Room #{reservation.room.room_id} is reserved from #{reservation.check_in_date} to #{reservation.check_out_date}"
+      end
+      ap array
+      return array
+    end
+
     # admin would enter the following to create a new reservation:
     # hotel.store_reservation(check_in_date, check_out_date)
 
@@ -61,18 +82,6 @@ module Hotel_Chain
         end
       end
     end
-
-    #Finds all reservations for a given date
-    def find_reservations_by_date(date)
-      reservations_on_date = []
-      @reservations_array.each do |reservation|
-        if (reservation.check_in_date...reservation.check_out_date).cover?(Date.strptime(date, "%m/%d/%Y"))
-          reservations_on_date << reservation
-        end
-      end
-      return reservations_on_date
-    end
-
 
     def find_rooms_available(check_in_date, check_out_date)
       available_rooms = []
@@ -120,15 +129,5 @@ module Hotel_Chain
     end
 
 
-
-
-    # def print_reservations_by_date(date)
-    #   array = []
-    #   reservations_on_date = self.make_reservations_by_date_array(date)
-    #   reservations_on_date.each do |reservation|
-    #     array  << "Room #{reservation.room_id} is reserved from #{reservation.check_in_date} to #{reservation.check_out_date}"
-    #   end
-    #   puts array
-    # end
   end #end of class
 end #end of module

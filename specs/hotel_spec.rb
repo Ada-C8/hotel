@@ -94,17 +94,17 @@ describe "The Hotel class" do
 
   end
 
-  # describe "print_reservations_by_date method" do
-  #
-  #   it "prints a formatted list of reservations for a particular date" do
-  #     @myhotel.store_reservation("8/13/17", "8/16/17")
-  #     @myhotel.store_reservation("9/25/17", "9/29/17")
-  #     @myhotel.store_reservation("8/15/17", "8/30/17")
-  #     @myhotel.find_reservations_by_date("8/15/17").length.must_equal 2
-  #     @myhotel.print_reservations_by_date("8/15/17").length.must_equal 2
-  #   end
-  #
-  # end
+  describe "print_reservations_by_date method" do
+
+    it "prints a formatted list of reservations for a particular date" do
+      @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.store_reservation("9/25/17", "9/29/17")
+      @myhotel.store_reservation("8/15/17", "8/30/17")
+      @myhotel.find_reservations_by_date("8/15/17").length.must_equal 2
+      @myhotel.print_reservations_by_date("8/15/17").length.must_equal 2
+    end
+
+  end
 
   describe "find_rooms_available method" do
 
