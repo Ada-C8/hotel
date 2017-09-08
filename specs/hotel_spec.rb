@@ -200,6 +200,21 @@ describe 'Hotel' do
       }.must_raise NoRoomError
     end
   end
+
+  describe 'find_rooms_not_in_blocks' do
+    it 'returns array of rooms' do
+      rooms = @hotel.find_rooms_not_in_blocks('2017-10-14', '2017-10-18')
+      rooms.must_be_kind_of Array
+    end
+
+    it 'returns rooms that are not in block' do
+      block = @hotel.make_block('2017-10-10', '2017-10-20', 5, 20)
+      rooms = @hotel.find_rooms_not_in_blocks('2017-10-14', '2017-10-18')
+      rooms.each do |room|
+        block.rooms.wont_include room
+      end
+    end
+  end
 end
 
 # - As an administrator, I can check whether a given block has any rooms available

@@ -1,3 +1,5 @@
+require 'pry'
+
 module Hotel
   require_relative 'room'
   require_relative 'reservation'
@@ -44,29 +46,17 @@ module Hotel
     end
 
     def find_available_rooms(checkin, checkout, block_id = false)
-      booked_rooms, available_rooms = [], []
-
       if block_id
-        current_block = block(block_id)
-        raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{current_block.id}") unless DateRange.overlap?(checkin, checkout, current_block.start_date, current_block.end_date)
-        @rooms.each do |room|
-          booked_rooms << room unless current_block.rooms.include? room
-        end
-      else # not in block
-        @blocks.each do |block|
-          booked_rooms += block.rooms if block.includes_dates?(checkin, checkout)
-        end
+        raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{block(block_id).id}") unless block(block_id).includes_dates?(checkin, checkout)
+        rooms = block(block_id).rooms
+      else
+        rooms = find_rooms_not_in_blocks(checkin, checkout)
       end
 
       @reservations.each do |reservation|
-        if !(booked_rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
-          booked_rooms << reservation.room
-        end
+        rooms.delete(reservation.room) if (rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
       end
-      @rooms.each do |room|
-        available_rooms << room unless booked_rooms.include? room
-      end
-      available_rooms
+      rooms
     end
 
     def make_block(start_date, end_date, num_rooms, discount)
@@ -85,6 +75,18 @@ module Hotel
     def block(id)
       @blocks.each { |block| return block if block.id == id }
       nil
+    end
+
+    # private
+
+    def find_rooms_not_in_blocks(start_date, end_date)
+      rooms = @rooms.dup
+      @blocks.each do |block|
+        if block.includes_dates?(start_date, end_date)
+          rooms.delete_if { |room| block.rooms.include? room }
+        end
+      end
+      rooms
     end
   end
 end
