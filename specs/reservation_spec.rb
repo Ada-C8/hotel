@@ -22,4 +22,10 @@ describe 'Reservation' do
 
     end # end test
   end # end #reserve_dates
+
+  describe 'finalize_reservation' do
+    it 'displays complete reservation info' do
+      @puppy_expo.finalize_reservation.must_equal "Name: Finn\nCheck In: 2017-10-13\nCheck Out: 2017-10-31\nRoom Number: 1\nTotal Cost: $3600"
+    end # end test
+  end # end #final_reservation
 end # end of all Reservation tests

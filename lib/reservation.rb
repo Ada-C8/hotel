@@ -9,6 +9,8 @@ module Hotel
 
     def initialize(guest_name, check_in, check_out)
       @guest_name = guest_name
+      @check_in = check_in
+      @check_out = check_out
       @dates = Hotel::DateRange.new(check_in, check_out)
       @room = Hotel::Room.new
       @reservation = reservation
@@ -21,15 +23,11 @@ module Hotel
       @dates.length_of_stay
     end # end #reserve_dates
 
-    def final_reservation
-      @reservation = {
-        name: @guest_name,
-        check_in: @check_in,
-        check_out: @check_out,
-        room: @room,
-        cost: COST * Hotel::DateRange.length_of_stay
-      }
-    end # end #final_reservation
+    def finalize_reservation
+        booking = "Name: #{@guest_name}\nCheck In: #{@check_in}\nCheck Out: #{@check_out}\nRoom Number: #{@room}\nTotal Cost: $#{COST * @dates.length_of_stay}"
+
+        return puts booking
+    end # end #finalize_reservation
 
     def list_by_date
 
