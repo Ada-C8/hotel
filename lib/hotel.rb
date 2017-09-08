@@ -49,10 +49,10 @@ module BookingSystem
       end
 
       #select first available rooms to fill request
-      rooms_for_block = all_available_rooms[0..(number_of_rooms - 1)]
+      rooms_in_block = all_available_rooms[0..(number_of_rooms - 1)]
 
       #block off a block by instantiating Block
-       new_block = BookingSystem::Block.new(number_of_rooms, rooms_for_block, check_in, check_out)
+       new_block = BookingSystem::Block.new(number_of_rooms, rooms_in_block, check_in, check_out)
 
        @all_blocks << new_block
 
@@ -108,7 +108,7 @@ module BookingSystem
       all_blocks_with_room = []
       @all_blocks.each do |block|
         #find booked blocks that include room number
-        if block.rooms_for_block.include?(room)
+        if block.rooms_in_block.include?(room)
           all_blocks_with_room << block
         end
       end
