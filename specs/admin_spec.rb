@@ -107,4 +107,14 @@ describe "Admin" do
     end
   end
 
+  describe "available_rooms_in_date_range" do
+    it "Returns an error if date objects aren't passed" do
+      proc{@admin.available_rooms_in_date_range("I am not a date!", "I'm not one too! haha")}.must_raise ArgumentError
+    end
+
+    it "Returns an error if dates are passed in descending order" do
+      proc{@admin.available_rooms_in_date_range(Date.new(2017, 10, 3), Date.new(2017, 10, 1))}.must_raise ArgumentError
+    end
+  end
+
 end
