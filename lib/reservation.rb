@@ -8,7 +8,7 @@ module Hotel
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
       @dates = DateRange.range_to(@checkin, @checkout)
-      @id = create_id
+      # @id = create_id
       @block = block
       get_total
     end
@@ -24,8 +24,8 @@ module Hotel
 
     private
 
-    def create_id
-      format('R%.2d%.2d%.4d', @checkin.month, @checkin.day, rand(9999))
-    end
+    # def create_id
+    #   format('R%.2d%.2d%.4d', @checkin.month, @checkin.day, rand(9999))
+    # end
   end
 end

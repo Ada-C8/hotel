@@ -17,11 +17,11 @@ describe 'Reservation' do
       @reservation.dates.first.must_be_kind_of Date
     end
 
-    it 'has 9-character @id value' do
-      @reservation.id.must_be_kind_of String
-      @reservation.id.length.must_equal 9
-      @reservation.id[0..4].must_equal 'R0905'
-    end
+    # it 'has 9-character @id value' do
+    #   @reservation.id.must_be_kind_of String
+    #   @reservation.id.length.must_equal 9
+    #   @reservation.id[0..4].must_equal 'R0905'
+    # end
 
     it 'has @total_cost value, which is rate * num of nights' do
       # As an administrator, I can get the total cost for a given reservation
