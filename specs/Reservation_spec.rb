@@ -22,7 +22,7 @@ describe "Hotel::Reservation class" do
       read_res.check_in.day.must_equal 1
       read_res.check_out.day.must_equal 3
       read_res.id.must_equal 100
-      read_res.room.id.must_equal 5
+      read_res.room_id.must_equal 5
     end
 
   end #end initialize tests

@@ -1,15 +1,19 @@
+
 require_relative 'Block'
 require_relative 'Reservation'
 require_relative 'Booking'
 
 module Hotel
   class BlockReservation < Hotel::Reservation
-    def initialize(check_in,check_out,room_id, b_res_id, block_discount, block_id,guest = nil)
+    attr_accessor :id, :guest, :check_in, :check_out, :room, :block_id
+    attr_reader :all_reservations, :type
+
+    def initialize(check_in,check_out,room_id, b_res_id, block_discount,guest = nil)
       super(check_in,check_out,room_id, b_res_id,block_discount, guest = nil)
-      #how do I get the discounted_rate? must incorpo
+      #how do I incorporate a block id?
       @discounted_rate = block_discount
-      @block_id = block_id
-      @type= :block 
+      @block_id = nil
+      @type= :block
     end #end initialize
 
     def cost

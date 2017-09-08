@@ -19,8 +19,8 @@ module Hotel
     #NUM_OTHER_ROOMS = 0
 
     def initialize # do we want to initialize with hotel name?
-      @all_rooms = Hotel::Room.all # returns an array or hash of Room objects
-      # @all_rooms2 = Hotel::BookingProgram.setup_rooms
+      # @all_rooms = Hotel::Room.all # returns an array or hash of Room objects
+      @all_rooms = Hotel::BookingProgram.setup_rooms
       @all_reservations = []
       @all_blocks = []
 
@@ -38,39 +38,10 @@ module Hotel
       #if block_id
     end
 
-    ###should this be a Room method
-    def make_reservation(check_in,check_out,room_id, block_id = nil, guest_id=nil)
+    def find_room_by_id(room_id)
+      @all_rooms.each {|room| return room if room.id == room_id}
 
-      reservation_id = (@all_reservations.count + 1) #something
-
-      if block_id
-        #TODO: think about whether or not to have a separate block reservation id logic and whether or not to store block reservations in the same place as all reservations AND store them separately, or store them in one place (either all reservations or Block reservations)
-
-        block= find_block_by_id(block_id)
-        raise ArgumentError.new("This block doesn't exist") if !(find_block_by_id(block_id))
-
-        block_discount = block.discounted_rate
-        block_room = Hotel::Room.find_by_id(room_id)#must be included in the block
-
-        raise ArgumentError.new("This room is not in the block") if !(block.rooms.include?(block_room))
-
-        #TODO: IRON OUT and TEST block reservation constraints: check in and check out MUST be that of the BLOCK check_in/Check_out dates
-        block_check_in = block.check_in.to_s
-        block_check_out= block.check_out.to_s
-
-        #TODO: Think about if we want to make a block reservation id a +1 count of all reservations, or have separate ids for blocks
-        reservation = Hotel::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount, block_id)
-      else
-        reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
-      end
-
-      #TODO: How to incorporate reserve_room logic for Block Reservations
-      reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id) if reservation.type == :standard
-
-      reservation.room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil) if reservation.type == :block
-
-      @all_reservations << reservation
-
+      raise ArgumentError.new "Sorry, we don't have a room matching that ID number."
     end
 
     def make_block(check_in,check_out,room_ids,discounted_rate)
@@ -80,12 +51,54 @@ module Hotel
       block_id = @all_blocks.count + 1
 
       block = Hotel::Block.new(check_in,check_out,room_ids,discounted_rate,block_id)
-
-      block.rooms.each do |room|
+      block.room_ids.each do |room_id|
+        room = find_room_by_id(room_id)
         room.block_room(check_in,check_out,block_id)
       end
 
       @all_blocks << block
+
+    end
+
+
+    ###should this be a Room method
+    def make_reservation(check_in,check_out,room_id, block_id = nil, guest_id=nil)
+
+      reservation_id = (@all_reservations.count + 1) #something
+
+      if block_id
+        #TODO: think about whether or not to have a separate block reservation id logic and whether or not to store block reservations in the same place as all reservations AND store them separately, or store them in one place (either all reservations or Block reservations)
+
+        all_block_ids = @all_blocks.map {|block| block.id}
+        raise ArgumentError.new("This block doesn't exist") if !(all_block_ids.include?(block_id))
+
+        block= find_block_by_id(block_id)
+        # binding.pry
+
+        block_discount = block.discounted_rate
+
+
+        raise ArgumentError.new("This room is not in the block") if !(block.room_ids.include?(room_id))
+
+        #TODO: IRON OUT and TEST block reservation constraints: check in and check out MUST be that of the BLOCK check_in/Check_out dates
+        block_check_in = block.check_in.to_s
+        block_check_out= block.check_out.to_s
+
+        #TODO: Think about if we want to make a block reservation id a +1 count of all reservations, or have separate ids for blocks
+        reservation = Hotel::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount)
+
+        reservation.block_id = block_id
+      else
+        reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
+      end
+
+      #TODO: How to incorporate reserve_room logic for Block Reservations
+      room = find_room_by_id(room_id)
+      room.reserve_room(check_in,check_out,reservation.id, guest_id) if reservation.type == :standard
+
+      room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil) if reservation.type == :block
+
+      @all_reservations << reservation
 
     end
 
@@ -110,7 +123,14 @@ module Hotel
     def find_res_by_date(date_str)
       date_object= Date.parse(date_str)
       reserved_on_date = []
-      @all_reservations.each {|reservation| reserved_on_date << reservation if reservation.room.all_dates.include?(date_object)}
+      @all_reservations.each do |reservation|
+        room= find_room_by_id(reservation.room_id)
+
+        reserved_on_date << reservation if room.all_dates.include?(date_object)
+      end
+
+
+        #  {|reservation| reserved_on_date << reservation if reservation.room.all_dates.include?(date_object)}
 
       return reserved_on_date
 
@@ -129,18 +149,20 @@ module Hotel
       return false
     end
 
-    # def self.setup_rooms
-    #   i = 1
-    #   standard_rooms = []
-    #
-    #   until standard_rooms.count == NUM_STANDARD_ROOMS
-    #     room =  Hotel::Room.new(i)
-    #     standard_rooms << room
-    #     i += 1
-    #   end
-    #
-    #   return standard_rooms
-    # end
+    def self.setup_rooms
+      i = 1
+      standard_rooms = []
+
+      until standard_rooms.count == NUM_STANDARD_ROOMS
+        room =  Hotel::Room.new(i)
+        standard_rooms << room
+        i += 1
+      end
+
+      return standard_rooms
+
+      #can modify to set up for different types of rooms
+    end
 
 
 

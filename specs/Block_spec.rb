@@ -11,10 +11,10 @@ describe "Hotel::Block class " do
       new_block = Hotel::Block.new(check_in_str, check_out_str,room_ids,discounted_rate,block_id)
 
       new_block.must_be_instance_of Hotel::Block
-      # new_block.rooms.must_be_instance_of Array
-      # new_block.rooms.each do |room|
-      #   room.must_be_instance_of Hotel::Room
-      # end
+      new_block.room_ids.must_be_instance_of Array
+      new_block.room_ids.each do |room|
+        room.must_be_instance_of Integer
+      end
 
     end
   end

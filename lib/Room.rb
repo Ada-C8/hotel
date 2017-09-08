@@ -2,6 +2,7 @@ require 'pry'
 require 'date'
 require_relative 'Reservation'
 require_relative 'BlockReservation'
+require_relative 'Booking'
 
 module Hotel
 
@@ -48,13 +49,22 @@ module Hotel
     end
 
     def reserve_block_room(check_in_str,check_out_str,reservation_id, block_id, guest_id=nil)
+
+      #TODO: maybe reserve block room should only take in a Block id, since the check-in and check-out dates will be whatever the dates of the block are
+
+    #def reserve_block_room(block_id, reservation_id)
+      # block = Hotel::BookingProgram.all_blocks.find_block_by_id(block_id)
+      #
+      # check_in = block.check_in.to_s
+      # check_out = block.check_out.to_s
+
       check_in = Date.parse(check_in_str)
       check_out = Date.parse(check_out_str)
 
       check_valid_dates(check_in,check_out)
 
       (check_in...check_out).each do |date|
-        raise ArgumentError.new("this room has already been reserved for these dates in this block") if @block_id_and_res_dates[block_id].include?
+        raise ArgumentError.new("this room has already been reserved for these dates in this block") if @block_id_and_res_dates[block_id].include?(date)
       end
 
       (check_in...check_out).each do |date|

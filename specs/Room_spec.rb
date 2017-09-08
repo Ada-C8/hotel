@@ -153,5 +153,68 @@ describe "Hotel::Room class" do
     end
   end
 
+  xdescribe "reserve_block_room" do
+    it "can reserve a room if given the check-in/out date, reservation id, and guest id" do
+      hotel = Hotel::BookingProgram.new
+
+      rooms_in_block = [1,3]
+
+      block_room_wanted = 3
+
+      check_in_str = "2018-08-09"
+      check_out_str = "2018-08-12"
+      discounted_rate = 10
+
+      hotel.make_block(check_in_str, check_out_str, rooms_in_block,discounted_rate)
+
+      block1 = hotel.all_blocks[0]
+
+      hotel.all_blocks.count.must_equal 1
+      block1.must_be_instance_of Hotel::Block
+      block1.id.must_equal 1
+
+      room = Hotel::Room.find_by_id(block_room_wanted)
+
+      #check for when trying to make a block reservation for a room that is not in the block e.g.proc{room.reserve_block_room(check_in_str, check_out_str, 1, 20)}.must_raise ArgumentError
+
+      room.reserve_block_room(check_in_str, check_out_str, 99, block1.id)
+
+      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
+        room.all_dates.must_include date
+      end
+
+      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
+        room.block_id_and_res_dates[block1.id].must_include date
+      end
+
+    end
+
+    xit "Raises an error when we try to book a room with a check-in or check-out date earlier than today" do
+      room = Hotel::Room.new(123)
+      check_in_str = "2016-08-09"
+      check_out_str = "2016-08-12"
+
+      proc { room.reserve_block_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
+    end
+
+    xit "raises an error if the check-in or check-out date is invalid" do
+      room = Hotel::Room.new(123)
+      check_in_str = "February 30, 2018"
+      check_out_str = "February 31, 2018"
+
+      proc { room.reserve_block_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
+
+    end
+
+    xit "raises an error if the check-out dates is earlier than the check-in date" do
+      room = Hotel::Room.new(123)
+      check_in_str = "March 3, 2018"
+      check_out_str = "February 20, 2018"
+
+      proc { room.reserve_block_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
+    end
+
+  end #end reserve_block_room
+
 
 end #end Hotel::Room class tests
