@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-xdescribe "Booking class" do
+describe "Booking class" do
   before do
     id = 1
     rooms = [Hotel::Room.new(15),Hotel::Room.new(16)]
