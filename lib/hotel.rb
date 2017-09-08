@@ -36,6 +36,7 @@ module Hotel
     end
 
     def make_block(start_date, end_date, num_rooms, discount)
+      raise(ArgumentError,"Number of rooms must be Integer: is #{num_rooms.class}") unless num_rooms.class == Integer
       rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
       raise(NoRoomError, "Not enough available rooms for amount #{num_rooms}") if rooms.length < num_rooms
       block = Block.new(start_date, end_date, rooms, discount)
