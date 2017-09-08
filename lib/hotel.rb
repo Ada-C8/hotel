@@ -14,29 +14,22 @@ class Hotel
 
 
   def make_reservation(check_in, check_out, rooms)
-
-
-
     unavailable_rooms = []
-    flag = true
-    rooms.each do |room|
-      if !(rooms_available(check_in, check_out).include?(room))
-        unavailable_rooms.push(room.number)
-        flag = false
+    flag = flag_a_room(check_in, check_out, rooms, unavailable_rooms)
+
+    if flag == true
+      @reservations.push(Reservation.new(check_in, check_out, rooms))
+
+    else
+      begin
+        raise ArgumentError.new("Room: #{unavailable_rooms} not available: ")
+      rescue ArgumentError => exception
+        puts "#{exception}: #{check_in} - #{check_out}"
       end
     end
-
-      if flag == true
-        @reservations.push(Reservation.new(check_in, check_out, rooms))
-
-      else
-        begin
-          raise ArgumentError.new("Room: #{unavailable_rooms} not available: ")
-        rescue ArgumentError => exception
-          puts "#{exception}: #{check_in} - #{check_out}"
-        end
-      end
   end
+
+
 
   def reservation_by_date(date)
     my_date = Date.parse(date)
@@ -53,7 +46,6 @@ class Hotel
 
   def rooms_reserved(date)
     reserved_rooms = []
-
     reservation_by_date(date).each do |reservation|
       reservation.rooms.each do |room|
         reserved_rooms.push(room)
@@ -64,29 +56,39 @@ class Hotel
 
 
   def rooms_available(check_in, check_out)
-    last_night = Date.parse(check_out) - 1
+    nights = Nights.new(check_in, check_out)
     available_rooms = Array.new(@rooms)
-
-    reservation_by_date(check_in).each do |reservation|
-      reservation.rooms.each do |room|
-        available_rooms.delete(room)
-      end
+    nights.nights_reserved.each do |night_reserved|
+      remove_rooms_from_available(night_reserved, available_rooms)
     end
-
-    reservation_by_date(last_night.to_s).each do |reservation|
-      reservation.rooms.each do |room|
-        available_rooms.delete(room)
-      end
-    end
-
     return available_rooms
   end
+
 
   def block_reservation(check_in, check_out, rooms)
     @reservations.push(Block.new(check_in, check_out, rooms))
   end
 
+  private
 
+  def remove_rooms_from_available(search_date, available_rooms)
+    reservation_by_date(search_date.to_s).each do |reservation|
+      reservation.rooms.each do |room|
+        available_rooms.delete(room)
+      end
+    end
+  end
+
+  def flag_a_room(check_in, check_out, rooms, unavailable_rooms)
+    flag = true
+    rooms.each do |room|
+      if !(rooms_available(check_in, check_out).include?(room))
+        unavailable_rooms.push(room.number)
+        flag = false
+      end
+    end
+    return flag
+  end
 
 end
 #

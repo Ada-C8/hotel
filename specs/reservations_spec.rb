@@ -33,20 +33,11 @@ describe "#RESERVATIONS" do
       proc{Reservation.new("01-18-2018", "01-18-2018", @room)}.must_raise ArgumentError
     end
 
-
-    it "Can accurately report the number of nights in a reservation" do
-      @new_reservation.nights.num_nights.must_equal 2
-    end
-
     it "can calculate the cost for a reservation" do
       @new_reservation.bill.must_equal 400
       @new_reservation1.bill.must_equal 1400
     end
 
-    it "can show all nights in the reservation date range" do
-      @new_reservation.nights.nights_reserved.must_equal ["2018-01-16", "2018-01-17"]
-      @new_reservation1.nights.nights_reserved.length.must_equal 7
-    end
   end
 
   describe "#BLOCKS" do

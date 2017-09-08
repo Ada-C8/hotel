@@ -1,5 +1,3 @@
-require_relative 'hotel'
-
 class Nights
   attr_reader :check_in, :check_out, :num_nights, :nights_reserved
   def initialize(check_in, check_out)
@@ -17,6 +15,10 @@ class Nights
       check_in += 1
     end
     return nights
+  end
+
+  def num_nights
+    @nights_reserved.length
   end
 
   private
