@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 require_relative '../lib/hotel'
 
 describe 'Hotel' do
-  
+
 before do
   @test_hotel = Property::Hotel.new
 end
@@ -42,14 +42,11 @@ it "last day of a reservation is the checkout day, so the guest should not be ch
 
 end
 
-it "Your code should raise an error when an invalid date range is provided" do
-
-end
-
 
 it "I can view a list of rooms that are not reserved for a given date range" do
 
 end
+
 it "I can reserve an available room for a given date range" do
 
 end
@@ -61,6 +58,7 @@ end
 it " I can create a block of rooms:"do
 
 end
+
 # need a date range, collection of rooms and a discounted room rate
 it "block should only include rooms that are available for the given date range" do
 

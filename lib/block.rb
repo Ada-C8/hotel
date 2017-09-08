@@ -1,24 +1,39 @@
 module Property
 
-  class Blocks < Reservation
+  class Block
+    # make sure to uncomment block in spec helper
 
-    attr_reader :rooms, :room_price, :check_in, :check_out
+    attr_reader :rooms, :check_in, :check_out, :price
 
-    def initialize
-      @rooms = []
-      @reserved_blocks = []
-      @block_price = block_total
-      super(check_in, check_out)
+    def initialize(rooms,check_in,check_out,price)
+
+      raise ArgumentError.new "Cannot accomodate block reservation
+      for more than five rooms at a time." if rooms.length > 5
+
+      raise ArgumentError.new "Must specify at least one room." if rooms.empty?
+
+        @availability = rooms.clone
+        @rooms = []
+        @dates = Property::Range.new(check_in, check_out)
+        @price = 200
+        @total_price = @dates.num_nights * @price * @rooms.length
+      end
+
+      def reserve_individual_room(room)
+        raise ArgumentError.new "No availability" if @availability.empty?
+        @vailability.pop(room)
+        @availability << room
+        retun room
+      end
+
     end
-
-
-
-    def block_total
-      return ((@check_out - @check_in) * 200 * @rooms.length)
-    end
-
   end
-end
 
 
-make sure to uncomment block in spec helper 
+
+  # block = {
+  #   rooms => [],
+  #   check_in => check_in,
+  #   check_out => check_out,
+  #   total_price => ((rooms.length * 200)*(check_out - check_in))
+  # }
