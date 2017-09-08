@@ -1,11 +1,12 @@
 require 'date'
 require_relative 'room'
 require_relative 'reservation'
+require_relative 'block'
 
 module Hotel
 
   class California
-    attr_reader :all_rooms
+    attr_reader :all_rooms, :blocks
 
     def initialize
       @num_of_rooms = 20
@@ -14,6 +15,7 @@ module Hotel
       (1..@num_of_rooms).each do |room|
         @all_rooms[room] = Hotel::Room.new(room, @rate)
       end
+      @blocks = []
     end
 
     def find_available(date)
@@ -33,10 +35,8 @@ module Hotel
       return by_date
     end
 
-    def total(num)
-      # run 'all_reservations'
-      # search by reservation id?
-      num_nights = @all_rooms[num].reservations[0].dates.length - 1
+    def total(room, reservation)
+      num_nights = @all_rooms[room].reservations[reservation].dates.length - 1
       return num_nights * @rate
     end
 
@@ -66,5 +66,28 @@ module Hotel
       return all
     end
 
+    def create_block(start_date, end_date, num_rooms)
+      start_date = Date.parse(start_date)
+      end_date = Date.parse(end_date)
+      dates = (start_date..end_date).map(&:to_s)
+
+      available_rooms = []
+      dates.each {|date| available_rooms << find_available(date)}
+      available_rooms = available_rooms.inject(:&).first(num_rooms)
+
+      available_rooms.each do |num|
+        @all_rooms[num] = Hotel::Block.new(start_date, end_date)
+        @blocks << @all_rooms[num]
+      end
+    end
+
   end #end of California
 end #end of Hotel
+
+new = Hotel::California.new
+new.all_rooms[1].create_reservation("2017-04-03", "2017-04-08")
+new.all_rooms[2].create_reservation("2017-04-03", "2017-04-09")
+new.all_rooms[3].create_reservation("2017-04-06", "2017-04-09")
+new.all_rooms[4].create_reservation("2017-04-06", "2017-04-09")
+new.create_block("2017-04-03", "2017-04-10", 5)
+# p new.all_reservations

@@ -46,7 +46,7 @@ describe "California class" do
   describe "total method" do
     it "Returns the total cost for a given reservation" do
       @california.all_rooms[1].create_reservation("2017-03-13", "2017-03-14")
-      @california.total(1).must_equal 200
+      @california.total(1,0).must_equal 200
     end
   end
 
