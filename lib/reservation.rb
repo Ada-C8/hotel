@@ -1,4 +1,5 @@
 require_relative 'date_range'
+require 'csv'
 
 module BookingSystem
   class Reservation
@@ -17,6 +18,12 @@ module BookingSystem
       @total_cost = (cost * date_range.dates_within_range.length).to_f
 
     end #end of initialize
+
+    def add_reservation(file)
+      CSV.open(file, "a") do |line|
+        line << ["#{self.id}","#{self.room}","#{self.date_range.check_in.strftime("%m/%d/%Y")}","#{self.date_range.check_out.strftime("%m/%d/%Y")}","#{self.total_cost}"]
+      end
+    end #end of method
 
   end #end of class
 

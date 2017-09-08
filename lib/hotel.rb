@@ -2,6 +2,7 @@ require_relative 'reservation'
 require_relative 'date_range'
 require_relative 'no_room_available'
 require_relative 'block'
+require 'csv'
 
 module BookingSystem
   class Hotel
@@ -9,6 +10,8 @@ module BookingSystem
     DEFAULT_ROOMS = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150, 6 => 170, 7 => 180, 8 => 150, 9 => 190, 10 => 200, 11 => 220, 12 => 135, 13 => 200, 14 => 190, 15 => 220, 16 => 200, 17 => 220, 18 => 250, 19 => 200, 20 => 250}
 
     DEFAULT_DISCOUNT = 10
+
+    DEFAULT_RESERVATIONS = "support/reservations.csv"
 
     attr_reader :rooms, :all_reservations, :block_discount, :all_blocks
 
@@ -19,6 +22,14 @@ module BookingSystem
       @block_discount = block_discount
 
     end #end of initialize
+
+    def get_rates(file)
+      rates = {}
+      CSV.open(file, "r").each do |line|
+        rates[line[0]] = line[1]
+      end
+      return rates
+    end #end of method
 
     def room_unavailable(room)
       dates = []
@@ -61,13 +72,15 @@ module BookingSystem
       return available_rooms #hash of rooms
     end #end of method
 
-    def make_reservation(date_range, room)
+    def make_reservation(date_range, room, file=DEFAULT_RESERVATIONS)
       if !list_of_available_rooms(date_range).include?(room)
         raise NoRoomAvailableError.new("Requested room is unavailable")
       end
       cost = @rooms[room]
       new_reservation = Reservation.new(date_range, room, cost)
       @all_reservations << new_reservation
+
+      new_reservation.add_reservation(file)
 
       return new_reservation #new instance of class Reservation
     end #end of method
