@@ -4,9 +4,7 @@ describe "Booking class" do
   before do
     id = 1
     rooms = [Hotel::Room.new(15),Hotel::Room.new(16)]
-    check_in = Date.new(2017,9,5)
-    check_out = Date.new(2017,9,8)
-    date_range = Hotel::DateRange.new(check_in,check_out)
+    date_range = Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8))
     @reservation = Hotel::Booking.new(id, rooms, date_range)
   end
   describe "Initialize" do
@@ -25,12 +23,6 @@ describe "Booking class" do
     end
     it "total cost must be an integer" do
       @reservation.total_cost.must_be_kind_of Integer
-    end
-  end
-  describe "check_reservations method" do
-    # returns an array of the dates that are unavailable
-    it "" do
-
     end
   end
 end

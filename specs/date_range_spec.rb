@@ -2,11 +2,9 @@ require_relative 'spec_helper'
 
 describe "DateRange Class" do
   before do
-    check_in = Date.new(2017,9,5)
-    check_out = Date.new(2017,9,8)
-    # check_out_bad = Date.new(2017,9,2)
-    @vacation = Hotel::DateRange.new(check_in,check_out)
-    # @vacation_bad_dates = Hotel::DateRange.new(check_out,check_in)
+    @check_in = Date.new(2017,9,5)
+    @check_out = Date.new(2017,9,8)
+    @vacation = Hotel::DateRange.new(@check_in,@check_out)
   end
   describe "initialize" do
     it "Instance of DateRange class must respond to instance variables" do
@@ -31,15 +29,11 @@ describe "DateRange Class" do
   end
   describe "valid_date? method" do
     it "valid_date? will raise an error if check_out if prior to check_in" do
-      check_in = Date.new(2017,9,5)
-      check_out = Date.new(2017,9,8)
-      proc{Hotel::DateRange.new(check_out,check_in)}.must_raise InvalidDateRangeError
+      proc{Hotel::DateRange.new(@check_out,@check_in)}.must_raise InvalidDateRangeError
     end
     it "valid_date? will raise an error if parameters check_in in check_out are not Date objects" do
-      check_in = "9/6/2017"
-      check_out = Date.new(2017,9,8)
-      proc{Hotel::DateRange.new(check_in,check_out)}.must_raise ArgumentError
-      proc{Hotel::DateRange.new(check_out,check_in)}.must_raise ArgumentError
+      proc{Hotel::DateRange.new(@check_in.to_s,@check_out)}.must_raise ArgumentError
+      proc{Hotel::DateRange.new(@check_out,@check_in.to_s)}.must_raise ArgumentError
     end
   end
   describe "make_nights_arr method" do
