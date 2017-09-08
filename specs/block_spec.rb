@@ -2,11 +2,11 @@ require_relative 'spec_helper'
 
 describe "Block" do
   before do
-    @rooms = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150}
+    @five_rooms = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150}
     @check_in = Date.new(2017,9,15)
     @check_out = Date.new(2017,9,17)
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
-    @new_block = BookingSystem::Block.new(@date_range, @rooms)
+    @new_block = BookingSystem::Block.new(@date_range, @five_rooms)
   end
   describe "#initialize" do
     it "ID should be an integer" do
@@ -19,15 +19,15 @@ describe "Block" do
 
   describe "#has_available_rooms?" do
     before do
-      @hotel = BookingSystem::Hotel.new(@rooms)
-      @new_block = @hotel.create_block(@date_range, 3)
+      @five_room_hotel = BookingSystem::Hotel.new(@five_rooms)
+      @new_block = @five_room_hotel.create_block(@date_range, 3)
     end
     it "Returns true if there are available rooms in given block" do
       @new_block.has_available_rooms?.must_equal true
     end
     it "Returns false if there is no available rooms in given block" do
-      3.times do
-        @hotel.make_reservation_from_block(@new_block)
+      3.times do |i|
+        @five_room_hotel.make_reservation_from_block(@new_block, i+1)
       end
       @new_block.has_available_rooms?.must_equal false
     end

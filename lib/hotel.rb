@@ -92,24 +92,20 @@ module BookingSystem
       return new_block #has hash of rooms and prices
     end #end of method
 
-    def make_reservation_from_block(block)
+    def make_reservation_from_block(block, room)
       if !block.has_available_rooms?
-        raise NoRoomAvailableError.new("No room is available on given dates")
+        raise NoRoomAvailableError.new("No available rooms in block")
+      end
+      if !block.rooms.keys.include?(room)
+        raise NoRoomAvailableError.new("Requested room is unavailable")
       end
       date_range = block.date_range
-      room = block.rooms.first[0]
       cost = @rooms[room] * (1 - @block_discount / 100.0)
       new_reservation_from_block = Reservation.new(date_range, room, cost)
       block.rooms.delete(room)
       return new_reservation_from_block #instance of class Block
 
     end #end of method
-
-    # def reset_hotel
-    #   @all_reservations = []
-    #   @all_blocks = []
-    # end #end of method
-
 
   end #end of class
 
