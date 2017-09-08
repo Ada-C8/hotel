@@ -116,11 +116,6 @@ describe "hotel class" do
       new_hotel.create_reservation("marisa", "morris", start_date + 11, start_date + 16, 1)
       new_hotel.create_reservation("marisa", "morris", start_date + 20, start_date + 25, 1)
 
-
-      # new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
-      # new_hotel.create_reservation("marisa", "morris", Date.new(2017,10,5), Date.new(2017,10,10), 1)
-      # new_hotel.create_reservation("marisa", "morris", Date.new(2017,11,5), Date.new(2017,11,10), 1)
-
       input = start_date + 5
 
       new_hotel.reservations_by_date(input).must_equal [new_hotel.reservations[0]]
@@ -130,10 +125,33 @@ describe "hotel class" do
       new_hotel = HotelManagment::Hotel.new
 
       proc { new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,1), 1) }.must_raise ArgumentError
-
-
     end
 
+    # TODO this is for the 2ns user story (error handling)
+    # it "text" do
+    #
+    #   start_date = Date.today
+    #
+    #   new_hotel = HotelManagment::Hotel.new
+    #   new_hotel.create_reservation("marisa", "morris", start_date + 5, start_date + 10, 1)
+    #
+    #   proc { new_hotel.create_reservation("marisa", "morris", start_date + 6, start_date + 8, 1) }.must_raise ArgumentError
+    #
+    # end
   end
 
+  describe "rooms_not_reserved" do
+    it "Should return list of unreserved rooms" do
+
+      start_date = Date.today
+
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.create_reservation("marisa", "morris", start_date + 5, start_date + 10, 1)
+      new_hotel.create_reservation("marisa", "morris", start_date + 30, start_date + 35, 2)
+      new_hotel.create_reservation("marisa", "morris", start_date + 50, start_date + 55, 3)
+
+      new_hotel.rooms_not_reserved(start_date +5, start_date + 10).must_equal [2,3]
+
+    end
+  end
 end

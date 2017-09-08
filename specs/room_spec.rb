@@ -21,7 +21,11 @@ describe "Room Class" do
     new_room.room_number.must_equal 1
   end
 
-  it "rate should be equal to 200" do
+  it "RATE should be equal to 200" do
+    HotelManagment::Room::RATE.must_equal 200
+  end
+
+  it "Rate should be an instance of a Constant" do
     HotelManagment::Room::RATE.must_equal 200
   end
 

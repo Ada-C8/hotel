@@ -4,11 +4,12 @@ require 'date'
 
 module HotelManagment
   class Hotel
-    attr_reader :rooms, :reservations, :found_reservations
+    attr_reader :rooms, :reservations, :found_reservations, :unreserved_rooms
     def initialize
       @rooms = []
       @reservations = []
       @found_reservations = []
+      @unreserved_rooms = []
     end
 
     def add_20_rooms
@@ -31,16 +32,28 @@ module HotelManagment
       @reservations << reservation
     end
 
-# ------------------------------------------------
+    # ------------------------------------------------
     def reservations_by_date(date)
       @reservations.each { |reservation|
-        if (reservation.check_in_date <= date && reservation.check_out_date >= date)
+        if reservation.check_in_date <= date && reservation.check_out_date >= date
           found_reservations << reservation
         end
       }
       return @found_reservations
     end
-# ------------------------------------------------
+    # ------------------------------------------------
+
+    # TODO
+    def rooms_not_reserved(begin_date, end_date)
+
+      @reservations.each { |reservation|
+
+        unless reservation.check_in_date >= begin_date && reservation.check_out_date <= end_date
+          unreserved_rooms << reservation.room_number
+        end
+      }
+      return @unreserved_rooms
+    end
 
   end #class end
 end #module end
