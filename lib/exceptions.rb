@@ -6,3 +6,5 @@ end
 
 class NoBlockError < StandardError
 end
+
+class InvalidDiscountError < StandardError
