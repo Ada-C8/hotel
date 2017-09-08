@@ -28,7 +28,12 @@ describe Hotel::Hotel do
         room.number.must_equal i
         i += 1
       end
+    end
 
+    it "initializes an empty Array to store blocks of rooms" do
+      fairmont = Hotel::Hotel.new
+      fairmont.blocks.must_be_kind_of Array
+      fairmont.blocks.length.must_equal 0
     end
   end #end of initailize Hotel::Hotel tests
 
@@ -82,6 +87,70 @@ describe Hotel::Hotel do
     end
   end # end of make and retrieve reservations
 
+  describe "get_available_rooms_from_block" do
+    before do
+      @hotel = Hotel::Hotel.new
+      @check_in = Date.new(2018, 9, 7)
+      @check_out = Date.new(2018, 9, 13)
+      @hotel.make_block(@check_in, @check_out, 5)
+      @block = @hotel.blocks[0]
+      @id = @hotel.blocks[0].id
+      @hotel.make_reservation_from_block("guest", @id)
+    end
+
+    it "returns an Array of Rooms" do
+      rooms_in_block = @hotel.get_available_rooms_from_block(@block)
+
+      rooms_in_block.must_be_kind_of Array
+
+      rooms_in_block.each do |room|
+        room.must_be_instance_of Hotel::Room
+      end
+
+    end
+
+    it "only returns available Rooms" do
+      rooms_avail_before = @hotel.get_available_rooms_from_block(@block).clone
+
+      2.times do
+        @hotel.make_reservation_from_block("guest", @id)
+      end
+
+      rooms_avail_after = @hotel.get_available_rooms_from_block(@block)
+
+      rooms_avail_after.length.must_equal (rooms_avail_before.length - 2)
+
+      rooms_left_in_block = @block.rooms_in_block
+      @hotel.reservations.each do |res|
+        rooms_left_in_block.delete(res.room)
+      end
+
+      rooms_avail_after.must_equal rooms_left_in_block
+
+    end
+
+    it "returns an empty Array if no rooms are left" do
+      hotel = Hotel::Hotel.new
+
+      check_in = Date.new(2018, 9, 15)
+      check_out = Date.new(2018, 9, 16)
+      hotel.make_block(check_in, check_out, 3)
+      block = hotel.blocks[0]
+
+      binding.pry
+
+      3.times do
+        hotel.make_reservation_from_block("guest", block.id)
+      end
+
+
+
+      hotel.get_available_rooms_from_block(hotel.blocks[0]).length.must_equal 0
+
+    end
+
+  end
+
   describe "make_reservation_from_block" do
     before do
       @hotel = Hotel::Hotel.new
@@ -110,10 +179,8 @@ describe Hotel::Hotel do
       @hotel.reservations[0].check_in.must_equal @check_in
 
       @hotel.reservations[0].check_out.must_equal @check_out
-
     end
   end
-
 
   describe "can make a block of rooms" do
     it "can make a block that is passed into an Array" do
@@ -186,7 +253,6 @@ describe Hotel::Hotel do
     end
   end
 
-
   describe "get_res_by_date" do
     before do
       check_in_day = [2, 2, 6, 4, 8, 6, 12, 23, 17, 2, 3, 5, 22, 29, 10, 10, 1]
@@ -220,8 +286,6 @@ describe Hotel::Hotel do
     end
 
   end # end get_res_by_date
-
-
 
   ########### HOW TO TEST THIS METHOD?? #########
   ## CURRENTLY TESTING FOR LENGTH  ##
