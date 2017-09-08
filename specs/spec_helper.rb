@@ -6,7 +6,7 @@ require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/pride'
 require 'minitest/skip_dsl'
-require 'pry'
+# require 'pry'
 
 
 # Require any classes
