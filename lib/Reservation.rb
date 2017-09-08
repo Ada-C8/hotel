@@ -63,8 +63,9 @@ module Hotel
     end
 
     def set_block_dates(block_id)
-      @start_date = Block.all.select { |block| block.block_id == block_id }[0].start_date
-      @end_date = Block.all.select { |block| block.block_id == block_id }[0].end_date
+      block = Block.all.find { |a_block| a_block.block_id == block_id }
+      @start_date = block.start_date
+      @end_date = block.end_date
     end
 
     def self.sample_available_rooms(start_date, end_date, number_of_rooms, block_id)
