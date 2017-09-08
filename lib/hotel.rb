@@ -14,7 +14,7 @@ module Hotels
       if Date.valid_date?(start_date[0], start_date[1], start_date[2]) && Date.valid_date?(end_date[0], end_date[1], end_date[2])
       start_date = Date.new(start_date[0], start_date[1], start_date[2])
       end_date = Date.new(end_date[0], end_date[1], end_date[2])
-        if start_date < end_date && start_date == Date.today || (start_date > Date.today)
+        if (start_date < end_date) && start_date == (Date.today || (start_date > Date.today))
           date_array << start_date
           date_array << end_date
         else
@@ -22,7 +22,7 @@ module Hotels
         end
       return date_array
       end
-    end 
+    end
 
     def make_rooms
       rooms = Hotels::Rooms.all
@@ -54,10 +54,21 @@ module Hotels
 
 
     def find_room
-      rooms.each do |room|
-        if room.date_range.include? date_range
-        else
-          return room
+      all_booked_rooms = []
+      @reservations.each do |one_res|
+        all_booked_rooms << one_res.number
+      end
+      @rooms.each do |room|
+        unless all_booked_rooms.include? room.number
+         return room
+       else
+          @reservations.each do |one_res|
+            unless one_res.date_range.include? !date_range
+              return room
+            else
+              puts "Hotel is booked."
+            end
+          end
         end
       end
     end
