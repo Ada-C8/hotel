@@ -42,19 +42,19 @@ module Hotel
       end#rooms_available
 
 
-      #ability to do reservation things
-      def reservation_finder(search_term, instance_variable)
-        reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
-      end
+      # #ability to do searchy things
+      # def finder(search_term, instance_variable)
+      #   reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
+      # end
 
       def reservations_by_name(name_request)
-        reservation_finder( name_request, :name )
+        finder( name_request, :name, reservations_list)
 
       end#reservations_by_date
 
       def reservations_by_date(date)
         date_find = Date.new(date[0], date[1], date[2])
-        reservation_finder(date_find, :date_range )
+        finder(date_find, :date_range, reservations_list )
       end#reservations_by_date
     end
   end
