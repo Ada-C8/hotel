@@ -10,11 +10,20 @@ module Hotel
       # @room_cost = 0 # do I need this? I have cost over in booking
       # @cost = Room.new.cost
       @all_rooms = []
-      create_rooms(@all_rooms) # write test that rooms are created
+      create_rooms(@all_rooms)
+
       @all_blocks = []
+      # create_blocks(@all_blocks)
+
       @all_reservations = []
     end
 
+    def create_blocks(all_blocks)
+      20.times do |i|
+        num = i + 1
+        all_blocks << Room.new(num)
+      end
+    end
 
     def create_rooms(all_rooms)
       20.times do |i|
@@ -104,12 +113,14 @@ module Hotel
 
 
     def make_block(checkin, checkout, num_of_rooms) #collection_of_rooms
+
+      #### ERROR MESSAGES TO THINK ABOUT WRITING
       availability = check_block_availability(checkin, checkout)
-      if availability.length < num_of_rooms
-        raise ArgumentError.new "Sorry, we don't have enough rooms."
-      elsif availability == []
-        raise ArgumentError.new "Sorry, there are no rooms available."
-      end
+      # if availability.length < num_of_rooms
+      #   raise ArgumentError.new "Sorry, we don't have enough rooms."
+      # elsif availability == []
+      #   raise ArgumentError.new "Sorry, there are no rooms available."
+      # end
       block_id = @all_blocks.length
       collection_of_rooms = availability.take num_of_rooms
       block = Block.new(checkin, checkout, collection_of_rooms, block_id)

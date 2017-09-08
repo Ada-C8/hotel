@@ -109,10 +109,10 @@ describe "Hotel" do
       it "will create a block" do
         checkin = Date.new(2018,9,1)
         checkout = Date.new(2018,9,7)
-          # binding.pry
-        block1 = Hotel::Reservations.new.make_block(checkin, checkout, 1)
 
+        block1 = Hotel::Reservations.new.make_block(checkin, checkout, 5)
         block1.must_be_instance_of Hotel::Block
+        # binding.pry
       end
     end
   end
