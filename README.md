@@ -128,4 +128,4 @@ You should not be working on these (or even thinking about them) until you have 
 
 - _Allow a user to set different rates for different rooms_
 - Read/write CSV files for each piece of data that your system is storing
-- Create a CLI to interact with your hotel system
+- _Create a CLI to interact with your hotel system_

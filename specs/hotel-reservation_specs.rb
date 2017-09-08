@@ -1,9 +1,9 @@
 require 'Date'
 require_relative 'spec_helper.rb'
-# require_relative '../lib/hotel-room'
 
 describe "Hotel::Reservation" do
   before do
+    %x(cp ./support/reservations_copy.csv ./support/reservations.csv)
     @start_date = Date.new(2017,9,5)
     @end_date = Date.new(2017,9,8)
     @start_date2 = Date.new(2018,9,5)
@@ -12,21 +12,13 @@ describe "Hotel::Reservation" do
     @room_2 = Hotel::Room.new(20)
   end
 
-  describe "Reservations lists" do
-    it "can return a list of reservations for a specific date" do
-      Hotel::Reservation.new(@start_date2,@end_date2,@room_1)
-      Hotel::Reservation.new(@start_date2,@end_date2,@room_2)
-      reservation_list = Hotel::Reservation.list_for_date(@start_date2+1)
-      reservation_list.must_be_instance_of Array
-      reservation_list.length.must_equal 2
-    end
-    it "will return a blank array for no reservations" do
-      reservation_list = Hotel::Reservation.list_for_date(@end_date+10)
-      reservation_list.must_equal []
-    end
-  end
-
   describe "Reservation instantiation" do
+    it "can initialize a group of reservations" do
+      Hotel::Reservation.must_respond_to :all
+      Hotel::Reservation.all
+      Hotel::Reservation.list_all.count.must_be :>=, 2
+    end
+
     it "can be initialized" do
       room_reservation = Hotel::Reservation.new(@start_date,@end_date,Hotel::Room.new(1))
       room_reservation.must_be_instance_of Hotel::Reservation
@@ -46,14 +38,29 @@ describe "Hotel::Reservation" do
       room_reserved = Hotel::Reservation.new(@end_date,@end_date+3,@room_1)
       room_reserved.must_be_instance_of Hotel::Reservation
     end
-  end
 
-  describe "Reservation methods" do
     it "can return total cost for a given reservation" do
       room_reservation = Hotel::Reservation.new(@start_date+20,@end_date+20,@room_1)
-      # room_reservation = Hotel::Reservation.list_all[0]
       room_reservation.must_respond_to :total_cost
       room_reservation.total_cost.must_equal (room_reservation.rate*3)
+    end
+  end
+
+  describe "Reservations lists" do
+    it "can return a list of reservations for a specific date" do
+      Hotel::Reservation.new(@start_date2,@end_date2,@room_1)
+      Hotel::Reservation.new(@start_date2,@end_date2,@room_2)
+      reservation_list = Hotel::Reservation.list_for_date(@start_date2+1)
+      reservation_list.must_be_instance_of Array
+      reservation_list.length.must_equal 2
+    end
+    it "will return a blank array for no reservations" do
+      reservation_list = Hotel::Reservation.list_for_date(@end_date+10)
+      reservation_list.must_equal []
+    end
+    it "will return a list of all block rooms" do
+      Hotel::Reservation.must_respond_to :list_block
+      Hotel::Reservation.list_block.must_be_instance_of Hash
     end
   end
 

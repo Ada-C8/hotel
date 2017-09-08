@@ -108,13 +108,26 @@ while reply
     puts room_reservation.to_s
   when 3 #view a list of reservations
     puts "Let's view a list of reservations!"
-    date = get_date("reservation")
-    list = Hotel::Reservation.list_for_date(date)
-    if list.empty?
-      puts "No reservations for #{date}"
+    print "Would you like to view all? (y/n): "
+    user = gets.chomp.downcase
+    if user == 'y'
+      list = Hotel::Reservation.list_all
+      if list.empty?
+        puts "No reservations"
+      else
+        list.each do |reservation|
+          puts "- #{reservation.to_s}"
+        end
+      end
     else
-      list.each do |reservation|
-        puts "- #{reservation.to_s}"
+      date = get_date("reservation")
+      list = Hotel::Reservation.list_for_date(date)
+      if list.empty?
+        puts "No reservations for #{date}"
+      else
+        list.each do |reservation|
+          puts "- #{reservation.to_s}"
+        end
       end
     end
   when 4 #create a block
@@ -162,7 +175,7 @@ while reply
     print_rooms(hotel)
   end
 
-  print "Choose another option? (y/n) "
+  print "Choose another option? (y/n): "
   reply = gets.chomp.downcase
   if reply == "y"
     reply = true
