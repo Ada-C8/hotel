@@ -53,26 +53,23 @@ class Hotel
     blocked_rooms = []
     date_range = DateRange.new(check_in, check_out)
     @reservations.each do |reservation|
-      if ((reservation.dates.start < date_range.end) && (date_range.start < reservation.dates.end))
+      if date_range.overlap?(reservation.dates.start, reservation.dates.end)
         reserved_rooms << reservation.room
       end
     end
 
     @blocks.each do |block|
-      if ((block.dates.start < date_range.end) && (date_range.start < block.dates.end))
-        block.rooms.each do |room|
-          blocked_rooms << room
-        end
+      if date_range.overlap?(block.dates.start, block.dates.end)
+        blocked_rooms << room
       end
     end
 
     available_rooms = @rooms - reserved_rooms - blocked_rooms
-
     return available_rooms
   end
 
   # creates a block for a given date range if rooms are available
-  def create_block(rooms, check_in, check_out)
+  def create_block(name, rooms, check_in, check_out)
     rooms.each do |room|
       if !(availability(check_in, check_out).include?(room))
         raise ArgumentError.new("That room is not available as a block")
@@ -82,6 +79,10 @@ class Hotel
     @blocks << new_block
     return new_block
   end
+
+  # check availability of rooms in a block and reserve room in block if available
+  # pass in name of block reservation, then see if the block
+  # res dates match block dates
 
 end
 
@@ -101,7 +102,7 @@ end
 #   available_rooms = @rooms - reserved_rooms
 #   return available_rooms
 # end
-# 
+#
 # bb = Hotel.new
 # check_out = Date.new(2017, 03, 14)
 # check_in = Date.new(2017, 03, 11)

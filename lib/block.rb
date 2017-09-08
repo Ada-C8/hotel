@@ -1,32 +1,33 @@
 require_relative 'reservation'
 
-class Block < Reservation
+class Block
 
-  attr_reader :price_night, :rooms
+  attr_reader :price_night, :rooms, :dates
 
-  def initialize(room, check_in, check_out)
-
-    @rooms = room
-    @dates = DateRange.new(check_in, check_out)
+  def initialize(name, rooms, check_in, check_out)
+    @name = name
+    @rooms = rooms
     @price_night = 160
-    @nights = (check_out-check_in)
-
-    @total_cost = @price_night * @dates.nights
+    @dates = DateRange.new(check_in, check_out)
+    @start = check_in
+    @end = check_out
 
     # super
-
-
-    if room.length > 5 || room.length < 1
+    if rooms.length > 5 || rooms.length < 1
       raise ArgumentError.new("You can only block 1 to 5 rooms.")
     end
   end
 
   # returns total_cost for stay
-  def total_cost
-    total_cost = @price_night * @dates.nights
-    return total_cost
-  end
-
+  # def total_cost
+  #   total_cost = @price_night * @dates.nights
+  #   return total_cost
+  # end
+  # 
+  # def nights
+  #   nights = (check_out-check_in)
+  #   return nights
+  # end
 
 end
 

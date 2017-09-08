@@ -21,13 +21,27 @@ describe 'DateRange' do
       # proc { DateRange.new(check_in, check_out)}.wont_throw Exception
       DateRange.new(check_in, check_out).must_be_instance_of DateRange
     end
+  end
 
-    it "provides the nights of stay" do
-      check_in = Date.new(2017, 03, 11)
-      check_out = Date.new(2017, 03, 22)
-      stay = DateRange.new(check_in, check_out)
-      stay.nights.must_equal 11
+    describe "nights" do
+      it "provides the nights of stay" do
+        check_in = Date.new(2017, 03, 11)
+        check_out = Date.new(2017, 03, 22)
+        stay = DateRange.new(check_in, check_out)
+        stay.nights.must_equal 11
+      end
     end
+
+    describe "include" do
+      it "provides the nights of stay" do
+        check_in = Date.new(2017, 03, 11)
+        check_out = Date.new(2017, 03, 22)
+        stay = DateRange.new(check_in, check_out)
+        stay.nights.must_equal 11
+      end
+    end
+
+
   end
 
   #   it "initialize with all rooms in hotel as array" do
@@ -46,5 +60,3 @@ describe 'DateRange' do
   #
   #   end
   # end
-
-end
