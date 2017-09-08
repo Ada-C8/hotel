@@ -55,9 +55,22 @@ module Hotel
     def list_rooms_available_by_date(date)
       rooms_available = @rooms_collection
 
+
+      # list_reservations_by_date(date).each do |booking|
+      #   i = 0
+      #   rooms_available.length.times do
+      #     if booking.room_number == rooms_available[i].room_number
+      #       rooms_available.delete_at(i)
+      #     end
+      #     i += 1
+      #   end
+      # end
       list_reservations_by_date(date).each do |booking|
-        if room_number == booking.room_number
-        rooms_available.delete(room_number)
+          #room_number = booking.room_number
+        rooms_available.each do |room|
+          if room.room_number == booking.room_number
+            rooms_available.delete(room)
+          end
         end
       end
       return rooms_available

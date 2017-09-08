@@ -25,7 +25,9 @@ describe 'Reservations' do
   end
 
   describe 'new reservation' do
-
+    before do
+      @new_hotel.clear_reservations
+    end
     it 'must create a new booking' do
       new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23", 1)
       new_booking1.must_be_instance_of Hotel::Booking
@@ -41,6 +43,12 @@ describe 'Reservations' do
     end
     it 'must raise an error if the date is not valid on calendar' do
       proc{new_booking = @new_hotel.new_reservation("2018-02-30", "2018-02-31")}.must_raise ArgumentError
+    end
+    it 'allows a new reservation to be made on a room on the same day as previous check-out' do
+      @new_hotel.clear_reservations
+      @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
+      @new_reservation2 = @new_hotel.new_reservation("2018-01-05", "2018-01-07", 1)
+      @new_hotel.all_reservations.length.must_equal 2
     end
   end
 
@@ -59,9 +67,13 @@ describe 'Reservations' do
 
   describe 'list rooms available by date' do
     before do
+      @new_hotel.clear_reservations
       @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
       @new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 2)
       @new_reservation3 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 10)
+    end
+    after do
+      @new_hotel.clear_reservations
     end
     it 'must return an array' do
       @new_hotel.list_rooms_available_by_date("2018-01-02").must_be_kind_of Array
@@ -92,9 +104,9 @@ describe 'Reservations' do
   describe 'all reservations' do
     before do
       @new_hotel.clear_reservations
-      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
-      @new_booking2 = @new_hotel.new_reservation("2020-01-01", "2020-01-15")
-      @new_booking3 = @new_hotel.new_reservation("2019-01-01", "2019-01-15")
+      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23", 2)
+      @new_booking2 = @new_hotel.new_reservation("2020-01-01", "2020-01-15", 3)
+      @new_booking3 = @new_hotel.new_reservation("2019-01-01", "2019-01-15", 5)
     end
     it 'must be an array of all reservations' do
       @new_hotel.all_reservations.must_be_kind_of Array
@@ -113,10 +125,10 @@ describe 'Reservations' do
   describe 'list_reservations_by_date' do
     before do
       @new_hotel.clear_reservations
-      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23")
-      @new_booking2 = @new_hotel.new_reservation("2019-01-01", "2019-01-15")
-      @new_booking3 = @new_hotel.new_reservation("2019-01-02", "2019-01-12")
-      @new_booking4 = @new_hotel.new_reservation("2019-01-01", "2019-01-13")
+      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23", 1)
+      @new_booking2 = @new_hotel.new_reservation("2019-01-01", "2019-01-15", 10)
+      @new_booking3 = @new_hotel.new_reservation("2019-01-02", "2019-01-12", 12)
+      @new_booking4 = @new_hotel.new_reservation("2019-01-01", "2019-01-13", 15)
     end
     it "must be a method of Reservations" do
       @new_hotel.must_respond_to :list_reservations_by_date
