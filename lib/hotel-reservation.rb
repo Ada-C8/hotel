@@ -20,6 +20,7 @@ module Hotel
       if room.available?(start_date, end_date)
         @room = room
       else
+        puts "#{start_date}, #{end_date},#{room.number},#{block},#{add}"
         raise InvalidRoomError.new "Room is not available"
       end
       @number_of_nights = (@end_date - @start_date).to_i
@@ -99,7 +100,7 @@ module Hotel
       block = []
       file = CSV.open('./support/reservations.csv', "a+")
       number_of_rooms.times do |i|
-        block << self.new(start_date, end_date, available_rooms[i], rate: rate, block: true)
+        block << self.new(start_date, end_date, available_rooms[i], rate: rate, block: true, add: false)
         file << [available_rooms[i].number, start_date, end_date, rate, name]
       end
       @@block_rooms[name] = block
