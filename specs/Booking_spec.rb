@@ -19,15 +19,15 @@ describe "BookingProgram" do
     it "Returns an array of Reservation objects" do
       new_hotel =  Hotel::BookingProgram.new
 
-      new_hotel.make_reservation(1, "2018-03-14", "2018-04-16", 3)
+      new_hotel.make_reservation("2018-03-14", "2018-04-16", 3, 1)
 
-      new_hotel.make_reservation(2, "2018-03-14", "2018-04-16", 5)
+      new_hotel.make_reservation("2018-03-14", "2018-04-16", 5, 2)
 
-      new_hotel.make_reservation(3, "2018-02-02", "2018-02-08", 18)
+      new_hotel.make_reservation("2018-02-02", "2018-02-08", 18, 3)
 
-      new_hotel.make_reservation(5, "2018-12-08", "2018-12-10", 7)
+      new_hotel.make_reservation("2018-12-08", "2018-12-10", 7, 5)
 
-      new_hotel.make_reservation(4, "2018-03-21", "2018-03-22", 15)
+      new_hotel.make_reservation("2018-03-21", "2018-03-22", 15, 4)
 
 
       new_hotel.find_res_by_date("2018-03-21").must_be_instance_of Array
@@ -83,8 +83,6 @@ describe "BookingProgram" do
         guest_idx +=1
         res_idx +=1
       end
-
-      binding.pry
 
       updated_june_rooms= @new_hotel.available_rooms(@check_in, @check_out)
 

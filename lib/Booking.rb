@@ -29,9 +29,9 @@ module Hotel
       @all_rooms.select {|room| room.available_all_days?(check_in, check_out)}
     end
 
-    def make_reservation(guest_id, check_in,check_out,room_id)
+    def make_reservation(check_in,check_out,room_id, guest_id=nil)
 
-      reservation = Hotel::Reservation.new(guest_id, check_in,check_out,room_id)
+      reservation = Hotel::Reservation.new(check_in,check_out,room_id, guest_id)
       reservation.id += 1 #something
 
       reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
@@ -49,6 +49,17 @@ module Hotel
 
       #self.all.select {|reservation| reservation.room.all_dates.include?(date_object)}
     end
+
+    # def find_res_by_guest(guest_id)
+    # end
+    #
+
+    #
+    # def find_res_by_room(room_id)
+    # end
+
+    #def find_res_by_id(reservation_id)
+    #end
 
   end
 
