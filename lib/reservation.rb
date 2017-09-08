@@ -5,10 +5,6 @@ module Hotel
       @price_per_night = 200
       @days_range = Hotel::DateRange.new(checkin, checkout)
       @room_number = room_number
-      # @rooms = {}
-      # 20.times do |i|
-      #   @rooms["#{i + 1}"] => []
-      # end
     end
 
     def totalcost

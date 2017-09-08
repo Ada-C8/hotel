@@ -1,14 +1,12 @@
 
 module Hotel
   class Admin
-    attr_reader :list_reservations
+    attr_reader :list_reservations, :rooms
 
     def initialize
-      # @list_rooms = []
-      # 20.times do |i|
-      #   @list_rooms << i
-      # end
+      @rooms = {}
       @list_reservations = []
+      create_rooms
     end
 
     def add_reservation(checkin, checkout)
@@ -26,6 +24,12 @@ module Hotel
       end #each
       return list_per_day
     end #method
+
+    def create_rooms
+      20.times do |i|
+        @rooms["#{i + 1}"] = []
+      end
+    end
 
 
 

@@ -14,6 +14,14 @@ describe 'Admin class' do
     it "Create list of Reservation" do
       @administrator.list_reservations.must_equal []
     end
+
+    it "Create a hash of rooms" do
+      @administrator.rooms.must_be_instance_of Hash
+    end
+
+    it "Length of rooms is 20" do
+      @administrator.rooms.length.must_equal 20
+    end
   end
 
   describe "Creates a new reservation" do
@@ -61,7 +69,6 @@ describe 'Admin class' do
     it 'Returns empty array if that day there is no reservations' do
       @administrator.reservations_per_day(@date2).must_equal []
     end
-
-
   end
+
 end#describe class
