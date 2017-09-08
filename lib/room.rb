@@ -2,8 +2,7 @@ require_relative 'reservation'
 
 module Hotel_System
   class Room
-    attr_reader :room_number
-    attr_accessor :reservations
+    attr_reader :room_number, :reservations
     def initialize(room_number)
       @room_number = room_number
       @reservations = []
