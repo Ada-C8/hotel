@@ -229,6 +229,25 @@ module Hotel
       end # if/elsif
     end # rooms_left_in_block
 
+    def return_one_block(block_id)
+      # will return the block that has the ID that you're searching for
+      # this method will be called in the reserve_from_block method to reserve a room from a specific block!
+      id = block_id.upcase
+      all_block_id = []
+      @all_blocks.each do |block|
+        all_block_id << block.block_id
+      end # .each
+      if !(all_block_id.include?(id))
+        raise BookingError.new("That booking ID does not exist!")
+      end # if
+
+      @all_blocks.each do |block|
+        if block.block_id == id
+          return block
+        end # if
+      end # .each
+    end # return_one_block
+
     # TODO : move most of this funtionality into Block class
     def reserve_from_block(block_id, num_of_rooms)
       id = block_id.upcase
@@ -240,6 +259,15 @@ module Hotel
         raise BookingError.new("That booking ID does not exist!")
       end # if
 
+      reservation_id = @all_reservations.length + 1
+
+      block_reservations = return_one_block(id).reserve_room(reservation_id, num_of_rooms)
+
+      block_reservations.each do |res|
+        @all_reservations << res
+      end # .each
+
+      return block_reservations
     end # reserve_from_block
 
 

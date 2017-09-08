@@ -44,6 +44,7 @@ module Hotel
       cost = (num_of_rooms * @date_range.length * 180.0)
 
       reserved_rooms_from_block << Hotel::Reservation.new(reservation_id, cost, rooms, @date_range)
+      
     end # reserve_room
   end # Block
 end # Hotel

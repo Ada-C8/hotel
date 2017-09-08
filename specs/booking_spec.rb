@@ -385,9 +385,23 @@ end # describe "make_block" do
       end # it "will tell you if there are no more rooms left in the bock" do
   end #describe "rooms_left_in_block" do
 
+    describe "return_one_block" do
+      it "will return the right block" do
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        @booking.make_block("Event", @checkin_day, @checkout_day, 5)
+        @booking.make_block("Birthday", @checkin_day, @checkout_day, 5)
+
+        @booking.return_one_block("wedding").block_id.must_equal "WEDDING"
+      end # it "will return the right block" do
+
+      it "will raise argument error id the block doesn't exist" do
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        proc{@booking.return_one_block("another wedding")}.must_raise BookingError
+      end # it "will raise argument error id the block doesn't exist" do
+    end # describe "return_one_block" do
 
     describe "reserve_from_block" do
-      # TODO : decided to move alot of this functionality into the Block class, so I will have to rethink these test
+
       it "will be able to be called on @booking" do
         # still in Booking
         @booking.must_respond_to :reserve_from_block
@@ -398,22 +412,21 @@ end # describe "make_block" do
         proc{@booking.reserve_from_block("random id", 1)}.must_raise BookingError
       end # it "will raise BookingError if the blok ID does not exist" do
 
-      it "will make a new instance of Reservation" do
-        # in Block
-        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
-        @booking.reserve_from_block("wedding", 1).must_be_kind_of Hotel::Reservation
-      end # it "will make a new instance of Reservation" do
-
       it "will add the room from the block to the @all_reservations list" do
         # in Booking
         @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        @booking.all_reservations.length.must_equal 0
         test = @booking.reserve_from_block("wedding", 1)
-        @all_reservations.must_include test
+        @booking.all_reservations.must_equal test
+        @booking.all_reservations.length.must_equal 1
       end # it "will add the room from the block to the @all_reservations list" do
 
-      it "will delete the reserved room from block_rooms" do
-        # in Block
-        # TODO
-      end # it "will delete the reserved room from block_rooms" do
+      it "will have removed the room reserved from the Blocks @block_rooms" do
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        @booking.all_blocks[0].block_rooms.length.must_equal 5
+        @booking.reserve_from_block("wedding", 1)
+        @booking.all_blocks[0].block_rooms.length.must_equal 4
+      end # it "will have removed the room reserved from the Blocks @block_rooms" do
+
     end # describe "reserve_block_room" do
 end # Booking
