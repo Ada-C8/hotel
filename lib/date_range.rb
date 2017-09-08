@@ -32,14 +32,7 @@ module Hotel
       end
       return date_range
     end
-    #
-    # def self.create_range
-    #   date_range = []
-    #   @check_in.upto(@check_out).each do |date|
-    #     date_range << date
-    #   end
-    #   return date_range
-    # end
+
 
   end #date class
 end #module
@@ -47,3 +40,12 @@ end #module
 #include?
 #overlap?
 #.each
+
+#
+# def self.create_range
+#   date_range = []
+#   @check_in.upto(@check_out).each do |date|
+#     date_range << date
+#   end
+#   return date_range
+# end

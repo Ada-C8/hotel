@@ -40,12 +40,12 @@ describe "Hotel Class" do
     end #call class
   end #make reservations
 
-  # describe "Find Reservations" do
-  #   it "Can find and return a single reservation for a specific date: " do
-  #     Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-  #     Hotel::Hotel.find_reservation("2012/12/12").must_equal ["ID: 2222, Room: 2, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3, Total Cost: 600"]
-  #   end #find a single reservation for a specific date
-  # end #find reservations
+  describe "Find Reservations" do
+    it "Can find and return a single reservation for a specific date: " do
+      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.find_reservation("2012/12/12", "2012/12/13").must_equal ["ID: 2222, Room: 2, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3, Total Cost: 600"]
+    end #find a single reservation for a specific date
+  end #find reservations
   #
   # describe "Total Cost" do
   #   it "Given an ID number it can find the Total Cost of a reservation: " do
