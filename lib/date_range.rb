@@ -1,5 +1,6 @@
 
 require 'date'
+# require 'Array'
 module Booking
   class DateRange
     attr_reader :checkin, :checkout
@@ -26,12 +27,9 @@ module Booking
       return (@checkout - @checkin)
     end
 
-    def overlaps?(other_chekin, other_checkout)
-      # if @checkin - other_checkout) * (other_chekin - @checkout) >= 0
-      if @checkout >= other_chekin || @checkin <= other_checkout
-        return true
+
+    def overlaps?(other)
+      self.is_included?(other.checkin) || other.is_included?(self.checkin)
     end
-
-
   end
 end

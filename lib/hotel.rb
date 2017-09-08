@@ -13,7 +13,7 @@ module Booking
     #I can reserve an available room for a given date range
     def make_reservation(checkin, checkout, room_number)
       date_range = DateRange.new(checkin, checkout)
-      all_available_rooms = list_of_rooms(date_range)
+      all_available_rooms = available_rooms(date_range)
       if all_available_rooms.include?(room_number)
         reserve =  Reservation.new(checkin, checkout, room_number)
         list_of_reservations << reserve
@@ -34,11 +34,10 @@ module Booking
     end
 
     # Gives list of available rooms for a given date
-    def list_of_rooms(date_range)
-      available_rooms = Array.new(true, 21) # Setting all rooms to available
-
+    def available_rooms(date_range)
+      available_rooms = Array.new(21, true) # Setting all rooms to available
       @list_of_reservations.each do |r|
-        if (date_range.overlaps?(r.date_range)) # if date_ranges intersect
+        if (date_range.overlaps?(r.date_range)) # if date_ranges intersects
           available_rooms[r.room_number] = false # the room at that index becomes unavailable
         end
       end

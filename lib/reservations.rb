@@ -8,7 +8,7 @@ module Booking
       @date_range = DateRange.new(checkin, checkout)#date_range
       @room_number = room_number
     end
-    
+
 
     def total_cost
       return @date_range.number_of_nights * COST
