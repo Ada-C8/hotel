@@ -26,6 +26,15 @@ describe 'Block' do
         @my_block.reserve_in_block.must_be_instance_of Array
         @my_block.rooms_reserved_in_block.each {|room| room.must_be_instance_of Hotel_System::Room}
     end
+    it 'does not allow you to reserve a room if all rooms in block are already reserved' do
+      check_in = Date.new(2017,9,5)
+      check_out = Date.new(2017,9,7)
+      rooms = [Hotel_System::Room.new(1)]
+      rate_adjustor = 0.75
+      @my_block = Hotel_System::Block.new(check_in, check_out, rooms, rate_adjustor)
+      @my_block.reserve_in_block
+      proc {@my_block.reserve_in_block}.must_raise StandardError
+    end
   end
   describe 'find_avail_rooms' do
     it 'lists all constituent rooms as available when initialed' do

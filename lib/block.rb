@@ -12,7 +12,10 @@ module Hotel_System
     end
 
     def reserve_in_block
-      @rooms_reserved_in_block << @rooms.pop
+      if self.rooms == []
+        raise StandardError.new("All of the rooms in this block are already reserved")
+      end
+        @rooms_reserved_in_block << @rooms.pop
     end
 
     def find_avail_rooms
