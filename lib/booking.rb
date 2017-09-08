@@ -210,5 +210,39 @@ module Hotel
       return block_rooms_remaining
     end # def check_block_availibility
 
+    def rooms_left_in_block(block_id)
+      id = block_id.upcase
+      all_block_id = []
+      @all_blocks.each do |block|
+        all_block_id << block.block_id
+      end # .each
+      if !(all_block_id.include?(id))
+        raise BookingError.new("That booking ID does not exist!")
+      end # if
+
+      rooms_left = check_block_availibility(block_id)
+
+      if rooms_left.length == 0
+        return "There are no rooms left in the #{id} block"
+      elsif rooms_left.length > 0
+        return "There are #{rooms_left.length} rooms left in the #{id} block"
+      end # if/elsif
+    end # rooms_left_in_block
+
+    # TODO : move most of this funtionality into Block class
+    def reserve_from_block(block_id, num_of_rooms)
+      id = block_id.upcase
+      all_block_id = []
+      @all_blocks.each do |block|
+        all_block_id << block.block_id
+      end # .each
+      if !(all_block_id.include?(id))
+        raise BookingError.new("That booking ID does not exist!")
+      end # if
+
+    end # reserve_from_block
+
+
+
   end # Booking
 end # Hotel

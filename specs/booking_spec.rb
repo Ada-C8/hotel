@@ -2,7 +2,6 @@ require_relative 'spec_helper'
 require 'date'
 require 'pry'
 
-
 describe "Booking" do
   before do
     @booking = Hotel::Booking.new
@@ -360,5 +359,61 @@ end # describe "make_block" do
       end # it "will raise BookingError if the block_id does not exist" do
   end # describe "check_block_availibility" do
 
+  describe "rooms_left_in_block" do
+    # TODO
+      #will call the check_block_availibility method for a given date range
+        #  if thre return array has rooms in it, it will return a sting that says yes and how many rooms are left in the block if
+        # If the return array is empty then it will say that there aren't any rooms left in the block to be reserved
 
+      it "will be able to be called on @booking" do
+        @booking.must_respond_to :rooms_left_in_block
+      end # it "will be able to be called on @booking" do
+
+      it "will raise a BookingError if the ID does not exist" do
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        proc{@booking.rooms_left_in_block("another wedding")}.must_raise BookingError
+      end # it "will raise a BookingError if the ID does not exist" do
+
+      it "will return a string telling you how many rooms are left in the block" do
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        @booking.rooms_left_in_block("wedding").must_be_kind_of String
+        @booking.rooms_left_in_block("wedding").must_equal "There are 5 rooms left in the WEDDING block"
+      end # "will return a string telling you how many rooms are left in the block"
+
+      it "will tell you if there are no more rooms left in the bock" do
+        # TODO : after I write my reserve_block_room method!
+      end # it "will tell you if there are no more rooms left in the bock" do
+  end #describe "rooms_left_in_block" do
+
+
+    describe "reserve_from_block" do
+      # TODO : decided to move alot of this functionality into the Block class, so I will have to rethink these test
+      it "will be able to be called on @booking" do
+        # still in Booking
+        @booking.must_respond_to :reserve_from_block
+      end # it "will be able to be called on @booking" do
+
+      it "will raise BookingError if the blok ID does not exist" do
+        # still in Booking
+        proc{@booking.reserve_from_block("random id", 1)}.must_raise BookingError
+      end # it "will raise BookingError if the blok ID does not exist" do
+
+      it "will make a new instance of Reservation" do
+        # in Block
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        @booking.reserve_from_block("wedding", 1).must_be_kind_of Hotel::Reservation
+      end # it "will make a new instance of Reservation" do
+
+      it "will add the room from the block to the @all_reservations list" do
+        # in Booking
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        test = @booking.reserve_from_block("wedding", 1)
+        @all_reservations.must_include test
+      end # it "will add the room from the block to the @all_reservations list" do
+
+      it "will delete the reserved room from block_rooms" do
+        # in Block
+        # TODO
+      end # it "will delete the reserved room from block_rooms" do
+    end # describe "reserve_block_room" do
 end # Booking
