@@ -6,7 +6,7 @@ require 'date'
 module Hotel_Chain
   class Reservation
 
-    attr_accessor :check_in_date, :check_out_date, :room, :HOTEL, :cost, :status
+    attr_accessor :check_in_date, :check_out_date, :room, :HOTEL, :cost, :status, :block_reserved
 
     HOTEL = Hotel_Chain::MyHotel.new
 
@@ -21,6 +21,7 @@ module Hotel_Chain
         @check_out_date = Date.strptime(check_out_date, "%m/%d/%Y")
         @room = HOTEL.array_of_rooms.sample
         @status = status
+        @block_reserved = false #defaults to false. the reserve_block method changes this to true.
       rescue ArgumentError
         raise WrongDateFormatError
       end

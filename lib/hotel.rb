@@ -54,8 +54,9 @@ module Hotel_Chain
     # hotel.store_reservation(check_in_date, check_out_date)
 
     #NOTE TO SELF: Do you want to reserve a particular room here or in the reservation method, which now just randomly chooses a room, regardless if it's available or not?
-    def store_reservation(check_in_date, check_out_date, status = "assigned")
+    def store_reservation(check_in_date, check_out_date)
       available_rooms = []
+      ap "STORE_RESERVATION START: reservations_array: #{reservations_array}"
       if @reservations_array.length == 0 #i.e. there are no reservations at all
         new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
         new_reservation.room = @array_of_rooms[0]
@@ -94,24 +95,34 @@ module Hotel_Chain
       @array_of_rooms.each do |room|
         @reservations_array.each do |reservation|
           # checks for unavailable rooms
+          if room.room_id == reservation.room.room_id && reservation.block_reserved == true
+            unavailable_rooms << room
+            ap "here 1"
           #1
-          if room.room_id == reservation.room.room_id && reservation.status = "assigned" && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+          elsif room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
             unavailable_rooms << room
+            ap "here 2"
           #2
-          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
+          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
             unavailable_rooms << room
+            ap "here 3"
           #3
-          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
             unavailable_rooms << room
+            ap "here 4"
           #4
-          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && reservation.check_in_date < check_in && reservation.check_out_date > check_out
+          elsif room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
             unavailable_rooms << room
+            ap "here 5"
           #5
-          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && reservation.check_in_date == check_in
+          elsif room.room_id == reservation.room.room_id && reservation.check_in_date == check_in
             unavailable_rooms << room
+            ap "here 6"
           #6
-          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && reservation.check_out_date == check_out
+          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && reservation.check_out_date == check_out
             unavailable_rooms << room
+            ap "here 7"
+          #this else statement can ultimately deleted to save storage space, but for now, it's handy to check the available_rooms array when debugging.
           else
             available_rooms << room
           end
@@ -119,7 +130,7 @@ module Hotel_Chain
       end
       #ap "available_rooms: #{available_rooms}"
       # puts "***FIND ROOMS AVAILABLE ****"
-      # ap "unavailable_rooms: #{unavailable_rooms}"
+      ap "unavailable_rooms: #{unavailable_rooms}"
       # puts "***"
       final_available_rooms = @array_of_rooms - unavailable_rooms
       # puts "***"
@@ -127,24 +138,29 @@ module Hotel_Chain
       return final_available_rooms
     end
 
+
     def reserve_block(party_name, check_in, check_out, no_of_rooms, room_rate)
-      reservation_array = []
+      local_reservation_array = []
       available_rooms = find_rooms_available(check_in, check_out)
       ap available_rooms
       if available_rooms.length < no_of_rooms
         raise ArgumentError.new("There are not enough rooms available to reserve that block")
       else
         no_of_rooms.times do |room|
-          new_reservation = store_reservation(check_in, check_out, "unassigned")
+          new_reservation = store_reservation(check_in, check_out)
           new_reservation.room.rate = room_rate
+          new_reservation.block_reserved = true
+          new_reservation.status = "unassigned"
           ap "New reservation: #{new_reservation}"
-          reservation_array << new_reservation
+          @reservations_array << new_reservation
+          local_reservation_array << new_reservation
         end
       end
       puts "RESULT:"
       ap "Reservation_array: reservation_array"
       #I passed all these arguments to block becuse I want the block object to have these attributes for ease of reference.
-      @blocks_array << (new_block = Block.new(party_name, check_in, check_out, room_rate, reservation_array))
+      new_block = Block.new(party_name, check_in, check_out, room_rate, local_reservation_array)
+      @blocks_array << new_block
       return new_block
     end
 
