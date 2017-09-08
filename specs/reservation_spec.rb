@@ -14,15 +14,27 @@ describe "Administration#Reservation" do
     end
 
   describe "#total_nights" do
-    it "returns the total number of nights for a date range" do
+    it "return the total number of nights for a date range" do
       check_in = Date.new(2017, 9, 1)
       check_out = Date.new(2017, 9, 5)
       reservation = Administration::Reservation.new(check_in, check_out)
-
       reservation.total_nights.must_equal 4
-
     end
-  end
+
+    it "return the total number of nights when the month and year change" do
+      check_in = Date.new(2017, 12, 30)
+      check_out = Date.new(2018, 1, 4)
+      reservation = Administration::Reservation.new(check_in, check_out)
+      reservation.total_nights.must_equal 5
+    end
+
+    it "return one for a single night" do
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 2)
+      reservation = Administration::Reservation.new(check_in, check_out)
+      reservation.total_nights.must_equal 1
+    end
+  end #end of total_nights
 
 
 
