@@ -3,21 +3,10 @@ require 'rooms'
 
 module Hotels
   class Reservations
-    attr_reader :room, :dates, :cost
-    def initialize(start_date, end_date)
+    attr_reader :room, :date_range
+    def initialize(room, date_range)
       @room = room
-      @start_date = start_date
-      @end_date = end_date
-    end
-
-    def check_dates(dates)
-      #conditional with regex to check valid dates
-      #.valid_date?
-      #date conversion with gem?
-    end
-
-    def gets_room
-      @room = Hotels::Rooms.find(1..20).sample
+      @date_range = date_range
     end
 
     def calculate_bill
