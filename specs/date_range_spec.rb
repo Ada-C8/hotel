@@ -17,9 +17,9 @@ describe 'DateRange' do
     end # end test
   end # end #initialize
 
-  describe 'find_range' do
+  describe 'length_of_stay' do
     it 'finds the number of days needed for the reservation based on given dates' do
-      @puppy_dates.find_range.must_equal 18
+      @puppy_dates.length_of_stay.must_equal 18
     end # end test
 
     xit 'checks if a room is available on given dates' do

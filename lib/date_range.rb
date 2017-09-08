@@ -9,7 +9,7 @@ module Hotel
       @check_out = check_out
     end # end initialize
 
-    def find_range
+    def length_of_stay
       @check_out - @check_in
     end # end date_range
   end # end of class

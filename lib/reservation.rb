@@ -14,7 +14,7 @@ module Hotel
     end # end initialize
 
     def reserve_dates
-      @dates.find_range
+      @dates.length_of_stay
     end # end #reserve_dates
   end # end of Reservation
 end # end of Hotel module
