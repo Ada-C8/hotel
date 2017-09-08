@@ -5,9 +5,9 @@ module Hotel
     attr_reader :checkin, :checkout, :room
 
     def initialize(checkin_date, checkout_date, room_number)
-      if valid_dates?(Date.parse(checkin_date), Date.parse(checkout_date))
-        @checkin = Date.parse(checkin_date)
-        @checkout = Date.parse(checkout_date)
+      if valid_dates?(Date.strptime(checkin_date, '%m-%d-%Y'), Date.strptime(checkout_date, '%m-%d-%Y'))
+        @checkin = Date.strptime(checkin_date, '%m-%d-%Y')
+        @checkout = Date.strptime(checkout_date, '%m-%d-%Y')
         @room = room_number
       end
     end

@@ -4,9 +4,9 @@ require 'date'
 
 describe "Hotel" do
   let(:hotel) { Hotel::Hotel.new }
-  let(:smith) { hotel.new_reservation("2017-10-01", "2017-10-04", 2) }
-  let(:garcia) { hotel.new_reservation("2017-10-02", "2017-10-06", 4) }
-  let(:jones) { hotel.new_reservation("2017-10-02", "2017-10-04", 5) }
+  let(:smith) { hotel.new_reservation("10-01-2017", "10-04-2017", 2) }
+  let(:garcia) { hotel.new_reservation("10-02-2017", "10-06-2017", 4) }
+  let(:jones) { hotel.new_reservation("10-02-2017", "10-04-2017", 5) }
 
   describe "initialize" do
     it "creates a Hotel instance" do
@@ -26,30 +26,44 @@ describe "Hotel" do
   end
 
 
-describe "new_reservation" do
-  before do
-    hotel
-    smith
-    garcia
-    jones
+  describe "new_reservation" do
+    before do
+      smith
+      garcia
+      jones
+    end
+
+    it "returns an Array of Reservation objects" do
+      hotel.reservations.each { |reserv| reserv.must_be_instance_of Hotel::Reservation }
+      hotel.reservations[0].checkin.must_equal Date.new(2017, 10, 1)
+    end
   end
 
-  it "returns an Array of Reservation objects" do
-    hotel.reservations.each { |reserv| reserv.must_be_instance_of Hotel::Reservation }
-    hotel.reservations[0].checkin.must_equal Date.new(2017, 10, 1)
+  describe "reservations_on" do
+    it "provides a list of all reservations on a given date" do
+      smith
+      garcia
+      jones
+
+      hotel.reservations_on("10-02-2017").must_be_instance_of Array
+      hotel.reservations_on("10-02-2017").length.must_equal 3
+
+      hotel.reservations_on("10-05-2017").length.must_equal 1
+    end
   end
-end
 
-describe "reservations_on" do
-  it "provides a list of all reservations on a given date" do
-    smith
-    garcia
-    jones
+  describe "rooms_available" do
 
-    hotel.reservations_on("2017-10-02").must_be_instance_of Array
-    hotel.reservations_on("2017-10-02").length.must_equal 3
 
-    hotel.reservations_on("2017-10-05").length.must_equal 1
+    it "provides a list of available rooms for a date range" do
+      smith
+      garcia
+      jones
+
+      open_rooms = hotel.rooms_available("10-01-2017", "10-05-2017")
+
+      open_rooms.must_be_instance_of Array
+      open_rooms.length.must_equal 17
+    end
   end
-end
 end

@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 require 'date'
 
 describe "Reservation" do
-let(:smith) { Hotel::Reservation.new("2017-10-01", "2017-10-04", 2) }
+let(:smith) { Hotel::Reservation.new("10-01-2017", "10-04-2017", 2) }
 
   describe "initialize" do
     it "has a date range" do
@@ -24,13 +24,13 @@ let(:smith) { Hotel::Reservation.new("2017-10-01", "2017-10-04", 2) }
     end
 
     it "raises an error when given an incorrect date range" do
-      proc { Hotel::Reservation.new("2017-10-02", "2017-09-30", 3) }.must_raise ArgumentError
+      proc { Hotel::Reservation.new("10-02-2017", "09-30-2017", 3) }.must_raise ArgumentError
 
-      proc { Hotel::Reservation.new("2017-08-24", "2017-08-31", 3) }.must_raise ArgumentError
+      proc { Hotel::Reservation.new("08-24-2017", "08-31-2017", 3) }.must_raise ArgumentError
 
-      proc { Hotel::Reservation.new("2017-13-30", "2017-03-03", 3) }.must_raise ArgumentError
+      proc { Hotel::Reservation.new("13-30-2017", "03-03-2018", 3) }.must_raise ArgumentError
 
-      proc { Hotel::Resernation.new("2018-02-25", "2018-02-29")}
+      proc { Hotel::Reservation.new("02-25-2018", "02-29-2018", 3) }.must_raise ArgumentError
     end
   end
 end
