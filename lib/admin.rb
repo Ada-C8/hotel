@@ -2,6 +2,7 @@ require_relative './concerns/dateable'
 require_relative './concerns/reserveable'
 require_relative 'reservation'
 require 'date'
+require 'securerandom'
 require 'pry'
 module Hotel
 
@@ -10,7 +11,7 @@ module Hotel
     include Hotel::Dateable::InstanceMethods
     include Hotel::Reserveable::InstanceMethods
 
-    attr_reader :reservations_list, :all_rooms
+    attr_reader :reservations_list, :all_rooms, :block_list
     # def get_date_range(check_in, check_out)
     #   return  (check_in ... check_out).to_a
     # end
@@ -27,73 +28,47 @@ module Hotel
         @all_rooms << num #Hotel::Room.new(num) I don't think I have to do this
       end
     end
-    #
-    #
-    # def reserve(check_in, check_out, room, name, contact_info)
-    #   #checks that the date hash't been previously reserved, and there are enough rooms for the blocks
-    #
-    #   raise ArgumentError.new("This room is already reserved on these days") if rooms_available?(check_in, check_out).include?(room) == false
-    #   new_reservation = Hotel::Reservation.new(check_in, check_out, room, name, contact_info)
-    #
-    #   @reservations_list << new_reservation
-    #
-    #
-    # end#reserve
-    #
-    # def rooms_available?(check_in, check_out)
-    #   # binding.pry
-    #   # #searches through the reservation list to find available rooms
-    #
-    #   check_in_date = Date.new(check_in[0], check_in[1], check_in[2])
-    #   check_out_date = Date.new(check_out[0], check_out[1], check_out[2])
-    #   wanted_dates = get_date_range(check_in_date, check_out_date)
-    #   reserved_rooms_for_dates = []
-    #   blocks_for_date = 0
-    #
-    #   case
-    #   when @reservations_list == []
-    #     return @all_rooms
-    #   else
-    #     @reservations_list.each do |reservation|
-    #       #needs to check if the room is included in this reservation on the day
-    #
-    #       overlap =  reservation.dates_reserved & wanted_dates
-    #       overlap.any? ? reserved_rooms_for_dates << reservation.room : false
-    #
-    #     end
-    #   end
-    #   #if blocks_for_date.length <= (@all_rooms - reserved_rooms_for_dates).length ? @all_rooms - reserved_rooms_for_dates : raise ArgumentError.new("Blocks for this date prohibit us from reserving rooms")
-    #   return @all_rooms - reserved_rooms_for_dates
-    # end#rooms_available
-    #
-    #
-    # #ability to do reservation things
-    # def reservation_finder(search_term, instance_variable)
-    #   reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
-    # end
-    #
-    # def reservations_by_name(name_request)
-    #   reservation_finder( name_request, :name )
-    #
-    # end#reservations_by_date
-    #
-    # def reservations_by_date(date)
-    #   date_find = Date.new(date[0], date[1], date[2])
-    #   reservation_finder(date_find, :date_range )
-    # end#reservations_by_date
 
     #ablity to do block things
     #what I want to do is block off the amount of rooms that are required for the block
     #can change number of blocks in reserved block
-    def create_block(name, check_in, check_out, num_rooms)
+    def create_block(check_in, check_out, name, contact_info, discount, num_rooms)
+      num_rooms_in_range?(num_rooms)
+      #id_num = SecureRandom.uuid don't need it, but I like the idea
+
+      Hotel::Block.new(check_in, check_out, name, contact_info, discount, num_rooms)
+
     end
 
-    def change_number_blocks(block_id, amount)
+    def num_rooms_in_range?(num)
+      0 < num <= @all_rooms.length ? true : ArgumentError.new("The number of rooms is out of range")
+    end
+    # def finder(search_term, instance_variable)
+    #   reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
+    # end
+
+    def convert_block_to_reservation(name)
+      being_converted = finder(name, :name, block_list)
+      being_converted.num_rooms.times do
+      available_rooms = rooms_available?(being_converted.check_in, being_converted.check_out)
+      reserve(being_converted.name, being_converted.check_in, being_converted.check_out, available_rooms[0], being_converted.name, being_converted.contact_info)
+    end
+    @block_list.delete(being_converted)
+
     end
 
-    def convert_block_to_res(block_id)
+
+
+    def delete_block(name)
+      finder(name, :name, block_list)
     end
 
+
+
+    # #ability to do searchy things
+    # def finder(search_term, instance_variable)
+    #   reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
+    # end
   end #class Admin
 
 end #module Hotel
