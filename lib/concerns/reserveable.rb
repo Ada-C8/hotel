@@ -18,10 +18,10 @@ module Hotel
       def rooms_available?(check_in, check_out)
         # binding.pry
         # #searches through the reservation list to find available rooms
-
-        check_in_date = Date.new(check_in[0], check_in[1], check_in[2])
-        check_out_date = Date.new(check_out[0], check_out[1], check_out[2])
-        wanted_dates = get_date_range(check_in_date, check_out_date)
+        #
+        # check_in_date = Date.new(check_in[0], check_in[1], check_in[2])
+        # check_out_date = Date.new(check_out[0], check_out[1], check_out[2])
+        wanted_dates = get_date_range(check_in, check_out)
         reserved_rooms_for_dates = []
         blocks_for_date = 0
 
@@ -53,8 +53,7 @@ module Hotel
       end#reservations_by_date
 
       def reservations_by_date(date)
-        date_find = Date.new(date[0], date[1], date[2])
-        finder(date_find, :date_range, reservations_list )
+        finder(date, :date_range, reservations_list )
       end#reservations_by_date
     end
   end
