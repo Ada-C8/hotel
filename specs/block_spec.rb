@@ -42,7 +42,9 @@ describe "Block class" do
 
   end
 
-  
+    it "Has an instance variable @rooms_for_block that shows how many rooms are available in block in an Array" do
+      @test_ob.rooms_for_block.must_be_instance_of Array
+    end
 
   describe "block_total_cost" do
 

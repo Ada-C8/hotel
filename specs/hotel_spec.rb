@@ -70,16 +70,11 @@ describe "Hotel class" do
       @test_ob.must_respond_to :block_off_a_block
     end
 
-    it "Raises an UnavailableRoomError if there are not enough rooms available for request" do
-      @test_ob.make_reservation(@room, @check_in, @check_out)
-      proc { @test_ob.block_off_a_block(20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
-    end
-
     it "Returns an instance of Block class" do
       @test_ob.block_off_a_block(3, @check_in, @check_out).must_be_instance_of BookingSystem::Block
     end
 
-    it "Increases the length of the @block_reservations by 1" do
+    it "Increases the length of the @all_blocks by 1" do
       @test_ob.block_off_a_block(3, @check_in, @check_out)
       @test_ob.all_blocks.length.must_equal 1
     end
