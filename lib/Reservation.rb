@@ -10,6 +10,7 @@ module Hotel
 
     def initialize(block_id = nil, start_date = Date.today, end_date = Date.today + 1, room_num = 0)
       check_input(block_id, start_date, end_date, room_num)
+      @block_id = block_id
       set_reservation_dates(block_id, start_date, end_date)
       room_num = Reservation.sample_available_rooms(start_date, end_date, block_id).sample if room_num == 0
       raise NoRoomsAvailableError.new if room_num.class != Integer
@@ -32,11 +33,12 @@ module Hotel
     end
 
     def total
-      rate = 0
-      Room.all.each do |room|
-        rate = room.rate if room.room_num == @room_num
-      end
-      return (@end_date - @start_date) * rate
+      rate = Room.all.find { |room| room.room_num == room_num }.rate
+      discount = 0
+      print Block.all.find { |block| block.block_id == block_id }
+      discount = Block.all.find { |block| block.block_id == block_id }.discount if block_id != nil
+      puts discount
+      return (@end_date - @start_date) * rate * (1 - discount)
     end
 
     private

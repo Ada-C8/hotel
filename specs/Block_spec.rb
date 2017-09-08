@@ -61,4 +61,10 @@ describe "Block class" do
     Hotel::Block.rooms_left(1).length.must_equal 4
   end
 
+  it "gives a reservation a discount if the room is in a block" do
+    block = Hotel::Block.new(Date.today, Date.today + 1, 5, 0.5)
+    reservation = Hotel::Reservation.new(block.block_id, Date.today, Date.today + 1)
+    reservation.total.must_equal 100
+  end
+
 end
