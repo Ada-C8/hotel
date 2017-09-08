@@ -22,4 +22,10 @@ describe "Reservation class" do
       total.must_equal 600
     end
   end
+  # describe "Date Range error handling" do
+  #   it "Raises and ArgumentError if given invalid date range" do
+  #     test = Hotel::Reservation.new(2, "2017/9/12","2017/9/15")
+  #     proc { test.get_total}.must_raise ArgumentError
+  #   end
+  # end
 end # end describe Reservation class
