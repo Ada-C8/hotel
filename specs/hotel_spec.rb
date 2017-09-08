@@ -38,4 +38,17 @@ describe "HotelClass" do
       @hotel_test.access_reservations.length.must_equal 1
     end
   end
+  describe "View_avaiable_rooms method" do
+    it "Return a list of available rooms for a given date range" do
+      @hotel_test.reserve_room(2,"2017-9-12", "2017-9-15")
+      @hotel_test.reserve_room(2,"2017-10-12", "2017-10-15")
+      @hotel_test.reserve_room(2,"2017-9-15", "2017-9-18")
+      @hotel_test.reserve_room(3,"2017-9-12", "2017-9-15")
+      @hotel_test.reserve_room(3,"2017-10-12", "2017-10-15")
+      @hotel_test.reserve_room(3,"2017-9-15", "2017-9-18")
+      @hotel_test.reserve_room(1,"2017-9-12", "2017-9-15")
+      @hotel_test.reserve_room(1,"2017-10-12", "2017-10-15")
+      @hotel_test.reserve_room(1,"2017-9-15", "2017-9-18")
+    end
+  end
 end
