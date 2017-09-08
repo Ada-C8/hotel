@@ -20,10 +20,13 @@ module ReservationSystem
     def reserve(check_in, nights, room)
       valid_date?(check_in)
       positive_integer?(nights)
-      #TODO room.available?
-      @new_reservation = ReservationSystem::Reservation.new(check_in, nights, room)
-      all_reservations << @new_reservation
-      return @new_reservation
+      if room.available?(check_in, nights)
+        @new_reservation = ReservationSystem::Reservation.new(check_in, nights, room)
+        all_reservations << @new_reservation
+        return @new_reservation
+      else
+        raise UnavailableDate.new("This room is unavailable for #{to_date_range(check_in, nights)}")
+      end
 
     end # reserve
 

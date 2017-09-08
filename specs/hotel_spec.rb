@@ -55,6 +55,12 @@ describe "Hotel" do
         proc {ada_inn.reserve(Date.new(2017,10,12), 0.24, room_5)}.must_raise Reservable::PositiveIntegerError
       end #valid number error
 
+      it "Raises an error if the room is unavailable for given date range" do
+          proc {ada_inn.reserve(Date.new(2017,10,13), 1, room_4)}.must_raise Reservable::UnavailableDate
+          proc {ada_inn.reserve(Date.new(2017,6,10), 5, room_5)}.must_raise Reservable::UnavailableDate
+          proc {ada_inn.reserve(Date.new(2017,6,10), 1, room_7)}.must_raise Reservable::UnavailableDate
+
+      end
     end # "reserve"
 
     describe "search_reservations_by_date" do
