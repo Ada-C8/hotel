@@ -41,6 +41,7 @@ describe "Admin" do
       # room_num given is already reserved for a portion of date a prior reservation has
       @admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1).must_be_instance_of Hotel::Reservation
       proc {@admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1)}.must_raise ArgumentError
+      proc {@admin.reserve(Date.new(2017,10,4), Date.new(2017,10,6), 1)}.must_raise ArgumentError
 
       # Non-Date object passed into parameters
       proc{@admin.reserve("I am not a Date!", 123)}.must_raise ArgumentError
@@ -108,6 +109,21 @@ describe "Admin" do
   end
 
   describe "available_rooms_in_date_range" do
+    it "Returns an array of Room objects for a given date range" do
+      not_available1 = @admin.reserve(Date.new(2017, 10, 2), Date.new(2017, 10, 10), 1)
+      not_available2 = @admin.reserve(Date.new(2017, 10, 5), Date.new(2017, 10, 10), 3)
+      not_available_rooms = [not_available1, not_available2]
+      date1 = Date.new(2017, 10, 3)
+      date2 = date1 = Date.new(2017, 10, 9)
+      
+      available_rooms = @admin.available_rooms_in_date_range(date1, date2)
+      available_rooms.must_be_instance_of Array
+      available_rooms[rand(available_rooms.length)].must_be_instance_of Hotel::Room
+      available_rooms.each do |room|
+        not_available_rooms.include?(room).must_equal false
+      end
+    end
+
     it "Returns an error if date objects aren't passed" do
       proc{@admin.available_rooms_in_date_range("I am not a date!", "I'm not one too! haha")}.must_raise ArgumentError
     end
@@ -115,6 +131,7 @@ describe "Admin" do
     it "Returns an error if dates are passed in descending order" do
       proc{@admin.available_rooms_in_date_range(Date.new(2017, 10, 3), Date.new(2017, 10, 1))}.must_raise ArgumentError
     end
+
   end
 
 end

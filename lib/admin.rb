@@ -10,7 +10,7 @@ module Hotel
       @reservations = [] # key: reservation, value: hash
     end
 
-    # As an administrator, I can reserve a room for a given date range
+    # As an administrator, I can reserve an available room for a given date range
     def reserve(check_in, check_out, room_num)
       # Create a Reservation with those dates + assign a room
       if check_in.class != Date || check_out.class != Date
@@ -27,9 +27,9 @@ module Hotel
       end
 
       associated_room = find_room(room_num)
-      associated_room.change_availability(true) # only really useful for those with overlapping check-out and check-in :/
       new_reservation = Hotel::Reservation.new(check_in, check_out, associated_room)
       @reservations << new_reservation
+      new_reservation.change_availability(false)
       return new_reservation
     end
 
@@ -58,7 +58,7 @@ module Hotel
       return @rooms.detect { |r| r.room_number == room_number}
     end
 
-    # Wave 2:
+
     # As an administrator, I can view a list of rooms that are not reserved for a given date range
     def available_rooms_in_date_range(date1, date2)
       if date1.class != Date || date2.class != Date
@@ -66,20 +66,20 @@ module Hotel
       end
       raise ArgumentError.new("Dates are in invalid order") if date2 < date1
 
-      # Get all reservations that fall within the date range
-      reservations_at_date_range = @reservations.select{ |reservation| reservation.overlap?(date1, date2)}
+      # Get all reservation objects that fall within the date range
+      reservations_at_date_range = @reservations.select do |reservation|
+        reservation.overlap?(date1, date2)
+      end
       # Get those reservation's associated room's numbers
+      # turns array of Reservations into array of room numbers
       reservations_at_date_range.map!{|reservation| reservation.room.room_number}
       reserved_room_numbers_at_date_range = reservations_at_date_range.uniq
       # Get the room numbers that are not those numbers
-      available_room_numbers_at_date_range = [1..NUM_OF_ROOMS].select{|room_number| !reserved_room_numbers_at_date_range.include?(room_number)}
+      available_room_numbers_at_date_range = (1...NUM_OF_ROOMS).select{|room_number| !reserved_room_numbers_at_date_range.include?(room_number)}
       # Get the actual Room objects associated with those numbers
       rooms_at_date_range = available_room_numbers_at_date_range.map{|room_number| find_room(room_number)}
       return rooms_at_date_range
     end
-
-    # As an administrator, I can reserve an available room for a given date range
-
 
   end
 end
