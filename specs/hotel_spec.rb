@@ -44,6 +44,12 @@ describe "Hotel Class" do
       @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
       @hotel.is_available?(1000, 4, "2012/12/13", "2012/12/19").must_equal true
     end
+
+    it "Will tell you if a room is not available " do
+      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
+      @hotel.is_available?(1000, 2, "2012/12/13", "2012/12/19").must_equal false
+    end
   end #make reservations
 
   describe "Find Reservations" do

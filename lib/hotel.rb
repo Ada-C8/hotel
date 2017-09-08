@@ -25,7 +25,7 @@ module Hotel
 
     # - As an administrator, I can reserve a room for a given date range
     def make_reservation(id, room, day_in, day_out)
-      if is_available?(room, day_in, day_out)
+      if is_available?(id, room, day_in, day_out)
         @reservations.add(id, room, day_in, day_out)
       else
         return "Please choose a different date or room"
@@ -70,14 +70,15 @@ module Hotel
     end
 
     #As an administrator, I can reserve an available room for a given date range
-    def is_available?(room, day_in, day_out)
-      rooms = open_rooms(day_in, day_out)
-      if rooms.include?(room)
+    def is_available?(id, room, day_in, day_out)
+      x = open_rooms(day_in, day_out)
+      if x.include?(room)
         return true
       else
         return false
       end  #if/else
     end# is_available
+
   end #class
 end #module
 #binding.pry
