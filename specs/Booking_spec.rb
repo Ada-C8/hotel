@@ -40,7 +40,7 @@ describe "BookingProgram" do
   end #end find_res_by_date
 
   describe "make reservation" do
-    it "reserves a room and makes a reservation object " do
+    it "reserves a Room and makes a Reservation object " do
       new_hotel =  Hotel::BookingProgram.new
 
       new_hotel.make_reservation("2018-03-14", "2018-03-16", 3, 1)
@@ -48,12 +48,35 @@ describe "BookingProgram" do
       new_reservation = new_hotel.all_reservations[0]
 
 
-
       new_reservation.must_be_instance_of Hotel::Reservation
       new_reservation.id.must_equal 1
       (Date.parse("2018-03-14")...Date.parse("2018-03-16")).to_a.each do |date|
         new_reservation.room.all_dates.must_include date
-      end 
+      end
+
+    end
+  end
+
+  describe "make block" do
+    it "creates a Block and reserves a room" do
+      #note, need to fix: it shouldn't reserve room officially, but should be "Blocked off" test for this when the functionality is made
+
+      new_hotel =  Hotel::BookingProgram.new
+
+      new_hotel.make_block("2018-03-14", "2018-03-16",[18,19,20], 2)
+
+      new_block = new_hotel.all_blocks[0]
+
+
+      new_block.must_be_instance_of Hotel::Block
+      new_block.id.must_equal 1
+
+      new_block.rooms.each do |room|
+        (Date.parse("2018-03-14")...Date.parse("2018-03-16")).to_a.each do |date|
+          room.all_dates.must_include date #fix this logic later
+        end
+      end
+
 
     end
   end

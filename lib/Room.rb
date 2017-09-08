@@ -5,7 +5,7 @@ require_relative 'Reservation'
 module Hotel
 
   class Room
-    attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates
+    attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates, :block_id_and_dates
     # :status
 
     @@total_num_rooms = 20
@@ -13,31 +13,22 @@ module Hotel
     def initialize(id_number, nightly_rate = 200)
       @id = id_number
       @nightly_rate =  nightly_rate
-      @type = :standard
+      @type = :standard # is this necessary
       @reserv_id_and_dates = {}
        # holds all reservations, a hash with reservation ids as keys and values as the date range of the reservation ### check-out date should not be included
+      @block_id_and_dates = {}
       @all_dates = []
 
       # @status =  :available #not sure if status is needed anymore.maybe a method, available?
 
     end
 
-    def reserve_room(check_in_str,check_out_str,reservation_id, guest_id)
+    def reserve_room(check_in_str,check_out_str,reservation_id, guest_id=nil)
       check_in = Date.parse(check_in_str)
       check_out = Date.parse(check_out_str)
 
+      check_valid_dates(check_in,check_out)
 
-      if check_in < Date.today || check_out < Date.today
-        raise ArgumentError.new("Can't make reservations for days earlier than today")
-      end
-
-      if check_in.class != Date ||check_out.class != Date
-        raise ArgumentError.new("Please provide a valid date")
-      end
-
-      if check_out < check_in
-        raise ArgumentError.new("Invalid Date Range: Check out date is earlier than check-in date.")
-      end
 
       (check_in...check_out).each do |date|
         return false if @all_dates.include?(date)
@@ -52,6 +43,24 @@ module Hotel
       @all_dates = @reserv_id_and_dates.values.flatten
         ### future note- would it be helpful to sort, and do binary search instead of include? look into it
 
+
+    end
+
+    def block_room(check_in_str,check_out_str,block_id)
+      check_in = Date.parse(check_in_str)
+      check_out = Date.parse(check_out_str)
+
+      check_valid_dates(check_in,check_out)
+
+      (check_in...check_out).each do |date|
+        return false if @all_dates.include?(date)
+      end
+
+      @block_id_and_dates[block_id] = []
+
+      (check_in...check_out).each do |date|
+        @all_dates << date
+      end
 
     end
 
@@ -85,6 +94,21 @@ module Hotel
       end
 
       return true
+    end
+
+    def check_valid_dates(check_in, check_out)
+      if check_in < Date.today || check_out < Date.today
+        raise ArgumentError.new("Can't make reservations for days earlier than today")
+      end
+
+      if check_in.class != Date ||check_out.class != Date
+        raise ArgumentError.new("Please provide a valid date")
+      end
+
+      if check_out < check_in
+        raise ArgumentError.new("Invalid Date Range: Check out date is earlier than check-in date.")
+      end
+
     end
 
   end

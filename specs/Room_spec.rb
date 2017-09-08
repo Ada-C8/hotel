@@ -128,5 +128,30 @@ describe "Hotel::Room class" do
 
   end #end available_all_days
 
+  describe "block room" do
+    it "can block a room if given the check-in/out date and block id so that it is unavailable to reserve via regular reservations" do
+      room = Hotel::Room.new(666)
+      check_in_str = "2018-08-09"
+      check_out_str = "2018-08-12"
+      block_id = 3
+
+      room.block_room(check_in_str, check_out_str, block_id)
+
+      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
+        room.all_dates.must_include date
+      end
+
+      room.reserve_room("2018-08-10", "2018-08-11", 42, 16).must_equal false
+
+      check_in_str2 = "2018-09-28"
+      check_out_str2 = "2018-10-1"
+
+      room.reserve_room(check_in_str2, check_out_str2, 8, 23)
+      (Date.parse(check_in_str2)...Date.parse(check_out_str2)).each do |date|
+        room.all_dates.must_include date
+      end
+    end
+  end
+
 
 end #end Hotel::Room class tests

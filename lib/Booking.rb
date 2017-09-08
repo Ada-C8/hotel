@@ -14,11 +14,12 @@ module Hotel
   # NUMBER_OF_ROOMS = 20  ### might not want to use constant, especially if we have subclasses of rooms (by type), and each room subclass might have a different number. may best be a constant defined by class/subclass
 
   class BookingProgram
-    attr_reader :all_rooms, :all_reservations
+    attr_reader :all_rooms, :all_reservations, :all_blocks
 
     def initialize # do we want to initialize with hotel name?
       @all_rooms = Hotel::Room.all # returns an array or hash of Room objects
       @all_reservations = []
+      @all_blocks = []
 
     end
 
@@ -35,8 +36,9 @@ module Hotel
     ###should this be a Room method
     def make_reservation(check_in,check_out,room_id, guest_id=nil)
 
-      reservation = Hotel::Reservation.new(check_in,check_out,room_id, guest_id)
-      reservation.id = (@all_reservations.count + 1) #something
+      reservation_id = (@all_reservations.count + 1) #something
+      reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id, guest_id)
+
 
       reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
 
@@ -44,16 +46,19 @@ module Hotel
 
     end
 
-    def make_block(check_in,check_out,room_ids,discounted_rate,block_id)
+    def make_block(check_in,check_out,room_ids,discounted_rate)
 
       raise ArgumentError.new("Number of rooms in a block must be 5 or under") if room_ids.count > 5
 
-      reservation = Hotel::Block.new(check_in,check_out,room_id, guest_id)
-      reservation.id += 1 #something
+      block_id = @all_blocks.count + 1
 
-      reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
+      block = Hotel::Block.new(check_in,check_out,room_ids,discounted_rate,block_id)
 
-      @all_reservations << reservation
+      block.rooms.each do |room|
+        room.block_room(check_in,check_out,block_id)
+      end
+
+      @all_blocks << block
 
     end
 
