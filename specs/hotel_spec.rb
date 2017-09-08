@@ -126,4 +126,58 @@ describe "Hotel" do
 		rooms.must_be_kind_of Array
 	end
   end
+  
+  describe "get_open_rooms" do
+	it "get_open_rooms for a date returns an array" do
+		hotel = Hotels::Hotel.new()
+		
+		start_date = Date.new(2017,1,1)
+	    end_date = Date.new(2017,1,3)
+	    date1 = DateRange.new(start_date, end_date)
+		
+		rooms = hotel.get_open_rooms(date1)
+		rooms.length.must_equal 20
+		
+		hotel.reserve_room(1, date1)
+		
+		rooms = hotel.get_open_rooms(date1)
+		rooms.length.must_equal 19
+	end
+  end
+  
+  describe "make_new_block" do
+	it "checks make_new_block" do
+		hotel = Hotels::Hotel.new()
+		hotel.room_blocks.must_equal []
+		
+		
+		start_date = Date.new(2017,1,1)
+	    end_date = Date.new(2017,1,3)
+	    date1 = DateRange.new(start_date, end_date)
+		
+		hotel.make_new_block(2, date1, 1)
+		
+		hotel.room_blocks.length.must_equal 1
+		hotel.room_blocks[0].available_rooms.length.must_equal 2
+	end
+  end
+  
+  describe "check_block_for_availability" do
+	it "checks check_block_for_availability" do
+		hotel = Hotels::Hotel.new()
+		hotel.room_blocks.must_equal []
+		
+		
+		start_date = Date.new(2017,1,1)
+	    end_date = Date.new(2017,1,3)
+	    date1 = DateRange.new(start_date, end_date)
+		
+		hotel.make_new_block(2, date1, 1)
+		
+		hotel.check_block_for_availablity(1).must_equal true
+		hotel.reserve_room_from_block(1)
+		hotel.reserve_room_from_block(1)
+		hotel.check_block_for_availablity(1).must_equal false
+	end
+  end
 end
