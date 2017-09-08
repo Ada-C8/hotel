@@ -8,11 +8,12 @@ describe Hotel::Block do
 
     end
 
-    it "initializes with an id number between 111111 and 999999" do
+    it "initializes with an id number between 100000 and 999999" do
       hotel = Hotel::Hotel.new
+      check_in = Date.new(2018, 1, 1)
       100.times do
-        check_in = rand(Date.new(2018, 1, 1)..Date.new(2019, 1, 1))
         hotel.make_block(check_in, check_in + 5, rand(1..5) )
+        check_in += 3
       end
 
       ids = []
@@ -22,7 +23,7 @@ describe Hotel::Block do
       end
 
       ids.each do |id|
-        id.between?(111111, 999999).must_equal true
+        id.between?(100000, 999999).must_equal true
       end
 
       ids.uniq!

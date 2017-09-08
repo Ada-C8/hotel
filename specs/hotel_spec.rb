@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-require 'pry'
 
 describe Hotel::Hotel do
   describe "a hotel instance can be created" do
@@ -85,7 +84,7 @@ describe Hotel::Hotel do
       20.times do
         sheraton.make_reservation("guest", check_in, check_out)
       end
-      
+
       proc{sheraton.make_reservation("guest", check_in, check_out)}.must_raise StandardError
     end
 
