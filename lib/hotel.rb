@@ -29,7 +29,6 @@ module BookingSystem
           end
         end
       end
-      puts dates
       @all_blocks.each do |block|
         block.rooms.each do |block_room, price|
           if block_room == room
@@ -39,7 +38,6 @@ module BookingSystem
           end
         end
       end
-      puts dates
       return dates #array of dates on which this room is unavailable
       end #end of method
 
@@ -47,34 +45,26 @@ module BookingSystem
       available_rooms = {}
       @rooms.each do |room, price|
         booked_dates = room_unavailable(room) #array of dates
-        puts "booked dates: #{booked_dates} for room: #{room}"
         count = 0
         date_range.dates_within_range.each do |date|
           if !booked_dates.include?(date)
             count += 1
-            puts "#{count} after each new date"
           end
         end
-        puts "final count: #{count}"
-        puts "number of nights: #{date_range.dates_within_range.length}"
         if count == date_range.dates_within_range.length
           available_rooms[room] = price
         end
       end
-      puts available_rooms
+      if available_rooms.length == 0
+        raise NoRoomAvailableError.new("No room is available on given dates")
+      end
       return available_rooms #hash of rooms
     end #end of method
 
-    def find_room(date_range)
-      if list_of_available_rooms(date_range).empty?
-        raise NoRoomAvailableError.new("No room is available on given dates")
+    def make_reservation(date_range, room)
+      if !list_of_available_rooms(date_range).include?(room)
+        raise ArgumentError.new
       end
-      return list_of_available_rooms(date_range).first[0] #room number
-    end #end of method
-
-    #picks the first available room
-    def make_reservation(date_range)
-      room = find_room(date_range)
       cost = @rooms[room]
       new_reservation = Reservation.new(date_range, room, cost)
       @all_reservations << new_reservation
