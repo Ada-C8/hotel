@@ -2,14 +2,14 @@ require_relative 'date_range'
 module My_Hotel
   class Block
 
-    attr_reader :first_night, :last_night, :room_numbers, :nights_booked, :discount, :block_id
+    attr_reader :first_night, :last_night, :room_numbers, :nights_held, :discount, :block_id
 
     def initialize(first_night, last_night, array_of_rooms, discount)
       @first_night = first_night
       @last_night = last_night
       @discount = discount
       @room_numbers = array_of_rooms
-      @nights_booked = My_Hotel::Date_Range.new(first_night,last_night)
+      @nights_held = My_Hotel::Date_Range.new(first_night,last_night)
       @block_id = nil
       #@contact_info #could add contact_info
     end

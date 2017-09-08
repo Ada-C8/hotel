@@ -16,12 +16,10 @@ describe "My_Hotel::Block" do
   describe "initialize" do
     it "can be created" do
       @new_block.must_be_kind_of My_Hotel::Block
-      @new_block.nights_booked.must_be_kind_of My_Hotel::Date_Range
+      @new_block.nights_held.must_be_kind_of My_Hotel::Date_Range
       @new_block.room_numbers.must_be_kind_of Array
       @new_block.block_id.must_be_nil
     end
-
-
   end
 
   describe "set_block_id" do
