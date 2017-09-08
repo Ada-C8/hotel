@@ -355,11 +355,34 @@ describe 'Hotel' do
         end
       end
 
-      it 'raises an error when there are not enough rooms to fill a block' do
+      it 'raises NoRoomError when there are not enough rooms to fill a block' do
         proc {
           @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
         }.must_raise NoRoomError
       end
+
+      it 'raises ArgumentError error when passed invalid dates' do
+        proc {
+          @hotel.make_block('Augustish', 'Later', 5, 25)
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.make_block('2017-14-14', '2017-15-15', 5, 25)
+        }.must_raise ArgumentError
+      end
+
+      it 'raises InvalidDatesError when dates are out of order' do
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-05', 5, 25)
+        }.must_raise InvalidDatesError
+      end
+
+      it 'raises InvalidDiscountError when passed discount greater than 100%' do
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-010', 5, 125)
+        }.must_raise InvalidDiscountError
+      end
+
     end
 
     describe '#find_rooms_not_in_blocks' do
