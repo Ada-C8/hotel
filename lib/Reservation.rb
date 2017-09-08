@@ -88,7 +88,6 @@ module Hotel
       reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
       available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
       raise NoRoomsAvailableError.new if available_room_numbers.length < 1
-      print available_room_numbers
       return available_room_numbers.sample(number_of_rooms)
     end
 
