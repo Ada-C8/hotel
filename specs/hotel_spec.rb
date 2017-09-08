@@ -182,6 +182,7 @@ describe 'Hotel' do
       before do
         @reservation = @hotel.make_reservation('2017-09-05', '2017-09-08')
       end
+
       it 'creates a reservation and adds it to the @reservations array' do
         # As an administrator, I can reserve a room for a given date range
         @reservation.must_be_kind_of Hotel::Reservation
@@ -276,6 +277,45 @@ describe 'Hotel' do
         reservations.each do |reservation|
           reservation.must_be_kind_of Hotel::Reservation
         end
+      end
+
+      it 'returns all Reservations' do
+        10.times { @hotel.make_reservation('2017-10-14', '2017-10-18') }
+        reservations = @hotel.view_reservations('2017-10-14')
+
+        reservations.length.must_equal 10
+        reservations.each do |reservation|
+          reservation.must_be_kind_of Hotel::Reservation
+        end
+      end
+
+      it 'returns Reservations inside and outside of blocks' do
+        block = @hotel.make_block('2017-08-03', '2017-08-10', 10, 25)
+        @hotel.make_reservation('2017-08-03', '2017-08-10', block.id)
+        @hotel.make_reservation('2017-08-03', '2017-08-10')
+        reservations = @hotel.view_reservations('2017-08-06')
+
+        reservations.length.must_equal 2
+      end
+
+      it 'returns an empty array when there are no reservations' do
+        @hotel.view_reservations('2000-01-01').must_equal []
+      end
+
+      it 'wont display rooms in blocks that are not reserved' do
+        @block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+
+        @hotel.view_reservations('2017-08-06').must_equal []
+      end
+
+      it 'raises an ArgumentError when given invalid dates' do
+        proc {
+          @hotel.view_reservations('coffee')
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.view_reservations('9999-99-99')
+        }.must_raise ArgumentError
       end
     end
   end
