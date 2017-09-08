@@ -9,6 +9,8 @@ class Hotel
     @rooms = []
 	@reservations_by_room = {}
 	@reservations_by_date = {}
+	@room_blocks = []
+	@rooms_currently_in_block = []
 	20.times do |i|
 		@rooms << Room.new(i)
 		@reservations[i] = []
@@ -75,6 +77,22 @@ class Hotel
 	return available_roooms
   end
   
+  def make_new_block(number_of_rooms, date)
+	available_rooms = get_open_rooms(date)
+	if number_of_rooms > 5
+		raise ArgumentException, "Room blocks must be 5 rooms or less"
+	elsif number_of_rooms > available_rooms 
+		raise ArgumentException, "There are only #{available_rooms.length} available for the dates selected"
+	else
+		rooms = []
+		number_of_rooms.times do |i|
+			rooms << available_rooms[i]
+			@rooms_currently_in_block << available_rooms[i]
+		end
+		new_block = Block_Of_Rooms.new(rooms, date)
+		@room_blocks << new_block
+	end
+  end
   
 end
 

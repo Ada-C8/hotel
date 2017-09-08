@@ -5,7 +5,6 @@ class Reservation
 		@room = room
 		@start_date = date.start_date
 		@end_date = date.end_date
-		@cost = 0
 		if date.start_date == date.end_date
 			@cost = 200
 		else

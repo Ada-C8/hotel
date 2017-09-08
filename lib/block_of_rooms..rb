@@ -4,5 +4,6 @@ class Block_Of_Rooms << Room
 	def initialize(rooms, date)
 		@available_rooms = rooms
 		@date = date
+		@cost = 175
 	end
 end
