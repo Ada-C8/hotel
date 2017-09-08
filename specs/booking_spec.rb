@@ -87,7 +87,7 @@ describe "Booking" do
       @booking.make_reservation(@checkin_day, @checkout_day, 2) # room 3 and 4
 
       availible = @booking.availible_rooms(@checkin_day, @checkout_day)
-      
+
       availible.must_equal [@booking.all_rooms[4], @booking.all_rooms[5], @booking.all_rooms[6], @booking.all_rooms[7], @booking.all_rooms[8], @booking.all_rooms[9], @booking.all_rooms[10], @booking.all_rooms[11], @booking.all_rooms[12], @booking.all_rooms[13], @booking.all_rooms[14], @booking.all_rooms[15], @booking.all_rooms[16], @booking.all_rooms[17], @booking.all_rooms[18], @booking.all_rooms[19]]
     end # it "should not reserve the same room more than once for a date range" do
 
@@ -225,9 +225,47 @@ describe "Booking" do
       room = @booking.make_reservation(@checkin_day, @checkout_day, @num_of_rooms)[0].res_rooms[0]
 
       @booking.availible_rooms(start_date_to_check, end_date_to_check).wont_include room
-
     end # it "must not include a room that alleady has a reservation for that date range" do
   end # describe "availible_rooms" do
+
+  describe "make_block" do
+     it "should be able to be called on an instnce of Booking" do
+       @booking.must_respond_to :make_block
+     end # it "should be able to be called on an instnce of Booking" do
+
+     xit "will create a date_range using the date arguments given" do
+       # TODO : will need to change this to check that the date_range of the new instance of Block is correct
+        @booking.make_block("wedding", @checkin_day, @checkout_day, 1).must_equal Hotel::DateRange.new(@checkin_day, @checkout_day).nights_booked
+     end # it "will create a date_range using the date arguments given" do
+
+     it "Should raise an error if inproper dates are given" do
+       proc{@booking.make_block("wedding", @checkout_day, @checkin_day, 1)}.must_raise BookingError
+     end # it "Should raise an error if inproper dates are given" do
+
+     it "will raise BookingError if more then five rooms are requested" do
+       proc{@booking.make_block("wedding", @checkin_day, @checkout_day, 6)}.must_raise BookingError
+    end # raise BookingError for > 5 rooms
+
+    it "will raise a booking error if there are not enough rooms availible to make the block" do
+      @booking.make_reservation(@checkin_day, @checkout_day, 19)
+      proc{@booking.make_block("wedding", @checkin_day, @checkout_day, 4)}.must_raise BookingError
+      # TODO: after I modify availible_rooms to check @all_blocks maybe do this test checking after making multiple blocks?
+    end # Booking error if not enough availible rooms
+
+     it "will make a new instance of Block" do
+       @booking.make_block("wedding", @checkin_day, @checkout_day, 1)
+       @booking.all_blocks[0].must_be_kind_of Hotel::Block
+     end # it "will make a new instance of Block" do
+
+     # TODO: make tests for:
+          # date_range for block created is correct
+          # block_id for Block is correct (upcase!)
+          # the rooms in Block are correct
+     # TODO: After editing availible_rooms to check @all_blocks test:
+          # That a room will only be in one Block over a given DateRange
+          # That the rooms in the blocks are not in availible_rooms return array
+          # That rooms are added to blocks in secuential order from the availible array
+  end # describe "make_block" do
 
 
 end # Booking

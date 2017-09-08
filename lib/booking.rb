@@ -19,10 +19,11 @@ require_relative 'exceptions'
 
 module Hotel
   class Booking
-    attr_reader :all_reservations, :all_rooms
+    attr_reader :all_reservations, :all_rooms, :all_blocks
     def initialize
       @all_reservations = []
       @all_rooms = []
+      @all_blocks = []
 
       (1..20).each do |number|
         @all_rooms << Hotel::Room.new(number)
@@ -68,8 +69,8 @@ module Hotel
         @all_reservations.each do |res|
           if res.date_range.include?(day)
             if !(date_reservations.include?(res))
-            date_reservations << res
-          end
+              date_reservations << res
+            end
           end # if
         end # .each
       end #.each
@@ -96,6 +97,8 @@ module Hotel
     end #print_reservations
 
     def availible_rooms(start_date, end_date)
+
+      # TODO: need to iterate though @all_bookings and remove those rooms from availible! Maybe generate an array of bookings for a given date from the check_date_for_reservations method? Or have a different method that returns an array of bookings?
       reservations = check_date_for_reservations(start_date, end_date)
       reserved = []
       availible = []
@@ -117,9 +120,35 @@ module Hotel
       return availible
     end # availible_rooms
 
+    def make_block(block_id, start_date, end_date, num_of_rooms)
+
+      availible = availible_rooms(start_date, end_date)
+
+      if start_date > end_date
+        raise BookingError.new("Your checkin day must be before your checkout day! You entered checkin day = #{start_date} and checkout day = #{end_date}")
+      elsif num_of_rooms > 5
+        raise BookingError.new("You can only request a maximum of five rooms per block.")
+      elsif num_of_rooms > availible.length
+        raise BookingError.new("You cannot request that many rooms for your block. There are only #{availible.length} rooms left for that date range.")
+      end # if/elsif
+
+      dates = Hotel::DateRange.new(start_date, end_date).nights_booked
+      block_id = block_id.upcase
+      cost = (num_of_rooms * dates.length * 180.0)
+      rooms = []
+      i = 0
+      num_of_rooms.times do
+        rooms << availible[i]
+        i +=1
+      end # .each
+
+      @all_blocks << Hotel::Block.new(block_id, rooms, dates)
+
+    end #make_block
+
   end # Booking
 end # Hotel
 
 
 # TODO
-  # make new methods for
+# make new methods for
