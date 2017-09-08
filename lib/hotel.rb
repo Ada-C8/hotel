@@ -13,6 +13,16 @@ module Hotel
     def initialize
       @all_rooms = {1 => 200, 2 => 200, 3 => 200, 4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200}
     end
+    #should the all rooms just be in show rooms?
+
+    #As an administrator, I can access the list of all of the rooms in the hotel
+    def show_rooms
+      room_list = ""
+      @all_rooms.each do |number, cost|
+        room_list += "Room #{number}:\t\t$#{cost}\n"
+      end
+      return room_list
+    end #show rooms
 
     # - As an administrator, I can reserve a room for a given date range
     def self.make_reservation(id, room, day_in, day_out)
@@ -23,19 +33,6 @@ module Hotel
     def self.reservations
       return @@reservations
     end
-    #what will my reservation object look like
-    #in my fictional interface
-    #check whether a room is available on desired dates using reservation list
-    #if available, should instantiate a new instance of reservation using the reservation class
-    #if not available, go to next room and check.
-    #if you reach the end of the list, report that no reservation is possible during that time
-
-    # def self.view_all_reservations
-    #   @@reservations.each do |reservation|
-    #     return reservation.Reservation.view_reservation
-    #   end
-    # end
-
 
     #As an administrator, I can access the list of reservations for a specific date
     def self.find_reservation(date)
@@ -50,22 +47,19 @@ module Hotel
       #list all rooms reserved for that date from reservation list
     end #view_reservations
 
-
-
     # - As an administrator, I can get the total cost for a given reservation
-    def total_cost(reservation)
+    def self.total_cost(reservation_id)
+      @@reservations.each do |reservation|
+        if reservation.id == reservation_id
+          return reservation.total_cost
+        else
+          return "Reservation Not Found"
+        end #end if
+      end #end each
+    end #end total cost
+
       #enter reservation ID number
       #return total cost for that reservation
-    end #total_cost
-
-    # As an administrator, I can access the list of all of the rooms in the hotel
-    # def show_rooms
-    #   room_list = ""
-    #   @all_rooms.each do |number, cost|
-    #     room_list += "Room #{number}:\t$#{cost}\n"
-    #   end
-    #   return room_list
-    # end #show rooms
 
   end #class
 end #module
@@ -73,7 +67,18 @@ binding.pry
 
 # find if rooms is open for a given date range
 # reserve room for that date range
+#what will my reservation object look like
+#in my fictional interface
+#check whether a room is available on desired dates using reservation list
+#if available, should instantiate a new instance of reservation using the reservation class
+#if not available, go to next room and check.
+#if you reach the end of the list, report that no reservation is possible during that time
 
+# def self.view_all_reservations
+#   @@reservations.each do |reservation|
+#     return reservation.Reservation.view_reservation
+#   end
+# end
 
 # def is_avail(room, date)
 #   #put in room number and single date

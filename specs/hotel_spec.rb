@@ -22,7 +22,7 @@ describe "Hotel Class" do
     end #rooms
   end #Instantiation
 
-  describe "Make Reservation" do
+  describe "Make Reservations" do
     it "can create an array to hold reservations" do
       Hotel::Hotel.reservations.must_be_kind_of Array
     end #array
@@ -31,13 +31,13 @@ describe "Hotel Class" do
       a = Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
       a[0].must_be_kind_of Hotel::Reservation
     end #call class
-  end #reservations
+  end #make reservations
 
-  # describe "View Reservation" do
-  #   it "Can return a reservation for a certain date: " do
-  #     a = Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-  #     a.view_reservations.must_
-  #   end
-  #end
+  describe "Find Reservations" do
+    it "Can find and return a single reservation for a specific date: " do
+      Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      Hotel::Hotel.find_reservation("2012/12/12").must_equal ["ID: 2222, Room: 2, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3"]
+    end #find a single reservation for a specific date 
+  end #find reservations
 
 end #admin
