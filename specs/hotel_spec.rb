@@ -65,6 +65,10 @@ describe 'Hotel' do
         @my_hotel.create_block(@check_in, @check_out, 1, 0.70).must_be_instance_of Array
         @my_hotel.blocks.each {|block| block.must_be_instance_of Hotel_System::Block}
       end
+      it 'makes its constituent rooms unavailable' do
+        @my_hotel.create_block(@check_in, @check_out, 1, 0.70).must_be_instance_of Array
+        @my_hotel.blocks[0].rooms.each {|room| room.available?(@check_in, @check_out).must_equal false}
+      end
     end
   end
 end

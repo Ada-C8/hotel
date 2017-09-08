@@ -44,7 +44,9 @@ module Hotel_System
         raise ArgumentError.new("Block of this size not available")
       end
       rooms = blockable_rooms.sample(size)
+      rooms.each {|room| room.reserve(check_in, check_out)}
       @blocks << Hotel_System::Block.new(check_in, check_out, rooms, rate_adjustor)
+
 
     end
   end
