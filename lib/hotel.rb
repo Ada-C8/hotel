@@ -1,5 +1,7 @@
 require_relative 'room'
 require_relative 'reservation'
+require_relative 'daterange'
+require_relative 'block_of_rooms'
 require 'date'
 
 class Hotel
@@ -18,8 +20,21 @@ class Hotel
   end
   
   def reserve_room(room_number, date)
-	current_reservations = @reservations_by_room[room_number]
 	
+	if @rooms_currently_in_block.includes?(room_number)
+		@room_blocks.each do |current_block|
+			current_block.rooms.each do |current_room_in_block|
+				if current_room_in_block == room_number
+					if date.start_date > current_block.start_date && 
+					date.start_date < current_block.end_date
+						raise ArgumentException, "This room is part of a block"
+					end
+				end
+			end
+		end
+	end
+	
+	current_reservations = @reservations_by_room[room_number]
 	current_reservations.each do |i|
 		if date.start_date < i.start_date  
 			#end date happens after the start of an existing reservation
@@ -31,6 +46,8 @@ class Hotel
 			raise ArgumentError, "This room is booked during the dates requested"
 		end
 	end
+	
+	
 	new_reservation = Reservation.new(room_number, date)
 	@reservations_by_room[room_number] << new_reservation
 	
@@ -109,7 +126,6 @@ class Hotel
 	if @room_blocks == []
 		raise ArgumentError, "There are no current room blocks"
 	else
-		
 		@room_blocks.each do |current_block|
 			if current_block.id == block_id
 				if current_block.available_rooms.include?(false)
@@ -117,7 +133,7 @@ class Hotel
 					current_block.room_booked.each do |find_open_room|
 						if find_open_room[index] == false
 							room_number = current_block.available_rooms[index].room_number
-							new_reservation = Reservation.new(room_number, current_block.date)
+							new_reservation = Reservation.new(room_number, current_block.date, 175)
 							find_open_room[index] = true
 						end
 					end
@@ -129,8 +145,9 @@ class Hotel
 	end
   end
   
+  
+  
 end
 
-#date1 = Date.new(2007,1,1)
-#date2 = Date.new(2008,5,2)
-#print (date2 - date1).to_i
+date = DateRange.new(Date.new(2007,1,1), Date.new(2008,5,2))
+
