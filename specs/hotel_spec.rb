@@ -101,10 +101,14 @@ describe 'Hotel' do
         @hotel.make_reservation('2017-10-14', '2017-10-18')
         @hotel.make_reservation('2018-10-14', '2018-10-18')
         rooms = @hotel.find_available_rooms('2017-10-14', '2017-10-18')
-        rooms2 = @hotel.find_available_rooms('2017-11-14', '2017-11-18')
 
         rooms.length.must_equal 18
-        rooms2.length.must_equal 20
+      end
+
+      it 'returns an empty array if no rooms are available' do
+        20.times {@hotel.make_reservation('2017-10-14', '2017-10-18')}
+        rooms = @hotel.find_available_rooms('2017-10-14', '2017-10-18')
+        rooms.must_equal []
       end
 
       it 'will not return rooms in a block' do
@@ -116,11 +120,28 @@ describe 'Hotel' do
         rooms.length.must_equal 14
       end
 
+      it 'returns an empty array if all rooms are in a block' do
+        @hotel.make_block('2017-10-10', '2017-10-16', 20, 20)
+        rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15')
+
+        rooms.must_equal []
+      end
+
       it 'will return rooms in a block when provided block ID' do
         block = @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
         rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15', block.id)
 
         rooms.length.must_equal 5
+      end
+
+      it 'raises an error if passed invalid dates' do
+        proc {
+          @hotel.find_available_rooms(1,2)
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.find_available_rooms('tomorrow','next friday')
+        }.must_raise ArgumentError
       end
 
       it 'raises an error if block is not found' do
