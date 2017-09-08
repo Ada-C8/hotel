@@ -21,9 +21,12 @@ module Tools
 
   # TODO rescue valid_date and positive_integer
 
+  #TODO Validate room
+
 end # Tools module
 
 module ReservationSystem
+
   class Hotel
     include Tools
 
@@ -38,17 +41,17 @@ module ReservationSystem
       end
     end # initialize
 
-    def reserve(check_in, nights)
+    def reserve(check_in, nights, room)
       valid_date?(check_in)
       positive_integer?(nights)
-      @new_reservation = ReservationSystem::Reservation.new(check_in, nights)
+      # TODO validate room is available
+      @new_reservation = ReservationSystem::Reservation.new(check_in, nights, room)
       all_reservations << @new_reservation
       return @new_reservation
     end # reserve
 
     def search_reservations_by_date(date)
       valid_date?(date)
-
       list = Array.new
 
       all_reservations.each do |res|
@@ -59,6 +62,20 @@ module ReservationSystem
 
       return list
     end # search_reservations_by_date
+
+    def search_available_rooms_by_dates(date_array)
+      rooms = hotel.dup
+
+      date_array.each do |date|
+          hotel.each do |room|
+            if room.nights_reserved.include?(date)
+              rooms.delete(room)
+            end
+          end
+      end
+
+      return rooms
+    end # "search_available_rooms_by_dates"
 
   end #Hotel class
 

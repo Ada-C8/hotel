@@ -5,7 +5,8 @@ module ReservationSystem
   class Room
     include Tools
 
-    attr_reader :number, :rate, :nights_reserved
+    attr_reader :number, :rate
+    attr_accessor :nights_reserved
 
     def initialize(number)
       positive_integer?(number)
