@@ -8,5 +8,6 @@ require_relative '../lib/Reservation'
 require_relative '../lib/Room'
 require_relative '../lib/Guest'
 require_relative '../lib/Block'
+require_relative '../lib/BlockReservation'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new

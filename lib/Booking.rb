@@ -34,12 +34,26 @@ module Hotel
     end
 
     ###should this be a Room method
-    def make_reservation(check_in,check_out,room_id, guest_id=nil)
+    def make_reservation(check_in,check_out,room_id, block_id = nil, guest_id=nil)
 
       reservation_id = (@all_reservations.count + 1) #something
-      reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id, guest_id)
 
+      if block_id
+        #TODO: think about whether or not to have a separate block reservation id logic and whether or not to store block reservations in the same place as all reservations AND store them separately, or store them in one place (either all reservations or Block reservations)
+        raise ArgumentError.new("This block doesn't exist") if !(find_block_by_id(block_id))
 
+        block= find_block_by_id(block_id)
+        block_discount = block.discounted_rate
+
+        #TODO: IRON OUT and TEST block reservation constraints: check in and check out MUST be that of the BLOCK check_in/Check_out dates
+        block_check_in = block.check_in.to_s
+        block_check_out= block.check_out.to_s
+        reservation = Hotel::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount, block_id)
+      else
+        reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
+      end
+
+      #TODO: How to incorporate reserve_room logic for Block Reservations
       reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
 
       @all_reservations << reservation
@@ -62,6 +76,24 @@ module Hotel
 
     end
 
+    # def make_block_res(check_in,check_out,room_id, block_id, type = :block, guest_id=nil)
+    #   room= Hotel::Room.find_by_id(room_id)
+    #   block = find_block_by_id(block_id)
+    #
+    #   raise ArgumentError.new("Error: No block matching that ID number") if !(block)
+    #   raise ArgumentError.new("This room isn't included in your block") if !(room.block_id_and_res_dates.keys.include?(block_id))
+    #
+    #   reservation_id = (@all_reservations.count + 1) #something
+    #   reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id,type = :block,guest_id)
+    #
+    #
+    #   reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
+    #
+    #   @all_reservations << reservation
+    #
+    #
+    # end
+
     def find_res_by_date(date_str)
       date_object= Date.parse(date_str)
       reserved_on_date = []
@@ -71,6 +103,16 @@ module Hotel
 
       #self.all.select {|reservation| reservation.room.all_dates.include?(date_object)}
     end
+
+    def find_block_by_id(block_id)
+      @all_blocks.each do |block|
+        return block if block.id == block_id
+      end
+
+      return false
+    end
+
+
 
     # def find_res_by_guest(guest_id)
     # end
