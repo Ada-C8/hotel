@@ -72,15 +72,13 @@ module Hotel
       if block_id == nil
         room_numbers = Room.all.map { |room| room.room_num }
         blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
-        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
-        available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
-        return available_room_numbers.sample(number_of_rooms)
       else
         room_numbers = Block.all.find { |block| block.block_id == block_id }.rooms
-        reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
-        available_room_numbers = room_numbers - reserved_room_numbers
-        return available_room_numbers.sample(number_of_rooms)
+        blocked_room_numbers = []
       end
+      reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
+      available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
+      return available_room_numbers.sample(number_of_rooms)
     end
 
     def collect_instance
