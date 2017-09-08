@@ -1,7 +1,7 @@
 require_relative 'room'
 require_relative 'reservation'
 require_relative 'daterange'
-require_relative 'block_of_rooms'
+require_relative 'block'
 require 'date'
 
 class Hotel
@@ -15,17 +15,17 @@ class Hotel
 	@rooms_currently_in_block = []
 	20.times do |i|
 		@rooms << Room.new(i)
-		@reservations[i] = []
+		@reservations_by_room[i] = []
 	end
   end
   
   def reserve_room(room_number, date)
 	#checks to see if the room in question is a part of a block 
 	##and if the dates conflict
-	if @rooms_currently_in_block.includes?(room_number)
+	if @rooms_currently_in_block.include?(room_number)
 		@room_blocks.each do |current_block|
 			current_block.rooms.each do |current_room_in_block|
-				if current_room_in_block == room_number
+				if current_room_in_block.room_number == room_number
 					if date.start_date > current_block.start_date && 
 					date.start_date < current_block.end_date
 						raise ArgumentException, "This room is part of a block. Change your start date"
@@ -62,39 +62,38 @@ class Hotel
 		
   end
   
+  
   def get_all_rooms
 	return @rooms
   end
   
   def get_open_rooms(date)
-	available_rooms = []
+	open_rooms = []
 	20.times do |i|
-		available_rooms[i] = true
+		open_rooms[i] = true
 	end
 	
 	current_date = date.start_date
 	while current_date < date.end_date do
 		if @reservations_by_date.key?(current_date)
 			current_reservations = @reservations_by_date[current_date]
-			current_reservations.each do  |this_room|
-				available_rooms[this_room.room_number] = false
+			current_reservations.each do  |this_reservation|
+				open_rooms[this_reservation.room_number] = false
 			end
 		end
 		current_date += 1
 	end
 	
-	atleast_one_open_room = 0
-	available_rooms.each do |i|
-		if i == true
-			atleast_one_open_room += 1
+	available_rooms = []
+	index = 0
+	open_rooms.each do |value|
+		if value == true
+			available_rooms << @rooms[index]
 		end
+		index += 1
 	end
 	
-	if atleast_one_open_room == 0
-		raise ArgumentError, "There are no open rooms for the dates in question"
-	end	
-	
-	return available_roooms
+	return available_rooms
   end
   
   def make_new_block(number_of_rooms, date, id)
@@ -114,10 +113,11 @@ class Hotel
 	end
   end
   
-  def check_block_for_availablity
-    @room_blocks.each do |block_of_rooms|
-		block_of_rooms.room_booked.each do |is_room_booked|
-			if is_room_booked == true
+  def check_block_for_availablity(block_id)
+    @room_blocks.each do |block|
+		if block.id == block_id
+		block.room_booked.each do |is_room_booked|
+			if is_room_booked == false
 				return true
 			end
 		end
@@ -153,4 +153,8 @@ class Hotel
 end
 
 date = DateRange.new(Date.new(2007,1,1), Date.new(2008,5,2))
-
+hotel = Hotel.new()
+puts (hotel.get_open_rooms(date)).length
+hotel.reserve_room(1, date)
+puts (hotel.get_open_rooms(date)).length
+hotel.make_new_block(2, date, 1)

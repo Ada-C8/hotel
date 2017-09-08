@@ -1,8 +1,8 @@
 class Reservation
-	attr_reader :room, :start_date, :end_date, :cost
+	attr_reader :room_number, :start_date, :end_date, :cost
 
-	def initialize(room, date, cost=nil)
-		@room = room
+	def initialize(room_number, date, cost=nil)
+		@room_number = room_number
 		@start_date = date.start_date
 		@end_date = date.end_date
 		cost = 0
