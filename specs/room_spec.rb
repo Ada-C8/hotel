@@ -36,16 +36,20 @@ describe 'Room' do
     it 'returns the room number to the rooms_available array when a guest checks out' do
       @puppy_room.assign_room # room 1
       @kitten_room.assign_room # room 2
-      @bat_room.assign_room # room 3
+      @puppy_room.check_out_of_room # return 1 to array
 
-      @puppy_room.check_out_of_room
-      @kitten_room.check_out_of_room
-      @bat_room.check_out_of_room
-      Hotel::Room.rooms_available.must_equal [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 1, 2, 3]
+      Hotel::Room.rooms_available.must_include 1
     end # end test
 
-    # it 'will sort the rooms_available array each time a room is assigned so the remaining rooms are in order (this will help when consecutive rooms need to be booked together)' do
+    it 'will sort the rooms_available array each time a room is assigned so the remaining rooms are in order (this will help when consecutive rooms need to be booked together)' do
+      @puppy_room.assign_room # room 1
+      @kitten_room.assign_room # room 2
+      @bat_room.assign_room # room 3
+      @puppy_room.check_out_of_room # room 1
+      @kitten_room.check_out_of_room # room 2
+      @bat_room.check_out_of_room # room 3
 
-    # end # end test
+      Hotel::Room.rooms_available.must_equal [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    end # end test
   end # end #check_out_of_room
 end # end all Room tests

@@ -30,7 +30,7 @@ module Hotel
 
     def check_out_of_room
       @@rooms_available << @room_number
-      return @@rooms_available
+      return @@rooms_available.sort! # sort the rooms back into numerical order as they are returned to the array
     end # end #check_out_of_room
 
     def is_available?(checkin, check_out)
