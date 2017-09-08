@@ -65,7 +65,7 @@ describe "Hotel" do
 
     it "Raise an error if asked to reserve a room that is not available" do
       reservation = @two_room_hotel.make_reservation(@date_range, 1)
-      proc { @two_room_hotel.make_reservation(@date_range, 1) }.must_raise ArgumentError
+      proc { @two_room_hotel.make_reservation(@date_range, 1) }.must_raise BookingSystem::NoRoomAvailableError
     end
   end
 

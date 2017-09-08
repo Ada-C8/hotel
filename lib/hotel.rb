@@ -63,7 +63,7 @@ module BookingSystem
 
     def make_reservation(date_range, room)
       if !list_of_available_rooms(date_range).include?(room)
-        raise ArgumentError.new
+        raise NoRoomAvailableError.new("Requested room is unavailable")
       end
       cost = @rooms[room]
       new_reservation = Reservation.new(date_range, room, cost)
