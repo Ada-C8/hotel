@@ -4,7 +4,10 @@ describe "Block" do
 
   before do
     avail_block_rooms = [1,2,3,4,5]
-    @booking = BookingSystem::Block.new("Bob", '2001-02-03', '2001-02-05', avail_block_rooms )
+    @booking = BookingSystem::Block.new("Bob", '2001-02-03', '2001-02-05', avail_block_rooms)
+
+    @rooms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    @hotel = BookingSystem::Hotel.new
   end
 
   describe "#initalize" do
@@ -42,6 +45,10 @@ describe "Block" do
 
   describe "#block_total" do
     it "should return the discounted total of the rooms that were reserved within the block" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_room_in_block("Bob", 2)
+      @hotel.block_reservations[0].reserve_block_cost
+      @hotel.block_reservations[0].block_total.must_equal 600
     end
   end
 
