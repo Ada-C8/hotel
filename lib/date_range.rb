@@ -25,8 +25,6 @@ module DateRange
     false
   end
 
-  private
-
   def self.validate(input)
     return input if input.class == Date
     Date.parse(input)
