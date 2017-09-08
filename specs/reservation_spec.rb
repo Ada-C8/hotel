@@ -34,21 +34,25 @@ describe "My_Hotel::Reservation" do
 
   end
   describe "set_cost" do
-    it "calculates the cost of a reservation" do
+    it "calculates the cost of a reservation without a discount" do
       @holiday.assign_room(@rooms_avail)
       @holiday.set_cost.must_equal 1200 #nominal
       one_night =  My_Hotel::Reservation.new(@feb1, @feb1)
       one_night.assign_room(@rooms_avail)
       one_night.set_cost.must_equal 200
+    end
 
+    it "calculates the cost of a reservation with a discount" do
+      @holiday.assign_room(@rooms_avail)
+      @holiday.set_cost(0.5).must_equal 600 #nominal
     end
   end
 
   describe "set_reservation_id" do
-    it "creates a reservation id" do
-      new_reservation = My_Hotel::Reservation.new(@feb1, @feb6)
-      new_reservation.set_reservation_id
-      new_reservation.reservation_id.must_be_kind_of String
+    it "creates a 6 number reservation_id string" do
+      @holiday.set_reservation_id
+      @holiday.reservation_id.must_be_kind_of String
+      @holiday.reservation_id.length.must_equal 6
     end
   end
 end

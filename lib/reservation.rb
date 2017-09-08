@@ -6,7 +6,7 @@ module My_Hotel
     attr_reader :first_night, :last_night, :reservation_id, :room_number, :nights_booked, :cost
 
 
-    def initialize(first_night, last_night)
+    def initialize(first_night, last_night=first_night)
       @first_night = first_night
       @last_night = last_night
       @reservation_id = nil
@@ -14,7 +14,7 @@ module My_Hotel
       @room_number = nil
       @nights_booked = My_Hotel::Date_Range.new(first_night,last_night)
       @block_id = nil
-
+      #@contact_info #could add contact_info
     end
 
     def assign_room(rooms_avail)
@@ -25,15 +25,10 @@ module My_Hotel
       end
     end
 
-    def set_cost
+    def set_cost(discount=1)
       number_of_nights = @nights_booked.nights.to_a.length
-      if number_of_nights <= 0
-        return @cost = 0
-      else
-        cost_per_night = ROOMS[@room_number]
-        @cost = number_of_nights * cost_per_night
-      end
-      @cost
+      cost_per_night = ROOMS[@room_number]
+      @cost = number_of_nights * cost_per_night * discount
     end
 
     def set_reservation_id
@@ -46,8 +41,3 @@ module My_Hotel
 
   end
 end
-# h = My_Hotel::Hotel.new
-# a = h.make_reservation([2017,1,2], [2017,1,5])
-# b = h.make_reservation([2017,2,2], [2017,2,5])
-# puts a.reservation_id
-# puts b.reservation_id
