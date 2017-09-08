@@ -13,11 +13,10 @@ module Hotel
       @check_out = DateRange.check_out(day_out)#day_out
       @date_range = DateRange.create_range
     end
-
+    
     def view_reservation
-      list = ""
-      list += "ID: #{@id}, Room: #{@room}, Check in: #{@check_in}, Check Out: #{@check_out}, Total Nights: #{@date_range.length - 1}"
-      return list
+      return "ID: #{@id}, Room: #{@room}, Check in: #{@check_in}, Check Out: #{@check_out}, Total Nights: #{@date_range.length - 1}"
+
     end
   end #class
 end #module

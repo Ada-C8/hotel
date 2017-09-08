@@ -31,25 +31,24 @@ module Hotel
     #if you reach the end of the list, report that no reservation is possible during that time
 
     # def self.view_all_reservations
-    #
     #   @@reservations.each do |reservation|
-    #     puts reservation
+    #     return reservation.Reservation.view_reservation
     #   end
-    #end
+    # end
 
 
-    # - As an administrator, I can access the list of reservations for a specific date
-    # def self.find_reservation(date)
-    #   date = Date.parse(date)
-    #   reservation_list = []
-    #   @@reservations.each do |reservation|
-    #     if reservation.date_range.include?(date)
-    #       reservation_list << reservation
-    #     end
-    #     return reservation_list
-    #   end
-    #   #list all rooms reserved for that date from reservation list
-    # end #view_reservations
+    #As an administrator, I can access the list of reservations for a specific date
+    def self.find_reservation(date)
+      date = Date.parse(date)
+      reservation_list = []
+      @@reservations.each do |reservation|
+        if reservation.date_range.include?(date)
+          reservation_list << reservation.view_reservation
+        end
+        return reservation_list
+      end
+      #list all rooms reserved for that date from reservation list
+    end #view_reservations
 
 
 
@@ -70,7 +69,7 @@ module Hotel
 
   end #class
 end #module
-#binding.pry
+binding.pry
 
 # find if rooms is open for a given date range
 # reserve room for that date range
