@@ -17,6 +17,10 @@ describe 'Room' do
       proc {my_room.reserve(check_out, check_in)}.must_raise ArgumentError
     end
 
+    it "raises an Argument Error if the rate_adjustor argument is non-numeric" do
+      proc {Hotel_System::Room.new(1, "five")}.must_raise ArgumentError
+    end
+
     it "creates a new reservation" do
       my_room.reserve(check_in, check_out).must_be_instance_of Hotel_System::Reservation
     end
@@ -36,6 +40,17 @@ describe 'Room' do
       my_room.reserve(check_in, check_out)
       my_room.reserve(check_out, later_date).must_be_instance_of Hotel_System::Reservation
     end
+
+    it "changes a reservation's cost if room has a rate_adjustor" do
+      fancy_room = Hotel_System::Room.new(2, 2)
+      expensive_res = fancy_room.reserve(check_in, check_out)
+      expensive_res.cost.must_equal 800
+
+      busted_room = Hotel_System::Room.new(3, 0.5)
+      cheap_res = busted_room.reserve(check_in, check_out)
+      cheap_res.cost.must_equal 200
+
+    end
   end
 
   describe '#available' do
@@ -47,7 +62,7 @@ describe 'Room' do
     it "returns true if Date argument does not overlap with existing reservation" do
       my_room.available?(date, later_date).must_equal true
     end
-    
+
     it 'returns false if Date argument does overlap with existing reservation' do
       my_room.reserve(date, later_date)
       my_room.available?(later_date, even_later_date).must_equal true

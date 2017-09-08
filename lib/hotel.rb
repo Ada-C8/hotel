@@ -51,7 +51,6 @@ module Hotel_System
       rooms.each {|room| room.reserve(check_in, check_out)}
       @blocks << Hotel_System::Block.new(check_in, check_out, rooms, rate_adjustor)
 
-
     end
   end
 end
