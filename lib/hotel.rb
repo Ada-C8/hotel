@@ -6,6 +6,9 @@ require_relative 'block'
 module BookingSystem
   class Hotel
 
+    COST = 200
+    BLOCK_DISCOUNT = 10
+
     attr_reader :rooms, :all_reservations
 
     def initialize(number_of_rooms)
@@ -57,7 +60,7 @@ module BookingSystem
       return list_of_available_rooms(date_range)[0] #room number
     end #end of method
 
-    def make_reservation(date_range)
+    def make_reservation(date_range) #, stratgey = :cheapest
       room = find_room(date_range)
       if room == nil
         raise NoRoomAvailableError.new("No room is available on given dates")

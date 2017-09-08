@@ -1,7 +1,6 @@
 module BookingSystem
  class Block
 
-   DISCOUNT = 0.9
    @@id_count = 1
 
    attr_reader :date_range, :rooms, :id, :room_cost
@@ -11,7 +10,7 @@ module BookingSystem
      @@id_count += 1
      @date_range = date_range
      @rooms = rooms
-     @room_cost = (Reservation::COST * DISCOUNT).to_i
+     @room_cost = (Hotel::COST * (1 - Hotel::BLOCK_DISCOUNT / 100.0)).round(2)
 
    end #end of initialize
 

@@ -4,17 +4,18 @@ module BookingSystem
   class Reservation
 
     @@id_count = 1
-    COST = 200
+
+    # price = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150, 6 => 170, 7 => 180, 8 => 150, 9 => 190, 10 => 200, 11 => 220, 12 => 135, 13 => 200, 14 => 190, 15 => 220, 16 => 200, 17 => 220, 18 => 250, 19 => 200, 20 => 250}
 
     attr_reader :id, :date_range, :room, :total_cost
 
-    def initialize(date_range, room, cost=COST)
+    def initialize(date_range, room, cost=Hotel::COST)
       @id = @@id_count
       @@id_count += 1
       @date_range = date_range
       @room = room
       @cost = cost
-      @total_cost = cost * date_range.dates_within_range.length
+      @total_cost = (cost * date_range.dates_within_range.length).to_f
 
     end #end of initialize
 

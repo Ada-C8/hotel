@@ -17,9 +17,11 @@ describe "Reservation" do
       @new_reservation.date_range.must_equal @date_range
     end
     it "Total cost should be an integer" do
-      @new_reservation.total_cost.must_be_kind_of Integer
+      # @new_reservation.total_cost.must_be_kind_of Integer
+      @new_reservation.total_cost.must_be_kind_of Float
     end
     it "Returns the rigth total cost" do
+      # @new_reservation.total_cost.must_equal 400
       @new_reservation.total_cost.must_equal 400
     end
     end
