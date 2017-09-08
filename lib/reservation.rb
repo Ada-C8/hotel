@@ -24,9 +24,9 @@ module Hotel
     end # end #reserve_dates
 
     def finalize_reservation
-        booking = "Name: #{@guest_name}\nCheck In: #{@check_in}\nCheck Out: #{@check_out}\nRoom Number: #{@room}\nTotal Cost: $#{COST * @dates.length_of_stay}"
+        booking = "Name: #{@guest_name}\nCheck In: #{@check_in}\nCheck Out: #{@check_out}\nRoom Number: #{@room.assign_room}\nTotal Cost: $#{(COST * @dates.length_of_stay).to_i}"
 
-        return puts booking
+        return booking
     end # end #finalize_reservation
 
     def list_by_date
