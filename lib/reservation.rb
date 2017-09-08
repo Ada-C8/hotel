@@ -1,5 +1,6 @@
 require 'pry'
 require_relative 'date_range'
+#require_relative 'reservation_list'
 
 module Hotel
   class Reservation
@@ -19,9 +20,29 @@ module Hotel
     def view_reservation
       return "ID: #{@id}, Room: #{@room}, Check in: #{@check_in}, Check Out: #{@check_out}, Total Nights: #{@length_of_stay}, Total Cost: #{@total_cost}"
     end
-
   end #class
+
+
+  # An InstructorTeam represents a collection of instructors
+
 end #module
+
+# liberal_arts_dept = InstructorTeam.new
+# 6.times do |i|
+#   liberal_arts_dept.add
+# end
+#
+# puts "#{liberal_arts_dept.reservations.length} liberal arts teachers"
+# # => 6 liberal arts teachers
+#
+# science_dept = InstructorTeam.new
+# 10.times do
+#   science_dept.add
+# end
+#
+# puts "#{science_dept.instructors.length} science teachers"
+# # => 10 science teachers
+# puts "#{science_dept.instructors.inspect}"
 #binding.pry
 #maybe checkin and checkout are entered from daterange
 #total cost of res.$

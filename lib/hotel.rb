@@ -1,6 +1,7 @@
 require 'pry'
 require 'date'
 require_relative 'reservation'
+require_relative 'reservation_list'
 require_relative 'date_range'
 
 module Hotel
@@ -15,47 +16,48 @@ module Hotel
     end
 
     #As an administrator, I can access the list of all of the rooms in the hotel
-    def show_rooms
-      room_list = ""
-      @all_rooms.each do |number, cost|
-        room_list += "Room #{number}:\t\t$#{cost}\n"
-      end
-      return room_list
-    end #show rooms
+    # def show_rooms
+    #   room_list = ""
+    #   @all_rooms.each do |number, cost|
+    #     room_list += "Room #{number}:\t\t$#{cost}\n"
+    #   end
+    #   return room_list
+    # end #show rooms
 
     # - As an administrator, I can reserve a room for a given date range
     def self.make_reservation(id, room, day_in, day_out)
-      @@reservations << Reservation.new(id, room, day_in, day_out)
-      return @@reservations
+      ReservationList.add(id, room, day_in, day_out)
+      #@@reservations << Reservation.new(id, room, day_in, day_out)
+      return ReservationList.reservations
     end #make_reservation
 
-    def self.reservations
-      return @@reservations
-    end
+    # def self.reservations
+    #   return @@reservations
+    # end
 
     #As an administrator, I can access the list of reservations for a specific date
-    def self.find_reservation(date)
-      date = Date.parse(date)
-      reservation_list = []
-      @@reservations.each do |reservation|
-        if reservation.date_range.include?(date)
-          reservation_list << reservation.view_reservation
-        end
-        return reservation_list
-      end
-      #list all rooms reserved for that date from reservation list
-    end #view_reservations
-    #As an administrator, I can reserve an available room for a given date range
-    def self.find_available_room(day_in, day_out)
-      dates = DateRange.create_range(day_in, day_out) #should create an array
-      occupied_rooms = []
-      available_rooms = []
-
-      dates.each do |date|
-        occupied_rooms << find_reservation(date)
-      end
-      occupied_rooms = occupied_rooms.compact
-      return occupied_rooms
+    # def self.find_reservation(date)
+    #   date = Date.parse(date)
+    #   reservation_list = []
+    #   @@reservations.each do |reservation|
+    #     if reservation.date_range.include?(date)
+    #       reservation_list << reservation.view_reservation
+    #     end
+    #     return reservation_list
+    #   end
+    #   #list all rooms reserved for that date from reservation list
+    # end #view_reservations
+    # #As an administrator, I can reserve an available room for a given date range
+    # def self.find_available_room(day_in, day_out)
+    #   dates = DateRange.create_range(day_in, day_out) #should create an array
+    #   occupied_rooms = []
+    #   available_rooms = []
+    #
+    #   dates.each do |date|
+    #     occupied_rooms << find_reservation(date)
+    #   end
+    #   occupied_rooms = occupied_rooms.compact
+    #   return occupied_rooms
       # @@reservations.each do |reservation|
       #   if reservation.date_range.include?(date)
       #     occupied_rooms << reservation.id
@@ -64,17 +66,17 @@ module Hotel
       #   end #reservations each
       # end #dates each
       #list all rooms reserved for that date from reservation list
-    end #find room
-    # - As an administrator, I can get the total cost for a given reservation
-    def self.total_cost(reservation_id)
-      @@reservations.each do |reservation|
-        if reservation.id == reservation_id
-          return reservation.total_cost
-        else
-          return "Reservation Not Found"
-        end #end if
-      end #end each
-    end #end total cost
+    # end #find room
+    # # - As an administrator, I can get the total cost for a given reservation
+    # def self.total_cost(reservation_id)
+    #   @@reservations.each do |reservation|
+    #     if reservation.id == reservation_id
+    #       return reservation.total_cost
+    #     else
+    #       return "Reservation Not Found"
+    #     end #end if
+    #   end #end each
+    # end #end total cost
 
     #As an administrator, I can view a list of rooms that are not reserved for a given date range
     # =begin
@@ -115,4 +117,3 @@ binding.pry
 #view_booked(Date)
 #reservations list
 #is_avail? room date
-#make_reservation

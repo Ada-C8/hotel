@@ -21,11 +21,12 @@ describe "Hotel Class" do
     end #rooms
   end #Instantiation
 
-  # describe "Access Room List" do
-  #   it "Can show a list of all rooms in the hotel" do
-  #     @hotel.
-  #   end
-  # end #Room List
+  describe "Access Room List" do
+    # it "Can show a list of all rooms in the hotel" do
+    #   @hotel.show_roo
+    # end
+
+  end #Room List
 
   describe "Make Reservations" do
     it "can create an array to hold reservations" do
