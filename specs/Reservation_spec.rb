@@ -6,13 +6,13 @@ describe "Hotel::Reservation class" do
       proc {Hotel::Reservation.new}.must_raise ArgumentError
       proc {Hotel::Reservation.new("Jim Bob", "2018-07-01",5)}.must_raise ArgumentError
 
-      new_res = Hotel::Reservation.new("July 1", "2018-07-03", 5, "Jim Bob")
+      new_res = Hotel::Reservation.new("July 1", "2018-07-03", 5, 14, "Jim Bob")
 
       new_res.must_be_instance_of Hotel::Reservation
     end
 
     it "creates a Reservation instance that allows us to read the id, guest, check-in date, check-out date, and room " do
-      read_res = Hotel::Reservation.new("2018-07-01", "2018-07-03", 5, "Dale Cooper")
+      read_res = Hotel::Reservation.new("2018-07-01", "2018-07-03", 5,100, "Dale Cooper")
 
       read_res.must_be_instance_of Hotel::Reservation
       [read_res.check_in, read_res.check_out].each do |date|
@@ -21,7 +21,7 @@ describe "Hotel::Reservation class" do
 
       read_res.check_in.day.must_equal 1
       read_res.check_out.day.must_equal 3
-
+      read_res.id.must_equal 100
       read_res.room.id.must_equal 5
       read_res.guest.must_equal "Dale Cooper"
     end
