@@ -22,11 +22,16 @@ module Booking
       end
     end
 
-    # checkin = Date.new(2017, 01, 01)
-    # checkout = checkin + 3
     def number_of_nights
       return (@checkout - @checkin)
     end
+
+    def overlaps?(other_chekin, other_checkout)
+      # if @checkin - other_checkout) * (other_chekin - @checkout) >= 0
+      if @checkout >= other_chekin || @checkin <= other_checkout
+        return true
+    end
+
 
   end
 end

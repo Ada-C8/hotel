@@ -63,5 +63,11 @@ describe "Hotel" do
       result.must_be_kind_of Array
       result.length.must_equal 0
     end
+
+    # describe "reserved_rooms_for_date_range method" do
+    #   it "should return list of rooms that are not reserved for a given date range" do
+    #
+      # end
+    # end
   end
 end
