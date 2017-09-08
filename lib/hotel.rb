@@ -1,3 +1,5 @@
+require_relative 'reservation'
+
 module Hotel
 
   class Hotel
@@ -15,6 +17,11 @@ module Hotel
       @price = price
       @reservation_collection = []
     end #initialize
+
+    def make_reservation
+      @reservation = Hotel::Reservation.new(check_in, check_out, room_num)
+      @reservation_collection << @reservation
+    end
 
     # def list_of_rooms
     #   @list_of_rooms.each do |room|

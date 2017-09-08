@@ -1,11 +1,12 @@
 require_relative 'date_range'#take note this needs to be included at the top
 require 'pry'
+require 'Date'
 
 module Hotel
 
   class Reservation
 
-    attr_reader :check_in, :check_out, :date_range, :room_num, :cost, :reservation_array, :num_nights
+    attr_reader :check_in, :check_out, :date_range, :room_num, :cost, :reservation_array
 
     def initialize(check_in, check_out, room_num, cost = 200)
       @reservation_array = []
@@ -19,7 +20,8 @@ module Hotel
       @cost = cost
       @reservation_array << @cost
 
-      # @reservation_collection << @reservation_array
+
+
     end #initialize
 
     def total_cost
@@ -31,3 +33,6 @@ module Hotel
 
 
 end #module
+
+# hotel = Hotel::Reservation.new('sept 9 2016', 'sept 9 2017', 18)
+# puts hotel.date_range.check_out
