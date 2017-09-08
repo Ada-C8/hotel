@@ -20,7 +20,10 @@ describe "HotelClass" do
   end
 
   describe "Reserve_room method" do
-
+    it "Responds to Hotel::Reservation" do
+      @hotel_test.reserve_room("2017-9-12", "2017-9-15")
+      @hotel_test.reservations[0].must_be_instance_of Hotel::Reservation
+    end
   end
   describe "Access_reservations method" do
 
