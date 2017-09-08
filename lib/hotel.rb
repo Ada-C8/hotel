@@ -100,7 +100,7 @@ class Hotel
 	available_rooms = get_open_rooms(date)
 	if number_of_rooms > 5
 		raise ArgumentException, "Room blocks must be 5 rooms or less"
-	elsif number_of_rooms > available_rooms 
+	elsif number_of_rooms > available_rooms.length
 		raise ArgumentException, "There are only #{available_rooms.length} available for the dates selected"
 	else
 		rooms = []
@@ -116,12 +116,14 @@ class Hotel
   def check_block_for_availablity(block_id)
     @room_blocks.each do |block|
 		if block.id == block_id
-		block.room_booked.each do |is_room_booked|
-			if is_room_booked == false
-				return true
+			block.room_booked.each do |is_room_booked|
+				if is_room_booked == false
+					return true
+				end
 			end
 		end
 	end
+	
 	return false
   end
   
@@ -131,15 +133,9 @@ class Hotel
 	else
 		@room_blocks.each do |current_block|
 			if current_block.id == block_id
-				if current_block.available_rooms.include?(false)
-					index = 0
-					current_block.room_booked.each do |find_open_room|
-						if find_open_room[index] == false
-							room_number = current_block.available_rooms[index].room_number
-							new_reservation = Reservation.new(room_number, current_block.date, 175)
-							find_open_room[index] = true
-						end
-					end
+				if check_block_for_availablity(block_id)
+					room = get_open_room_from_block(current_block)
+					new_reservation = Reservation.new(room, current_block.date, 175)
 				else
 					puts "There are no rooms avaiable for this block"
 				end
@@ -148,13 +144,28 @@ class Hotel
 	end
   end
   
+  def get_open_room_from_block(block)
+	rooms = block.room_booked
+	rooms.each_with_index do |value, index|
+		if value == false
+			block.room_booked[index] = true
+			return block.available_rooms[index]
+		end
+	end
+  end
   
-  
+  private :get_open_room_from_block
 end
 
-date = DateRange.new(Date.new(2007,1,1), Date.new(2008,5,2))
+date = DateRange.new(Date.new(2008,1,1), Date.new(2007,5,2))
 hotel = Hotel.new()
 puts (hotel.get_open_rooms(date)).length
 hotel.reserve_room(1, date)
 puts (hotel.get_open_rooms(date)).length
 hotel.make_new_block(2, date, 1)
+puts "###"
+hotel.reserve_room_from_block(1)
+puts "###"
+hotel.reserve_room_from_block(1)
+puts "###"
+hotel.reserve_room_from_block(1)

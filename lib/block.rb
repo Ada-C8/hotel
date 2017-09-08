@@ -1,6 +1,6 @@
 require_relative 'room'
 class Block_Of_Rooms < Room
-	attr_reader :rooms, :date, :room_booked, :id
+	attr_reader :available_rooms, :date, :room_booked, :id
 	
 	def initialize(rooms, date, id)
 		@available_rooms = rooms
