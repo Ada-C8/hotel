@@ -10,9 +10,8 @@ describe "class Admin" do
       admin_1.all_rooms.length.must_equal 20
       admin_1.reservations_list.must_be_instance_of Array
       admin_1.must_be_instance_of Hotel::Admin
-      admin_1.block_list.must_be_instance_of Hash
+      admin_1.block_list.must_be_instance_of Array
     end
   end
-
 
 end#end describe Admin
