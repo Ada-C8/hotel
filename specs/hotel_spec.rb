@@ -200,3 +200,5 @@ describe 'Hotel' do
 end
 
 # - As an administrator, I can check whether a given block has any rooms available
+
+# TODO: lots and lots of edge case testing
