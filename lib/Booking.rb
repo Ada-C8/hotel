@@ -3,10 +3,12 @@ require 'date'
 require 'pry'
 require_relative 'Reservation'
 require_relative 'Room'
+require_relative 'Block'
 
 #TODO 09/07/2017:Design logic: Rooms have reservations, have dates, BUT CURRENTLY, Rooms store reservations and all dates on which they are reserved, and that is used to check quickly what rooms are available.
 #Rooms also store a hash of Reservation id keys, with their corresponding dates as values, which seems superfluous. RECONSIDER THIS DESIGN. Should Rooms hold Reservation objects only? Reservation objects and dates reserved? maybe just reservation ids and dates? Maybe just reservation ids and helper method that will retrieve the reservation as needed? Think through
 
+## THINK THROUGH: Does a Room create a Reservation based on availability vs. does a Reservation, once created, reserve a room?
 
 module Hotel
   # NUMBER_OF_ROOMS = 20  ### might not want to use constant, especially if we have subclasses of rooms (by type), and each room subclass might have a different number. may best be a constant defined by class/subclass
@@ -20,6 +22,7 @@ module Hotel
 
     end
 
+    ####should this be a Room, self.all method
     def available_rooms(check_in,check_out)
       #check_in and #check_out are strings
       #TODO: below
@@ -29,9 +32,23 @@ module Hotel
       @all_rooms.select {|room| room.available_all_days?(check_in, check_out)}
     end
 
+    ###should this be a Room method
     def make_reservation(check_in,check_out,room_id, guest_id=nil)
 
       reservation = Hotel::Reservation.new(check_in,check_out,room_id, guest_id)
+      reservation.id = (@all_reservations.count + 1) #something
+
+      reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
+
+      @all_reservations << reservation
+
+    end
+
+    def make_block(check_in,check_out,room_ids,discounted_rate,block_id)
+
+      raise ArgumentError.new("Number of rooms in a block must be 5 or under") if room_ids.count > 5
+
+      reservation = Hotel::Block.new(check_in,check_out,room_id, guest_id)
       reservation.id += 1 #something
 
       reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)

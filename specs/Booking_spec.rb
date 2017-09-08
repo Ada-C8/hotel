@@ -39,6 +39,25 @@ describe "BookingProgram" do
     end
   end #end find_res_by_date
 
+  describe "make reservation" do
+    it "reserves a room and makes a reservation object " do
+      new_hotel =  Hotel::BookingProgram.new
+
+      new_hotel.make_reservation("2018-03-14", "2018-03-16", 3, 1)
+
+      new_reservation = new_hotel.all_reservations[0]
+
+
+
+      new_reservation.must_be_instance_of Hotel::Reservation
+      new_reservation.id.must_equal 1
+      (Date.parse("2018-03-14")...Date.parse("2018-03-16")).to_a.each do |date|
+        new_reservation.room.all_dates.must_include date
+      end 
+
+    end
+  end
+
 
   describe "available_rooms" do
     before do
