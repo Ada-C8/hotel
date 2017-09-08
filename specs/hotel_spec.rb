@@ -21,6 +21,12 @@ describe "My_Hotel::Hotel" do
     end
   end
 
+  describe "display_rooms" do
+    it "list of all of the rooms in the hotel" do
+      @ritz.display_rooms.must_be_kind_of Array
+    end
+  end
+
   describe "make_reservation" do
     it "can make a multi-night reservation" do
       @ritz.must_be_kind_of My_Hotel::Hotel
@@ -104,36 +110,62 @@ describe "My_Hotel::Hotel" do
     end
   end
 
-  describe "find unreserved rooms by date" do
-    it "returns an hash" do
-      nights = (@feb1 .. @feb5)
-      free_rooms = @ritz.find_unreserved_rooms(nights)
-      free_rooms.must_be_kind_of Hash
-      free_rooms.length.must_equal 20
-    end
+  describe "make_block" do
+    it "can make a block of rooms with the same block_id" do
+    new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
+    new_block.must_be_kind_of My_Hotel::Block
+    new_block.block_id.must_be_kind_of String
+  end
+end
 
-    it "returns a hash of the available rooms" do
-      index = 1
-      20.times do
-        @ritz.make_reservation(@feb1, @feb5)
-        free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
-        free_rooms.length.must_equal 20-index
-        index += 1
-      end
-    end
 
-    it "if there are no available rooms it returns an empty hash" do
-      index = 1
-      20.times do
-        @ritz.make_reservation(@feb1, @feb5)
-        free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
-        free_rooms.length.must_equal 20-index
-        index += 1
-      end
-      @ritz.find_unreserved_rooms(@feb1..@feb5).must_be_kind_of Hash
-      @ritz.find_unreserved_rooms(@feb1..@feb5).length.must_equal 0
+# describe "find_by_block" do
+#   it "given a reservation id, it returns that reservation" do
+#     first = @ritz.make_block_reservation(@feb1, @feb5)
+#     second = @ritz.make_block_reservation(@feb3,@may6)
+#     first.reservation_id
+#     @ritz.find_by_block_id(first.block_id).must_equal first
+#     @ritz.find_by_reservation_id(second.block_id).must_equal second
+#   end
+#
+#   it "given a reservation id, it returns nil if that reservation does not exist" do
+#     @ritz.find_by_block_id(5).must_be_nil
+#   end
+# end
+
+
+
+
+describe "find unreserved rooms by date" do
+  it "returns an hash" do
+    nights = (@feb1 .. @feb5)
+    free_rooms = @ritz.find_unreserved_rooms(nights)
+    free_rooms.must_be_kind_of Hash
+    free_rooms.length.must_equal 20
+  end
+
+  it "returns a hash of the available rooms" do
+    index = 1
+    20.times do
+      @ritz.make_reservation(@feb1, @feb5)
+      free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
+      free_rooms.length.must_equal 20-index
+      index += 1
     end
   end
+
+  it "if there are no available rooms it returns an empty hash" do
+    index = 1
+    20.times do
+      @ritz.make_reservation(@feb1, @feb5)
+      free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
+      free_rooms.length.must_equal 20-index
+      index += 1
+    end
+    @ritz.find_unreserved_rooms(@feb1..@feb5).must_be_kind_of Hash
+    @ritz.find_unreserved_rooms(@feb1..@feb5).length.must_equal 0
+  end
+end
 end
 
 
@@ -142,10 +174,6 @@ end
 
 
 
-# describe "display_rooms"
-# it "must puts out a list of all the rooms" do
-#   #TODO: Test
-# end
 #
 #
 # describe "display_reservations" do

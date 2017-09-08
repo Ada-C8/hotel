@@ -28,14 +28,11 @@ module My_Hotel
     def initialize
       @rooms = ROOMS
       @all_reservations = []
+      @all_blocks =[]
     end
 
     def display_rooms
-      index = 1
-      rooms.each do |room, price|
-        puts "Room Number #{index}: $#{price} per night."
-        index += 1
-      end
+      ROOMS.keys
     end
 
     def make_reservation(first_night, last_night)
@@ -51,6 +48,21 @@ module My_Hotel
       return new_reservation
     end
 
+    def make_block(first_night, last_night, array_of_rooms, discount)
+      new_block = My_Hotel::Block.new(first_night, last_night, array_of_rooms, discount)
+      #rooms_avail = find_unreserved_rooms(first_night..last_night)
+      #new_block.assign_room(rooms_avail)
+      #remove those blocks from available rooms
+      # new_block.set_cost
+      new_block.set_block_id
+      while unique_id?(new_block) == false
+        new_reservation.set_block_id
+      end
+      @all_blocks << new_block
+      new_block
+    end
+
+
     def unique_id?(new_reservation)
       if @all_reservations.length != 0
         @all_reservations.each do |one_reservation|
@@ -63,15 +75,6 @@ module My_Hotel
       end
       return true
     end
-
-    # def set_reservation_id(reservation)
-    #   new_reservation_id = ""
-    #   6.times do
-    #     new_reservation_id = new_reservation_id + (rand(9)).to_s
-    #   end
-    #   reservation.reservation_id = new_reservation_id
-    #   #TODO: make sure id is unique
-    # end
 
     #given a range of nights, it will find rooms that are available for every night in the range.
     #if no room is available for the whole range, returns an empty hash
@@ -115,6 +118,15 @@ module My_Hotel
       return nil
     end
 
+    def find_by_block_id(block_id)
+      @all_reservations.each do |reservation|
+        if reservation.block_id == block_id
+          return reservation
+        end
+      end
+      return nil
+    end
+
     #given an array [year,month,day], it returns all the reservations on that day.
     #if there are no reservations on that day, returns an empty array
     def find_reservations_by_date(date)
@@ -128,60 +140,7 @@ module My_Hotel
     end
 
 
-
-    # if @list_of_reservations.length  == 0 #if there are no reservations make any random reservation_id
-    #   return 5.times do reservation_id << rand(9)
-    #   end
-    # end
-    #
-    # unique = false
-    # while unique == false #while reservation_id is not unique
-    #   unique = true
-    #   5.times do reservation_id << rand(9) #make new reservation_id
-    #     @list_of_reservations.each do |reservation| #check if unique
-    #       if reservation.reservation_id == reservation_id
-    #         unique = false
-    #       end
-    #     end
-    #   end
-    # end
-    # reservation_id
-
-    #def make_block
-    #define a block
-    # make a random_id_number for block.
-    #end
-
-    #def rooms_available_block(block_id)
-    #shows if any rooms in the block are available
-    # end
-
   end
 end
 
-# #
-# hotel_california= My_Hotel::Hotel.new
-# first_night = Date.civil(2017,2,1)
-# last_night = Date.civil(2017,2,5)
-# a = hotel_california.make_reservation(first_night, last_night)
-# first_night = Date.civil(2017,2,3)
-# last_night = Date.civil(2017,5,6)
-# b = hotel_california.make_reservation(first_night,last_night)
-# first_night = Date.civil(2017,4,3)
-# last_night = Date.civil(2017,4,6)
-# c = hotel_california.make_reservation(first_night, last_night)
 #
-# #
-# f = Date.civil(2017,2,4)
-# j = Date.civil(2017,2,5)
-# g = Date.civil(2017,2,6)
-#  puts a.room_number
-#  puts b.room_number
-# # puts e.room_number
-# # puts d.room_number
-#  puts hotel_california.find_reservations_by_date(j).class
-#  puts hj= hotel_california.find_unreserved_rooms(f..g)
-# # q = hotel_california.make_reservation(arrive,leave)
-# # puts q.room_number
-# # puts hj= hotel_california.find_unreserved_rooms(f..g)
-# # puts h.find_reservations_by_date([2017,2,3])
