@@ -23,10 +23,20 @@ module Tools
 
   #TODO Validate room
 
+  def to_date_range(start, nights)
+    array = Array.new
+    nights.times {|i| array << start + i}
+    return array
+  end
+
+  def available?(room, date_range)
+    #TODO setup
+  end
+
 end # Tools module
 
 module ReservationSystem
-
+#TODO Go through each file and auto indent
   class Hotel
     include Tools
 
@@ -63,15 +73,16 @@ module ReservationSystem
       return list
     end # search_reservations_by_date
 
-    def search_available_rooms_by_dates(date_array)
+    def search_available_rooms_by_dates(start, nights)
       rooms = hotel.dup
-
+      date_array = to_date_range(start, nights)
       date_array.each do |date|
-          hotel.each do |room|
-            if room.nights_reserved.include?(date)
-              rooms.delete(room)
-            end
+        hotel.each do |room|
+          if room.nights_reserved.include?(date)
+            rooms.delete(room)
+
           end
+        end
       end
 
       return rooms

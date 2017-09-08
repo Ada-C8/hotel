@@ -74,13 +74,12 @@ describe "Hotel" do
 
     describe "search_available_rooms_by_dates" do
       it "Can list available rooms by date range" do
-        search1 = ada_inn.search_available_rooms_by_dates(Date.new(2017,06,12)..Date.new(2017,06,14))
+        search1 = ada_inn.search_available_rooms_by_dates(Date.new(2017,06,12),3)
 
         search1.must_be_kind_of Array
         search1.must_include room_4 && room_7
         search1.wont_include room_5 && room_6
       end # "Can list available rooms by date range"
-      #TODO Test search rooms by date after connecting rooms to reservations
 
     end # "search_available_rooms_by_dates"
 
