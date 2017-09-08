@@ -1,7 +1,7 @@
 require 'date'
 require 'rooms'
 
-module Hotel
+module Hotels
   class Reservations
     attr_reader :room, :dates, :cost
     def initialize(start_date, end_date)
@@ -17,7 +17,7 @@ module Hotel
     end
 
     def gets_room
-      @room = Hotel::Rooms.find(1..20).sample
+      @room = Hotels::Rooms.find(1..20).sample
     end
 
     def calculate_bill

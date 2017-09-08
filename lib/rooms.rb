@@ -1,10 +1,11 @@
-module Hotel
+module Hotels
   class Rooms
 
-    attr_reader :number
+    attr_reader :number, :price
 
-    def initialize(number)
+    def initialize(number, price: 200)
       @number = number
+      @price = price
     end
 
     def self.all
@@ -18,10 +19,10 @@ module Hotel
     end
 
     def self.find(number)
-      all_rooms = Hotel::Rooms.all
+      all_rooms = Hotels::Rooms.all
       all_rooms.each do |room|
         if room.number == number
-          return Rooms.new(room.number)
+          return room
         end
       end
       raise ArgumentError.new("Room does not exist.")
