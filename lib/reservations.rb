@@ -16,26 +16,24 @@ module Hotel
     def make_reservation(check_in,check_out,num_rooms)
       date_range = DateRange.new(check_in,check_out)
       id = (@all_reservations.length + 1)
-      booking = Booking.new(id, num_rooms,date_range)
+      rooms_available = check_availability(check_in,check_out)
 
+      if rooms_available.length < num_rooms && num_rooms > 20
+        raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms, in your date range, to handle your request of #{num_rooms} rooms.")
+      end
+      #rooms needs to be an arry of rooms
+      rooms_to_book = rooms_available.shift(num_rooms)
+      booking = Booking.new(id,rooms_to_book,date_range)
       @all_reservations << booking
-      #1 take start_date and end_date and pass it to date range class, date range will validate user input
-      #make sure you have enough rooms available
-
-      #2 do we have availability? If yes make a booking.new(range_of_dates) and push to all_reservations
-      # check_reservation
-      # check_availability
-      # Hotel::Booking.new(id, rooms, date_range)
+      return booking
     end
 
     def check_reservations(check_in,check_out)
-      # run through valid_date?
-      range = DateRange.new(check_in,check_out).nights_arr
       booked_rooms = []
-      # binding.pry
+      range = DateRange.new(check_in,check_out).nights_arr
+
       range.each do |date|
         @all_reservations.each do |booking|
-          # binding.pry
           if booking.date_range.nights_arr.include?(date)
             booking.rooms.each do |room|
               if (!booked_rooms.include?(room))
@@ -49,15 +47,16 @@ module Hotel
     end
 
     def check_availability(check_in,check_out)
-      booked_rooms = check_reservations(check_in,check_out)
+      booked_rooms =
       available_rooms = []
+      check_reservations(check_in,check_out)
 
       all_rooms.each do |room|
         if !(booked_rooms.include?(room))
           available_rooms << room
         end
       end
-      return available_rooms 
+      return available_rooms
     end
   end
 end
