@@ -89,10 +89,15 @@ describe "Hotel" do
 
     it "should return an empty array if no available rooms found" do
 
-      checkin = Date.new(2017,01,01)
-      checkout = Date.new(2017,01,01)
-      @my_hotel.make_reservation(checkin, checkout, room)
+      list_of_rooms = [*1..20]
+      list_of_rooms.each do |room|
+        checkin = Date.new(2017,01,01)
+        checkout = Date.new(2017,01,02)
+        @my_hotel.make_reservation(checkin, checkout, room)
+      end
 
+      checkin = Date.new(2017,01,01)
+      checkout = Date.new(2017,01,02)
       available_rooms = @my_hotel.available_rooms(Booking::DateRange.new(checkin,checkout))
       available_rooms.must_be_kind_of Array
       available_rooms.length.must_equal 0
