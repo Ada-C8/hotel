@@ -13,17 +13,18 @@ module Hotel
       reservations << new_reservation
     end
 
-    def is_available?(room, date)
-      # loop through @rooms
-      return true
-    end
-
-    def access_reservations
+    def access_reservations#(date)
       # access the list of reservations for a specific date
+      # loop over @reservations.date_range
+      # if date_range includes passed in date
+      # return reservations
       return @reservations
     end
 
-
+    def view_avaiable_rooms(date_range)
+      # view a list of rooms that are not reserved for a given date range
+      # loop thru reservations.date_range to see if it include the date_range passed in, if not return room_ids
+    end
 
   end
 end
