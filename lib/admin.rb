@@ -1,4 +1,4 @@
-# require_relative 'hotel'
+require_relative './concerns/dateable'
 require_relative 'reservation'
 require 'date'
 require 'pry'
@@ -6,6 +6,8 @@ module Hotel
 
 
   class Admin
+    include Hotel::Dateable::InstanceMethods
+
     attr_reader :reservations_list, :all_rooms
     # def get_date_range(check_in, check_out)
     #   return  (check_in ... check_out).to_a
@@ -13,6 +15,7 @@ module Hotel
 
     def initialize
       @reservations_list = []
+      @block_list = []
       @all_rooms = []
       make_hotel_rooms
     end
@@ -23,10 +26,10 @@ module Hotel
       end
     end
 
-    #
-    def get_date_range(check_in, check_out)
-      return  (check_in ... check_out).to_a
-    end
+    # #
+    # def get_date_range(check_in, check_out)
+    #   return  (check_in ... check_out).to_a
+    # end
 
 
     def reserve(check_in, check_out, room, name, contact_info)
@@ -69,16 +72,15 @@ module Hotel
     end
 
     def reservations_by_name(name_request)
-      #go through reservations list and return array with all that contain the date
+      #go through reservations list and return array with all that contain the name
       reservation_finder( name_request, :name )
-      #reservations_list.find_all{|reservation| reservation.name.include?(name)}
+
     end#reservations_by_date
 
     def reservations_by_date(date)
       date_find = Date.new(date[0], date[1], date[2])
       #go through reservations list and return array with all that contain the date
       reservation_finder(date_find, :date_range )
-      #  reservations_list.find_all{|reservation| reservation.date_range.include?(date_find)}
     end#reservations_by_date
   end #class Admin
 
