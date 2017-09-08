@@ -41,10 +41,4 @@ describe "My_Hotel::Date_Range" do
     end
 
   end
-  #   describe "make_date_range" do
-  #     #the a correct range can be made
-  #   end
-  #
-  #
-  #
 end
