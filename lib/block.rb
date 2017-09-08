@@ -7,7 +7,7 @@ module BookingSystem
 
     def initialize(number_of_rooms, all_room_numbers, check_in, check_out)
 
-      unless number_of_rooms > 0 
+      unless number_of_rooms > 0
         raise ArgumentError.new("Number of rooms must be a positive integer (e.g., 1, 2, 3). Given input: #{number_of_rooms}")
       end
 
@@ -15,12 +15,6 @@ module BookingSystem
       @all_room_numbers = all_room_numbers
       @date_range = BookingSystem::DateRange.new(check_in, check_out).all_reservation_dates
     end
-
-    # #The collection of rooms should only include rooms that are available for the given date range
-    # def collection_of_rooms
-    #
-    #   return []
-    # end
 
     def block_total_cost
 
