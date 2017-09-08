@@ -3,13 +3,16 @@ require 'date'
 module Hotel
   class Room
       @@rooms_available = (1..20).to_a
-    end
 
     attr_reader :room_number, :rooms_available
-    def self.rooms_available
+
     def initialize
       @room_number = room_number
     end # end #initialize
+
+    def self.rooms_available
+      @@rooms_available
+    end # end #rooms_available
 
     def assign_room
       @room_number = @@rooms_available.shift # removes first element of array
