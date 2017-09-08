@@ -217,6 +217,7 @@ describe 'Hotel' do
     end
 
     describe 'block_availability?' do
+      # - As an administrator, I can check whether a given block has any rooms available
       it 'returns true if there are unbooked rooms within block for given dates' do
         check = @hotel.block_availability?('2017-08-05', '2017-08-07', @block.id)
         check.must_equal true
@@ -237,7 +238,4 @@ describe 'Hotel' do
   end
 end
 
-
 # TODO: lots and lots of edge case testing
-
-# - As an administrator, I can check whether a given block has any rooms available
