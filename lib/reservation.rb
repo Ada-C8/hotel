@@ -3,7 +3,7 @@ module Hotel
     require_relative 'date_range'
     attr_reader :total_cost, :dates, :checkin, :checkout, :id, :hotel, :room
 
-    def initialize(room, checkin, checkout, hotel, block = false)
+    def initialize(room, checkin, checkout, block = false)
       @room = room
       @checkin = Date.parse(checkin)
       @checkout = Date.parse(checkout)
