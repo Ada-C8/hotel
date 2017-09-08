@@ -6,15 +6,17 @@ require_relative 'block'
 module BookingSystem
   class Hotel
 
-    COST = 200
-    BLOCK_DISCOUNT = 10
+    # COST = 200
+    # BLOCK_DISCOUNT = 10
 
-    attr_reader :rooms, :all_reservations
+    attr_reader :rooms, :all_reservations, :cost, :block_discount
 
-    def initialize(number_of_rooms)
+    def initialize(number_of_rooms, cost=200, block_discount=10)
       @rooms = (1 .. number_of_rooms).to_a
       @all_reservations = [] #array of instances of class Reservation
       @all_blocks = [] #array of instances of class Block
+      @cost = cost
+      @block_discount = block_discount
     end #end of initialize
 
     def room_unavailable(room)
@@ -60,12 +62,13 @@ module BookingSystem
       return list_of_available_rooms(date_range)[0] #room number
     end #end of method
 
-    def make_reservation(date_range) #, stratgey = :cheapest
+    def make_reservation(date_range) # strategy = :cheapest
       room = find_room(date_range)
       if room == nil
         raise NoRoomAvailableError.new("No room is available on given dates")
       end
-      new_reservation = Reservation.new(date_range, room)
+      cost = @cost
+      new_reservation = Reservation.new(date_range, room, cost)
       @all_reservations << new_reservation
 
       return new_reservation #new instance of class Reservation
@@ -97,7 +100,7 @@ module BookingSystem
       end
       date_range = block.date_range
       room = block.rooms[0]
-      cost = block.room_cost
+      cost = @cost * (1 - @block_discount / 100.0)
       puts cost
       new_reservation_from_block = Reservation.new(date_range, room, cost)
       block.rooms.delete_at(0)
