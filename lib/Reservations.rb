@@ -3,11 +3,11 @@ require 'DateRange'
 
 module Hotel
   class Reservations
-    attr_reader
+    attr_reader :room_number
 
     def initialize
     @all_reservations = []
-
+    @room_number = room_number
     #(1..20).to_a
     #@rooms_collection = []
     # @blocks_arr = []
@@ -43,9 +43,6 @@ module Hotel
       date = Date.parse(date)
       list = []
       @all_reservations.each do |reservation|
-          #dates = reservation.dates
-          # if reservation.dates.include?(date)
-          #   list << reservation
           if date >= reservation.check_in && date <= reservation.check_out
             list << reservation
           end

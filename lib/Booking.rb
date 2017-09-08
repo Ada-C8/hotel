@@ -18,13 +18,13 @@ module Hotel
       @discount = 0
     end
 
-    def dates
-    dates = (@check_in..@check_out).map(&:to_s)
-      dates.each do |date|
-        date = Date.parse(date)
-      end
-    return dates
-    end
+    # def dates
+    # dates = (@check_in..@check_out).map(&:to_s)
+    #   dates.each do |date|
+    #     date = Date.parse(date)
+    #   end
+    # return dates
+    # end
 
     def total_cost
       num_days = (@check_out - @check_in).to_i

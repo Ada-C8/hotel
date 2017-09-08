@@ -148,26 +148,29 @@ describe 'Reservations' do
     it "must have the correct number of reservations for the date given" do
       @new_hotel.list_reservations_by_date("2019-01-04").length.must_equal 3
     end
+    it "must return the correct reservations" do
+      @new_hotel.list_reservations_by_date("2017-09-21")[0].room_number.must_equal @new_booking1.room_number
+    end
   end
 end
-#
-# describe 'DateRange' do
-#   before do
-#     @new_date_range = Hotel::DateRange.new("2019-01-01", "2019-01-04")
-#     # @new_date_range2 = Hotel::DateRange.new("2017-01-02", "2017-01-03")
-#     # @new_date_range3 = Hotel::DateRange.new("2017-02-04", "2017-02-07")
-#   end
-#   describe 'initialize' do
-#     it 'will initialize' do
-#       @new_date_range.must_be_instance_of Hotel::DateRange
-#     end
-#   end
-#   describe 'dates method' do
-#     it 'is an array' do
-#       @new_date_range.dates.must_be_kind_of Array
-#     end
-#     it 'must include the correct number of dates' do
-#       @new_date_range.dates.length.must_equal 4
-#     end
-#   end
-# end
+
+describe 'DateRange' do
+  before do
+    @new_date_range = Hotel::DateRange.new("2019-01-01", "2019-01-04")
+    # @new_date_range2 = Hotel::DateRange.new("2017-01-02", "2017-01-03")
+    # @new_date_range3 = Hotel::DateRange.new("2017-02-04", "2017-02-07")
+  end
+  describe 'initialize' do
+    it 'will initialize' do
+      @new_date_range.must_be_instance_of Hotel::DateRange
+    end
+  end
+  describe 'dates method' do
+    it 'is an array' do
+      @new_date_range.dates.must_be_kind_of Array
+    end
+    it 'must include the correct number of dates' do
+      @new_date_range.dates.length.must_equal 4
+    end
+  end
+end
