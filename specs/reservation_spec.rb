@@ -43,4 +43,12 @@ describe "My_Hotel::Reservation" do
 
     end
   end
+
+  describe "set_reservation_id" do
+    it "creates a reservation id" do
+      new_reservation = My_Hotel::Reservation.new(@feb1, @feb6)
+      new_reservation.set_reservation_id
+      new_reservation.reservation_id.must_be_kind_of String
+    end
+  end
 end

@@ -43,19 +43,35 @@ module My_Hotel
       rooms_avail = find_unreserved_rooms(first_night..last_night)
       new_reservation.assign_room(rooms_avail)
       new_reservation.set_cost
-      set_reservation_id(new_reservation)
+      new_reservation.set_reservation_id
+      while unique_id?(new_reservation) == false
+        new_reservation.set_reservation_id
+      end
       @all_reservations << new_reservation
       return new_reservation
     end
 
-    def set_reservation_id(reservation)
-      new_reservation_id = ""
-      6.times do
-        new_reservation_id = new_reservation_id + (rand(9)).to_s
+    def unique_id?(new_reservation)
+      if @all_reservations.length != 0
+        @all_reservations.each do |one_reservation|
+          if one_reservation.reservation_id == new_reservation.reservation_id
+            puts one_reservation.reservation_id
+            puts new_reservation.reservation_id
+            return false
+          end
+        end
       end
-      reservation.reservation_id = new_reservation_id
-      #TODO: make sure id is unique
+      return true
     end
+
+    # def set_reservation_id(reservation)
+    #   new_reservation_id = ""
+    #   6.times do
+    #     new_reservation_id = new_reservation_id + (rand(9)).to_s
+    #   end
+    #   reservation.reservation_id = new_reservation_id
+    #   #TODO: make sure id is unique
+    # end
 
     #given a range of nights, it will find rooms that are available for every night in the range.
     #if no room is available for the whole range, returns an empty hash

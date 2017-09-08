@@ -2,8 +2,8 @@ require_relative 'date_range'
 module My_Hotel
 
   class Reservation
-    attr_accessor :reservation_id, :block_id, :room_number, :cost, :nights_booked
-    attr_reader :first_night, :last_night
+    attr_accessor :block_id
+    attr_reader :first_night, :last_night, :reservation_id, :room_number, :nights_booked, :cost
 
 
     def initialize(first_night, last_night)
@@ -36,14 +36,16 @@ module My_Hotel
       @cost
     end
 
-    def set_reservation_id(reservation)
-      if Hotel.all_reservations !=[]
-        @reservation_id = all_reservations.length 
+    def set_reservation_id
+      new_reservation_id = ""
+      6.times do
+        new_reservation_id = new_reservation_id + (rand(9)).to_s
       end
+      @reservation_id = new_reservation_id
     end
+
   end
 end
-
 # h = My_Hotel::Hotel.new
 # a = h.make_reservation([2017,1,2], [2017,1,5])
 # b = h.make_reservation([2017,2,2], [2017,2,5])

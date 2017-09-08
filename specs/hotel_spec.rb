@@ -34,6 +34,18 @@ describe "My_Hotel::Hotel" do
       holiday.must_be_kind_of My_Hotel::Reservation
     end
 
+    it "raises an argument if you try to reserve a room and none is available" do
+      index = 1
+      20.times do
+        @ritz.make_reservation(@feb1, @feb5)
+        free_rooms = @ritz.find_unreserved_rooms(@feb1..@feb5)
+        free_rooms.length.must_equal 20-index
+        index += 1
+      end
+      proc{@ritz.make_reservation(@feb1, @feb5).must_raise ArgumentError}
+    end
+
+
     it "updates the list_of_reservations" do
       @ritz.make_reservation(@feb1, @feb5)
       @ritz.all_reservations.must_be_kind_of Array
@@ -43,16 +55,19 @@ describe "My_Hotel::Hotel" do
     end
   end
 
-  describe "set_reservation_id" do
-    it "creates a reservation id" do
-      new_reservation = My_Hotel::Reservation.new(@feb1, @feb5)
-      @ritz.all_reservations << new_reservation
-      @ritz.set_reservation_id(new_reservation)
-      new_reservation.reservation_id.must_be_kind_of String
-    end
-    # it "creates a unique id" do
-    # end
+  describe "unique_id" do
+    it "returns false if reservation_id is not unique" do
+      first =  @ritz.make_reservation(@feb1, @feb5)
+      second = first.dup
 
+      @ritz.unique_id?(second).must_equal false
+    end
+
+    it "returns true if reservation_id is unique" do
+      @ritz.make_reservation(@feb1, @feb5)
+      second = My_Hotel::Reservation.new(@feb1, @feb5)
+      @ritz.unique_id?(second).must_equal true
+    end
   end
 
   describe "find_reservations_by_date" do
