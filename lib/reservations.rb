@@ -52,9 +52,12 @@ module Hotel
       booked_rooms = check_reservations(check_in,check_out)
       available_rooms = []
 
-
-      # return the inverse not_available
-
+      all_rooms.each do |room|
+        if !(booked_rooms.include?(room))
+          available_rooms << room
+        end
+      end
+      return available_rooms 
     end
   end
 end
