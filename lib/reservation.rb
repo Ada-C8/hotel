@@ -43,7 +43,7 @@ module Hotel
     #   return num_nights * rate
     # end
 
-    private
+    #private
 
     def to_s
       # return human readable representation

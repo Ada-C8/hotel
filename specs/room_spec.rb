@@ -20,6 +20,14 @@ describe "Testing Room class" do
       proc { Hotel::Room.new(0) }.must_raise ArgumentError
     end
 
+    it "Creates an empty array of Reservation objects" do
+      @room.reservations.must_equal []
+    end
+
+    it "Creates an empty array of Block objects" do
+      @room.blocks.must_equal []
+    end
+
     # it "Raises an error if room number isn't between 1 & 20" do
     #   proc { Hotel::Room.new(0) }.must_raise ArgumentError
     #   proc { Hotel::Room.new(-2) }.must_raise ArgumentError
@@ -38,8 +46,8 @@ describe "Testing Room class" do
   describe "#reserve" do
     before do
       @room = Hotel::Room.new(3)
-      @check_in = Date.new(2017,9,5)
-      @check_out = Date.new(2017,9,8)
+      @check_in = Date.new(2018,9,5)
+      @check_out = Date.new(2018,9,8)
 
       @room.reserve(@check_in, @check_out)
     end
@@ -66,38 +74,53 @@ describe "Testing Room class" do
       @room.reserve(@check_out, @check_out.next_day).must_equal new_res
     end
 
-    # it "Returns true if the room is added" do
-    #   @room.reserve(Date.new(2017,8,5), Date.new(2017,8,8)).must_equal true
-    #   @room.reservations.length.must_equal 2
-    # end
-    #
-    # it "Doesn't reserve the room if the room isn't available" do
-    #   # bad_res = @room.reserve(@check_in, @check_out)
-    #   # bad_res.must_equal false
-    #   @room.reserve(@check_in, @check_out).must_equal false
-    #   @room.reservations.length.must_equal 1
-    # end
-
   end
 
   describe "#is_booked?" do
     before do
       @room = Hotel::Room.new(3)
-      @check_in = Date.new(2017,9,5)
-      @check_out = Date.new(2017,9,8)
+      @check_in = Date.new(2018,9,5)
+      @check_out = Date.new(2018,9,8)
       @room.reserve(@check_in, @check_out)
     end
 
     it "Returns true if the room is booked for a given date" do
-      @room.is_booked?(Date.new(2017,9,6)).must_equal true
-      @room.is_booked?(Date.new(2017,9,8)).must_equal false
+      @room.is_booked?(Date.new(2018,9,6)).must_equal true
+      @room.is_booked?(Date.new(2018,9,8)).must_equal false
 
-      @room.reserve(Date.new(2017,9,8), Date.new(2017,9,10))
-      @room.is_booked?(Date.new(2017,9,8)).must_equal true
+      @room.reserve(Date.new(2018,9,8), Date.new(2018,9,10))
+      @room.is_booked?(Date.new(2018,9,8)).must_equal true
     end
 
     it "Returns true if room is booked for given date range" do
-      @room.is_booked?(Date.new(2017,9,6), Date.new(2017,9,8)).must_equal true
+      @room.is_booked?(Date.new(2018,9,6), Date.new(2018,9,8)).must_equal true
+    end
+  end
+
+  describe "#is_blocked?" do
+    let(:rooms) { [2, 4, 5, 9, 20].map { |num| Hotel::Room.new(num) } }
+    let(:check_in) { Date.new(2018,9,3) }
+    let(:check_out) { Date.new(2018,9,5) }
+    # let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms) }
+
+    it "Returns true if a room is in a block for the given date range (no reservation)" do
+      Hotel::Block.new(check_in, check_out, 0.2, rooms)
+      blocked_room = rooms[0]
+      blocked_room.is_blocked?(check_in, check_out).must_equal true
+
+      unblocked_room = Hotel::Room.new(15)
+      unblocked_room.is_blocked?(check_in, check_out).must_equal false
+    end
+
+    it "Returns true if a room is in a block for the given date range (with reservation)" do
+      new_block = Hotel::Block.new(check_in, check_out, 0.2, rooms)
+      reserved_room = rooms[0]
+      new_block.reserve(reserved_room)
+      reserved_room.is_blocked?(check_in, check_out).must_equal true
+
+      unblocked_room_with_res = Hotel::Room.new(15)
+      unblocked_room_with_res.reserve(check_in, check_out)
+      unblocked_room_with_res.is_blocked?(check_in, check_out).must_equal false
     end
   end
 end

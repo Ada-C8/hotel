@@ -3,9 +3,9 @@ require_relative 'spec_helper'
 describe "Testing Block class" do
 
   let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
-  let(:check_in) { Date.new(2017,9,3) }
-  let(:check_out) { Date.new(2017,9,5) }
-  let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
+  let(:check_in) { Date.today }
+  let(:check_out) { Date.today + 2 }
+  let(:block) { Hotel::Block.new(Date.today, Date.today + 2, 0.2, rooms)}
 
   describe "#initialize" do
     before do
@@ -14,8 +14,8 @@ describe "Testing Block class" do
         @rooms << Hotel::Room.new(num + 1)
       end
 
-      @check_in = Date.new(2017,9,3)
-      @check_out = Date.new(2017,9,5)
+      @check_in = Date.today
+      @check_out = Date.today + 2
 
       @block = Hotel::Block.new(@check_in, @check_out, 0.2, @rooms)
     end
@@ -42,15 +42,25 @@ describe "Testing Block class" do
       unavail_room.reserve(@check_in, @check_out)
 
       proc { Hotel::Block.new(@check_in, @check_out, 0.2, @rooms) }.must_raise ArgumentError
+    end
+
+    it "Adds itself to each room's list of blocks" do
+      @rooms.each do |room|
+        room.blocks.length.must_equal 1
+        room.blocks.must_include @block
+      end
+
+      new_block = Hotel::Block.new(@check_out, @check_out + 3, 0.2, @rooms)
+
+      @rooms.each do |room|
+        room.blocks.length.must_equal 2
+        room.blocks.must_include new_block
+      end
 
     end
   end
 
   describe "#is_available" do
-    # let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
-    # let(:check_in) { Date.new(2017,9,3) }
-    # let(:check_out) { Date.new(2017,9,5) }
-    # let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
 
     it "Returns true if a room in the block is available" do
       room1 = rooms[0]
@@ -67,10 +77,6 @@ describe "Testing Block class" do
   end
 
   describe "#find_avail_in_block" do
-    # let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
-    # let(:check_in) { Date.new(2017,9,3) }
-    # let(:check_out) { Date.new(2017,9,5) }
-    # let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
 
     it "Returns a list of rooms that are available in the block" do
       block.find_avail_in_block.must_equal rooms

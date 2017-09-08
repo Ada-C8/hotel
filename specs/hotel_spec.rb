@@ -46,23 +46,39 @@ describe "Testing Hotel class" do
   end
 
   describe "#reserve" do
-    before do
-      @hotel = Hotel::Hotel.new
-      @room1 = @hotel.rooms[1]
-    end
+    # before do
+    #   @hotel = Hotel::Hotel.new
+    #   @room1 = @hotel.rooms[1]
+    # end
+    let(:hotel) { Hotel::Hotel.new }
+    let(:room1) { hotel.rooms[1] }
+    let(:check_in) { Date.today }
+    let(:check_out) { Date.today + 3 }
 
     it "Reserves the given room for the given dates" do
-      @room1.reservations.must_equal []
+      room1.reservations.must_equal []
 
-      @hotel.reserve(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1)
-      new_res = Hotel::Reservation.new(Date.parse('2017/9/3'), Date.parse('2017/9/5'), @room1)
-      @room1.reservations[0].must_equal new_res
+      hotel.reserve(Date.today + 4, Date.today + 6, room1)
+      new_res = Hotel::Reservation.new(Date.today + 4, Date.today + 6, room1)
+      room1.reservations[0].must_equal new_res
     end
 
-    it "Raises error when it tries to reserve a room that isn't available" do
-      @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,8), @room1)
-      proc { @hotel.reserve(Date.new(2017,9,7), Date.new(2017,9,8), @room1) }.must_raise ArgumentError
+    it "Raises error when it tries to reserve a room that's already reserved" do
+
+      hotel.reserve(check_in, check_out, room1)
+
+      proc { hotel.reserve(check_in + 2, check_out, room1) }.must_raise ArgumentError
+
     end
+
+    it "Raises error when it tries to reserve a room that's in a block" do
+
+      Hotel::Block.new(check_out, check_out + 3, 0.2, [room1])
+
+      proc { hotel.reserve(check_out, check_out + 1, room1) }.must_raise ArgumentError
+
+    end
+
   end
 
   describe "#find_reservations_by_date" do
@@ -72,28 +88,28 @@ describe "Testing Hotel class" do
       # res that doesn't conflict with 9/5/17
       5.times do |num|
         room = @hotel.rooms[1 + num]
-        @hotel.reserve(Date.new(2017,9,1), Date.new(2017,9,4), room)
+        @hotel.reserve(Date.new(2018,9,1), Date.new(2018,9,4), room)
       end
 
       # res that does conflict with 9/5/17
       5.times do |num|
         room = @hotel.rooms[6 + num]
-        @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,9), room)
+        @hotel.reserve(Date.new(2018,9,4), Date.new(2018,9,9), room)
       end
 
       # res with start date conflicting with 9/5/17
       5.times do |num|
         room = @hotel.rooms[11 + num]
-        @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,9), room)
+        @hotel.reserve(Date.new(2018,9,5), Date.new(2018,9,9), room)
       end
 
       # res with end date not conflicting with 9/5/17
       5.times do |num|
         room = @hotel.rooms[16 + num]
-        @hotel.reserve(Date.new(2017,9,3), Date.new(2017,9,5), room)
+        @hotel.reserve(Date.new(2018,9,3), Date.new(2018,9,5), room)
       end
 
-      @date_to_check = Date.new(2017,9,5)
+      @date_to_check = Date.new(2018,9,5)
       @sept5_res = @hotel.find_reservations_by_date(@date_to_check)
     end
 
@@ -105,12 +121,12 @@ describe "Testing Hotel class" do
       @sept5_res.length.must_equal 10
 
       room3 = @hotel.rooms[2]
-      @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,5), room3)
+      @hotel.reserve(Date.new(2018,9,4), Date.new(2018,9,5), room3)
 
       updated_res = @hotel.find_reservations_by_date(@date_to_check)
       updated_res.length.must_equal 10
 
-      @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,6), room3)
+      @hotel.reserve(Date.new(2018,9,5), Date.new(2018,9,6), room3)
       updated_res = @hotel.find_reservations_by_date(@date_to_check)
       updated_res.length.must_equal 11
     end
@@ -120,32 +136,33 @@ describe "Testing Hotel class" do
     before do
       @hotel = Hotel::Hotel.new
 
-      # res that doesn't conflict with 9/5/17 - 9/7/17
+      # res that doesn't conflict with 9/5/18 - 9/7/18
       5.times do |num|
         room = @hotel.rooms[1 + num]
-        @hotel.reserve(Date.new(2017,9,1), Date.new(2017,9,4), room)
+        @hotel.reserve(Date.new(2018,9,1), Date.new(2018,9,4), room)
       end
 
-      # res that does conflict with 9/5/17-9/7/17
+      # res that does conflict with 9/5/18-9/7/18
       5.times do |num|
         room = @hotel.rooms[6 + num]
-        @hotel.reserve(Date.new(2017,9,4), Date.new(2017,9,9), room)
+        @hotel.reserve(Date.new(2018,9,4), Date.new(2018,9,9), room)
       end
 
-      # res conflicting with 9/5/17-9/7/17
+      # res conflicting with 9/5/18-9/7/18
       5.times do |num|
         room = @hotel.rooms[11 + num]
-        @hotel.reserve(Date.new(2017,9,5), Date.new(2017,9,9), room)
+        @hotel.reserve(Date.new(2018,9,5), Date.new(2018,9,9), room)
       end
 
-      # res not conflicting with 9/5/17-9/7/17
+      # res not conflicting with 9/5/18-9/7/18
       5.times do |num|
         room = @hotel.rooms[16 + num]
-        @hotel.reserve(Date.new(2017,9,3), Date.new(2017,9,5), room)
+        @hotel.reserve(Date.new(2018,9,3), Date.new(2018,9,5), room)
       end
 
-      @start_date = Date.new(2017,9,5)
-      @end_date = Date.new(2017,9,7)
+      @start_date = Date.new(2018,9,5)
+      @end_date = Date.new(2018,9,7)
+
     end
 
     it "Returns a hash of rooms available for the given date range" do
@@ -163,13 +180,23 @@ describe "Testing Hotel class" do
       avail_rooms.length.must_equal expected_availability
 
       room1 = @hotel.rooms[1]
-      @hotel.reserve(Date.new(2017,9,4), @start_date, room1)
+      @hotel.reserve(Date.new(2018,9,4), @start_date, room1)
       @hotel.find_avail_rooms(@start_date, @end_date).must_equal avail_rooms
 
-      @hotel.reserve(@start_date, Date.new(2017,9,6), room1)
+      @hotel.reserve(@start_date, Date.new(2018,9,6), room1)
       updated_avail_rooms = @hotel.find_avail_rooms(@start_date, @end_date)
       updated_avail_rooms.length.must_equal expected_availability - 1
       updated_avail_rooms.wont_include room1
+
+      room_block = (@hotel.rooms.select { |room_num, room| room_num > 15 }).values
+      Hotel::Block.new(@start_date, @end_date, 0.2, room_block)
+      updated_avail = @hotel.find_avail_rooms(@start_date, @end_date)
+
+      updated_avail.length.must_equal expected_availability - 6
+      room_block.each do |room|
+        updated_avail.wont_include room
+      end
+
     end
 
     it "Raises ArgumentError if start date is later than end date" do

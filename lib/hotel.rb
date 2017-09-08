@@ -23,7 +23,7 @@ module Hotel
     end
 
     def reserve(start_date, end_date, room)
-      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.is_booked?(start_date, end_date)
+      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.is_booked?(start_date, end_date) || room.is_blocked?(start_date, end_date)
 
       return room.reserve(start_date, end_date)
 
@@ -60,11 +60,11 @@ module Hotel
       # check input
       raise ArgumentError.new("End date must be after start date") if start_date >= end_date
 
-      return rooms.reject { |room_num, room| room.is_booked?(start_date, end_date) }
+      return rooms.reject { |room_num, room| room.is_booked?(start_date, end_date) || room.is_blocked?(start_date, end_date) }
 
     end
 
-    private
+    # private
 
     #
     # def is_valid?(num) move integer check to user input

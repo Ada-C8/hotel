@@ -4,7 +4,7 @@ describe "Testing Reservation class" do
   describe "#initialize" do
     before do
       @room = Hotel::Room.new(4)
-      @res = Hotel::Reservation.new(Date.new(2017,9,4), Date.new(2017,9,7), @room)
+      @res = Hotel::Reservation.new(Date.today, Date.today + 3, @room)
     end
 
     it "Creates a Reservation with a date range and room number" do
@@ -13,16 +13,23 @@ describe "Testing Reservation class" do
       @res.room_num.must_be_kind_of Integer
     end
 
-    it "Raises an error if check_out date isn't later than check_in date" do
-      check_in = Date.new(2017,9,5)
-      check_out = Date.new(2017,8,5)
+    describe "Testing Reservable methods" do
 
-      proc { Hotel::Reservation.new(check_in, check_out, @room) }.must_raise ArgumentError
+      it "Raises an error if check_out date isn't later than check_in date" do
+        check_in = Date.today
+        check_out = Date.new(2017,8,5)
 
-      check_out = Date.new(2017,9,5)
-      proc { Hotel::Reservation.new(check_in, check_out, @room) }.must_raise ArgumentError
+        proc { Hotel::Reservation.new(check_in, check_out, @room) }.must_raise ArgumentError
+
+        check_out = Date.today
+        proc { Hotel::Reservation.new(check_in, check_out, @room) }.must_raise ArgumentError
+      end
+
+      it "Raises an error if check_in is before today's date" do
+        proc { Hotel::Reservation.new(Date.today - 1, Date.today, @room) }.must_raise ArgumentError
+      end
+
     end
-
     # move this to user interface
     # it "Raises an error if check in or check out aren't date objects or can't be parsed as dates" do
     #   not_dates = ["cat", nil, 0, "", -1]
@@ -42,8 +49,8 @@ describe "Testing Reservation class" do
 
   describe "total_cost" do
     before do
-      @check_in = Date.new(2017,9,5)
-      @check_out = Date.new(2017,9,8)
+      @check_in = Date.today
+      @check_out = Date.today + 3
       @res = Hotel::Reservation.new(@check_in, @check_out, Hotel::Room.new(4))
     end
 

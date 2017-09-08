@@ -3,7 +3,13 @@ require 'date'
 module Reservable
 
   def valid_dates?
-    raise ArgumentError.new("Check out must be later than check in") if @check_in >= @check_out
+    if @check_in >= @check_out
+      raise ArgumentError.new("Check out must be later than check in")
+
+    elsif @check_in < Date.today
+      raise ArgumentError.new("Can't reserve a room for date that's already passed")
+    end
+
   end
 
   def total_cost(rate = @rate)
