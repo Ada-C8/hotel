@@ -11,7 +11,7 @@ module Hotel
       @room = room
       @check_in = DateRange.check_in(day_in)#day_in
       @check_out = DateRange.check_out(day_out)#day_out
-      @date_range = DateRange.create_range
+      @date_range = DateRange.create_range(@check_in, @check_out)
       @length_of_stay = @date_range.length - 1
       @total_cost = (200 * @length_of_stay).to_i
     end

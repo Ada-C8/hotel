@@ -30,7 +30,9 @@ describe "DateRange Class" do
     end #check_out
 
     it "can create an array of dates between the check-in and check out" do
-      Hotel::DateRange.create_range.must_be_kind_of Array
+      a = Hotel::DateRange.check_in("2001/1/1")
+      b = Hotel::DateRange.check_out("2001/1/10")
+      Hotel::DateRange.create_range(a, b).must_be_kind_of Array
     end #date_range
   end #check_in, check_out, range
 
