@@ -2,7 +2,7 @@ require 'date'
 module Hotel
   class Reservations
 
-    attr_reader :all_reservations, :rooms, :all_rooms, :not_available, :available, :booking
+    attr_reader :all_reservations, :rooms, :all_rooms, :not_available, :available, :booking, :num_of_rooms, :collection_of_rooms
 
     def initialize
       # @all_rooms = [1..20] # do I need all_rooms?
@@ -24,7 +24,7 @@ module Hotel
     end
 
     # Booking.new(checkin, checkout, check_availablity[0])
-#Todo:
+    #Todo:
     # return rooms that are reserved for that date
 
     def make_booking(checkin, checkout, num_of_rooms = 1)
@@ -47,7 +47,7 @@ module Hotel
       booking = Booking.new(checkin, checkout, rooms, id)
       @all_reservations << booking
 
-# should I write a loop that tells it to make multiple bookings per num_of_rooms?
+      # should I write a loop that tells it to make multiple bookings per num_of_rooms?
       # if num_of_rooms > 1
       #   num_of_rooms.times do
       #     booking * num_of_rooms
@@ -80,6 +80,8 @@ module Hotel
             end
           end
         end
+
+        # @all_blocks What if I write the same above?
       end
       # if (checkin == Date.new(2017, 10, 5))
       #   # binding.pry
@@ -88,10 +90,7 @@ module Hotel
     end
 
     def check_availability(checkin, checkout)
-  ##### write logic to check for blocks bc then it's not available
-
-
-
+      ##### write logic to check for blocks bc then it's not available
       # this is the inverse of not_available array
       available = []
       @all_rooms.each do |room|
@@ -104,15 +103,44 @@ module Hotel
     end
 
 
-    def create_blocks
+    def make_block(checkin, checkout, num_of_rooms) #collection_of_rooms
+      availability = check_block_availability(checkin, checkout)
+      if availability.length < num_of_rooms
+        raise ArgumentError.new "Sorry, we don't have enough rooms."
+      elsif availability == []
+        raise ArgumentError.new "Sorry, there are no rooms available."
+      end
+      block_id = @all_blocks.length
+      collection_of_rooms = availability.take num_of_rooms
+      block = Block.new(checkin, checkout, collection_of_rooms, block_id)
+      @all_blocks << block
+      return block
     end
 
-    def check_blocks
+    def check_block(checkin, checkout)
+      check_against = DateRange.new(checkin, checkout).night_array
+      block_not_available = []
+      check_against.each do |date|
+        @all_blocks.each do |block|
+          if block.dates.include?(date)
+            block.rooms.each do |room|
+              not_available << room
+            end
+          end
+        end
+      end
+      return block_not_available
     end
 
-    def check_block_availability
+    def check_block_availability(checkin, checkout)
+      block_available = []
+      @all_blocks.each do |room|
+        unless check_block(checkin, checkout).include?(room)
+          block_available << room
+        end
+      end
+      # binding.pry
+      return block_available
     end
-
-
   end
 end
