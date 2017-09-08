@@ -22,6 +22,18 @@ describe "Admin" do
       @admin.reservations[0].room.room_number.must_equal 1
     end
 
+    # Wave 2
+    it "Can make a reservation starting at the check-out date of another reservation" do
+      check_in = Date.new(2017,10,3)
+      check_out = Date.new(2017,10,7)
+      room_num = 1
+      @admin.reserve(check_in, check_out, room_num)
+      later_check_in = Date.new(2017,10,7)
+      later_check_out = Date.new(2017,10,8)
+      @admin.reserve(later_check_in, later_check_out, room_num)
+      @admin.reservations_at_date(Date.new(2017,10,7)).length.must_equal 1
+    end
+
     it "Returns an ArgumentError if the reservation can't be made" do
       # check_in_date is later than check_out_date
       proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise ArgumentError
@@ -84,6 +96,14 @@ describe "Admin" do
 
     it "Returns nil if a Reservation object isn't passed" do
       proc {@admin.total_cost("I am not a Reservation! >:D")}.must_raise ArgumentError
+    end
+  end
+
+  describe "find_room(room_number)" do
+    it "Returns the Room object with the specific room" do
+      local_room = @admin.find_room(1)
+      local_room.must_be_instance_of Hotel::Room
+      local_room.available.must_equal true
     end
   end
 

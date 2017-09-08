@@ -21,12 +21,13 @@ module Hotel
 
       #Check all reservations if it can be made
       @reservations.each do |reservation|
-        if (check_in >= reservation.check_in || check_out < reservation.check_out) && room_num == reservation.room.room_number
+        if reservation.overlap?(check_in, check_out, room_num)
           raise ArgumentError.new("There's overlap with this reservation and an existing reservation's date and room number")
         end
       end
 
       associated_room = find_room(room_num)
+      associated_room.change_availability(true) # only really useful for those with overlapping checkout and checkin :/
       new_reservation = Hotel::Reservation.new(check_in, check_out, associated_room)
       @reservations << new_reservation
       return new_reservation
@@ -37,10 +38,10 @@ module Hotel
       # takes in a date
       # returns an array of reservations that have the date in their range
             # date >= check_in_date < check_out_date
-      reservation_at_date = @reservations.select do |reservation|
+      list_of_reservations_at_date = @reservations.select do |reservation|
         reservation.check_in <= date && reservation.check_out > date
       end
-      return reservation_at_date
+      return list_of_reservations_at_date
     end
 
     # As an administrator, I can get the total cost for a given reservation
@@ -54,9 +55,10 @@ module Hotel
       return reservation.room.cost * total_days
     end
 
-    #find a Room object that's available
+    # find a Room object that's available
+    # nil
     def find_room(room_number)
-      return @rooms.detect { |r| r.available == true && r.room_number == room_number}
+      return @rooms.detect { |r| r.room_number == room_number}
     end
 
 

@@ -8,7 +8,7 @@ module Hotel
       @check_in = check_in
       @check_out = check_out
       @room = room
-      @room.change_availability
+      @room.change_availability(false) # Sets availability to false
     end
 
     def to_s
@@ -18,5 +18,15 @@ module Hotel
       puts "  Room: ##{room.room_number}"
     end
 
+
+    # (check_in >= reservation.check_in || check_out < reservation.check_out) && room_num == reservation.room.room_number
+    def overlap?(other_check_in, other_check_out, other_room_num)
+      # return (check_in >= other_check_in || check_out < other_check_out) &&
+      #        room.room_number == other_room_num
+      return room.room_number == other_room_num &&
+             (other_check_in == check_in ||
+             (other_check_in < check_in && (other_check_out > check_in && other_check_out < check_out)) ||
+             (other_check_in > check_in && other_check_in < check_out))
+    end
   end
 end

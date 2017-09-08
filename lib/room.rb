@@ -14,8 +14,9 @@ module Hotel
       @room_number = room_number
     end
 
-    def change_availability
-      @available ? @available = false : @available = true
+    def change_availability(state) # T or F
+      # @available ? @available = false : @available = true
+      @available = state
     end
 
     def self.all
