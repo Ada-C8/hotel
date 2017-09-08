@@ -31,7 +31,7 @@ module Hotel
       if room_num.nil?
         raise(NoRoomError, "No available rooms for dates #{checkin} - #{checkout}")
       end
-      reservation = Reservation.new(room_num, checkin, checkout, self, block)
+      reservation = Reservation.new(room_num, checkin, checkout, block)
       @reservations << reservation
       reservation
     end
@@ -47,7 +47,9 @@ module Hotel
 
     def find_available_rooms(checkin, checkout, block_id = false)
       if block_id
-        raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{block(block_id).id}") unless block(block_id).includes_dates?(checkin, checkout)
+        unless block(block_id).includes_dates?(checkin, checkout)
+          raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{block(block_id).id}")
+        end
         rooms = block(block_id).rooms
       else
         rooms = find_rooms_not_in_blocks(checkin, checkout)

@@ -25,25 +25,17 @@ module DateRange
     false
   end
 
-  # private
+  private
 
   def self.validate(input)
     return input if input.class == Date
-    begin
-      Date.parse(input)
-    rescue
-      raise(TypeError, "Invalid input #{input.class}-must be Date or String")
-    end
-  end
-
-  def self.invalid_dates_error
-    raise(InvalidDatesError, 'Start date must be before end date')
+    Date.parse(input)
   end
 
   def self.find_range(start_date, end_date, flag = false)
     start_date = validate(start_date)
     end_date = validate(end_date)
-    invalid_dates_error unless start_date < end_date
+    raise(InvalidDatesError, 'Start date must be before end date') unless start_date < end_date
     dates = []
     while start_date < end_date
       dates << start_date
