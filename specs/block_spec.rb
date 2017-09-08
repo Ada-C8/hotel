@@ -1,6 +1,12 @@
 require_relative 'spec_helper'
 
 describe "Testing Block class" do
+
+  let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
+  let(:check_in) { Date.new(2017,9,3) }
+  let(:check_out) { Date.new(2017,9,5) }
+  let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
+
   describe "#initialize" do
     before do
       @rooms = []
@@ -41,10 +47,10 @@ describe "Testing Block class" do
   end
 
   describe "#is_available" do
-    let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
-    let(:check_in) { Date.new(2017,9,3) }
-    let(:check_out) { Date.new(2017,9,5) }
-    let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
+    # let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
+    # let(:check_in) { Date.new(2017,9,3) }
+    # let(:check_out) { Date.new(2017,9,5) }
+    # let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
 
     it "Returns true if a room in the block is available" do
       room1 = rooms[0]
@@ -61,10 +67,10 @@ describe "Testing Block class" do
   end
 
   describe "#find_avail_in_block" do
-    let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
-    let(:check_in) { Date.new(2017,9,3) }
-    let(:check_out) { Date.new(2017,9,5) }
-    let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
+    # let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
+    # let(:check_in) { Date.new(2017,9,3) }
+    # let(:check_out) { Date.new(2017,9,5) }
+    # let(:block) { Hotel::Block.new(Date.new(2017,9,3), Date.new(2017,9,5), 0.2, rooms)}
 
     it "Returns a list of rooms that are available in the block" do
       block.find_avail_in_block.must_equal rooms
@@ -83,6 +89,27 @@ describe "Testing Block class" do
       end
 
       block.find_avail_in_block.must_equal []
+    end
+  end
+
+  describe "#reserve" do
+    let(:room_to_reserve) { rooms[0] }
+
+    it "Reserves a room for the dates of the block" do
+      block_res = block.reserve(room_to_reserve)
+
+      block_res.check_in.must_equal check_in
+      block_res.check_out.must_equal check_out
+    end
+
+    it "Raises an error if it tries to reserve a room not in the block" do
+      room_outside_block = Hotel::Room.new(20)
+      proc { block.reserve(room_outside_block) }.must_raise ArgumentError
+    end
+
+    it "Raises an error if it tries to reserve an room that's already reserved" do
+      block.reserve(room_to_reserve)
+      proc {block.reserve(room_to_reserve) }.must_raise ArgumentError
     end
   end
 

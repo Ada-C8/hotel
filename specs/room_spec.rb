@@ -56,17 +56,27 @@ describe "Testing Room class" do
       res.check_out.must_equal @check_out
     end
 
-    it "Returns true if the room is added" do
-      @room.reserve(Date.new(2017,8,5), Date.new(2017,8,8)).must_equal true
-      @room.reservations.length.must_equal 2
+    it "Raises an error if the room isn't available" do
+      proc { @room.reserve(@check_in, @check_out) }.must_raise ArgumentError
     end
 
-    it "Doesn't reserve the room if the room isn't available" do
-      # bad_res = @room.reserve(@check_in, @check_out)
-      # bad_res.must_equal false
-      @room.reserve(@check_in, @check_out).must_equal false
-      @room.reservations.length.must_equal 1
+    it "Returns the new reservation if the reservation is created" do
+      new_res = Hotel::Reservation.new(@check_out, @check_out.next_day, @room)
+
+      @room.reserve(@check_out, @check_out.next_day).must_equal new_res
     end
+
+    # it "Returns true if the room is added" do
+    #   @room.reserve(Date.new(2017,8,5), Date.new(2017,8,8)).must_equal true
+    #   @room.reservations.length.must_equal 2
+    # end
+    #
+    # it "Doesn't reserve the room if the room isn't available" do
+    #   # bad_res = @room.reserve(@check_in, @check_out)
+    #   # bad_res.must_equal false
+    #   @room.reserve(@check_in, @check_out).must_equal false
+    #   @room.reservations.length.must_equal 1
+    # end
 
   end
 

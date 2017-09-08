@@ -26,13 +26,21 @@ module Hotel
     end
 
     def is_available?(room)
-      raise ArgumentError.new("Room number #{room.room_num} isn't in the block") if !room_block.include?(room)
+      raise ArgumentError.new("Room #{room.room_num} isn't in the block") if !room_block.include?(room)
 
       return !room.is_booked?(check_in, check_out)
     end
 
     def find_avail_in_block
       return room_block.select { |room| is_available?(room) }
+    end
+
+    def reserve(room)
+      raise ArgumentError.new("Room #{room.room_num} isn't in the block") if !room_block.include?(room)
+
+      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.is_booked?(check_in, check_out)
+
+      return room.reserve(check_in, check_out)
     end
 
   end # end of Block class

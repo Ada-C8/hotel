@@ -30,13 +30,21 @@ module Hotel
     end
 
     def reserve(start_date, end_date)
-      # add reservation if room is available and return true; else false
-      if !is_booked?(start_date, end_date)
-        reservations << ::Hotel::Reservation.new(start_date, end_date, self) # replacing room_num with self
-        return true
-      end
+      # TODO maybe return the actual reservation object here instead? And both Hotel/Block check if booked; throw out check here?
 
-      return false
+      raise ArgumentError.new("Room #{room_num} isn't available for the given dates") if is_booked?(start_date, end_date)
+
+      new_reservation = ::Hotel::Reservation.new(start_date, end_date, self)
+      reservations << new_reservation
+
+      return new_reservation
+      # add reservation if room is available and return true; else false
+      # if !is_booked?(start_date, end_date)
+      #   reservations << ::Hotel::Reservation.new(start_date, end_date, self) # replacing room_num with self
+      #   return true
+      # end
+      #
+      # return false
     end
 
     def is_booked?(start_date, end_date = start_date.next_day)
