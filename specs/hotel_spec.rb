@@ -1,6 +1,7 @@
 #hotel_spec.rb
 require_relative 'spec_helper.rb'
 require 'date'
+require 'pry'
 describe "The Hotel class" do
 
   before do
@@ -148,11 +149,13 @@ describe "The Hotel class" do
       @myhotel.find_rooms_available("8/8/17", "8/15/17").length.must_equal 18
     end
 
-    it "returns an array of 17 objects when searching for a date range that overlaps with overlapping existing reservations" do
+    it "returns an array of 16 objects when searching for a date range that overlaps with overlapping existing reservations" do
       @myhotel.store_reservation("8/13/17", "8/15/17")
       @myhotel.store_reservation("8/13/17", "8/15/17")
       @myhotel.store_reservation("8/13/17", "8/15/17")
-      @myhotel.find_rooms_available("8/13/17", "8/15/17").length.must_equal 17
+      @myhotel.store_reservation("8/13/17", "8/14/17")
+      @myhotel.store_reservation("8/13/17", "8/16/17")
+      @myhotel.find_rooms_available("8/13/17", "8/15/17").length.must_equal 15
     end
 
   end #end of describe "find_rooms_available method"
@@ -166,7 +169,36 @@ describe "The Hotel class" do
       @myhotel.reservations_array.length.must_equal 2
     end
 
-  end
+    # it "adds reservations for different available rooms for overlapping reservation dates" do
+    #   @myhotel.store_reservation("8/13/17", "8/15/17").room.room_id.must_equal == 1
+    #   #@myhotel.reservations_array.length.must_equal 2
+    # end
+
+    it "adds reservations for different available rooms for overlapping reservation dates" do
+      @myhotel.store_reservation("8/13/17", "8/15/17")
+      @myhotel.store_reservation("8/13/17", "8/15/17")
+      puts @myhotel.reservations_array[1].room.room_id
+      @myhotel.reservations_array[1].room.room_id.must_equal 2
+      @myhotel.store_reservation("8/13/17", "8/15/17")
+      @myhotel.reservations_array[2].room.room_id.must_equal 3
+      @myhotel.store_reservation("8/13/17", "8/14/17")
+      @myhotel.reservations_array[3].room.room_id.must_equal 4
+      @myhotel.store_reservation("8/13/17", "8/17/17")
+      @myhotel.reservations_array[4].room.room_id.must_equal 5
+    end
+
+  end # end of describe
+
+  describe "Error handling for trying to reserve an unavailable room" do
+
+    it "gives an error if the room is not available" do
+
+    end
+
+  end #end of describe
+
+
+
 
 
 end
