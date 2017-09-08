@@ -7,11 +7,11 @@ module Hotel
     attr_reader :room_number
 
     def initialize
-    @all_reservations = []
-    @room_number = room_number
-    #(1..20).to_a
-    #@rooms_collection = []
-    # @blocks_arr = []
+      @all_reservations = []
+      @room_number = room_number
+      #(1..20).to_a
+      #@rooms_collection = []
+      # @blocks_arr = []
     end
 
     def all_rooms
@@ -30,26 +30,57 @@ module Hotel
       return @all_reservations
     end
 
-    def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
+    def new_reservation(check_in, check_out, room_number = 0, room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
+      # auto_assign_room_number
+      # available?
       @all_reservations << booking
       return booking
     end
 
-    def list_reservations_by_date(date)
-      date = Date.parse(date)
-      list = []
-      @all_reservations.each do |reservation|
-          if date >= reservation.check_in && date <= reservation.check_out
+    def available?
+      unless @rooms_collection.include?(@room_number)
+        raise ArgumentError.new("#{@room_number} is not a valid room number at this property.")
+      end
+      @dates[0...-1].each do |date|
+        list_reservations_by_date(date)
+        @list.each do |booking|
+          if booking.room_number == @room_number
+            return false
+          end
+        end
+      end
+
+    end
+
+    def auto_assign_room_number
+      unless @room_number > 0
+        @rooms_collection.each do |room|
+          if room.available?
+            @room_number = room
+          else @room_number = nil
+          end
+        end
+        if @room_number == nil
+          raise ArgumentError.new("No rooms available for those dates.")
+        end
+      end
+    end
+
+      def list_reservations_by_date(date)
+        date = Date.parse(date)
+        @list = []
+        @all_reservations.each do |reservation|
+          if date >= reservation.check_in && date < reservation.check_out  #removed = so that it wont' include the check out date
             list << reservation
           end
+        end
+        return @list
       end
-      return list
-    end
 
-    def clear_reservations #Using this for testing purposes
-      @all_reservations = []
-    end
+      def clear_reservations #Using this for testing purposes
+        @all_reservations = []
+      end
 
+    end
   end
-end

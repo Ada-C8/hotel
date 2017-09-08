@@ -118,7 +118,7 @@ describe 'Reservations' do
       proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-18")}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the date is not valid on calendar' do
-      proc{new_booking = @new_hotel.new_reservation("2018-02-30")}.must_raise ArgumentError
+      proc{new_booking = @new_hotel.new_reservation("2018-02-30", "2018-02-31")}.must_raise ArgumentError
     end
   end
 

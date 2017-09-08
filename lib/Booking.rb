@@ -22,6 +22,10 @@ module Hotel
       validate_dates
     end
 
+    def auto_assign_room_number
+
+    end
+
     def validate_dates
       unless @check_in >= Date.today
         raise InvalidDateError.new("Check-in cannot be before today's date.")
