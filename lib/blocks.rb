@@ -1,7 +1,15 @@
-require_relative "reservations"
-
-# class Block < Reservation
+# require_relative "reservations"
+# require 'pry'
 #
+# class Block < Reservation
+#   MAX_ROOMS = 5
+#   def initialize(check_in, check_out, rooms_array)
+#     super
+#     if rooms_array.length > MAX_ROOMS
+#       raise ArgumentError
+#     end
+#
+#   end
 # end
 
 
