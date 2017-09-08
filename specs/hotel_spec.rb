@@ -88,6 +88,7 @@ describe "The Hotel class" do
     end
 
     it "it returns an empty array for searches outside the range of any reservations" do
+    @myhotel.store_reservation("8/13/17", "8/16/17")
     @myhotel.find_reservations_by_date("8/12/17").length.must_equal 0
     end
 
@@ -192,6 +193,10 @@ describe "The Hotel class" do
   describe "Error handling for trying to reserve an unavailable room" do
 
     it "gives an error if the room is not available" do
+      20.times do
+        @myhotel.store_reservation("8/13/17", "8/15/17")
+      end
+      proc {@myhotel.store_reservation("8/13/17", "8/15/17")}.must_raise ReservationNotAvailableError
 
     end
 

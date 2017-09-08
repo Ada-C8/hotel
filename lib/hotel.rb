@@ -40,24 +40,26 @@ module Hotel_Chain
         new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
         new_reservation.room = @array_of_rooms[0]
         @reservations_array << new_reservation
-        puts "***STORE RESERVATION - NOTHING IN RESERVATIONS ARRAY ****"
-        ap "new_reservation when it was empty before: #{new_reservation}"
-        ap "new_reservation's room when it was empty before: #{new_reservation.room.room_id}"
-        ap "@reservations_array when it was empty before: #{@reservations_array}"
+        return new_reservation
+        # puts "***STORE RESERVATION - NOTHING IN RESERVATIONS ARRAY ****"
+        # ap "new_reservation when it was empty before: #{new_reservation}"
+        # ap "new_reservation's room when it was empty before: #{new_reservation.room.room_id}"
+        # ap "@reservations_array when it was empty before: #{@reservations_array}"
       elsif @reservations_array.length > 0
         available_rooms = find_rooms_available(check_in_date, check_out_date)
-        new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
-        new_reservation.room = available_rooms[0]
-        @reservations_array << new_reservation
-        puts "***STORE RESERVATION - SOMETHING IN RESERVATIONS ARRAY ****"
-        ap "new_reservation if there was already data: #{new_reservation}"
-        ap "new_reservation's room if there was already data: #{new_reservation.room.room_id}"
-        ap "@reservations_array if there was already data: #{@reservations_array}"
-        return new_reservation
-      else
-        puts "There are no rooms available for that date range"
+        if available_rooms.length == 0
+          raise ReservationNotAvailableError
+        else
+          new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
+          new_reservation.room = available_rooms[0]
+          @reservations_array << new_reservation
+          # puts "***STORE RESERVATION - SOMETHING IN RESERVATIONS ARRAY ****"
+          # ap "new_reservation if there was already data: #{new_reservation}"
+          # ap "new_reservation's room if there was already data: #{new_reservation.room.room_id}"
+          # ap "@reservations_array if there was already data: #{@reservations_array}"
+          return new_reservation
+        end
       end
-      return new_reservation
     end
 
     #Finds all reservations for a given date
@@ -68,9 +70,6 @@ module Hotel_Chain
           reservations_on_date << reservation
         end
       end
-      # if reservations_on_date.length == 0
-      #   return "There are currently no reservations for #{date}"
-      # end
       return reservations_on_date
     end
 
@@ -82,9 +81,7 @@ module Hotel_Chain
       check_in = Date.strptime(check_in_date, "%m/%d/%Y")
       check_out = Date.strptime(check_out_date, "%m/%d/%Y")
 
-      ap "Reservations array before finding open rooms: #{@reservations_array}"
-
-      #ap "@array_of_rooms: #{@array_of_rooms}"
+      #ap "Reservations array before finding open rooms: #{@reservations_array}"
 
       @array_of_rooms.each do |room|
         @reservations_array.each do |reservation|
@@ -102,12 +99,9 @@ module Hotel_Chain
           elsif room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
             unavailable_rooms << room
           #5
-        # elsif room.room_id == reservation.room.room_id && reservation.check_in_date == check_in && (reservation.check_out_date == check_out || reservation.check_out_date > check_out)
-        #     unavailable_rooms << room
-          #6
           elsif room.room_id == reservation.room.room_id && reservation.check_in_date == check_in
             unavailable_rooms << room
-          #7
+          #6
           elsif room.room_id == reservation.room.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && reservation.check_out_date == check_out
             unavailable_rooms << room
           else
@@ -116,19 +110,14 @@ module Hotel_Chain
         end
       end
       #ap "available_rooms: #{available_rooms}"
-      puts "***FIND ROOMS AVAILABLE ****"
-      ap "unavailable_rooms: #{unavailable_rooms}"
-      puts "***"
-      #unique_available_rooms = available_rooms.uniq
-      #puts "***"
-      #ap "unique_available_rooms: #{unique_available_rooms}"
+      # puts "***FIND ROOMS AVAILABLE ****"
+      # ap "unavailable_rooms: #{unavailable_rooms}"
+      # puts "***"
       final_available_rooms = @array_of_rooms - unavailable_rooms
-      puts "***"
-      ap "FINAL AVAILABLE ROOMS: #{final_available_rooms}"
+      # puts "***"
+      # ap "FINAL AVAILABLE ROOMS: #{final_available_rooms}"
       return final_available_rooms
     end
-
-    #NOTE TO SELF: You don't need the "available rooms" array - just use @array_of_rooms
 
 
 
