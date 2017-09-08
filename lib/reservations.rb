@@ -10,6 +10,8 @@ module Hotels
     end
 
     def calculate_bill
+      cost = @date_range.length * @room.price
+      return cost 
     end
 
 

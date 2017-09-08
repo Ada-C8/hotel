@@ -52,13 +52,13 @@ module Hotels
 
 
     def find_room
-      i = 0
       rooms.each do |room|
-        if rooms[i].date_range.include? date_range
-
+        if room.date_range.include? date_range
+        else
+          return room
         end
-
       end
+
     end
 
 
