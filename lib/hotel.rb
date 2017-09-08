@@ -35,6 +35,14 @@ module Hotel
       reservation
     end
 
+    def make_block(start_date, end_date, num_rooms, discount)
+      rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
+      raise(NoRoomError, "Not enough available rooms for amount #{num_rooms}") if rooms.length < num_rooms
+      block = Block.new(start_date, end_date, rooms, discount)
+      @blocks << block
+      block
+    end
+
     def view_reservations(date)
       date = DateRange.validate(date)
       reservations = []
@@ -45,6 +53,7 @@ module Hotel
     end
 
     def find_available_rooms(checkin, checkout, block_id = false)
+      DateRange.validate_order(checkin, checkout)
       if block_id
         unless block(block_id).includes_dates?(checkin, checkout)
           raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{block(block_id).id}")
@@ -58,14 +67,6 @@ module Hotel
         rooms.delete(reservation.room) if (rooms.include? reservation.room) && reservation.includes_dates?(checkin, checkout)
       end
       rooms
-    end
-
-    def make_block(start_date, end_date, num_rooms, discount)
-      rooms = find_available_rooms(start_date, end_date)[0...num_rooms]
-      raise(NoRoomError, "Not enough available rooms for amount #{num_rooms}") if rooms.length < num_rooms
-      block = Block.new(start_date, end_date, rooms, discount)
-      @blocks << block
-      block
     end
 
     def block_availability?(checkin, checkout, block_id)
