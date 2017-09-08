@@ -1,12 +1,22 @@
-#module Hotel
 
-#class Reservation
-#dates, check in check out, cost, id
-# As an administrator, I can access the list of all of the rooms in the hotel
-# As an administrator, I can reserve a room for a given date range
-# As an administrator, I can access the list of reservations for a specific date
-# As an administrator, I can get the total cost for a given reservation
-#work
+#mark with x when done
+
+
+#   I can access the list of all of the rooms in the hotel
+# x I can reserve a room for a given date range
+#   I can access the list of reservations for a specific date
+# x I can get the total cost for a given reservation
+
+# x number of rooms numbered 1-20
+# x cost 200/night/rooms
+# x make sure only charged for when occupied, not check out
+# x error for invalid date range
+
+#  I can view a list of rooms that are not reserved for a given date range
+#  I can reserve an available room for a given date range
+#  also, A reservation is allowed start on the same day that another reservation for the same room ends
+#  should raise an exception when asked to reserve a room that is not available
+
 require 'date'
 
 module Hotel
@@ -63,14 +73,14 @@ module Hotel
 
 
 
-  class Hotel_Rooms
-    attr_reader :number, :id, :rate, :room_number
+  class Room
 
-    def initialize(number)
-      @number = number
+    attr_reader :room_number, :id, :rate
+
+    def initialize(room_number)
+      @room_number = room_number
       @id = id
       @rate = rate
-      @room_number = room_number
     end
 
     def self.all
@@ -81,11 +91,6 @@ module Hotel
         rooms << self.new(number)
       end
     end
-
-    #xnumber of rooms numbered 1-20
-    #cost 200/night/rooms
-    #make sure only charged for when occupied, not check out
-    #error for invalid date range
 
 
   end #end of class Hotel_Rooms

@@ -7,8 +7,8 @@ describe "DateRange" do
   describe "initialize" do
 
     before do
-      @start_date = Date.new(2017,1,1)
-      @end_date = Date.new(2017,1,3)
+      @start_date = Date.new(2018,1,1)
+      @end_date = Date.new(2018,1,3)
       @date = Hotel::DateRange.new(@start_date, @end_date)
     end
 
@@ -24,8 +24,8 @@ describe "DateRange" do
     end
 
 	it "checks initialize when start date is after end date" do
-	  start_date = Date.new(2017,1,1)
-	  end_date = Date.new(2017,1,3)
+	  start_date = Date.new(2018,1,1)
+	  end_date = Date.new(2018,1,3)
 	  proc {DateRange.new(end_date, start_date)}.must_raise Exception
 	end
   end
@@ -40,8 +40,8 @@ describe "Reservation" do
   describe "initialize" do
 
     before do
-      start_date = Date.new(2017,1,1)
-      end_date = Date.new(2017,1,3)
+      start_date = Date.new(2018,1,1)
+      end_date = Date.new(2018,1,4)
       date = Hotel::DateRange.new(start_date, end_date)
       @res = Hotel::Reservation.new(1, date, 200)
     end
@@ -54,7 +54,7 @@ describe "Reservation" do
 
 	  @res.must_respond_to :cost
 	  @res.cost.must_be_kind_of Integer
-	  @res.cost.must_equal 400
+	  @res.cost.must_equal 600
     end
 
   end #end of initialize do
@@ -62,8 +62,8 @@ describe "Reservation" do
   describe "initialize but checks for same day problems" do
 
   before do
-    start_date = Date.new(2017,1,1)
-    end_date = Date.new(2017,1,1)
+    start_date = Date.new(2018,1,1)
+    end_date = Date.new(2018,1,1)
     date = Hotel::DateRange.new(start_date, end_date)
     @res = Hotel::Reservation.new(1, date, 200)
   end
@@ -74,31 +74,24 @@ describe "Reservation" do
 
 end #end of initialize same day
 
-
 end #end of reservation
 
 
 
 
 
-# describe "Rooms" do
-#   before do
-#     @rooms = Hotel::Hotel_Rooms.new(1)
-#   end
-#
-#   it "can initialize rooms" do
-#     @rooms.must_be_instance_of Hotel::Hotel_Rooms
-#     @rooms.number.must_be_kind_of Integer
-#     #@rooms.room_id.must_equal 1
-#   end
 
-  # describe "Room" do
-  #   describe "initialize" do
-  #     it "checks initialize" do
-  #       room = Hotel::Hotel_Rooms.new(1)
-  #       room.must_respond_to :room_number
-  # 	  room.room_number.must_be_kind_of Integer
-  # 	  room.room_number.must_equal 1
-  #     end
-  #   end
-  # end
+describe "Room" do
+  describe "initialize" do
+    before do
+      @room = Hotel::Room.new(1)
+    end
+
+    it "can initialize rooms" do
+      @room.must_be_instance_of Hotel::Room
+      @room.must_respond_to :room_number
+      @room.room_number.must_be_kind_of Integer
+      @room.room_number.must_equal 1
+    end
+  end
+end #end of room class
