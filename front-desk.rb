@@ -19,6 +19,7 @@ require 'artii'
 require 'pry'
 require_relative './lib/hotel-room.rb'
 require_relative './lib/hotel-reservation.rb'
+%x(cp ./support/reservations_copy.csv ./support/reservations.csv)
 # User interface for hotel
 def menu
   menu = <<OK
@@ -57,6 +58,7 @@ a = Artii::Base.new :font => 'slant'
 
 puts "Welcome to ..."
 puts a.asciify('Hotelie')
+Hotel::Reservation.all
 reply = true
 while reply
   puts "Options:"

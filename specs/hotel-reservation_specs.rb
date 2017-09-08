@@ -85,15 +85,7 @@ describe "Hotel::Reservation" do
       end_date = Date.new(2017,6,8)
       proc{Hotel::Reservation.block_rooms(start_date, end_date, 0, 150, "Averi")}.must_raise InvalidRoomError
     end
-    # it "will reduce number of rooms if not enough available" do
-    #   start_date = Date.new(2006,6,5)
-    #   end_date = Date.new(2006,6,8)
-    #   18.times do |i|
-    #     Hotel::Reservation.new(start_date, end_date, Hotel::Room.new(i+1))
-    #   end
-    #   block1 = Hotel::Reservation.block_rooms(start_date, end_date, 5, 150, "Chris")
-    #   block1["Chris"].length.must_equal (20-18)
-    # end
+
     it "general public can't reserve block room" do
       start_date = Date.new(2017,6,5)
       end_date = Date.new(2017,6,8)

@@ -20,7 +20,6 @@ module Hotel
       if room.available?(start_date, end_date)
         @room = room
       else
-        puts "#{start_date}, #{end_date},#{room.number},#{block},#{add}"
         raise InvalidRoomError.new "Room is not available"
       end
       @number_of_nights = (@end_date - @start_date).to_i
