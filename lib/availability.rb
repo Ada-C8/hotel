@@ -1,38 +1,34 @@
 require_relative 'rooms'
 require 'date'
-require 'pry'
-
-# Recognize that a :blocked room should be able to be booked, but only by certain people
-
-# Allow people to reserve a certain room ID
-
-# Be able to return a collection of open rooms on any given date or for any given date block
-# Be able to return a collection of reserved rooms on any given date or for any given date block
-# Be able to return a collection of blocked rooms on any given date or for any given date block
 
 class Availability
-attr_accessor :calendar
-HOTEL = Hotel.new
+  attr_reader :calendar, :all_available_rooms, :create_calendar
+  @@calendar = []
 
-  def self.calendar
-    calendar = []
+  def self.create_calendar
+    current_date = Date.today
+    last_day = current_date + 365
 
-    date = Date.today
     roominfo = []
-
-    HOTEL.rooms.each do |room|
+    hotel = Hotel.new
+    hotel.rooms.each do |room|
       id = room.id
       status = room.status
       roominfo << {id => status}
     end
 
-    366.times do
-      calendar << {date => roominfo}
-      date = date + 1
+    until current_date == last_day
+      @@calendar << {current_date => roominfo}
+      current_date += 1
     end
+  end
 
-    return calendar
+  def self.calendar
+    return @@calendar
+  end
 
+  def self.set_calendar(new_cal)
+    @@calendar = new_cal
   end
 
   def self.all_available_rooms(startyear, startmonth, startday, endyear, endmonth, endday)
@@ -48,13 +44,10 @@ HOTEL = Hotel.new
           if wanteddate == date
             roominfo.each do |rooms|
               rooms.each do |id, status|
-
                 if status == :available
                   openrooms << id
                 end
-                # binding.pry
               end
-
             end
           end
         end
@@ -69,10 +62,9 @@ HOTEL = Hotel.new
         finalrooms << id
       end
     end
+
     return finalrooms
   end
 
 
 end #end of class
-
-Availability.all_available_rooms(2017, 9, 8, 2017, 9, 9)
