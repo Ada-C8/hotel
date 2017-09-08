@@ -47,7 +47,7 @@ describe 'Hotel' do
   end
 
   describe 'rooms' do
-    describe 'rooms' do
+    describe '@rooms' do
       # As an administrator, I can access the list of all of the rooms in the hotel
       it 'Returns an array of all room numbers' do
         all_rooms = @hotel.rooms
@@ -86,7 +86,7 @@ describe 'Hotel' do
       end
     end
 
-    describe 'find_available_rooms' do
+    describe '#find_available_rooms' do
       # As an administrator, I can view a list of rooms that are not reserved for a given date range
       it 'returns an array of rooms' do
         rooms = @hotel.find_available_rooms('2017-09-05', '2017-09-09')
@@ -141,6 +141,10 @@ describe 'Hotel' do
 
         proc {
           @hotel.find_available_rooms('tomorrow','next friday')
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.find_available_rooms('2017-02-30','2017-04-98')
         }.must_raise ArgumentError
       end
 
@@ -223,6 +227,14 @@ describe 'Hotel' do
         proc {
           @hotel.make_reservation('cat','bug')
         }.must_raise ArgumentError
+
+        proc {
+          @hotel.make_reservation(1,2)
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.make_reservation('2019-02-40','2019-02-45')
+        }.must_raise ArgumentError
       end
 
       it 'raises InvalidDatesError if dates are out of order' do
@@ -231,7 +243,7 @@ describe 'Hotel' do
         }.must_raise InvalidDatesError
       end
 
-      it 'raises NoBlockError if passed invalid block' do
+      it 'raises NoBlockError if passed nonexistent block' do
         proc {
           @hotel.make_reservation('2017-09-05', '2017-09-08', 'catbug')
         }.must_raise NoBlockError
@@ -310,7 +322,7 @@ describe 'Hotel' do
       end
     end
 
-    describe 'find_rooms_not_in_blocks' do
+    describe '#find_rooms_not_in_blocks' do
       it 'returns array of rooms' do
         rooms = @hotel.find_rooms_not_in_blocks('2017-10-14', '2017-10-18')
         rooms.must_be_kind_of Array
@@ -324,7 +336,7 @@ describe 'Hotel' do
       end
     end
 
-    describe 'block_availability?' do
+    describe '#block_availability?' do
       # - As an administrator, I can check whether a given block has any rooms available
       it 'returns true if there are unbooked rooms within block for given dates' do
         check = @hotel.block_availability?('2017-08-05', '2017-08-07', @block.id)
@@ -344,7 +356,7 @@ describe 'Hotel' do
       end
     end
 
-    describe 'block_exists?' do
+    describe '#block_exists?' do
       it 'returns true if block w/ given ID exists' do
         @hotel.block_exists?(@block.id).must_equal true
       end
