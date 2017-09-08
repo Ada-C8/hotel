@@ -47,9 +47,9 @@ module Hotel
     end
 
     def check_availability(check_in,check_out)
-      booked_rooms =
+      booked_rooms = check_reservations(check_in,check_out)
       available_rooms = []
-      check_reservations(check_in,check_out)
+
 
       all_rooms.each do |room|
         if !(booked_rooms.include?(room))

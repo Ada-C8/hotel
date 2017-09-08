@@ -4,16 +4,10 @@ describe "Reservations class" do
     @check_in = Date.new(2017,9,5)
     @check_out = Date.new(2017,9,6)
     @hotel = Hotel::Reservations.new
-    @res1 = Hotel::Booking.new(1, [@hotel.all_rooms[0],@hotel.all_rooms[1]], Hotel::DateRange.new(@check_in,@check_out))
-    @res2 = Hotel::Booking.new(2,[@hotel.all_rooms[2]], Hotel::DateRange.new(@check_in,@check_out))
-    @res3 = Hotel::Booking.new(3, [@hotel.all_rooms[3]], Hotel::DateRange.new(@check_in,@check_out + 2))
-    @res4 = Hotel::Booking.new(4, [@hotel.all_rooms[2]], Hotel::DateRange.new(@check_in,@check_out + 1))
-    res_arr = [@res1,@res2,@res3,@res4]
-    # @res5 = Hotel::Booking.new(4, [@hotel.all_rooms[2]], Hotel::DateRange.new(@check_in - 1,@check_out - 1))
-    # res_arr = [@res1,@res2,@res3,@res4]
-    res_arr.each do |res|
-      @hotel.all_reservations << res
-    end
+    @hotel.make_reservation(@check_in,@check_out,1)
+    @hotel.make_reservation(@check_in,@check_out,1)
+    @hotel.make_reservation(@check_in,@check_out + 2,1)
+    @hotel.make_reservation(@check_in + 1,@check_out + 1,4)
   end
   describe "initializes" do
     it "initializes" do
@@ -41,7 +35,7 @@ describe "Reservations class" do
     it "return a list of rooms booked for a given date range, rooms should be unique" do
       arr_booked = @hotel.check_reservations(@check_in,@check_out + 3)
       arr_booked_unique = arr_booked.uniq
-      arr_booked.length.must_equal 4
+      arr_booked.length.must_equal 5
       arr_booked.length.must_equal arr_booked_unique.length
     end
     it "returns an empty array if nothing is booked" do
@@ -58,7 +52,9 @@ describe "Reservations class" do
       rooms_available_unique = rooms_available.uniq
       rooms_available.length.must_equal rooms_available_unique.length
     end
-    xit "returns an empty array if everything is booked" do
+    it "returns an empty array if everything is booked" do
+      @hotel.make_reservation(@check_in - 1,@check_out - 1,20)
+      # binding.pry
       #will fail until we do make booking method
       @hotel.check_availability(@check_in - 1,@check_out - 1).must_be_empty
     end
@@ -77,9 +73,10 @@ describe "Reservations class" do
       after = @hotel.all_reservations.length
       after.must_equal (before + 1)
     end
-    xit "make sure it creates consecutive ID numbers" do
+    it "make sure it creates consecutive ID numbers" do
       id1 = @hotel.make_reservation(@check_in,@check_out,1).id
       id2 = @hotel.make_reservation(@check_in,@check_out,1).id
+      binding.pry
       id2.must_equal (id1 + 1)
     end
     xit "picks the next consecutive room number available" do
