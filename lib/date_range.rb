@@ -8,12 +8,19 @@ module Hotel
     def initialize(check_in, check_out)
     @check_in = check_in
     @check_out = check_out
-    @nights = (@check_out - @check_in).to_i
+    # @nights = (@check_out - @check_in).to_i
+    @nights = ''
     @nights_arr = []
     make_nights_arr
     end
+    def valid_input?
+      if @check_in.class != Date && @check_out.class != Date
+        raise ArgumentError.new("User input Check-in: #{@check_in} and Check-out: #{@check_out} are not valid inputs, must be a Date Object.")
+      end
+    end
 
     def valid_date?
+      valid_input?
       if @check_in > @check_out
         raise InvalidDateRangeError.new("Invalid Date Range: Check-out #{@check_out} is before Check-in #{@check_in}")
       end
@@ -21,6 +28,7 @@ module Hotel
 
     def make_nights_arr
       valid_date?
+      @nights = (@check_out - @check_in).to_i
       counter = 0
       @nights.times do
         @nights_arr << (@check_in + counter)

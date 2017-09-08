@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-xdescribe "DateRange Class" do
+describe "DateRange Class" do
   before do
     check_in = Date.new(2017,9,5)
     check_out = Date.new(2017,9,8)
@@ -31,10 +31,14 @@ xdescribe "DateRange Class" do
   end
   describe "valid_date? method" do
     it "valid_date? will raise an error if check_out if prior to check_in" do
-      # binding.pry
       check_in = Date.new(2017,9,5)
       check_out = Date.new(2017,9,8)
       proc{Hotel::DateRange.new(check_out,check_in)}.must_raise InvalidDateRangeError
+    end
+    it "valid_date? will raise an error if parameters check-in/out are not Date objects" do
+      check_in = "9/6/2017"
+      check_out = Date.new(2017,9,8)
+      proc{Hotel::DateRange.new(check_out,check_in)}.must_raise ArgumentError
     end
   end
   describe "make_nights_arr method" do
