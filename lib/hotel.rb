@@ -3,6 +3,12 @@ require 'date'
 module Administration
   class Hotel
 
+    attr_accessor :all_rooms
 
-  end
-end
+    def initialize(all_rooms)
+      @all_rooms = all_rooms
+    end
+
+
+  end #end of class
+end #end of hotel

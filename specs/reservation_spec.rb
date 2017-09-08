@@ -44,9 +44,6 @@ describe "Administration#Reservation" do
       reservation = Administration::Reservation.new(check_in, check_out)
       reservation.total_nights.must_equal 1
     end
-
-
-
   end #end of total_nights
 
   describe "#total_cost" do

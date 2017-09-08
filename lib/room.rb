@@ -10,9 +10,7 @@ module Administration
       @dates_reserved = []
 
       raise ArgumentError.new("Invalid room number") if !(@room_num.is_a? Integer)
-
     end
-
 
   end #room
 end # module

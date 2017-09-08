@@ -16,10 +16,5 @@ describe "Administration#Room wave 1" do
         Administration::Room.new("four")
       }.must_raise ArgumentError
     end
-
-
   end
-
-
-
 end #hotel room wave 1
