@@ -10,8 +10,8 @@ module Hotel
 
     def get_total
       # get the total cost for a given reservation
-      number_of_nights = @date_range.number_of_nights
-      total = number_of_nights * @cost_per_night
+      number_of_nights = date_range.number_of_nights
+      total = number_of_nights * cost_per_night
       return total
     end
   end
