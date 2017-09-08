@@ -1,2 +1,0 @@
-class NoRoomError < StandardError
-end
