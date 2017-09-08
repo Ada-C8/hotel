@@ -4,7 +4,7 @@ module Hotel
   class Reservation
     extend Overlapping
 
-    attr_reader :start_date, :end_date, :room_num
+    attr_reader :block_id, :start_date, :end_date, :room_num
 
     @@reservations = []
 
