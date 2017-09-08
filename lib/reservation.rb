@@ -21,6 +21,7 @@ module Hotel
       raise ArgumentError.new "Invalid date range" if @check_in >= @check_out
     end
 
+    private
     def cost
       length_of_stay = (@check_out - @check_in).to_i
       cost_of_stay = length_of_stay * @room.cost

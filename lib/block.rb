@@ -20,6 +20,7 @@ module Hotel
       @reservations = []
     end
 
+    
     def add_rooms(begin_date, end_date)
       block_rooms = []
       available_rooms = Hotel.available_rooms(begin_date, end_date)
