@@ -1,22 +1,31 @@
 require 'date'
 require_relative 'hotel.rb'
 require_relative 'room.rb'
-
+require_relative 'reservations.rb'
 
 module Hotel_System
 
-  class Reservations
-    attr_accessor :all_rooms, :check_in, :check_out, :room, :today, :num_of_nights, :all_reservations, :total_cost, :date_range
+  class Block
 
-    def initialize(room, check_in, check_out)
-      @room = room
+    attr_accessor :array_of_room_objects, :check_in, :check_out, :today
+
+    def initialize(num_of_rooms, check_in, check_out, discount)
+      @num_of_rooms = num_of_rooms
+      if @num_of_rooms > 5
+        raise ArgumentError.new("Invalid block request -- too many rooms requested")
+      end
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
       @today = Date.today
+      @array_of_room_objects = []
+    end
+
+    def add_room_to_block(room_number)
+      @array_of_room_objects << room_number
     end
 
     def valid_date_range?
-      if check_in < today
+      if @check_in < today
         raise ArgumentError.new("Invalid check in date")
       elsif check_out < today
         raise ArgumentError.new("Invalid check out date")
@@ -29,23 +38,5 @@ module Hotel_System
       end
     end
 
-    def num_of_nights
-      @num_of_nights = (@check_out - @check_in).to_i
-    end
-
-    def res_date_range_generator
-      @date_range = [@check_in]
-      date = @check_in
-      until date.next == @check_out
-        date = date.next
-        @date_range << date
-      end
-      return @date_range
-    end
-
-    def total_cost
-      total_cost = num_of_nights * @room.price
-    end
   end
-
 end

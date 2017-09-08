@@ -142,27 +142,65 @@ describe "avail_rooms_by_daterange" do
   end
 end
 
-describe "avail_checker" do
-  it "avail_checker makes reservation if room not already reserved" do
+describe "make_res_if_avail" do
+  it "make_res_if_avail makes reservation if room not already reserved" do
     @hotel = Hotel_System::Hotel.new(20)
-    res = @hotel.avail_checker(1, "2018-1-1", "2018-1-5")
-    res2 = @hotel.avail_checker(2, "2017-12-25", "2018-1-4")
+    res = @hotel.make_res_if_avail(1, "2018-1-1", "2018-1-5")
+    res2 = @hotel.make_res_if_avail(2, "2017-12-25", "2018-1-4")
     @hotel.availability_room_hash_by_date("2018-1-2")[1].must_equal :reserved
     @hotel.availability_room_hash_by_date("2018-1-2")[2].must_equal :reserved
     @hotel.availability_room_hash_by_date("2018-1-2")[20].must_equal :available
     @hotel.available_rooms_by_date("2017-12-26").wont_include 2
   end
 
-  it "avail_checker returns argument error if room already reserved" do
+  it "make_res_if_avail returns argument error if room already reserved" do
     @hotel = Hotel_System::Hotel.new(20)
-    res = @hotel.avail_checker(1, "2018-1-1", "2018-1-5")
-    res2 = @hotel.avail_checker(2, "2017-12-25", "2018-1-4")
-    proc {@hotel.avail_checker(1, "2018-1-1", "2018-1-3")}.must_raise ArgumentError
-    proc {@hotel.avail_checker(2, "2018-1-3", "2018-1-4")}.must_raise ArgumentError
-    begin @hotel.avail_checker(2, "2018-1-3", "2018-1-4")
+    res = @hotel.make_res_if_avail(1, "2018-1-1", "2018-1-5")
+    res2 = @hotel.make_res_if_avail(2, "2017-12-25", "2018-1-4")
+    proc {@hotel.make_res_if_avail(1, "2018-1-1", "2018-1-3")}.must_raise ArgumentError
+    proc {@hotel.make_res_if_avail(2, "2018-1-3", "2018-1-4")}.must_raise ArgumentError
+    begin @hotel.make_res_if_avail(2, "2018-1-3", "2018-1-4")
     rescue ArgumentError => e
       e.message.must_equal("Room not available")
     end
   end
 
+end
+
+describe "blocks" do
+
+  it "find_rooms_for_block returns arary of available rooms for given date range" do
+    @hotel = Hotel_System::Hotel.new(20)
+    res = @hotel.make_reservation(1, "2018-1-1", "2018-1-5")
+    res2 = @hotel.make_reservation(2, "2017-12-25", "2018-1-4")
+    res3 = @hotel.make_reservation(19, "2018-1-3", "2018-1-31")
+    list_of_rooms = @hotel.find_rooms_for_block(5, "2018-1-1", "2018-1-3")
+    list_of_rooms.must_be_instance_of Array
+    list_of_rooms.length.must_equal 5
+  end
+
+  it "find_rooms_for_block raises error if insufficient rooms available" do
+  @hotel2 = Hotel_System::Hotel.new(5)
+  res = @hotel2.make_reservation(1, "2018-1-1", "2018-1-5")
+  res2 = @hotel2.make_reservation(2, "2017-12-25", "2018-1-4")
+  proc {@hotel2.find_rooms_for_block(5, "2018-1-1", "2018-1-3")}.must_raise ArgumentError
+  begin @hotel2.find_rooms_for_block(5, "2018-1-1", "2018-1-3")
+  rescue ArgumentError => e
+    e.message.must_equal("Insufficient number of rooms available")
+  end
+  end
+
+  it "can add a room to a block instatiated inside a hotel" do
+    @hotel = Hotel_System::Hotel.new(20)
+    block = @hotel.make_block(5, "1-1-2018", "1-5-2018", 0.8)
+    block.must_be_instance_of Hotel_System::Block
+    block.array_of_room_objects.length.must_equal 5
+    p @hotel.availability_room_hash_by_date("2018-1-2")
+  end
+
+  it "cannot reserve a room in a block" do
+    @hotel = Hotel_System::Hotel.new(20)
+    block = @hotel.make_block(5, "1-1-2018", "1-5-2018", 0.8)
+    proc {@hotel.make_res_if_avail(2, "2017-12-25", "2018-1-4")}.must_raise ArgumentError
+  end
 end

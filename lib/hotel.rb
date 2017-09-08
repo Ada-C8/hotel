@@ -1,6 +1,7 @@
 require 'date'
 require_relative 'room.rb'
 require_relative 'reservations.rb'
+require_relative 'block.rb'
 require 'pry'
 
 module Hotel_System
@@ -9,7 +10,7 @@ module Hotel_System
 
     attr_reader :all_rooms, :room_list, :list_of_rooms, :room_number, :reservation
 
-    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list, :master_list
+    attr_accessor :all_reservations, :room_object, :room_price, :available_rooms_hash, :avail_check_by_date, :available_room_list, :master_list, :block_rooms
 
     def initialize(num_of_rooms)
       @all_rooms = fill_hotel(num_of_rooms)
@@ -31,8 +32,24 @@ module Hotel_System
     def make_reservation(room_number, check_in, check_out)
       room = return_room_object_by_num(room_number)
       @reservation = Reservations.new(room, check_in, check_out)
-      @all_reservations << @reservation
+      if @reservation.valid_date_range? == true
+        @all_reservations << @reservation
+      end
       return @reservation
+    end
+
+    def make_block(num_of_rooms, check_in, check_out, discount)
+      @block = Block.new(num_of_rooms, check_in, check_out, discount)
+      if @block.valid_date_range? == true
+        @all_reservations << @block
+      end
+      list_of_rooms = find_rooms_for_block(num_of_rooms, check_in, check_out)
+      list_of_rooms.each do |room|
+        discounted_room = return_room_object_by_num(room)
+        discounted_room.price = return_room_object_by_num(room).price * 0.8
+        @block.add_room_to_block(discounted_room)
+      end
+      return @block
     end
 
     def date_object_checker(date)
@@ -55,7 +72,7 @@ module Hotel_System
 
     def available_room_hash
       @available_rooms_hash = {}
-      (1..20).each do |num|
+      (1..@num_of_rooms).each do |num|
         @available_rooms_hash[num] = :available
       end
       return @available_rooms_hash
@@ -65,12 +82,19 @@ module Hotel_System
       @list_of_rooms_avail_on_date = available_room_hash
       if reservations_by_date(date).length == 0
         return @list_of_rooms_avail_on_date
+        #TODO need to add elsif to check if in a block here??
       else
         reservations_by_date(date).each do |res|
-          @list_of_rooms_avail_on_date[res.room.room_number] = :reserved
+          if res.is_a? Hotel_System::Reservations
+            @list_of_rooms_avail_on_date[res.room.room_number] = :reserved
+          elsif res.is_a? Hotel_System::Block
+            res.array_of_room_objects.each do |room|
+              @list_of_rooms_avail_on_date[room.room_number] = :block
+            end
+          end
         end
+        return @list_of_rooms_avail_on_date
       end
-      return @list_of_rooms_avail_on_date
     end
 
     def available_rooms_by_date(date)
@@ -89,7 +113,7 @@ module Hotel_System
         @master_list << available_rooms_by_date(date)
       end
       @master_list = @master_list.inject(:&)
-      # p @master_list
+      return @master_list
     end
 
     def inquiry_date_range_generator(check_in, check_out)
@@ -104,7 +128,7 @@ module Hotel_System
       return @inquiry_date_range
     end
 
-    def avail_checker(room_number, check_in, check_out)
+    def make_res_if_avail(room_number, check_in, check_out)
       date_range = inquiry_date_range_generator(check_in, check_out)
       boolean = avail_rooms_by_daterange(date_range).include? room_number
       if boolean == false
@@ -114,16 +138,40 @@ module Hotel_System
       end
     end
 
+    def make_block_res_if_avail(room_number, check_in, check_out)
+      date_range = inquiry_date_range_generator(check_in, check_out)
+
+    end
+
+    def make_block_reservation(room_number, check_in, check_out)
+
+    end 
+
+    def find_rooms_for_block(num_of_rooms, check_in, check_out)
+      date_range = inquiry_date_range_generator(check_in, check_out)
+      master_list = avail_rooms_by_daterange(date_range)
+      p "master list length #{master_list.length}"
+      if master_list.length < num_of_rooms
+        raise ArgumentError.new("Insufficient number of rooms available")
+      else
+        @block_rooms = master_list.shift(num_of_rooms)
+      end
+      return @block_rooms
+    end
+
+
     private
 
     def fill_hotel(num_of_rooms)
       room_array = []
+      @num_of_rooms = num_of_rooms
       num_of_rooms.times do |i|
         room_array << Room.new(i + 1, 200)
       end
       return room_array
     end
 
-  end
 
-end
+
+  end #class end
+end # module end
