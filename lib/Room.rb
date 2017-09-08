@@ -22,8 +22,8 @@ module Hotel
     end
 
     def self.update_price(room_num, new_rate)
-      index = @@rooms.find_index { |i| i.room_num == room_num }
-      @@rooms[index].rate = new_rate
+      index = Room.all.find_index { |i| i.room_num == room_num }
+      Room.all[index].rate = new_rate
     end
 
   end # Room class

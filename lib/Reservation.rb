@@ -26,7 +26,7 @@ module Hotel
 
     def self.available(start_date, end_date)
       all_rooms = Room.all.map { |room| room.room_num }
-      overlapping_rooms = @@reservations.map do |reservation|
+      overlapping_rooms = Reservation.all.map do |reservation|
         reservation.room_num if self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
       return all_rooms - overlapping_rooms
@@ -36,7 +36,7 @@ module Hotel
       rate = Room.all.find { |room| room.room_num == room_num }.rate
       discount = 0
       discount = Block.all.find { |block| block.block_id == block_id }.discount if block_id != nil
-      return (@end_date - @start_date) * rate * (1 - discount)
+      return (end_date- start_date) * rate * (1 - discount)
     end
 
     private
