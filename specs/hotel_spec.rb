@@ -61,6 +61,9 @@ describe 'Hotel' do
         20.times { |i| @my_hotel.rooms[i].reserve(@check_in, @check_out)}
         proc {@my_hotel.create_block(@check_in, @check_out, 1, 0.70)}.must_raise ArgumentError
       end
+      it 'does not allow creation of a block with more than 5 rooms' do
+        proc {@my_hotel.create_block(@check_in, @check_out, 6, 0.70)}.must_raise ArgumentError
+      end
       it 'returns a new instance of Block' do
         @my_hotel.create_block(@check_in, @check_out, 1, 0.70).must_be_instance_of Array
         @my_hotel.blocks.each {|block| block.must_be_instance_of Hotel_System::Block}

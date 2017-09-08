@@ -43,6 +43,9 @@ module Hotel_System
       if blockable_rooms.length < size
         raise ArgumentError.new("Block of this size not available")
       end
+      if size > 5
+        raise ArgumentError.new("Blocks can have a maximum of 5 rooms")
+      end
       rooms = blockable_rooms.sample(size)
       rooms.each {|room| room.reserve(check_in, check_out)}
       @blocks << Hotel_System::Block.new(check_in, check_out, rooms, rate_adjustor)
