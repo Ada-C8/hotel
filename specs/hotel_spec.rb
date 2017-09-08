@@ -31,11 +31,11 @@ describe "HotelClass" do
     end
     it "Is an Array" do
       @hotel_test.reserve_room(2,"2017-9-12", "2017-9-15")
-      @hotel_test.reservations.must_be_kind_of Array
+      @hotel_test.access_reservations.must_be_kind_of Array
     end
     it "Has one element" do
       @hotel_test.reserve_room(2,"2017-9-12", "2017-9-15")
-      @hotel_test.reservations.length.must_equal 1
+      @hotel_test.access_reservations.length.must_equal 1
     end
   end
   describe "Get_total method" do
