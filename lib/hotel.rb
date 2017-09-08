@@ -6,12 +6,13 @@ module Hotel
 
   class Hotel
 
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :blocks
 
     # get a list of all rooms
     def initialize
-      @rooms = new_rooms
+      @rooms = make_rooms
       @reservations = []
+      @blocks = []
     end
 
     def new_reservation(checkin_date, checkout_date, room_number)
@@ -23,7 +24,22 @@ module Hotel
         raise ArgumentError.new("Room is not available for those dates.")
       end
     end
-    # get list of all reservations on a given date
+
+    def new_block(checkin_date, checkout_date, num_of_rooms, discount)
+      case
+      when num_of_rooms > 5
+        raise ArgumentError.new("Maximum number of rooms for a block is 5")
+      when num_of_rooms > rooms_available(checkin_date, checkout_date).length
+        raise ArgumentError.new("There are not enough rooms available for these dates")
+      else
+        block_rooms = rooms_available(checkin_date, checkout_date).first(num_of_rooms)
+
+        block = Block.new(checkin_date, checkout_date, block_rooms, discount)
+
+        blocks << block
+      end
+    end
+
     def reservations_on(date)
       check_date = Date.strptime(date, '%m-%d-%Y')
 
@@ -31,20 +47,23 @@ module Hotel
     end
 
     def rooms_available(checkin_date, checkout_date)
+      rooms.reject { |room| booked_rooms(checkin_date, checkout_date).include?(room.number) }
+    end
+
+    def booked_rooms(checkin_date, checkout_date)
       checkin = Date.strptime(checkin_date, '%m-%d-%Y')
       checkout = Date.strptime(checkout_date, '%m-%d-%Y')
       booked_rooms = []
+
       checkin.upto(checkout) do |date|
         booked_rooms << reservations_on(date.strftime('%m-%d-%Y')).collect { |reserv| reserv.room }
       end
 
-      booked_rooms.flatten!.uniq!
-
-      rooms.reject { |room| booked_rooms.include?(room.number) }
+      booked_rooms.flatten.uniq
     end
 
     private
-    def new_rooms
+    def make_rooms
       rooms = []
       i = 0
       NUMBER_OF_ROOMS.times do

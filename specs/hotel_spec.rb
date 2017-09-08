@@ -64,8 +64,6 @@ describe "Hotel" do
   end
 
   describe "rooms_available" do
-
-
     it "provides a list of available rooms for a date range" do
       smith
       garcia
@@ -75,6 +73,39 @@ describe "Hotel" do
 
       open_rooms.must_be_instance_of Array
       open_rooms.length.must_equal 17
+    end
+  end
+
+  describe "new_block" do
+    it "can create a block of rooms, with date range, discount rate, and room numbers" do
+      block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
+      hotel.blocks.length.must_equal 1
+      # block.must_respond_to :checkin
+      # block.must_respond_to :checkout
+      # block.must_respond_to :discount
+      # block.must_respond_to :rooms
+    end
+
+    xit "only accepts rooms that are available" do
+
+    end
+
+    xit "prevents its rooms from showing as available" do
+
+    end
+
+    xit "contains a maximum of 5 rooms" do
+
+    end
+  end
+
+  xdescribe "reserve_from_block" do
+    it "reserves a room from a block" do
+
+    end
+
+    it "will have the same reservation dates as the block" do
+
     end
   end
 end
