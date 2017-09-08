@@ -1,16 +1,15 @@
 require 'date'
 
-module Hotel
+module Administration
   class Room
 
-    attr_reader :room_num, :rate
+    attr_reader :room_num
 
-    def initialize(room_data)
-      @room_num = room_data[:room_num]
-      @rate = room_data[:rate]
+    def initialize(room_num)
+      @room_num = room_num
       @dates_reserved = []
 
-      raise ArgumentError.new("room_num is not valid") if !(@room_num.is_a? Integer)
+      raise ArgumentError.new("Invalid room number") if !(@room_num.is_a? Integer)
 
     end
 

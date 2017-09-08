@@ -12,6 +12,15 @@ describe "Administration#Reservation" do
       reservation.check_in.must_equal check_in
       reservation.check_in.must_be_kind_of Date
     end
+
+    it "raise ArgumentError if there is no overnight stay" do
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 1)
+
+      proc {
+        Administration::Reservation.new(check_in, check_out)
+      }.must_raise ArgumentError
+    end
   end
 
   describe "#total_nights" do
@@ -36,15 +45,7 @@ describe "Administration#Reservation" do
       reservation.total_nights.must_equal 1
     end
 
-    # it "raise ArgumentError if there is no overnight stay" do
-    #   check_in = Date.new(2017, 9, 1)
-    #   check_out = Date.new(2017, 9, 1)
-    #   reservation = Administration::Reservation.new(check_in, check_out)
-    #
-    #   proc {
-    #     reservation.total_nights.must_equal 0
-    #   }.must_raise ArgumentError
-    # end
+
 
   end #end of total_nights
 
@@ -63,6 +64,23 @@ describe "Administration#Reservation" do
       check_out = Date.new(2017, 9, 5)
       reservation = Administration::Reservation.new(check_in, check_out)
       reservation.reserved?(Date.new(2017, 9, 3)).must_equal true
+
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      reservation = Administration::Reservation.new(check_in, check_out)
+      reservation.reserved?(Date.new(2017, 9, 1)).must_equal true
+
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      reservation = Administration::Reservation.new(check_in, check_out)
+      reservation.reserved?(Date.new(2017, 9, 20)).must_equal false
+    end
+
+    it "not consider the check out date as reserved" do
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      reservation = Administration::Reservation.new(check_in, check_out)
+      reservation.reserved?(Date.new(2017, 9, 5)).must_equal false
     end
   end
 

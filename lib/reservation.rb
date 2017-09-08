@@ -1,3 +1,5 @@
+require 'date'
+
 module Administration
   class Reservation
 
@@ -8,6 +10,8 @@ module Administration
     def initialize(check_in, check_out)
       @check_in = check_in
       @check_out = check_out
+
+      raise ArgumentError.new("Enter a valid date range") if @check_in == @check_out
     end
 
     def total_nights
