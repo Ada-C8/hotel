@@ -4,5 +4,5 @@ end
 class InvalidDatesError < StandardError
 end
 
-class InvalidBlockError < StandardError
+class NoBlockError < StandardError
 end

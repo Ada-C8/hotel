@@ -147,7 +147,7 @@ describe 'Hotel' do
       it 'raises an error if block is not found' do
         proc {
           @hotel.find_available_rooms('2017-10-14','2017-10-15', 'B10141991')
-        }.must_raise InvalidBlockError
+        }.must_raise NoBlockError
 
       end
 
@@ -176,31 +176,31 @@ describe 'Hotel' do
   describe 'reservations' do
     describe '#make_reservation' do
       before do
-        @reservation1 = @hotel.make_reservation('2017-09-05', '2017-09-08')
+        @reservation = @hotel.make_reservation('2017-09-05', '2017-09-08')
       end
       it 'creates a reservation and adds it to the @reservations array' do
         # As an administrator, I can reserve a room for a given date range
-        @reservation1.must_be_kind_of Hotel::Reservation
-        @reservation1.checkout.strftime.must_equal '2017-09-08'
+        @reservation.must_be_kind_of Hotel::Reservation
+        @reservation.checkout.strftime.must_equal '2017-09-08'
       end
 
       it 'will reserve the first available room' do
         # As an administrator, I can reserve an available room for a given date range
         reservation2 = @hotel.make_reservation('2017-09-05', '2017-09-08')
-        @reservation1.room.wont_equal reservation2.room
+        @reservation.room.wont_equal reservation2.room
       end
 
       it 'will book a room again after a reservation ends' do
         reservation2 = @hotel.make_reservation('2018-09-05', '2018-09-08')
 
-        @reservation1.room.must_equal reservation2.room
+        @reservation.room.must_equal reservation2.room
       end
 
       it 'can book two consecutive reservations to the same room' do
         # A reservation is allowed start on the same day that another reservation for the same room ends
         reservation2 = @hotel.make_reservation('2017-09-08', '2017-09-11')
 
-        @reservation1.room.must_equal reservation2.room
+        @reservation.room.must_equal reservation2.room
       end
 
       it 'will not book a room that is part of a block' do
@@ -217,6 +217,24 @@ describe 'Hotel' do
         reservation = @hotel.make_reservation('2017-08-04', '2017-08-05', block.id)
 
         block.rooms.must_include reservation.room
+      end
+
+      it 'raises ArgumentError if passed invalid dates' do
+        proc {
+          @hotel.make_reservation('cat','bug')
+        }.must_raise ArgumentError
+      end
+
+      it 'raises InvalidDatesError if dates are out of order' do
+        proc {
+          reservation = @hotel.make_reservation('2017-09-08', '2017-09-05')
+        }.must_raise InvalidDatesError
+      end
+
+      it 'raises NoBlockError if passed invalid block' do
+        proc {
+          @hotel.make_reservation('2017-09-05', '2017-09-08', 'catbug')
+        }.must_raise NoBlockError
       end
 
       it 'raises NoRoomError if no rooms are available' do

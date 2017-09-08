@@ -56,7 +56,7 @@ module Hotel
       DateRange.validate_order(checkin, checkout)
       if block_id
         unless block_exists?(block_id)
-          raise(InvalidBlockError, "No such block: #{block_id}")
+          raise(NoBlockError, "No such block: #{block_id}")
         end
         unless block(block_id).includes_dates?(checkin, checkout)
           raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{block(block_id).id}")
