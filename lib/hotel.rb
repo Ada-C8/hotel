@@ -19,9 +19,9 @@ class Hotel
   end
 
   # reserves an available room for a given date range
-  def create_reservation(room, check_in, check_out)
+  def create_reservation(name, room, check_in, check_out)
     if availability(check_in, check_out).include?(room)
-      new_reservation = Reservation.new(room, check_in, check_out)
+      new_reservation = Reservation.new(name, room, check_in, check_out)
       @reservations << new_reservation
       return new_reservation
     else
@@ -60,7 +60,7 @@ class Hotel
 
     @blocks.each do |block|
       if date_range.overlap?(block.dates.start, block.dates.end)
-        blocked_rooms << room
+        blocked_rooms << block.rooms
       end
     end
 
@@ -75,16 +75,55 @@ class Hotel
         raise ArgumentError.new("That room is not available as a block")
       end
     end
-    new_block = Block.new(rooms, check_in, check_out)
+    new_block = Block.new(name, rooms, check_in, check_out)
     @blocks << new_block
     return new_block
   end
 
   # check availability of rooms in a block and reserve room in block if available
   # pass in name of block reservation, then see if the block
-  # res dates match block dates
 
+  # reserve a room from within a block of rooms
+  def reserve_block_room(name, room)
+    @blocks.each do |block|
+      if name == block.name && block.rooms.include?(room) && availability(block.dates.start, block.dates.end).include?(room)
+        new_reservation = Reservation.new(name, room, block.dates.start, block.dates.end)
+        @reservations << new_reservation
+      else
+        raise ArgumentError.new("The room is either booked or the name and room combination is not in our records.")
+      end
+    end
+  end
+
+  def check_block_availability(name)
+    @blocks.each do |block|
+      if name == block.name
+        available_rooms_in_block = block.rooms & availability(block.dates.start, block.dates.end)
+        puts block.rooms
+        puts availability(block.dates.start, block.dates.end)
+        return available_rooms_in_block
+        #block.rooms is a set of blocked rooms - availability(block.dates.start, block.dates.end)
+      end
+    end
+
+    # if block.name equals what admin passes in
+    # res dates match block dates
+
+  end
 end
+
+# check_in = Date.new(2017, 04, 17)
+# check_out = Date.new(2017, 04, 20)
+# bb = Hotel.new
+# check_in = Date.new(2017, 04, 11)
+# check_out = Date.new(2017, 04, 15)
+# bb.create_block("guest", [3,2,5], check_in, check_out)
+# bb.reserve_block_room("guest", 3)
+# puts bb.check_block_availability("guest")
+#
+# # bb.reserve_block_room("guest", 3)
+#
+# print bb.all_reservations
 
 # # check availability of rooms for a certain date range
 # def availability(check_in, check_out)

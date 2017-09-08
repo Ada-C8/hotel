@@ -2,7 +2,7 @@ require_relative 'reservation'
 
 class Block
 
-  attr_reader :price_night, :rooms, :dates
+  attr_reader :price_night, :rooms, :dates, :name
 
   def initialize(name, rooms, check_in, check_out)
     @name = name
@@ -18,12 +18,17 @@ class Block
     end
   end
 
+  # def rooms
+  #
+  #
+  # end
+
   # returns total_cost for stay
   # def total_cost
   #   total_cost = @price_night * @dates.nights
   #   return total_cost
   # end
-  # 
+  #
   # def nights
   #   nights = (check_out-check_in)
   #   return nights

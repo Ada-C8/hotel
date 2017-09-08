@@ -4,30 +4,31 @@ class Reservation
   # @@reservations = []
   attr_reader :dates, :room
 
-  def initialize(room, check_in, check_out)
+  def initialize(name, room, check_in, check_out)
+    @name = name
     @room = room
     @dates = DateRange.new(check_in, check_out)
     @price_night = 200
   end
 
-# returns total_cost for stay
-def total_cost
-  total_cost = @price_night * @dates.nights
-  return total_cost
-end
+  # returns total_cost for stay
+  def total_cost
+    total_cost = @price_night * @dates.nights
+    return total_cost
+  end
 
 end
 
 
 
 
-  # def add_reservation
-  #   @@reservations << self
-  # end
-  #
-  # def self.all
-  #   return @@reservations
-  # end
+# def add_reservation
+#   @@reservations << self
+# end
+#
+# def self.all
+#   return @@reservations
+# end
 
 # end
 
