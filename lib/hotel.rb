@@ -23,20 +23,19 @@ module Hotel
         if @all_rooms[k].reservations.length == 0
           by_date << @all_rooms[k].room_num
         elsif @all_rooms[k].reservations.length != 0
-          # needs to iterate over reservations
-          unless @all_rooms[k].reservations[0].dates.include? valid_date.to_s
-            by_date << @all_rooms[k].room_num
+          @all_rooms[k].reservations.each_index do |i|
+            unless @all_rooms[k].reservations[i].dates.include? valid_date.to_s
+              by_date << @all_rooms[k].room_num
+            end
           end
         end
       end
       return by_date
     end
 
-    def total(num) # reservation id
+    def total(num)
       # run 'all_reservations'
-      # search by id, reservation creates an id
-      # only would return for a specific reservation
-      # two arguments? num and reservation?
+      # search by reservation id?
       num_nights = @all_rooms[num].reservations[0].dates.length - 1
       return num_nights * @rate
     end
@@ -69,8 +68,3 @@ module Hotel
 
   end #end of California
 end #end of Hotel
-
-new = Hotel::California.new
-new.all_rooms[1].create_reservation("2017-03-04", "2017-03-05")
-new.all_rooms[4].create_reservation("2017-03-04", "2017-03-19")
-p new.all_rooms[1].reservations

@@ -22,7 +22,7 @@ module Hotel
         @reservations << reservation
       else
         @reservations.each do |item|
-          compare = dates & item.dates # add a .pop type thing
+          compare = dates & item.dates[0...-1]
           if compare.length != 0
             raise ArguementError("This room is already booked.")
           end
