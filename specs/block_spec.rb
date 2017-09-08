@@ -10,9 +10,9 @@ describe "Block class" do
     @test_ob = BookingSystem::Block.new( number_of_rooms, rooms_in_block, check_in, check_out)
   end
 
-  it "Has a class method @@id that is an Integer" do
-    BookingSystem::Block::id.must_be_instance_of Integer
-  end
+  # it "Has a class method @@id that is an Integer" do
+  #   BookingSystem::Block::id.must_be_instance_of Integer
+  # end
 
   it "Has a ROOM_PRICE constant set to 200" do
     BookingSystem::Block::ROOM_PRICE.must_equal 200
@@ -30,10 +30,6 @@ describe "Block class" do
       @test_ob.must_be_instance_of BookingSystem::Block
     end
 
-    it "Has an instance variable @id that is a Integer" do
-      @test_ob.id.must_be_instance_of Integer
-    end
-
     it "Has an instance variable @number_of_rooms that is an Integer" do
       @test_ob.number_of_rooms.must_be_instance_of Integer
     end
@@ -43,7 +39,7 @@ describe "Block class" do
     end
 
     it "Has an instance variable @rooms_available that shows the rooms that are available in block in an Array" do
-      @test_ob.rooms_in_block.must_be_instance_of Array
+      @test_ob.rooms_available.must_be_instance_of Array
     end
 
     it "Has an instance variable @date_range that is an Array" do
@@ -51,18 +47,18 @@ describe "Block class" do
     end
   end
 
-  describe "rooms_available method" do
+  describe "remove_reserved_room_from_availability method" do
 
     it "Can be called" do
       @test_ob.must_respond_to :rooms_available
     end
 
     it "Returns an Array" do
-      @test_ob.rooms_available(1).must_be_instance_of Array
+      @test_ob.remove_reserved_room_from_availability(1).must_be_instance_of Array
     end
 
     it "Takes a room out of availablity when a Reservation is made" do
-      @test_ob.rooms_available(2).length.must_equal 1
+      @test_ob.remove_reserved_room_from_availability(2).length.must_equal 1
     end
 
   end

@@ -64,6 +64,26 @@ describe "Hotel class" do
 
   end
 
+  describe "block_reservation" do
+
+    before do
+      @check_in = Date.new(2017,10,9)
+      @check_out = Date.new(2017,10,15)
+
+      @hotel_ob = BookingSystem::Hotel.new
+      @block_ob = @hotel_ob.block_off_a_block(4, @check_in, @check_out)
+
+    end
+
+    it "Can be called" do
+      @hotel_ob.must_respond_to :block_reservation
+    end
+
+    it "Returns an instance of Block_Reservation" do
+      @hotel_ob.block_reservation(2, @check_in, @check_out).must_be_instance_of BookingSystem::BlockReservation
+    end
+  end
+
   describe "block_off_a_block method" do
 
     it "Can be called" do

@@ -29,19 +29,27 @@ module BookingSystem
       end
     end
 
-    def block_reservation(id, room, check_in, check_out)
+    def block_reservation(room, check_in, check_out)
       CheckUserInput.integer(room)
       CheckUserInput.between_1_20(room)
 
       requested_date_range = DateRange.new(check_in, check_out).all_reservation_dates
 
-      #check all_block for block that matches date range requested
+      #check that room and date range match a block reservation
+
+      new_block_reservation = nil
 
       @all_blocks.each do |block|
-        block.date_range == requested_date_range
-
+        #if a match make block reservation
+        #remove room from availablity in block
+        if block.date_range == requested_date_range && block.rooms_available.include?(room)
+          new_block_reservation = BookingSystem::BlockReservation.new(room, check_in, check_out)
+          block.remove_reserved_room_from_availability(room)
+          return new_block_reservation
+        else
+          raise UnavailableRoomError.new("Room #{room} in this block is not available for those dates - #{check_in.to_s} to #{check_out.to_s}")
+        end
       end
-
     end
 
     def block_off_a_block(number_of_rooms, check_in, check_out)
