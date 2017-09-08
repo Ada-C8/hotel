@@ -29,13 +29,27 @@ module BookingSystem
       end
     end
 
-    def block_off_a_block(number_of_rooms, check_in, check_out)
-      #check which rooms are available for date range
-      #https://stackoverflow.com/questions/25168005/how-to-select-the-first-n-elements-from-ruby-array-that-satisfy-a-predicate
+    def block_reservation(id, room, check_in, check_out)
+      CheckUserInput.integer(room)
+      CheckUserInput.between_1_20(room)
 
+      requested_date_range = DateRange.new(check_in, check_out).all_reservation_dates
+
+      #check all_block for block that matches date range requested
+
+      @all_blocks.each do |block|
+        block.date_range == requested_date_range
+
+      end
+
+    end
+
+    def block_off_a_block(number_of_rooms, check_in, check_out)
       CheckUserInput.integer(number_of_rooms)
       CheckUserInput.between_1_5(number_of_rooms)
 
+      #check which rooms are available for date range
+      #https://stackoverflow.com/questions/25168005/how-to-select-the-first-n-elements-from-ruby-array-that-satisfy-a-predicate
       all_available_rooms = []
       @rooms.each do |room_num|
         if room_available?(room_num, check_in, check_out)
@@ -67,6 +81,8 @@ module BookingSystem
         end
       end
 
+      #TODO: BLOCK RESERVATIONS
+
       return reservations_for_specific_date
     end
 
@@ -81,6 +97,8 @@ module BookingSystem
         end
       end
 
+      #TODO: BLOCKS
+
       return available_rooms
     end
 
@@ -90,7 +108,7 @@ module BookingSystem
     def room_available?(room, check_in, check_out)
 
       CheckUserInput.integer(room)
-      CheckUserInput.between_1_21(room)
+      CheckUserInput.between_1_20(room)
 
       all_res_for_room = @all_single_reservations.select {|res| res.room == room}
 

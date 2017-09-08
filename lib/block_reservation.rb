@@ -5,8 +5,9 @@ module BookingSystem
 
     DISCOUNTED_PRICE = ROOM_PRICE - (ROOM_PRICE * 0.15)
 
-    def initialize(room, check_in, check_out)
+    def initialize(room, check_in, check_out, id)
       super(room, check_in, check_out)
+      @id = id
     end
 
     def total_cost

@@ -10,12 +10,12 @@ describe "CheckUserInput module" do
 
   end
 
-  describe "between_1_21 method" do
+  describe "between_1_20 method" do
     it "Raises an InvalidRoomError if input for room is not an Integer between 1-20" do
 
-      proc { BookingSystem::CheckUserInput.between_1_21(0) }.must_raise BookingSystem::Reservation::InvalidRoomError
+      proc { BookingSystem::CheckUserInput.between_1_20(0) }.must_raise BookingSystem::Reservation::InvalidRoomError
 
-      proc { BookingSystem::CheckUserInput.between_1_21(21) }.must_raise BookingSystem::Reservation::InvalidRoomError
+      proc { BookingSystem::CheckUserInput.between_1_20(21) }.must_raise BookingSystem::Reservation::InvalidRoomError
     end
   end
 

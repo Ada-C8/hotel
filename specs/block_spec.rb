@@ -7,7 +7,11 @@ describe "Block class" do
     rooms_in_block = [1, 2]
     check_in = Date.new(2017,9,9)
     check_out = Date.new(2017,9,12)
-    @test_ob = BookingSystem::Block.new(number_of_rooms, rooms_in_block, check_in, check_out)
+    @test_ob = BookingSystem::Block.new( number_of_rooms, rooms_in_block, check_in, check_out)
+  end
+
+  it "Has a class method @@id that is an Integer" do
+    BookingSystem::Block::id.must_be_instance_of Integer
   end
 
   it "Has a ROOM_PRICE constant set to 200" do
@@ -24,6 +28,10 @@ describe "Block class" do
 
     it "Can be called" do
       @test_ob.must_be_instance_of BookingSystem::Block
+    end
+
+    it "Has an instance variable @id that is a Integer" do
+      @test_ob.id.must_be_instance_of Integer
     end
 
     it "Has an instance variable @number_of_rooms that is an Integer" do

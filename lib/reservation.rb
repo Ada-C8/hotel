@@ -11,7 +11,7 @@ module BookingSystem
     def initialize(room, check_in, check_out)
 
       CheckUserInput.integer(room)
-      CheckUserInput.between_1_21(room)  
+      CheckUserInput.between_1_20(room)  
       # if room.class != Integer
       #   raise InvalidRoomError.new("Room number must be entered as a digit (e.g., 1, 2, 3...). Input given: #{room}")
       # end

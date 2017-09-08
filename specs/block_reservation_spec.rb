@@ -6,7 +6,8 @@ describe "BlockReservation" do
     room = 1
     check_in = Date.new(2017,9,9)
     check_out = Date.new(2017,9,12)
-    @test_ob = BookingSystem::BlockReservation.new(room, check_in, check_out)
+    id = 1
+    @test_ob = BookingSystem::BlockReservation.new(room, check_in, check_out, id)
   end
 
   describe "initialize method" do
