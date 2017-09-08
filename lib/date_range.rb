@@ -25,6 +25,12 @@ module DateRange
     false
   end
 
+  def self.validate_order(first, second)
+    unless first < second
+      raise(InvalidDatesError, 'Start date must be at least 1 day before end date')
+    end
+  end
+
   def self.validate(input)
     return input if input.class == Date
     Date.parse(input)
@@ -33,7 +39,7 @@ module DateRange
   def self.find_range(start_date, end_date, flag = false)
     start_date = validate(start_date)
     end_date = validate(end_date)
-    raise(InvalidDatesError, 'Start date must be before end date') unless start_date < end_date
+    validate_order(start_date, end_date)
     dates = []
     while start_date < end_date
       dates << start_date
