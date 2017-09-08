@@ -80,22 +80,32 @@ describe "Hotel" do
     it "can create a block of rooms, with date range, discount rate, and room numbers" do
       block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
       hotel.blocks.length.must_equal 1
-      # block.must_respond_to :checkin
-      # block.must_respond_to :checkout
-      # block.must_respond_to :discount
-      # block.must_respond_to :rooms
+      hotel.blocks[0].room.must_be_instance_of Array
+      hotel.blocks[0].must_respond_to :discount
     end
 
-    xit "only accepts rooms that are available" do
+    it "only accepts rooms that are available" do
+      smith
+      garcia
+      jones
 
+      block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
+
+      hotel.blocks[0].room.wont_include 2
+      hotel.blocks[0].room.wont_include 4
+      hotel.blocks[0].room.wont_include 5
     end
 
-    xit "prevents its rooms from showing as available" do
+    it "prevents its rooms from showing as available" do
+      block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
 
+      open_rooms = hotel.rooms_available("10-01-2017", "10-05-2017")
+
+      open_rooms.length.must_equal 16   
     end
 
-    xit "contains a maximum of 5 rooms" do
-
+    it "contains a maximum of 5 rooms" do
+      proc { hotel.new_block("10-01-2017", "10-04-2017", 10, "10") }.must_raise ArgumentError
     end
   end
 

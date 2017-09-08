@@ -46,6 +46,12 @@ module Hotel
       reservations.select { |reserv| check_date >= reserv.checkin && check_date < reserv.checkout }
     end
 
+    def blocks_on(date)
+      check_date = Date.strptime(date, '%m-%d-%Y')
+
+      blocks.select { |block| check_date >= block.checkin && check_date < block.checkout }
+    end
+
     def rooms_available(checkin_date, checkout_date)
       rooms.reject { |room| booked_rooms(checkin_date, checkout_date).include?(room.number) }
     end
@@ -57,6 +63,7 @@ module Hotel
 
       checkin.upto(checkout) do |date|
         booked_rooms << reservations_on(date.strftime('%m-%d-%Y')).collect { |reserv| reserv.room }
+        booked_rooms << blocks_on(date.strftime('%m-%d-%Y')).collect { |block| block.room.collect { |room| room.number } }
       end
 
       booked_rooms.flatten.uniq
