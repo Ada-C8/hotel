@@ -47,152 +47,184 @@ describe 'Hotel' do
   end
 
   describe 'rooms' do
-    # As an administrator, I can access the list of all of the rooms in the hotel
-    it 'Returns an array of all room numbers' do
-      all_rooms = @hotel.rooms
-      all_rooms.must_be_kind_of Array
-      all_rooms.each do |room|
-        room.must_be_kind_of Hotel::Room
+    describe 'rooms' do
+      # As an administrator, I can access the list of all of the rooms in the hotel
+      it 'Returns an array of all room numbers' do
+        all_rooms = @hotel.rooms
+        all_rooms.must_be_kind_of Array
+        all_rooms.each do |room|
+          room.must_be_kind_of Hotel::Room
+        end
+      end
+
+      it 'returns an empty array if there are no rooms' do
+        all_rooms = Hotel::Hotel.new(0).rooms
+        all_rooms.must_equal []
+      end
+
+      it 'returns a single-element array if there is 1 room' do
+        all_rooms = Hotel::Hotel.new(1).rooms
+        all_rooms.length.must_equal 1
+        all_rooms[0].must_be_kind_of Hotel::Room
       end
     end
 
-    it 'returns an empty array if there are no rooms' do
-      all_rooms = Hotel::Hotel.new(0).rooms
-      all_rooms.must_equal []
+    describe '#room' do
+      it 'returns the Room with corresponding number' do
+        room = @hotel.room(4)
+        room.must_be_kind_of Hotel::Room
+        room.number.must_equal 4
+      end
+
+      it 'returns nil if room is not found' do
+        assert_nil @hotel.room(1000)
+        assert_nil @hotel.room('hi')
+        assert_nil @hotel.room(5.5)
+        assert_nil @hotel.room(nil)
+        assert_nil @hotel.room(true)
+        assert_nil @hotel.room([4,0])
+      end
     end
 
-    it 'returns a single-element array if there is 1 room' do
-      all_rooms = Hotel::Hotel.new(1).rooms
-      all_rooms.length.must_equal 1
-      all_rooms[0].must_be_kind_of Hotel::Room
-    end
-  end
+    describe 'find_available_rooms' do
+      # As an administrator, I can view a list of rooms that are not reserved for a given date range
+      it 'returns an array of rooms' do
+        rooms = @hotel.find_available_rooms('2017-09-05', '2017-09-09')
+        rooms.must_be_kind_of Array
+        rooms.each do |room|
+          room.must_be_kind_of Hotel::Room
+        end
+      end
 
-  describe '#room' do
-    it 'returns the Room with corresponding number' do
-      room = @hotel.room(4)
-      room.must_be_kind_of Hotel::Room
-      room.number.must_equal 4
-    end
+      it 'returns only available rooms' do
+        @hotel.make_reservation('2017-10-14', '2017-10-18')
+        @hotel.make_reservation('2017-10-14', '2017-10-18')
+        @hotel.make_reservation('2018-10-14', '2018-10-18')
+        rooms = @hotel.find_available_rooms('2017-10-14', '2017-10-18')
+        rooms2 = @hotel.find_available_rooms('2017-11-14', '2017-11-18')
 
-    it 'returns nil if room is not found' do
-      @hotel.room(1000).must_equal nil
-    end
-  end
+        rooms.length.must_equal 18
+        rooms2.length.must_equal 20
+      end
 
-  describe 'find_available_rooms' do
-    # As an administrator, I can view a list of rooms that are not reserved for a given date range
-    it 'returns an array of rooms' do
-      rooms = @hotel.find_available_rooms('2017-09-05', '2017-09-09')
-      rooms.must_be_kind_of Array
-    end
+      it 'will not return rooms in a block' do
+        @hotel.make_reservation('2017-10-14', '2017-10-18')
+        @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
+        @hotel.make_block('2017-11-10', '2017-11-16', 5, 20)
+        rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15')
 
-    it 'returns only available rooms' do
-      @hotel.make_reservation('2017-10-14', '2017-10-18')
-      @hotel.make_reservation('2017-10-14', '2017-10-18')
-      @hotel.make_reservation('2018-10-14', '2018-10-18')
-      rooms = @hotel.find_available_rooms('2017-10-14', '2017-10-18')
+        rooms.length.must_equal 14
+      end
 
-      rooms.length.must_equal 18
-    end
+      it 'will return rooms in a block when provided block ID' do
+        block = @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
+        rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15', block.id)
 
-    it 'will not return rooms in a block' do
-      # skip
-      @hotel.make_reservation('2017-10-14', '2017-10-18')
-      @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
-      rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15')
+        rooms.length.must_equal 5
+      end
 
-      rooms.length.must_equal 14
-    end
+      it 'raises an error if block is not found' do
+        proc {
+          @hotel.find_available_rooms('2017-10-14','2017-10-15', 'B10141991')
+        }.must_raise InvalidBlockError
 
-    it 'will return rooms in a block when provided block ID' do
-      # skip
-      block = @hotel.make_block('2017-10-10', '2017-10-16', 5, 20)
-      rooms = @hotel.find_available_rooms('2017-10-14','2017-10-15', block.id)
+      end
 
-      rooms.length.must_equal 5
-    end
+      it 'raises an error if dates do not fall within given block' do
+        block = @hotel.make_block('2017-08-03', '2017-08-08', 5, 20)
 
-    it 'raises an error if dates do not fall within given block' do
-      block = @hotel.make_block('2017-08-03', '2017-08-08', 5, 20)
+        proc {
+          @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
+        }.must_raise InvalidDatesError
+      end
 
-      proc {
-        @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
-      }.must_raise InvalidDatesError
-    end
-  end
+      it 'raises an error if dates are out of order' do
+        proc {
+          @hotel.find_available_rooms('2017-08-23', '2017-08-08')
+        }.must_raise InvalidDatesError
+      end
 
-  describe '#make_reservation' do
-    before do
-      @reservation1 = @hotel.make_reservation('2017-09-05', '2017-09-08')
-    end
-    it 'creates a reservation and adds it to the @reservations array' do
-      # As an administrator, I can reserve a room for a given date range
-      @reservation1.must_be_kind_of Hotel::Reservation
-      @reservation1.checkout.strftime.must_equal '2017-09-08'
-    end
-
-    it 'will reserve the first available room' do
-      # As an administrator, I can reserve an available room for a given date range
-      reservation2 = @hotel.make_reservation('2017-09-05', '2017-09-08')
-      @reservation1.room.wont_equal reservation2.room
-    end
-
-    it 'will book a room again after a reservation ends' do
-      reservation2 = @hotel.make_reservation('2018-09-05', '2018-09-08')
-
-      @reservation1.room.must_equal reservation2.room
-    end
-
-    it 'can book two consecutive reservations to the same room' do
-      # A reservation is allowed start on the same day that another reservation for the same room ends
-      reservation2 = @hotel.make_reservation('2017-09-08', '2017-09-11')
-
-      @reservation1.room.must_equal reservation2.room
-    end
-
-    it 'will not book a room that is part of a block' do
-      # - If a room is set aside in a block, it is not available for reservation by the general public
-      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
-      reservation = @hotel.make_reservation('2017-08-04', '2017-08-05')
-
-      block.rooms.wont_include reservation.room
-    end
-
-    it 'will book room in block if provided a block ID' do
-      # - As an administrator, I can reserve a room from within a block of rooms
-      block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
-      reservation = @hotel.make_reservation('2017-08-04', '2017-08-05', block.id)
-
-      block.rooms.must_include reservation.room
-    end
-
-    it 'raises NoRoomError if no rooms are available' do
-      # Your code should raise an exception when asked to reserve a room that is not available
-      proc {
-        21.times { @hotel.make_reservation('2017-09-05', '2017-09-08') }
-      }.must_raise NoRoomError
-    end
-
-    it 'raises NoRoomError if all rooms are in a block' do
-      @hotel.make_block('2017-09-05', '2017-09-08', 19, 20)
-
-      proc {
-        @hotel.make_reservation('2017-09-05', '2017-09-08')
-      }.must_raise NoRoomError
+      it 'raises an error if dates do not span at least 1 night' do
+        proc {
+          @hotel.find_available_rooms('2017-08-08', '2017-08-08')
+        }.must_raise InvalidDatesError
+      end
     end
   end
 
-  describe '#view_reservations' do
-    # As an administrator, I can access the list of reservations for a specific date
-    it 'returns an array of Reservations' do
-      @hotel.make_reservation('2017-10-14', '2017-10-18')
-      reservations = @hotel.view_reservations('2017-10-14')
+  describe 'reservations' do
+    describe '#make_reservation' do
+      before do
+        @reservation1 = @hotel.make_reservation('2017-09-05', '2017-09-08')
+      end
+      it 'creates a reservation and adds it to the @reservations array' do
+        # As an administrator, I can reserve a room for a given date range
+        @reservation1.must_be_kind_of Hotel::Reservation
+        @reservation1.checkout.strftime.must_equal '2017-09-08'
+      end
 
-      reservations.must_be_kind_of Array
-      reservations.length.must_equal 1
-      reservations.each do |reservation|
-        reservation.must_be_kind_of Hotel::Reservation
+      it 'will reserve the first available room' do
+        # As an administrator, I can reserve an available room for a given date range
+        reservation2 = @hotel.make_reservation('2017-09-05', '2017-09-08')
+        @reservation1.room.wont_equal reservation2.room
+      end
+
+      it 'will book a room again after a reservation ends' do
+        reservation2 = @hotel.make_reservation('2018-09-05', '2018-09-08')
+
+        @reservation1.room.must_equal reservation2.room
+      end
+
+      it 'can book two consecutive reservations to the same room' do
+        # A reservation is allowed start on the same day that another reservation for the same room ends
+        reservation2 = @hotel.make_reservation('2017-09-08', '2017-09-11')
+
+        @reservation1.room.must_equal reservation2.room
+      end
+
+      it 'will not book a room that is part of a block' do
+        # - If a room is set aside in a block, it is not available for reservation by the general public
+        block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+        reservation = @hotel.make_reservation('2017-08-04', '2017-08-05')
+
+        block.rooms.wont_include reservation.room
+      end
+
+      it 'will book room in block if provided a block ID' do
+        # - As an administrator, I can reserve a room from within a block of rooms
+        block = @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+        reservation = @hotel.make_reservation('2017-08-04', '2017-08-05', block.id)
+
+        block.rooms.must_include reservation.room
+      end
+
+      it 'raises NoRoomError if no rooms are available' do
+        # Your code should raise an exception when asked to reserve a room that is not available
+        proc {
+          21.times { @hotel.make_reservation('2017-09-05', '2017-09-08') }
+        }.must_raise NoRoomError
+      end
+
+      it 'raises NoRoomError if all rooms are in a block' do
+        @hotel.make_block('2017-09-05', '2017-09-08', 19, 20)
+
+        proc {
+          @hotel.make_reservation('2017-09-05', '2017-09-08')
+        }.must_raise NoRoomError
+      end
+    end
+
+    describe '#view_reservations' do
+      # As an administrator, I can access the list of reservations for a specific date
+      it 'returns an array of Reservations' do
+        @hotel.make_reservation('2017-10-14', '2017-10-18')
+        reservations = @hotel.view_reservations('2017-10-14')
+
+        reservations.must_be_kind_of Array
+        reservations.length.must_equal 1
+        reservations.each do |reservation|
+          reservation.must_be_kind_of Hotel::Reservation
+        end
       end
     end
   end
@@ -270,6 +302,19 @@ describe 'Hotel' do
         proc {
           @hotel.block_availability?('2017-10-14','2017-10-15', @block.id)
         }.must_raise InvalidDatesError
+      end
+    end
+
+    describe 'block_exists?' do
+      it 'returns true if block w/ given ID exists' do
+        @hotel.block_exists?(@block.id).must_equal true
+      end
+
+      it 'returns false if block w/ given ID does not exist' do
+        @hotel.block_exists?('B09051234').must_equal false
+        @hotel.block_exists?(2).must_equal false
+        @hotel.block_exists?(nil).must_equal false
+        @hotel.block_exists?('hello').must_equal false
       end
     end
   end

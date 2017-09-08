@@ -55,6 +55,9 @@ module Hotel
     def find_available_rooms(checkin, checkout, block_id = false)
       DateRange.validate_order(checkin, checkout)
       if block_id
+        unless block_exists?(block_id)
+          raise(InvalidBlockError, "No such block: #{block_id}")
+        end
         unless block(block_id).includes_dates?(checkin, checkout)
           raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{block(block_id).id}")
         end
@@ -84,7 +87,6 @@ module Hotel
     end
 
     # private
-
     def find_rooms_not_in_blocks(start_date, end_date)
       rooms = @rooms.dup
       @blocks.each do |block|
@@ -93,6 +95,10 @@ module Hotel
         end
       end
       rooms
+    end
+
+    def block_exists?(block_id)
+      block(block_id) != nil
     end
   end
 end
