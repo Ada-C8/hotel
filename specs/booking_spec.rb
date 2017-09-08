@@ -5,7 +5,8 @@ describe "Booking class" do
     id = 1
     rooms = [Hotel::Room.new(15),Hotel::Room.new(16)]
     date_range = Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8))
-    @reservation = Hotel::Booking.new(id, rooms, date_range)
+    block_info = []
+    @reservation = Hotel::Booking.new(id, rooms, date_range,block_info)
   end
   describe "Initialize" do
     it "can be instantiated" do
@@ -17,6 +18,8 @@ describe "Booking class" do
       @reservation.must_respond_to :rooms
       @reservation.must_respond_to :date_range
       @reservation.must_respond_to :nights
+      @reservation.must_respond_to :block_info
+
     end
     it "total cost must return the appropriate amount for 2 rooms, and be an Integer" do
       @reservation.total_cost.must_equal 1200
