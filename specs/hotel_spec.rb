@@ -46,12 +46,12 @@ describe "Hotel Class" do
       @hotel.find_reservation("2012/12/12", "2012/12/13").must_equal ["ID: 2222, Room: 2, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3, Total Cost: 600"]
     end #find a single reservation for a specific date
   end #find reservations
-  #
-  # describe "Total Cost" do
-  #   it "Given an ID number it can find the Total Cost of a reservation: " do
-  #     Hotel::Hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-  #     Hotel::Hotel.total_cost(2222).must_equal 600
-  #   end #ID Number
-  # end #Total Cost
+
+  describe "Total Cost" do
+    it "Given an ID number it can find the Total Cost of a reservation: " do
+      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.total_cost(2222).must_equal 600
+    end #ID Number
+  end #Total Cost
 
 end #admin
