@@ -29,5 +29,17 @@ module Hotel
       end
     end
 
+    def overlap?(other)
+      if other.checkin <= self.checkin && other.checkout > self.checkin
+        return true
+      elsif other.checkin >= self.checkin && other.checkin < self.checkout
+        return true
+      else
+        return false
+      end 
+    end
+
+
+
   end
 end #module

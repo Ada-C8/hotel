@@ -66,4 +66,35 @@ describe 'DateRange class' do
 
   end
 
-end#big descrbe
+  describe 'overlap?' do
+    before do
+      @day1 = Date.new(2017,12, 13)
+      @day2 = Date.new(2017,12, 19)
+      @dr1 = Hotel::DateRange.new(@day1, @day2)
+      @day3 = Date.new(2017,12,7)
+      @day4 = Date.new(2017,12,12)
+      @day5 = Date.new(2017,12,24)
+      @day6 = Date.new(2017,12,14)
+      @day7 = Date.new(2017,12,16)
+      @dr2 = Hotel::DateRange.new(@day3,@day4)
+      @dr3 = Hotel::DateRange.new(@day2,@day5)
+      @dr4 = Hotel::DateRange.new(@day6,@day7)
+      @dr5 = Hotel::DateRange.new(@day6,@day5)
+      @dr6 = Hotel::DateRange.new(@day3,@day5)
+      @dr7 = Hotel::DateRange.new(@day3,@day6)
+    end
+
+    it "returns false if the intervals are disconect" do
+      @dr1.overlap?(@dr2).must_equal false
+      @dr1.overlap?(@dr3).must_equal false
+    end
+
+    it "returns true if the dates ranges overlap" do
+      @dr1.overlap?(@dr4).must_equal true
+      @dr1.overlap?(@dr5).must_equal true
+      @dr1.overlap?(@dr6).must_equal true
+      @dr1.overlap?(@dr7).must_equal true
+    end
+  end#overlap
+
+end#big describe
