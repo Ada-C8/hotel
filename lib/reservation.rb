@@ -12,9 +12,9 @@ module ReservationSystem
       @check_in = check_in_date
       @nights = nights
       @room = room
-      @dates_reserved = to_date_range(check_in_date, nights)
+      @dates_reserved = date_range(check_in_date, nights)
 
-      @room.nights_reserved += to_date_range(check_in_date, nights)
+      @room.nights_reserved += date_range(check_in_date, nights)
 
     end # initialize
 

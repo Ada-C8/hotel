@@ -30,6 +30,4 @@ describe "Reservable Module" do
     proc {@hotel_california.positive_integer?(day)}.must_raise Reservable::PositiveIntegerError
 
   end #valid number error
-
-  #TODO ?? change tests to their respective methods Reservation.new and search_reservations_by_date -- do in reservable tests primarily.
 end # Reservable module

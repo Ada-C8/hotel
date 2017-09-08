@@ -25,7 +25,7 @@ module ReservationSystem
         all_reservations << @new_reservation
         return @new_reservation
       else
-        raise UnavailableDate.new("This room is unavailable for #{to_date_range(check_in, nights)}")
+        raise UnavailableDate.new("This room is unavailable for #{nights} night(s) starting on #{check_in}")
       end
 
     end # reserve
@@ -43,7 +43,7 @@ module ReservationSystem
 
     def search_available_rooms_by_dates(start, nights)
       rooms = hotel.dup
-      date_array = to_date_range(start, nights)
+      date_array = date_range(start, nights)
 
       date_array.each do |date|
         rooms.delete_if { |room| room.nights_reserved.include?(date) }

@@ -16,8 +16,8 @@ module ReservationSystem
       @nights_reserved = Array.new
     end
 
-    def available?(start, nights = 1)
-      date_array = to_date_range(start, nights)
+    def available?(start, nights = 1) #TODO consider changing input to just date_range
+      date_array = date_range(start, nights)
       availability = true
 
       date_array.each { |date| availability = false if self.nights_reserved.include?(date) }

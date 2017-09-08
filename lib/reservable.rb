@@ -19,14 +19,14 @@ module Reservable
 
   def positive_integer?(num)
     unless (num.kind_of? Integer) && num > 0
-      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.")
+      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.") #TODO rescue
     end
   end # positive_integer? method
 
   # TODO rescue valid_date and positive_integer
 
   #Useful methods
-  def to_date_range(start, nights)
+  def date_range(start, nights)
     array = Array.new
     nights.times {|i| array << start + i}
     return array
