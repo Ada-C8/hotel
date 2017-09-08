@@ -27,7 +27,6 @@ describe "reservation" do
       @test_res.date_range.must_be_kind_of Array
     end #it "will have the date range as an array of (whatever the date gem makes it)" do
 
-#TODO : Do I need to put argument errors if a reservation is initlized with incorrect input? Or do I not need to since other methods directly pass Reservation the input it needs to
 
   end # describe "initialize" do
 end # describe "reservation" do

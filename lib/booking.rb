@@ -30,9 +30,6 @@ module Hotel
     end # initialize
 
     def make_reservation(start_date, end_date, num_rooms )
-      # TODO: add functionality to only accept reservations when there is availibility
-      # TODO: will need to call the availible_rooms method to access the availible array
-      # TODO: will need to check that there are enough rooms in the availible array to make the reservation and raise BookingError if there is are not enough rooms
       if end_date < start_date
         raise BookingError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
       else
@@ -62,6 +59,8 @@ module Hotel
     def check_date_for_reservations(start_date, end_date)
       # it will have a method that checks if there is a reservation for the date(s) requested
       # iterate though @all_reservations for each day requested and if the day is included in the Booking then it will look at the Reservation that included that date and add the room(s) in that reservation to a new array not_availible.
+      # TODO
+      #maybe change this method to use a mehtod_name(block).each or method_name(reservation).each where methof_name is a method that can return either the @all_reservations array or the @all_blocks array. Then we don't have to make a new method to search for a block in a given date range? Not sure if there is enough overlap for this, but something to keep in mind!
       days = Hotel::DateRange.new(start_date, end_date).nights_booked
       date_reservations = []
 
@@ -123,4 +122,4 @@ end # Hotel
 
 
 # TODO
-  # make new methods for 
+  # make new methods for
