@@ -20,8 +20,8 @@ module Hotel
     end
 
     def get_discount_rate(input)
-      raise(ArgumentError, "Discount must be number: #{input.class}") unless input.class == (Integer || Float)
-      raise(DiscountError, "Discount must be between 0-100%: #{input}") unless 0 < input && input < 100
+      raise(ArgumentError, "Discount must be number: was #{input.class}") unless input.class == (Integer || Float)
+      raise(DiscountError, "Discount must be between 0-100%: was #{input}") unless 0 < input && input < 100
       return (100 - input) / 100
     end
   end
