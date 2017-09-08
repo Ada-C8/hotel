@@ -100,7 +100,9 @@ module Hotel
 
       # TODO: need to iterate though @all_bookings and remove those rooms from availible! Maybe generate an array of bookings for a given date from the check_date_for_reservations method? Or have a different method that returns an array of bookings?
       reservations = check_date_for_reservations(start_date, end_date)
+      blocks = check_date_for_block(start_date, end_date)
       reserved = []
+      blocked = []
       availible = []
 
       #creates an array of all the rooms that are reserved for the given date range
@@ -110,9 +112,15 @@ module Hotel
         end # .each
       end # .each
 
+      blocks.each do |block|
+        block.block_rooms.each do |room|
+          blocked << room
+        end # .each
+      end # .each
+
       # creates an array of all the availible rooms for the given date range
       @all_rooms.each do |room|
-        if !(reserved.include?(room))
+        if !(reserved.include?(room)) && !(blocked.include?(room))
           availible << room
         end # if
       end # .each
@@ -134,7 +142,6 @@ module Hotel
 
       dates = Hotel::DateRange.new(start_date, end_date).nights_booked
       block_id = block_id.upcase
-      cost = (num_of_rooms * dates.length * 180.0)
       rooms = []
       i = 0
       num_of_rooms.times do
@@ -146,9 +153,21 @@ module Hotel
 
     end #make_block
 
+    def check_date_for_block(start_date, end_date)
+      days = Hotel::DateRange.new(start_date, end_date).nights_booked
+      date_blocks = []
+
+      days.each do |day|
+        @all_blocks.each do |block|
+          if block.date_range.include?(day)
+            if !(date_blocks.include?(block))
+              date_blocks << block
+            end # if
+          end # if
+        end # .each
+      end # .each
+      return date_blocks
+    end # check_date_for_block
+
   end # Booking
 end # Hotel
-
-
-# TODO
-# make new methods for

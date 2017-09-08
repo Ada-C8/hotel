@@ -1,2 +1,2 @@
 class BookingError < StandardError
-            end
+end

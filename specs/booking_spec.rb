@@ -96,7 +96,7 @@ describe "Booking" do
       @booking.make_reservation(@checkin_day, @checkout_day, 1)
       @booking.make_reservation(@checkin_day, @checkout_day, 3)
 
-      room_array = []
+      # room_array = []
 
       @booking.all_reservations[0].res_rooms.must_equal [@booking.all_rooms[0]]
       @booking.all_reservations[1].res_rooms.must_equal [@booking.all_rooms[1]]
@@ -112,7 +112,7 @@ describe "Booking" do
       @booking.make_reservation(@checkin_day, @checkout_day, 3)
 
       rooms = []
-      test = @booking.check_date_for_reservations(@checkin_day, @checkout_day)
+      @booking.check_date_for_reservations(@checkin_day, @checkout_day)
       @booking.check_date_for_reservations(@checkin_day, @checkout_day).each do |res|
         res.res_rooms.each do |room|
           rooms << room
@@ -131,6 +131,8 @@ describe "Booking" do
       @booking.make_reservation(@checkin_day, @checkout_day, 5)
       proc{@booking.make_reservation(@checkin_day, @checkout_day, 18)}.must_raise BookingError
     end # it "will raise BookingError if more rooms are requested then are availible
+
+    # TODO : make sure that you can make a reservation on the day that all the rooms become availible (reserve all the rooms and then try to make another reservation on the day they all open up!)
   end #  describe make_reservation
 
   describe "check_date_for_reservations" do
@@ -226,24 +228,34 @@ describe "Booking" do
 
       @booking.availible_rooms(start_date_to_check, end_date_to_check).wont_include room
     end # it "must not include a room that alleady has a reservation for that date range" do
+
+    it "will not include a room that is in a block during the given date range" do
+      start_date_to_check = Date.new(2017, 9, 6)
+      end_date_to_check = Date.new(2017, 9, 9)
+
+      @booking.make_block("Conference", @checkin_day, @checkout_day, 2)
+
+      @booking.availible_rooms(start_date_to_check, end_date_to_check).wont_include @booking.all_rooms[0]
+      @booking.availible_rooms(start_date_to_check, end_date_to_check).wont_include @booking.all_rooms[1]
+    end # it "will not include a room that is in a block during
   end # describe "availible_rooms" do
 
   describe "make_block" do
-     it "should be able to be called on an instnce of Booking" do
-       @booking.must_respond_to :make_block
-     end # it "should be able to be called on an instnce of Booking" do
+    it "should be able to be called on an instnce of Booking" do
+      @booking.must_respond_to :make_block
+    end # it "should be able to be called on an instnce of Booking" do
 
-     xit "will create a date_range using the date arguments given" do
-       # TODO : will need to change this to check that the date_range of the new instance of Block is correct
-        @booking.make_block("wedding", @checkin_day, @checkout_day, 1).must_equal Hotel::DateRange.new(@checkin_day, @checkout_day).nights_booked
-     end # it "will create a date_range using the date arguments given" do
+    xit "will create a date_range using the date arguments given" do
+      # TODO : will need to change this to check that the date_range of the new instance of Block is correct
+      @booking.make_block("wedding", @checkin_day, @checkout_day, 1).must_equal Hotel::DateRange.new(@checkin_day, @checkout_day).nights_booked
+    end # it "will create a date_range using the date arguments given" do
 
-     it "Should raise an error if inproper dates are given" do
-       proc{@booking.make_block("wedding", @checkout_day, @checkin_day, 1)}.must_raise BookingError
-     end # it "Should raise an error if inproper dates are given" do
+    it "Should raise an error if inproper dates are given" do
+      proc{@booking.make_block("wedding", @checkout_day, @checkin_day, 1)}.must_raise BookingError
+    end # it "Should raise an error if inproper dates are given" do
 
-     it "will raise BookingError if more then five rooms are requested" do
-       proc{@booking.make_block("wedding", @checkin_day, @checkout_day, 6)}.must_raise BookingError
+    it "will raise BookingError if more then five rooms are requested" do
+      proc{@booking.make_block("wedding", @checkin_day, @checkout_day, 6)}.must_raise BookingError
     end # raise BookingError for > 5 rooms
 
     it "will raise a booking error if there are not enough rooms availible to make the block" do
@@ -252,20 +264,68 @@ describe "Booking" do
       # TODO: after I modify availible_rooms to check @all_blocks maybe do this test checking after making multiple blocks?
     end # Booking error if not enough availible rooms
 
-     it "will make a new instance of Block" do
-       @booking.make_block("wedding", @checkin_day, @checkout_day, 1)
-       @booking.all_blocks[0].must_be_kind_of Hotel::Block
-     end # it "will make a new instance of Block" do
+    it "will make a new instance of Block" do
+      @booking.make_block("wedding", @checkin_day, @checkout_day, 1)
+      @booking.all_blocks[0].must_be_kind_of Hotel::Block
+    end # it "will make a new instance of Block" do
 
-     # TODO: make tests for:
-          # date_range for block created is correct
-          # block_id for Block is correct (upcase!)
-          # the rooms in Block are correct
-     # TODO: After editing availible_rooms to check @all_blocks test:
-          # That a room will only be in one Block over a given DateRange
-          # That the rooms in the blocks are not in availible_rooms return array
-          # That rooms are added to blocks in secuential order from the availible array
-  end # describe "make_block" do
+    it "will have the right @date_range for the block created"do
+    @booking.make_block("wedding", @checkin_day, @checkout_day, 1)
+    @booking.all_blocks[0].date_range.must_equal [@checkin_day, (@checkin_day + 1)]
+  end # it "will have the right @date_range for the block created"do
 
+  it "must have the right @blck_id for the Block created" do
+    @booking.make_block("wedding", @checkin_day, @checkout_day, 1)
+    @booking.all_blocks[0].block_id.must_equal "WEDDING"
+  end # it "must have the right @blck_id for the Block created" do
+
+  it "must have the right rooms in the Block and will add rooms sequentially" do
+    @booking.make_block("wedding", @checkin_day, @checkout_day, 3)
+    @booking.all_blocks[0].block_rooms.must_equal [@booking.all_rooms[0], @booking.all_rooms[1], @booking.all_rooms[2]]
+  end # it "must have the right rooms in the Block" do
+
+  it "will only allow a room to be in one block over a date range" do
+    @booking.make_block("wedding", @checkin_day, @checkout_day, 1)
+    @booking.make_block("fun event", @checkin_day, @checkout_day, 1)
+    @booking.make_block("conference", @checkin_day, @checkout_day, 3)
+
+    rooms = []
+
+    @booking.check_date_for_block(@checkin_day, @checkout_day).each do |block|
+      block.block_rooms.each do |room|
+        rooms << room
+      end # .each
+    end # .each
+
+    rooms.length.must_equal 5
+    rooms.detect{ |room| rooms.count(room) > 1}.must_equal nil
+  end # it "will only allow a room to be in one block over a date range" do
+
+end # describe "make_block" do
+
+  describe "check_date_for_block" do
+    it "will be able to be called on @booking" do
+      @booking.must_respond_to :check_date_for_block
+    end #it "will be able to be called on @booking" do
+
+    it "will return an empty array if not Blocks are in that date range" do
+      @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+      @booking.make_block("Wedding", (@checkin_day + 5), (@checkout_day + 5), 5)
+
+      @booking.check_date_for_block(@start_date_to_check, @end_date_to_check).must_be_empty
+    end # it "will return an empty array if not blocks are in that date range" do
+
+    it "will return an array of all the Blocks that are in that date range" do
+      start_date_to_check = Date.new(2017, 9, 6)
+      end_date_to_check = Date.new(2017, 9, 9)
+
+      @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+      @booking.make_block("event", (@checkin_day + 2), (@checkout_day + 2), 5)
+
+      @booking.check_date_for_block(start_date_to_check, end_date_to_check).length.must_equal 2
+      @booking.check_date_for_block(start_date_to_check, end_date_to_check)[0].block_id.must_equal "WEDDING"
+      @booking.check_date_for_block(start_date_to_check, end_date_to_check)[1].block_id.must_equal "EVENT"
+    end # it "will return an array of all the Blocks that are in that date range" do
+  end # describe "check_date_for_block" do
 
 end # Booking
