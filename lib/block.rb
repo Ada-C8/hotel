@@ -4,7 +4,7 @@ module Hotel
 
     def initialize(partyname, discountedrate, rooms, date1, date2=nil)
       @partyname = partyname
-      @daterange = DateRange.new(date1, *date2)
+      @daterange = DateRange.new(date1, date2)
       @discountedrate = discountedrate
       @rooms = rooms
     end
