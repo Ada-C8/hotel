@@ -13,8 +13,9 @@ describe "#RESERVATIONS" do
 
     it "An Administrator can initialize an instance of Reservation for a room" do
       @new_reservation.must_be_instance_of Reservation
-      @new_reservation.check_in.must_be_instance_of Date
-      @new_reservation.check_out.must_be_instance_of Date
+      @new_reservation.nights.must_be_instance_of Nights
+      @new_reservation.nights.check_in.must_be_instance_of Date
+      @new_reservation.nights.check_out.must_be_instance_of Date
       @new_reservation.room_numbers.first.must_equal 1
       @new_reservation.must_respond_to :reservation_id
 
@@ -34,7 +35,7 @@ describe "#RESERVATIONS" do
 
 
     it "Can accurately report the number of nights in a reservation" do
-      @new_reservation.num_nights.must_equal 2
+      @new_reservation.nights.num_nights.must_equal 2
     end
 
     it "can calculate the cost for a reservation" do
@@ -43,8 +44,8 @@ describe "#RESERVATIONS" do
     end
 
     it "can show all nights in the reservation date range" do
-      @new_reservation.nights.must_equal ["2018-01-16", "2018-01-17"]
-      @new_reservation1.nights.length.must_equal 7
+      @new_reservation.nights.nights_reserved.must_equal ["2018-01-16", "2018-01-17"]
+      @new_reservation1.nights.nights_reserved.length.must_equal 7
     end
   end
 

@@ -14,7 +14,7 @@ class Hotel
 
 
   def make_reservation(check_in, check_out, rooms)
-    valid_date(check_in, check_out)
+
 
 
     unavailable_rooms = []
@@ -44,7 +44,7 @@ class Hotel
 
     reservations_today = []
     @reservations.each do |reservation|
-      if reservation.nights.include?(my_date.to_s)
+      if reservation.nights.nights_reserved.include?(my_date.to_s)
         reservations_today.push(reservation)
       end
     end
@@ -88,19 +88,6 @@ class Hotel
 
 
 
-  private
-  def valid_date(check_in, check_out)
-    start = Date.parse(check_in)
-    finish = Date.parse(check_out)
-
-    if start.nil? || finish.nil?
-      raise ArgumentError.new("Invalid Input")
-    elsif finish <= start
-      raise ArgumentError.new("Invalid date range. Checkout date must be after check-in date.")
-    elsif start < Date.today
-      raise ArgumentError.new("That date has already passed. Please select a valid check-in date.")
-    end
-  end
 end
 #
 # #this is an interface feature
