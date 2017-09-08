@@ -7,7 +7,7 @@ module Hotel
       @end_date = Date.parse(end_date)
       @dates = DateRange.range_to(@start_date, @end_date)
       @rooms = rooms
-      @discount_rate = (100 - discount_rate) / 100
+      @discount_rate = get_discount_rate(discount_rate)
       @id = create_id
     end
 
@@ -17,6 +17,12 @@ module Hotel
 
     def includes_dates?(checkfirst, checklast)
       DateRange.overlap?(checkfirst, checklast, @start_date, @end_date)
+    end
+
+    def get_discount_rate(input)
+      raise(ArgumentError, "Discount must be number: #{input.class}") unless input.class == (Integer || Float)
+      raise(DiscountError, "Discount must be between 0-100%: #{input}") unless 0 < input && input < 100
+      return (100 - input) / 100
     end
   end
 end
