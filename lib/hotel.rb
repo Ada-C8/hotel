@@ -1,12 +1,14 @@
 module Hotel
 
   class Room
-    attr_reader :num
+    attr_reader :num, :reserved, :dates
 
-    def initialize(num)
+    def initialize(num, reserved = false)
       @num = num
+      @reserved = reserved
+      @dates = []
     end
-    
+
     def self.all
       rooms = []
       (1..20).each do |num|
@@ -14,10 +16,6 @@ module Hotel
       end
       return rooms
     end
-
   end
 
 end
-
-# thing = Hotel::Room.new(1).all
-# p thing
