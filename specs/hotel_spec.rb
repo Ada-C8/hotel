@@ -27,7 +27,19 @@ describe "California class" do
     end
 
     it "Raises an error if an invalid date is given" do
-      proc { @california.create_reservation("2017-23-13", "2017-03-16", 3).must_raise ArgumentError }
+      proc { @california.all_rooms[1].create_reservation("2017-33-13", "2017-03-16").must_raise ArgumentError }
+    end
+
+    it "Raises an error if the room is already booked" do
+      @california.all_rooms[1].create_reservation("2017-03-13", "2017-03-16")
+      proc { @california.all_rooms[1].create_reservation("2017-03-13", "2017-03-16").must_raise ArgumentError }
+    end
+
+    it "Adds reservation if checking in when another reservation is checking out" do
+      @california.all_rooms[1].create_reservation("2017-03-04", "2017-03-05")
+      @california.all_rooms[1].create_reservation("2017-03-05", "2017-03-19")
+      @california.all_rooms[1].create_reservation("2017-03-19", "2017-03-21")
+      @california.all_rooms[1].reservations.length.must_equal 3
     end
   end
 
@@ -50,6 +62,7 @@ describe "California class" do
 
   describe "all_rooms method" do
     it "Returns all rooms in Hotel California" do
+      @rooms.must_be_instance_of Hash
       @rooms.length.must_equal 20
     end
   end
