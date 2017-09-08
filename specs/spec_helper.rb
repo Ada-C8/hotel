@@ -7,7 +7,8 @@ require 'minitest/skip_dsl'
 
 require_relative '../lib/admin'
 require_relative '../lib/reservation'
-require_relative '../lib/room'
+require_relative '../lib/concerns/dateable'
+require_relative '../lib/concerns/reserveable'
 
 
 
