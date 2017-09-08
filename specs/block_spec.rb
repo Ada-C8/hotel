@@ -1,7 +1,6 @@
 require_relative 'spec_helper'
 
 describe "Block class" do
-
   before do
     number_of_rooms = 2
     rooms_in_block = [1, 2]
@@ -9,10 +8,6 @@ describe "Block class" do
     check_out = Date.new(2017,9,12)
     @test_ob = BookingSystem::Block.new( number_of_rooms, rooms_in_block, check_in, check_out)
   end
-
-  # it "Has a class method @@id that is an Integer" do
-  #   BookingSystem::Block::id.must_be_instance_of Integer
-  # end
 
   it "Has a ROOM_PRICE constant set to 200" do
     BookingSystem::Block::ROOM_PRICE.must_equal 200
@@ -25,7 +20,6 @@ describe "Block class" do
   end
 
   describe "initialize method" do
-
     it "Can be called" do
       @test_ob.must_be_instance_of BookingSystem::Block
     end
@@ -48,7 +42,6 @@ describe "Block class" do
   end
 
   describe "remove_reserved_room_from_availability method" do
-
     it "Can be called" do
       @test_ob.must_respond_to :rooms_available
     end
@@ -60,11 +53,9 @@ describe "Block class" do
     it "Takes a room out of availablity when a Reservation is made" do
       @test_ob.remove_reserved_room_from_availability(2).length.must_equal 1
     end
-
   end
 
   describe "block_total_cost" do
-
     it "Can be called" do
       @test_ob.must_respond_to :block_total_cost
     end
@@ -73,5 +64,4 @@ describe "Block class" do
       @test_ob.block_total_cost.must_be_instance_of Float
     end
   end
-
 end

@@ -44,7 +44,6 @@ module BookingSystem
 
       #check that there is a matching block for the date range requested
       blocks_dates_match = @all_blocks.select {|block| block.date_range == requested_date_range}
-
       if blocks_dates_match.empty?
         raise UnavailableBlockError.new("There is no block matching this date range: #{check_in} - #{check_out}")
       end
@@ -108,13 +107,19 @@ module BookingSystem
         end
       end
 
-      #TODO: BLOCKS
+      @all_blocks.each do |block|
+        same_dates = requested_date_range & block.date_range
+        if same_dates.any?
+          block.rooms_in_block.each do |room|
+            available_rooms.delete(room)
+          end
+        end
+      end
 
       return available_rooms
     end
 
     private
-
     #check if room is available for selected dates
     def room_available?(room, check_in, check_out)
       CheckUserInput.integer(room)
@@ -149,7 +154,6 @@ module BookingSystem
       end
 
       return true
-
     end
 
   end

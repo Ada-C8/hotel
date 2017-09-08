@@ -1,7 +1,6 @@
 require_relative 'spec_helper'
 
 describe "CheckUserInput module" do
-
   describe "integer method" do
 
     it "Raises an InvalidRoomError if input is not an Integer" do
@@ -25,8 +24,6 @@ describe "CheckUserInput module" do
       proc { BookingSystem::CheckUserInput.between_1_5(0) }.must_raise BookingSystem::Reservation::InvalidRoomError
 
       proc { BookingSystem::CheckUserInput.between_1_5(6) }.must_raise BookingSystem::Reservation::InvalidRoomError
-
     end
-
   end
 end

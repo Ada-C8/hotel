@@ -100,6 +100,12 @@ describe "Hotel class" do
       proc { @test_ob.block_reservation(20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
     end
 
+    it "Adds a new block reservation to @all_block_reservations" do
+      @test_ob.block_off_a_block(4, @check_in, @check_out)
+      @test_ob.block_reservation(2, @check_in, @check_out)
+      @test_ob.all_block_reservations.length.must_equal 1
+    end
+
     it "Returns an instance of BlockReservation" do
       @test_ob.block_off_a_block(4, @check_in, @check_out)
       @test_ob.block_reservation(2, @check_in, @check_out).must_be_instance_of BookingSystem::BlockReservation
@@ -130,13 +136,6 @@ describe "Hotel class" do
   end
 
   describe "reservations_for_specific_date" do
-
-    before do
-      @room = 1
-      @check_in = Date.new(2017,9,9)
-      @check_out = Date.new(2017,9,12)
-    end
-
     it "Can be called" do
       @test_ob.must_respond_to :reservations_for_specific_date
     end
@@ -145,17 +144,18 @@ describe "Hotel class" do
       @test_ob.make_single_reservation(@room, @check_in, @check_out)
 
       @test_ob.make_single_reservation(2, Date.new(2017,9,11), Date.new(2017,9,15))
+      @test_ob.block_off_a_block(4, @check_in, @check_out)
+      @test_ob.block_reservation(3, @check_in, @check_out)
 
       @test_ob.reservations_for_specific_date(Date.new(2017,9,10)).must_be_instance_of Array
 
       @test_ob.reservations_for_specific_date(Date.new(2017,9,10))[0].must_be_instance_of BookingSystem::Reservation
 
-      @test_ob.reservations_for_specific_date(Date.new(2017,9,11)).length.must_equal 2
+      @test_ob.reservations_for_specific_date(Date.new(2017,9,11)).length.must_equal 3
     end
   end
 
   describe "available_rooms method" do
-
     before do
       @room = 1
       @check_in = Date.new(2017,9,9)
@@ -172,9 +172,17 @@ describe "Hotel class" do
       @test_ob.available_rooms(@check_in, @check_out)[0].must_be_instance_of Integer
 
       @test_ob.available_rooms(@check_in, @check_out).length.must_equal 20
+    end
 
+    it "Removes rooms that are reserved (single) or in a block for the given dates" do
+      total_rooms = 20
+      free_rooms = total_rooms - 1
       @test_ob.make_single_reservation(@room, @check_in, @check_out)
-      @test_ob.available_rooms(@check_in, @check_out).length.must_equal 19
+      @test_ob.available_rooms(@check_in, @check_out).length.must_equal free_rooms
+
+      free_rooms -= 4
+      @test_ob.block_off_a_block(4, @check_in, @check_out)
+      @test_ob.available_rooms(@check_in, @check_out).length.must_equal free_rooms
     end
 
   end
@@ -187,13 +195,11 @@ describe "Hotel class" do
     end
 
     #https://stackoverflow.com/questions/16599256/testing-private-method-in-ruby-rspec
-
     it "Returns true if room is available for requested dates" do
       @test_ob.send(:room_available?, @room, @check_in, @check_out).must_equal true
     end
 
     it "Returns false if room is not available for requested dates" do
-
       block_check_in = Date.new(2017,10,9)
       block_check_out = Date.new(2017,10,12)
 
