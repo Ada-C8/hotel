@@ -244,6 +244,12 @@ describe 'Hotel' do
         }.must_raise DatesError
       end
 
+      it 'raises DatesError if reservation does not span at least 1 night' do
+        proc {
+          @hotel.make_reservation('2017-10-14','2017-10-14')
+        }.must_raise DatesError
+      end
+
       it 'raises NoBlockError if passed nonexistent block' do
         proc {
           @hotel.make_reservation('2017-09-05', '2017-09-08', 'catbug')
@@ -331,6 +337,12 @@ describe 'Hotel' do
         @block.must_be_kind_of Hotel::Block
       end
 
+      it 'can make a block for 1 night' do
+        block = @hotel.make_block('2017-08-03', '2017-08-04', 10, 20)
+
+        block.dates.length.must_equal 1
+      end
+
       it 'adds to @blocks array' do
         @hotel.blocks.length.must_equal 1
       end
@@ -377,12 +389,43 @@ describe 'Hotel' do
         }.must_raise DatesError
       end
 
+      it 'raises DatesError when dates do not span at least 1 night' do
+        proc {
+          @hotel.make_block('2017-08-03', '2017-08-03', 10, 20)
+        }.must_raise DatesError
+      end
+
       it 'raises DiscountError when passed discount greater than 100%' do
         proc {
-          @hotel.make_block('2017-09-07', '2017-09-010', 5, 125)
+          @hotel.make_block('2017-09-07', '2017-09-10', 5, 125)
         }.must_raise DiscountError
       end
 
+      it 'raises DiscountError when passed discount below 0%' do
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-10', 5, -25)
+        }.must_raise DiscountError
+      end
+
+      it 'raises ArgumentError when passed invalid discount' do
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-10', 5, 'free')
+        }.must_raise ArgumentError
+      end
+
+      it 'raises error when passed invalid rooms number' do
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-10', true, 25)
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-10', 0.5, 25)
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.make_block('2017-09-07', '2017-09-10', 'hello', 25)
+        }.must_raise ArgumentError
+      end
     end
 
     describe '#find_rooms_not_in_blocks' do
