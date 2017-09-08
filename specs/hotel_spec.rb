@@ -41,15 +41,15 @@ end
     it 'returns a list of rooms that are available for a given date' do
 
       @hotel.make_reservation(date1: @date1 , date2: @date2)
-      @hotel.view_available(@date1).must_be_kind_of Array
-      @hotel.view_available(@date1).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
+      @hotel.view_available(date1: @date1).must_be_kind_of Array
+      @hotel.view_available(date1: @date1).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
-      @hotel.view_available(@date1, @date3).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
+      @hotel.view_available(date1: @date1, date2: @date3).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
-      @hotel.view_available(@date3, @date4).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
+      @hotel.view_available(date1: @date3, date2: @date4).must_equal [:room2, :room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
       @hotel.make_reservation(date1: @date1, date2: @date2)
-      @hotel.view_available(@date1, @date2).must_equal [:room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
+      @hotel.view_available(date1: @date1, date2: @date2).must_equal [:room3, :room4, :room5, :room6, :room7, :room8, :room9, :room10,
         :room11, :room12, :room13, :room14, :room15, :room16, :room17, :room18, :room19, :room20]
     end
   end
@@ -94,11 +94,11 @@ end
       end
     end
 
-    it 'will  not reserve a room in a block if no partyname is supplied for a one night stay' do
-      @hotel.make_block('Diane', 120, 5, @date1)
-      @hotel.make_reservation(date1: @date1)
-      @hotel.reservations[0].room_number.must_equal :room6
-    end
+    # it 'will  not reserve a room in a block if no partyname is supplied for a one night stay' do
+    #   @hotel.make_block('Diane', 120, 5, @date1)
+    #   @hotel.make_reservation(date1: @date1)
+    #   @hotel.reservations[0].room_number.must_equal :room6
+    # end
 
 
     it 'will  not reserve a room in a block if no partyname is supplied for a multinight stay' do
@@ -124,11 +124,12 @@ end
       it 'returns a list of blocks that is the right length' do
         @hotel.make_block('Joyce', 100, 5, @date1, @date2)
       end
-       #MAKE AN ACTUAL TEST FOR THIS
+
       # it 'can make more than one block' do
-      #   @hotel.make_block('Diane', @date1 120, )
-      #   @hotel.make_block('Joyce', @date1, @date, 100 5)
-      #   @hotel.make_block('Roni', @date1, @date, 100 5)
+      #   @hotel.make_block('Diane', 120, 3, @date1)
+      #   @hotel.make_block('Joyce', 100, 4, @date1, @date)
+      #   @hotel.make_block('Roni', 100, 2, @date1, @date)
+      #   @hotel.view_available_in_block(partyname: 'Roni').must_equal [:room8, :room9]
       # end
 
      it 'sends a booking error if there are no rooms available for a block' do
@@ -145,6 +146,7 @@ end
 
       it 'will skip over a reserved room to make a block' do
         @hotel.make_block('Ruth', 100, 3, @date1, @date2)
+        # binding.pry
         @hotel.make_reservation(date1: @date1)
         block2 = @hotel.make_block('Bree', 100, 5, @date1, @date2)
         block2[1].rooms.must_equal [:room5, :room6, :room7, :room8, :room9]
@@ -170,8 +172,6 @@ end
         @res[0].must_be_instance_of Hotel::Reservation
         @res[0].partyname.must_equal 'IzzieP'
         @res[0].cost.must_equal 120
-        print @res[0]
-        puts "***\n"
       end
 
       it 'makes a reservation inside a block for the second room' do
@@ -186,15 +186,16 @@ end
         @res2[1].room_number.must_equal :room2
         @res3 = @hotel.make_reservation(date1:@date2, date2:@date2, partyname: 'Tuffanoo')
         @res3[2].room_number.must_equal :room3
+      end
+
+      it 'must raise BookingError if there are no rooms left in the block' do
         proc{@hotel.make_reservation(date1:@date2, date2:@date2, partyname:'Tuffanoo')}.must_raise BookingError
       end
 
-      # THIS NEEDS TO WORK WITHOUT NIL PLACEHOLDER!
       it 'makes a reservation inside a block for a block with one date' do
         @hotel.make_block('Victor', 100, 3, @date1)
-        @hotel.make_reservation(date1: @date1, partyname: 'Victor')
+        @hotel.make_reservation(partyname: 'Victor')
       end
-
 
       it 'makes a reservation inside a block with just block name' do
         @hotel.make_block('Charis', 100, 3, @date1, @date2)
@@ -208,15 +209,33 @@ end
         res.partyname.must_equal 'Isabella'
         res.cost.must_equal 100
       end
-
     end
 
 #MORE EDGE CASES
     describe "Show available rooms in a block" do
       it 'will return available rooms in a given block' do
         @hotel.make_block('Sarah', 120, 3, @date1, @date2)
-        @hotel.make_reservation(date1: @date1, date2: @date2, partyname: 'Sarah')
-        @hotel.view_available_in_block('Sarah', @date1, @date2).must_equal [:room2, :room3]
+        @hotel.make_reservation(partyname: 'Sarah')
+        @hotel.view_available_in_block(partyname: 'Sarah').must_equal [:room2, :room3]
+      end
+
+      it 'will return available rooms in a given block if all are available' do
+        @hotel.make_block('Alex', 120, 3, @date1, @date2)
+        @hotel.view_available_in_block(partyname: 'Alex').must_equal [:room1, :room2, :room3]
+      end
+
+      it 'will return the correct rooms for a block if there is more than one block' do
+        @hotel.make_block('Diane', 120, 3, @date1)
+        @hotel.make_block('Joyce', 100, 4, @date1, @date2)
+        @hotel.make_block('Roni', 100, 2, @date1, @date2)
+        @hotel.view_available_in_block(partyname: 'Roni').must_equal [:room8, :room9]
+      end
+
+      it 'will return an empty list if there are no rooms available in the given block' do
+        @hotel.make_block('Diane', 120, 2, @date1)
+        @hotel.make_reservation(partyname: 'Diane')
+        @hotel.make_reservation(partyname: 'Diane')
+        @hotel.view_available_in_block(partyname: 'Diane').length.must_equal 0
       end
     end
 

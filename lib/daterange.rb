@@ -13,7 +13,6 @@ module Hotel
     end
 
     def is_valid?
-      # binding.pry
       raise DateError.new("You are living in the past, bud") if @beginning < Date.today
       unless one_day?
         raise DateError.new("Last night must be after first night") if @beginning > @ending
