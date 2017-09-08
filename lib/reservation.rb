@@ -27,7 +27,7 @@ module Hotel
         check_in: @check_in,
         check_out: @check_out,
         room: @room,
-        cost: COST * Hotel::DateRange.length_of_stay,
+        cost: COST * Hotel::DateRange.length_of_stay
       }
     end # end #final_reservation
 
