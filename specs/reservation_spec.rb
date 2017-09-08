@@ -17,5 +17,9 @@ describe 'Reservation' do
     it 'returns the number of days to reserve' do
       @puppy_expo.reserve_dates.must_equal 18
     end # end test
+
+    it 'returns the array of dates needed to be reserved' do
+
+    end # end test
   end # end #reserve_dates
 end # end of all Reservation tests
