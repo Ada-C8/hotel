@@ -7,7 +7,10 @@ module Reservable
   class PositiveIntegerError < StandardError
   end
 
-  class UnavailableDate <StandardError
+  class UnavailableDate < StandardError
+  end
+
+  class RoomLimit < StandardError
   end
 
   #Error checking

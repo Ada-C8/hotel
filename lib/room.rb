@@ -6,17 +6,18 @@ module ReservationSystem
   class Room
     include Reservable
 
-    attr_reader :number, :rate
-    attr_accessor :nights_reserved
+    attr_reader :number
+    attr_accessor :nights_reserved, :blocked_nights, :rate
 
     def initialize(number)
       positive_integer?(number)
       @number = number
-      @rate = 200 #TODO decide: could be a constant?
+      @rate = ReservationSystem::Hotel::BASE_ROOM_RATE
       @nights_reserved = Array.new
+      @blocked_nights = Array.new
     end
 
-    def available?(start, nights = 1) #TODO consider changing input to just date_range
+    def available?(start, nights = 1)
       date_array = date_range(start, nights)
       availability = true
 

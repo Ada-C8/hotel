@@ -8,6 +8,8 @@ module ReservationSystem
 
     attr_accessor :hotel, :all_reservations, :new_reservation
 
+    BASE_ROOM_RATE = 200
+    
     def initialize
       @hotel = Array.new
       @all_reservations = Array.new
