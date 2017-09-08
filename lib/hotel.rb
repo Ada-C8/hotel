@@ -77,7 +77,7 @@ class Hotel
 	return available_roooms
   end
   
-  def make_new_block(number_of_rooms, date)
+  def make_new_block(number_of_rooms, date, id)
 	available_rooms = get_open_rooms(date)
 	if number_of_rooms > 5
 		raise ArgumentException, "Room blocks must be 5 rooms or less"
@@ -89,7 +89,7 @@ class Hotel
 			rooms << available_rooms[i]
 			@rooms_currently_in_block << available_rooms[i]
 		end
-		new_block = Block_Of_Rooms.new(rooms, date)
+		new_block = Block_Of_Rooms.new(rooms, date, id)
 		@room_blocks << new_block
 	end
   end
@@ -103,6 +103,30 @@ class Hotel
 		end
 	end
 	return false
+  end
+  
+  def reserve_room_from_block(block_id)
+	if @room_blocks == []
+		raise ArgumentError, "There are no current room blocks"
+	else
+		
+		@room_blocks.each do |current_block|
+			if current_block.id == block_id
+				if current_block.available_rooms.include?(false)
+					index = 0
+					current_block.room_booked.each do |find_open_room|
+						if find_open_room[index] == false
+							room_number = current_block.available_rooms[index].room_number
+							new_reservation = Reservation.new(room_number, current_block.date)
+							find_open_room[index] = true
+						end
+					end
+				else
+					puts "There are no rooms avaiable for this block"
+				end
+			end
+		end
+	end
   end
   
 end
