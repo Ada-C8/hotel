@@ -4,10 +4,11 @@ require 'date'
 describe "Block class" do
 
   before do
+    number_of_rooms = 2
+    all_room_numbers = [1, 2]
     check_in = Date.new(2017,9,9)
     check_out = Date.new(2017,9,12)
-    number_of_rooms = 5
-    @test_ob = BookingSystem::Block.new(number_of_rooms, check_in, check_out)
+    @test_ob = BookingSystem::Block.new(number_of_rooms, all_room_numbers, check_in, check_out)
   end
 
   describe "initialize method" do
@@ -22,6 +23,8 @@ describe "Block class" do
 
     it "Raises an ArgumentError if not passed an Integer for number_of_rooms" do
       proc { BookingSystem::Block.new("five", Date.new(2017,9,9), Date.new(2017,9,12)) }.must_raise ArgumentError
+
+      proc { BookingSystem::Block.new(0, Date.new(2017,9,9), Date.new(2017,9,12)) }.must_raise ArgumentError
     end
 
     it "Has an instance variable @date_range that is an Array" do

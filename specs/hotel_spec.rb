@@ -12,6 +12,9 @@ describe "Hotel class" do
 
   before do
     @test_ob = BookingSystem::Hotel.new
+    @room = 1
+    @check_in = Date.new(2017,9,9)
+    @check_out = Date.new(2017,9,12)
   end
 
   describe "initalize method" do
@@ -29,31 +32,28 @@ describe "Hotel class" do
       @test_ob.rooms[19].must_equal 20
     end
 
-    it "Has an instance variable @all_reservations that holds objects (instances of Reservation class) in an Array" do
-      @test_ob.all_reservations.must_be_instance_of Array
+    it "Has an instance variable @all_single_reservations that holds objects (instances of Reservation class) in an Array" do
+      @test_ob.all_single_reservations.must_be_instance_of Array
     end
 
+    it "Has an instance variable @all_block_reservations that holds objects (instances of Block class) in an Array" do
+      @test_ob.all_block_reservations.must_be_instance_of Array
+    end
   end#initialize
 
   describe "make_reservation method" do
-
-    before do
-      @room = 1
-      @check_in = Date.new(2017,9,9)
-      @check_out = Date.new(2017,9,12)
-    end
 
     it "Can be called" do
       @test_ob.must_respond_to :make_reservation
     end
 
-    it "Returns an instance of Reservation class" do
+    it "Returns an instance of Reservation class when room is available" do
       @test_ob.make_reservation(@room, @check_in, @check_out).must_be_instance_of BookingSystem::Reservation
     end
 
-    it "Increases @all_reservations by 1" do
+    it "Increases @all_single_reservations by 1 for each new reservation" do
       @test_ob.make_reservation(@room, @check_in, @check_out)
-      @test_ob.all_reservations.length.must_equal 1
+      @test_ob.all_single_reservations.length.must_equal 1
     end
 
     it "Raises an UnavailableRoomError if room is unavailable" do
@@ -64,10 +64,24 @@ describe "Hotel class" do
 
   end
 
-  describe "block_reservation" do
+  describe "block_reservation method" do
 
     it "Can be called" do
       @test_ob.must_respond_to :block_reservation
+    end
+
+    it "Raises an UnavailableRoomError if there are not enough rooms available for request" do
+      @test_ob.make_reservation(@room, @check_in, @check_out)
+      proc { @test_ob.block_reservation(20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+    end
+
+    it "Returns an instance of Block class" do
+      @test_ob.block_reservation(3, @check_in, @check_out).must_be_instance_of BookingSystem::Block
+    end
+
+    it "Increases the length of the @block_reservations by 1" do
+      @test_ob.block_reservation(3, @check_in, @check_out)
+      @test_ob.all_block_reservations.length.must_equal 1
     end
   end
 
@@ -117,7 +131,6 @@ describe "Hotel class" do
 
       @test_ob.make_reservation(@room, @check_in, @check_out)
       @test_ob.available_rooms(@check_in, @check_out).length.must_equal 19
-
     end
 
   end
@@ -130,15 +143,30 @@ describe "Hotel class" do
     end
 
     #https://stackoverflow.com/questions/16599256/testing-private-method-in-ruby-rspec
+    it "Raises an InvalidRoomError if input for room is not an Integer between 1-20" do
+      proc { @test_ob.send(:room_available?, 0, @check_in, @check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
+
+      proc { @test_ob.send(:room_available?, "one", @check_in, @check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
+
+      proc { @test_ob.send(:room_available?, 21, @check_in, @check_out) }.must_raise BookingSystem::Reservation::InvalidRoomError
+    end
+
     it "Returns true if room is available for requested dates" do
       @test_ob.send(:room_available?, @room, @check_in, @check_out).must_equal true
     end
 
     it "Returns false if room is not available for requested dates" do
 
+      block_check_in = Date.new(2017,10,9)
+      block_check_out = Date.new(2017,10,12)
+
       @test_ob.make_reservation(@room, @check_in, @check_out)
 
       @test_ob.send(:room_available?, @room, @check_in, @check_out).must_equal false
+
+      @test_ob.block_reservation(5, block_check_in, block_check_out)
+
+      @test_ob.send(:room_available?, 1, block_check_in, block_check_out).must_equal false
     end
   end
 
