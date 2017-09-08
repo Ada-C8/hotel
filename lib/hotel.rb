@@ -6,9 +6,6 @@ require_relative 'block'
 module BookingSystem
   class Hotel
 
-    # COST = 200
-    # BLOCK_DISCOUNT = 10
-
     attr_reader :rooms, :all_reservations, :cost, :block_discount
 
     def initialize(number_of_rooms, cost=200, block_discount=10)
@@ -17,6 +14,9 @@ module BookingSystem
       @all_blocks = [] #array of instances of class Block
       @cost = cost
       @block_discount = block_discount
+
+      # cost = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150, 6 => 170, 7 => 180, 8 => 150, 9 => 190, 10 => 200, 11 => 220, 12 => 135, 13 => 200, 14 => 190, 15 => 220, 16 => 200, 17 => 220, 18 => 250, 19 => 200, 20 => 250}
+
     end #end of initialize
 
     def room_unavailable(room)
