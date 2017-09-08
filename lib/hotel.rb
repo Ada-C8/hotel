@@ -25,6 +25,7 @@ module BookingSystem
     # As an administrator, I can create a block of rooms
     def reserve_block(reserved_for, check_in, check_out, num_of_rooms)
       # This is converted to a date object
+      #TODO:
       available_rooms = check_avail_rooms_for(check_in, check_out)
       reserved_room_nums = available_rooms[0..num_of_rooms - 1] # Takes the first 5 rooms from all available rooms
       new_block = Block.new(reserved_for, check_in, check_out, reserved_room_nums)

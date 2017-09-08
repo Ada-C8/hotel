@@ -67,12 +67,22 @@ describe "Hotel" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5).must_be_instance_of BookingSystem::Block
     end
 
-    it "should add BookingSystem::Block instance to all @reservations by one" do
+    it "should add one BookingSystem::Block instance to all @reservations by one" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
       @hotel.reservations[0].must_be_instance_of BookingSystem::Block
       @hotel.reservations.length.must_equal 1
     end
 
+    it "should return 4 instances of block if no other single reservations exist" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_block("Pete", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_block("Sally", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_block("Sue", '2001-02-03', '2001-02-05', 5)
+      @hotel.reservations.length.must_equal 4
+      @hotel.reservations.each do |reservation|
+        reservation.must_be_instance_of BookingSystem::Block
+      end
+    end
     #TODO: Write extra tests for this block???
   end
 
@@ -82,25 +92,43 @@ describe "Hotel" do
     end
   end
 
-  describe "#avail_rooms_in_block" do
-    it "only one instance of BookingSystem::Block should be added to all reservations" do
+  describe "#avail_rooms_in_block?" do
+    it "only 1 instance of BookingSystem::Block should be added to all reservations" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
-      @hotel.avail_rooms_in_block?("Bob").must_be_kind_of Array
+
       @hotel.reservations.length.must_equal 1
       @hotel.reservations.each do |reservation|
         reservation.must_be_instance_of BookingSystem::Block
       end
+      @hotel.avail_rooms_in_block?("Bob").must_be_kind_of Array
     end
 
-    it "should return 1 instance of Block if other single reservations are added" do
+    it "should return the first 5 available rooms as apart of the block" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.avail_rooms_in_block?("Bob").must_equal [1,2,3,4,5]
+    end
+
+    it "should return the last 5 available rooms if other blocks are booked for the same days" do
+      @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_block("Pete", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_block("Sally", '2001-02-03', '2001-02-05', 5)
+      @hotel.reserve_block("Sue", '2001-02-03', '2001-02-05', 5)
+
+      @hotel.avail_rooms_in_block?("Sue").must_equal [16,17,18,19,20]
+    end
+
+    it "should return 1 instance of Block if other single reservations already exist" do
       check_in = '2001-02-03'
       check_out = '2001-02-04'
-      10.times do
+      3.times do
         @hotel.create_reservation(check_in, check_out)
       end
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
       @hotel.avail_rooms_in_block?("Bob").must_be_kind_of Array
+      @hotel.avail_rooms_in_block?("Bob").length.must_equal 5
+      @hotel.avail_rooms_in_block?("Bob").must_equal [4,5,6,7,8]
     end
+
   end
 
   describe "#all_reservations(date)" do
@@ -139,6 +167,8 @@ describe "Hotel" do
         end
       @hotel.check_avail_rooms_for(check_in, check_out).must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     end
+
+    #TODO: Should return an argument error if no further rooms exist!!!!!
   end # Describe
 
 end # Describe

@@ -5,9 +5,10 @@ module BookingSystem
     DISCOUNT_RATE = 150
 
     def initialize(reserved_for, check_in, check_out, reserved_rooms)
+      dates = DateRange.new(check_in, check_out)
       @reserved_for = reserved_for
-      @check_in = check_in
-      @check_out = check_out
+      @check_in = dates.check_in
+      @check_out = dates.check_out
       @reserved_rooms = reserved_rooms # Blocked rooms is the reserved room numbers as an array
       @block_total = 0
       @avail_block_rooms = []

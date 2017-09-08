@@ -17,11 +17,11 @@ describe "Block" do
 
       @booking.must_respond_to :check_in
       #TODO: Must make sure the correct input is given a a regex
-      @booking.check_in.must_be_instance_of String
+      @booking.check_in.must_be_instance_of Date
 
       @booking.must_respond_to :check_out
       #TODO: Must make sure the correct input is given a a regex
-      @booking.check_out.must_be_kind_of String
+      @booking.check_out.must_be_kind_of Date
 
       @booking.must_respond_to :reserved_rooms
       @booking.reserved_rooms.each do |room_num|

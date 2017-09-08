@@ -12,7 +12,13 @@ module BookingSystem
       booked_rooms = []
         existing_reservations.each do |reservation|
           if @check_in >= reservation.check_in && @check_in < reservation.check_out
-            booked_rooms << reservation.room_num # Need to figure out how to get all rooms
+            if reservation.class == BookingSystem::Block
+              reservation.reserved_rooms.each do |block_room_num|
+                booked_rooms << block_room_num
+              end
+            else
+              booked_rooms << reservation.room_num
+            end
             # raise "This room is currently booked for your requested dates"
             # If room_num is an array do something else else do normal
             # Iterate over each room number and push it all into the booked rooms
