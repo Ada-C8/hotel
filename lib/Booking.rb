@@ -15,22 +15,27 @@ module Hotel
 
   class BookingProgram
     attr_reader :all_rooms, :all_reservations, :all_blocks
+    NUM_STANDARD_ROOMS = 20
+    #NUM_OTHER_ROOMS = 0
 
     def initialize # do we want to initialize with hotel name?
       @all_rooms = Hotel::Room.all # returns an array or hash of Room objects
+      # @all_rooms2 = Hotel::BookingProgram.setup_rooms
       @all_reservations = []
       @all_blocks = []
 
     end
 
     ####should this be a Room, self.all method
-    def available_rooms(check_in,check_out)
+    def available_rooms(check_in,check_out, block_id = nil)
       #check_in and #check_out are strings
       #TODO: below
       # confirm check_out date availability logic
       #error handling
       #message if no rooms are available?
       @all_rooms.select {|room| room.available_all_days?(check_in, check_out)}
+
+      #if block_id
     end
 
     ###should this be a Room method
@@ -40,21 +45,29 @@ module Hotel
 
       if block_id
         #TODO: think about whether or not to have a separate block reservation id logic and whether or not to store block reservations in the same place as all reservations AND store them separately, or store them in one place (either all reservations or Block reservations)
-        raise ArgumentError.new("This block doesn't exist") if !(find_block_by_id(block_id))
 
         block= find_block_by_id(block_id)
+        raise ArgumentError.new("This block doesn't exist") if !(find_block_by_id(block_id))
+
         block_discount = block.discounted_rate
+        block_room = Hotel::Room.find_by_id(room_id)#must be included in the block
+
+        raise ArgumentError.new("This room is not in the block") if !(block.rooms.include?(block_room))
 
         #TODO: IRON OUT and TEST block reservation constraints: check in and check out MUST be that of the BLOCK check_in/Check_out dates
         block_check_in = block.check_in.to_s
         block_check_out= block.check_out.to_s
+
+        #TODO: Think about if we want to make a block reservation id a +1 count of all reservations, or have separate ids for blocks
         reservation = Hotel::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount, block_id)
       else
         reservation = Hotel::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
       end
 
       #TODO: How to incorporate reserve_room logic for Block Reservations
-      reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id)
+      reservation.room.reserve_room(check_in,check_out,reservation.id, guest_id) if reservation.type == :standard
+
+      reservation.room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil) if reservation.type == :block
 
       @all_reservations << reservation
 
@@ -104,6 +117,10 @@ module Hotel
       #self.all.select {|reservation| reservation.room.all_dates.include?(date_object)}
     end
 
+    def find_block_res_by_block_id(block_id,guest_id=nil )
+
+    end
+
     def find_block_by_id(block_id)
       @all_blocks.each do |block|
         return block if block.id == block_id
@@ -111,6 +128,21 @@ module Hotel
 
       return false
     end
+
+    # def self.setup_rooms
+    #   i = 1
+    #   standard_rooms = []
+    #
+    #   until standard_rooms.count == NUM_STANDARD_ROOMS
+    #     room =  Hotel::Room.new(i)
+    #     standard_rooms << room
+    #     i += 1
+    #   end
+    #
+    #   return standard_rooms
+    # end
+
+
 
 
 

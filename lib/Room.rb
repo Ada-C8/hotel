@@ -1,6 +1,7 @@
 require 'pry'
 require 'date'
 require_relative 'Reservation'
+require_relative 'BlockReservation'
 
 module Hotel
 
@@ -16,7 +17,7 @@ module Hotel
       @type = :standard # is this necessary
       @reserv_id_and_dates = {}
        # holds all reservations, a hash with reservation ids as keys and values as the date range of the reservation ### check-out date should not be included
-      @block_id_and_dates = {}
+      @block_id_and_res_dates = {}
       @all_dates = []
 
       # @status =  :available #not sure if status is needed anymore.maybe a method, available?
@@ -46,6 +47,24 @@ module Hotel
 
     end
 
+    def reserve_block_room(check_in_str,check_out_str,reservation_id, block_id, guest_id=nil)
+      check_in = Date.parse(check_in_str)
+      check_out = Date.parse(check_out_str)
+
+      check_valid_dates(check_in,check_out)
+
+      (check_in...check_out).each do |date|
+        raise ArgumentError.new("this room has already been reserved for these dates in this block") if @block_id_and_res_dates[block_id].include?
+      end
+
+      (check_in...check_out).each do |date|
+        @block_id_and_res_dates[block_id]<< date
+      end
+
+
+    end
+
+
     def block_room(check_in_str,check_out_str,block_id)
       check_in = Date.parse(check_in_str)
       check_out = Date.parse(check_out_str)
@@ -56,7 +75,7 @@ module Hotel
         return false if @all_dates.include?(date)
       end
 
-      @block_id_and_dates[block_id] = []
+      @block_id_and_res_dates[block_id] = []
 
       (check_in...check_out).each do |date|
         @all_dates << date
