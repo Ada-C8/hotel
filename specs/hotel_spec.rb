@@ -95,3 +95,34 @@ describe "Room" do
     end
   end
 end #end of room class
+
+
+
+
+
+
+
+
+
+describe "Hotel" do
+  describe "initialize" do
+    before do
+      @hotel = Hotel::ReservationSystem.new()
+    end
+
+    it "checks initialize" do
+
+      @hotel.must_respond_to :rooms
+      @hotel.rooms.must_be_kind_of Array
+      @hotel.rooms.length.must_equal 20
+
+      @hotel.must_respond_to :room_reservation
+      keys = @hotel.room_reservation.keys
+      keys.length.must_equal 20
+
+    end
+  end
+
+
+
+end

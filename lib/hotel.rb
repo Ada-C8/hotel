@@ -37,14 +37,14 @@ module Hotel
 
 
 
-      # add in the comp date and such for this logic
-      def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
-        # start date is within comparison date range
-        return true if start_date >= comparison_start_date && start_date < comparison_end_date
-        # end date is within comparison date range
-        return true if end_date >= comparison_start_date && end_date <= comparison_end_date
-        return false
-      end
+    # add in the comp date and such for this logic
+    def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
+      # start date is within comparison date range
+      return true if start_date >= comparison_start_date && start_date < comparison_end_date
+      # end date is within comparison date range
+      return true if end_date >= comparison_start_date && end_date <= comparison_end_date
+      return false
+    end
 
 
   end #end of class DateRange
@@ -83,14 +83,15 @@ module Hotel
       @rate = rate
     end
 
-    def self.all
-      rooms = []
-      number = 0
-      20.times do
-        number += 1
-        rooms << self.new(number)
-      end
-    end
+    # this was moved/refactored to hotelreservations
+    # def self.all
+    #   rooms = []
+    #   number = 0
+    #   20.times do
+    #     number += 1
+    #     rooms << self.new(number)
+    #   end
+
 
 
   end #end of class Hotel_Rooms
@@ -99,5 +100,41 @@ module Hotel
 
 
 
+
+
+
+
+
+  class ReservationSystem
+
+    attr_reader :rooms, :room_reservation
+
+    def initialize
+
+      @rooms = []
+      @room_reservation = {}
+
+      @blocked_rooms = []
+      20.times do |r|
+        @rooms << Hotel::Room.new(r)
+        @room_reservation[r] = []
+      end
+
+    end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  end #end of class ReservationSystem
 
 end #end of module hotel
