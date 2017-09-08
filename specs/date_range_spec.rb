@@ -28,7 +28,7 @@ describe 'DateRange' do
 
     end # end test
   end # end #is_available?
-  
+
   describe 'reserve_room' do
     xit 'reserves room if given dates are available' do
 
