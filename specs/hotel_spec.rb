@@ -152,6 +152,19 @@ describe "hotel class" do
 
       new_hotel.rooms_not_reserved(start_date +5, start_date + 10).must_equal [2,3]
 
+      # new_hotel.rooms_not_reserved(start_date +1, start_date + 2).must_equal [1,2,3]
     end
+
+    it "rooms_not_reserved should be an instance of hotel" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.must_respond_to :rooms_not_reserved
+    end
+
+    it "unreserved_rooms must be instance of Array" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.unreserved_rooms.must_be_instance_of Array
+
+    end
+
   end
 end

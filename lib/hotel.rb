@@ -43,7 +43,6 @@ module HotelManagment
     end
     # ------------------------------------------------
 
-    # TODO
     def rooms_not_reserved(begin_date, end_date)
 
       @reservations.each { |reservation|
