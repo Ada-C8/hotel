@@ -170,10 +170,12 @@ describe "The Hotel class" do
       @myhotel.reservations_array.length.must_equal 2
     end
 
-    # it "adds reservations for different available rooms for overlapping reservation dates" do
-    #   @myhotel.store_reservation("8/13/17", "8/15/17").room.room_id.must_equal == 1
-    #   #@myhotel.reservations_array.length.must_equal 2
-    # end
+    it "it books room 1 if the only reservation ends on the requested reservation start date" do
+      @myhotel.store_reservation("8/13/17", "8/15/17")
+      @myhotel.store_reservation("8/15/17", "8/15/17")
+      @myhotel.reservations_array[0].room.room_id.must_equal 1
+      @myhotel.reservations_array[1].room.room_id.must_equal 1
+    end
 
     it "adds reservations for different available rooms for overlapping reservation dates" do
       @myhotel.store_reservation("8/13/17", "8/15/17")
