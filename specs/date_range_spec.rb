@@ -35,9 +35,10 @@ describe "DateRange Class" do
       check_out = Date.new(2017,9,8)
       proc{Hotel::DateRange.new(check_out,check_in)}.must_raise InvalidDateRangeError
     end
-    it "valid_date? will raise an error if parameters check-in/out are not Date objects" do
+    it "valid_date? will raise an error if parameters check_in in check_out are not Date objects" do
       check_in = "9/6/2017"
       check_out = Date.new(2017,9,8)
+      proc{Hotel::DateRange.new(check_in,check_out)}.must_raise ArgumentError
       proc{Hotel::DateRange.new(check_out,check_in)}.must_raise ArgumentError
     end
   end

@@ -14,7 +14,7 @@ module Hotel
     make_nights_arr
     end
     def valid_input?
-      if @check_in.class != Date && @check_out.class != Date
+      if @check_in.class != Date || @check_out.class != Date
         raise ArgumentError.new("User input Check-in: #{@check_in} and Check-out: #{@check_out} are not valid inputs, must be a Date Object.")
       end
     end
