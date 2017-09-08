@@ -8,26 +8,63 @@ describe 'Hotel' do
   describe '#initialize' do
     it 'Can be instantiated' do
       @hotel.must_be_kind_of Hotel::Hotel
+      @hotel.reservations.must_equal []
+      @hotel.blocks.must_equal []
     end
 
     it 'Creates an array of rooms' do
       @hotel.rooms.must_be_kind_of Array
       @hotel.rooms.length.must_equal 20
+      @hotel.rooms.each do |room|
+        room.must_be_kind_of Hotel::Room
+      end
     end
 
-    it 'Creates array of reservations' do
-      @hotel.reservations.must_equal []
+    it 'Can be initialized with 0 rooms' do
+      hotel = Hotel::Hotel.new(0)
+      hotel.rooms.must_equal []
+    end
+
+    it 'Can be initialized with 1 room' do
+      hotel = Hotel::Hotel.new(1)
+      hotel.rooms.length.must_equal 1
+      hotel.rooms[0].must_be_kind_of Hotel::Room
+    end
+
+    it 'raises ArgumentError if passed anything but an Integer' do
+      proc {
+        Hotel::Hotel.new('hi')
+      }.must_raise ArgumentError
+
+      proc {
+        Hotel::Hotel.new(nil)
+      }.must_raise ArgumentError
+
+      proc {
+        Hotel::Hotel.new(4.0)
+      }.must_raise ArgumentError
     end
   end
 
-  describe '#all_rooms' do
+  describe 'rooms' do
     # As an administrator, I can access the list of all of the rooms in the hotel
     it 'Returns an array of all room numbers' do
-      all_rooms = @hotel.all_rooms
+      all_rooms = @hotel.rooms
       all_rooms.must_be_kind_of Array
       all_rooms.each do |room|
         room.must_be_kind_of Hotel::Room
       end
+    end
+
+    it 'returns an empty array if there are no rooms' do
+      all_rooms = Hotel::Hotel.new(0).rooms
+      all_rooms.must_equal []
+    end
+
+    it 'returns a single-element array if there is 1 room' do
+      all_rooms = Hotel::Hotel.new(1).rooms
+      all_rooms.length.must_equal 1
+      all_rooms[0].must_be_kind_of Hotel::Room
     end
   end
 
