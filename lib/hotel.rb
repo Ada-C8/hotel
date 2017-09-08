@@ -95,22 +95,22 @@ module Hotel_Chain
         @reservations_array.each do |reservation|
           # checks for unavailable rooms
           #1
-          if room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+          if room.room_id == reservation.room.room_id && reservation.status = "assigned" && reservation.check_in_date < check_in && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
             unavailable_rooms << room
           #2
-          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
+          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && (reservation.check_in_date < check_out && reservation.check_in_date > check_in) && reservation.check_out_date > check_out
             unavailable_rooms << room
           #3
-          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
+          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && (reservation.check_out_date < check_out && reservation.check_out_date > check_in)
             unavailable_rooms << room
           #4
-          elsif room.room_id == reservation.room.room_id && reservation.check_in_date < check_in && reservation.check_out_date > check_out
+          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && reservation.check_in_date < check_in && reservation.check_out_date > check_out
             unavailable_rooms << room
           #5
-          elsif room.room_id == reservation.room.room_id && reservation.check_in_date == check_in
+          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && reservation.check_in_date == check_in
             unavailable_rooms << room
           #6
-          elsif room.room_id == reservation.room.room_id && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && reservation.check_out_date == check_out
+          elsif room.room_id == reservation.room.room_id && reservation.status = "assigned" && (reservation.check_in_date > check_in && reservation.check_in_date < check_out) && reservation.check_out_date == check_out
             unavailable_rooms << room
           else
             available_rooms << room

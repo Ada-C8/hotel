@@ -6,7 +6,7 @@ require 'date'
 module Hotel_Chain
   class Reservation
 
-    attr_accessor :check_in_date, :check_out_date, :room, :HOTEL, :cost
+    attr_accessor :check_in_date, :check_out_date, :room, :HOTEL, :cost, :status
 
     HOTEL = Hotel_Chain::MyHotel.new
 
@@ -15,11 +15,12 @@ module Hotel_Chain
     #After a reservation is created, this program randomly assigns a room object (without checking to see if it's available).
     #I may also like to have the program assign a reservation_id (this info can live in a spreadsheet)- then I will need a method to look up a reservation by reservation_id
     #reservation_ID would be set as default value of 0 here and then set in the store_reservation method based on existing reservations.
-    def initialize(check_in_date, check_out_date)
+    def initialize(check_in_date, check_out_date, status = "assigned")
       begin
         @check_in_date = Date.strptime(check_in_date, "%m/%d/%Y")
         @check_out_date = Date.strptime(check_out_date, "%m/%d/%Y")
         @room = HOTEL.array_of_rooms.sample
+        @status = status
       rescue ArgumentError
         raise WrongDateFormatError
       end
