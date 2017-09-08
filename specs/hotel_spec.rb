@@ -38,7 +38,4 @@ describe "HotelClass" do
       @hotel_test.access_reservations.length.must_equal 1
     end
   end
-  describe "Get_total method" do
-
-  end
 end

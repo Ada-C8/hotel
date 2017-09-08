@@ -9,7 +9,7 @@ module Hotel
 
     def reserve_room(room_id, check_in, check_out)
       # reserve a room for a given date range
-      new_reservation = Hotel::Reservation.new(1, room_id, check_in, check_out)
+      new_reservation = Hotel::Reservation.new(room_id, check_in, check_out)
       reservations << new_reservation
     end
 
