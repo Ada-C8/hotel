@@ -16,6 +16,7 @@
 # In ithe make_reservation method: using the availible array we can iterate though the array to create a new Reservation for the date(s) requested with the right rooms (only the ones in the availible array)
 
 require_relative 'exceptions'
+require 'pry'
 
 module Hotel
   class Booking
@@ -132,16 +133,25 @@ module Hotel
 
       availible = availible_rooms(start_date, end_date)
 
+      all_block_id = []
+      @all_blocks.each do |block|
+        all_block_id << block.block_id
+      end # .each
+
+      block_id = block_id.upcase
+
       if start_date > end_date
         raise BookingError.new("Your checkin day must be before your checkout day! You entered checkin day = #{start_date} and checkout day = #{end_date}")
       elsif num_of_rooms > 5
         raise BookingError.new("You can only request a maximum of five rooms per block.")
       elsif num_of_rooms > availible.length
         raise BookingError.new("You cannot request that many rooms for your block. There are only #{availible.length} rooms left for that date range.")
+      elsif all_block_id.include?(block_id)
+        raise BookingError.new("Please use a different block ID, the block ID #{block_id} is already in use")
       end # if/elsif
 
       dates = Hotel::DateRange.new(start_date, end_date).nights_booked
-      block_id = block_id.upcase
+
       rooms = []
       i = 0
       num_of_rooms.times do
@@ -150,6 +160,8 @@ module Hotel
       end # .each
 
       @all_blocks << Hotel::Block.new(block_id, rooms, dates)
+
+      # TODO: should this method return the insance of Block created instead of the @all_blocks array?
 
     end #make_block
 
@@ -168,6 +180,35 @@ module Hotel
       end # .each
       return date_blocks
     end # check_date_for_block
+
+    def check_block_availibility(block_id)
+      # will iterate though the @all_block array to find the block with the right ID
+        # if the block ID doesn't exsist
+        # if the ID does exist then it will rerurn the Block.block_rooms array
+          # if this array is empty then there is not avaibility
+          # if there are rooms in the array then there is still availible in the block
+            # Then this array can be passed to the reserve_from_block method so that you can book directly from the block
+            #Will have to have another method that will return true or false depending on the return array of the check_block_availibility method to be a simple way to check if there is availibility in the block
+
+      id = block_id.upcase
+
+      all_block_id = []
+      @all_blocks.each do |block|
+        all_block_id << block.block_id
+      end # .each
+
+      if !(all_block_id.include?(id))
+        raise BookingError.new("That booking ID does not exist!")
+      end # if
+
+      block_rooms_remaining = []
+      @all_blocks.each do |block|
+        if block.block_id == id
+          block_rooms_remaining = block.block_rooms
+        end # if
+      end # .each
+      return block_rooms_remaining
+    end # def check_block_availibility
 
   end # Booking
 end # Hotel

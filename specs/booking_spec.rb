@@ -310,7 +310,7 @@ end # describe "make_block" do
 
     it "will return an empty array if not Blocks are in that date range" do
       @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
-      @booking.make_block("Wedding", (@checkin_day + 5), (@checkout_day + 5), 5)
+      @booking.make_block("another wedding", (@checkin_day + 5), (@checkout_day + 5), 5)
 
       @booking.check_date_for_block(@start_date_to_check, @end_date_to_check).must_be_empty
     end # it "will return an empty array if not blocks are in that date range" do
@@ -326,6 +326,39 @@ end # describe "make_block" do
       @booking.check_date_for_block(start_date_to_check, end_date_to_check)[0].block_id.must_equal "WEDDING"
       @booking.check_date_for_block(start_date_to_check, end_date_to_check)[1].block_id.must_equal "EVENT"
     end # it "will return an array of all the Blocks that are in that date range" do
+
+    it "will only allow unique block_ids" do
+    @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+
+    proc{@booking.make_block("wedding", @checkin_day, @checkout_day, 5)}.must_raise BookingError
+
+    end # it "will only allow unique block_ids" do
+
   end # describe "check_date_for_block" do
+
+  describe "check_block_availibility" do
+    # TODO:
+      # it can be called on @booking
+      # it will be able to find a block based on it's block_id
+      # it will return an array of the rooms that are still availible in the Block
+
+      it "will be able to be be called on @booking" do
+        @booking.must_respond_to :check_block_availibility
+      end # it "will be able to be be called on @booking" do
+
+      it "will return an array of the rooms in the Block with that block_id" do
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+
+        @booking.check_block_availibility("WEDDING").must_be_kind_of Array
+        @booking.check_block_availibility("WEDDING").must_equal @booking.all_blocks[0].block_rooms
+      end # will return an array of the rooms in the Block with that block_id"
+
+      it "will raise BookingError if the block_id does not exist" do
+        # TODO
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        proc{@booking.check_block_availibility("another wedding")}.must_raise BookingError
+      end # it "will raise BookingError if the block_id does not exist" do
+  end # describe "check_block_availibility" do
+
 
 end # Booking
