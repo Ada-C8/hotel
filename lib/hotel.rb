@@ -11,6 +11,38 @@ require 'date'
 
 module Hotel
 
+  class DateRange
+
+    attr_reader :start_date, :end_date
+
+    def initialize(start_date, end_date)
+
+      @start_date = start_date
+      @end_date = end_date #should this be under the if as an else?
+
+      if @start_date > @end_date
+        raise ArgumentError, "Start date cannot come after end date"
+      end
+    end
+
+
+
+      # add in the comp date and such for this logic
+      def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
+        # start date is within comparison date range
+        return true if start_date >= comparison_start_date && start_date < comparison_end_date
+        # end date is within comparison date range
+        return true if end_date >= comparison_start_date && end_date <= comparison_end_date
+        return false
+      end
+
+
+  end #end of class DateRange
+
+
+
+
+
   class Reservation
     attr_reader :room_number, :start_date, :end_date, :cost
 
@@ -19,30 +51,20 @@ module Hotel
 			@start_date = date.start_date
 			@end_date = date.end_date
 
+
+
       #put in something for a cost discount? if nill blah blah blah
 
-			if @start_date == @date.end_date
+			if @start_date == @end_date
 				@cost = cost
 			else
 				@cost = cost * (@end_date - @start_date).to_i
 			end
+
 		end
 
-    #date range business
 
-    if @start_date > @end_date
-      raise ArgumentError, "Start date cannot come after end date!"
-    end
-
-    def self.overlapping?(start_date, end_date, comparison_start_date, comparison_end_date)
-      # start date is within comparison date range
-      return true if start_date >= comparison_start_date && start_date < comparison_end_date
-      # end date is within comparison date range
-      return true if end_date >= comparison_start_date && end_date <= comparison_end_date
-      return false
-    end
   end #class reservation
-
 
   class Hotel_Rooms
     attr_reader :number, :id, :rate, :room_number
