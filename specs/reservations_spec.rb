@@ -68,9 +68,6 @@ describe "#RESERVATIONS" do
 
 
       proc {Reservation.new(block_reserve[:check_in], block_reserve[:check_out], block_reserve[:rooms], 0.8)}.must_raise ArgumentError
-
-
-
     end
   end
 end

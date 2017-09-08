@@ -16,13 +16,11 @@ class Hotel
   def make_reservation(check_in, check_out, rooms)
     unavailable_rooms = []
 
-    if room_flagged_unavailable?(check_in, check_out, rooms, unavailable_rooms)
+    if room_flagged_available?(check_in, check_out, rooms, unavailable_rooms)
       @reservations.push(Reservation.new(check_in, check_out, rooms))
     else
       begin
-        raise ArgumentError.new("Room: #{unavailable_rooms} not available: ")
-      rescue ArgumentError => exception
-        puts "#{exception}: #{check_in} - #{check_out}"
+        raise ArgumentError.new("Room: #{unavailable_rooms} not available")
       end
     end
   end
@@ -60,7 +58,6 @@ class Hotel
   def rooms_available(check_in, check_out)
     nights = Nights.new(check_in, check_out)
     available_rooms = Array.new(@rooms)
-
     nights.nights_reserved.each do |night_reserved|
       remove_rooms_from_available(night_reserved, available_rooms)
     end
@@ -68,9 +65,9 @@ class Hotel
   end
 
 
-  def block_reservation(check_in, check_out, rooms)
-    @reservations.push(Reservation.new(check_in, check_out, rooms))
-  end 
+  # def block_reservation(check_in, check_out, rooms)
+  #   @reservations.push(Reservation.new(check_in, check_out, rooms))
+  # end
 
   private
 
@@ -82,7 +79,7 @@ class Hotel
     end
   end
 
-  def room_flagged_unavailable?(check_in, check_out, rooms, unavailable_rooms)
+  def room_flagged_available?(check_in, check_out, rooms, unavailable_rooms)
     flag = true
     rooms.each do |room|
       if !(rooms_available(check_in, check_out).include?(room))

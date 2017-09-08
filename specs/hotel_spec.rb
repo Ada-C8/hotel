@@ -5,12 +5,8 @@ require 'pry'
 describe "#HOTEL" do
   before do
     @my_hotel = Hotel.new
-
     @reservation1 = {check_in: "January 4, 2018", check_out: "January 10, 2018", room: [@my_hotel.rooms[0]]}
-
-
     @reservation2 = {check_in: "January 5, 2018", check_out: "January 10, 2018", room: [@my_hotel.rooms[1]]}
-
     @reservation3 = {check_in: "January 8, 2018", check_out: "January 14, 2018", room: [@my_hotel.rooms[2]]}
 
     @my_hotel.make_reservation(@reservation1[:check_in], @reservation1[:check_out], @reservation1[:room])
@@ -43,14 +39,11 @@ describe "#HOTEL" do
       @my_hotel.reservations.first.room_numbers.first.must_equal 1
     end
 
-
-
     it "Can reserve rooms that are available" do
       @reservation4 = {check_in: "January 7, 2018", check_out: "January 11, 2018", room: [@my_hotel.rooms[19]]}
       @my_hotel.make_reservation(@reservation4[:check_in], @reservation4[:check_out], @reservation4[:room])
       @my_hotel.reservations.length.must_equal 4
     end
-
 
 
     it "Can book a reservation for a room the same day another reservation ends" do
@@ -62,7 +55,7 @@ describe "#HOTEL" do
 
     it "Rejects reservation attemps on rooms that are already reserved for the specified dates" do
       @reservation5 = {check_in: "January 7, 2018", check_out: "January 13, 2018", room: [@my_hotel.rooms[1]]}
-      @my_hotel.make_reservation(@reservation5[:check_in], @reservation5[:check_out], @reservation5[:room])
+      proc{@my_hotel.make_reservation(@reservation5[:check_in], @reservation5[:check_out], @reservation5[:room])}.must_raise ArgumentError
       @my_hotel.reservations.length.must_equal 3
     end
 
@@ -73,6 +66,23 @@ describe "#HOTEL" do
       @my_hotel.reservation_by_date("January 10, 2018").length.must_equal 1
       @my_hotel.reservation_by_date("Janury 9, 2018").length.must_equal 3
       @my_hotel.reservation_by_date("2018-01-25").length.must_equal 0
+    end
+
+    it "Can add a reservation (#BLOCK) with more than one room to the reservations list" do
+      before_block = @my_hotel.reservations.length
+
+      @block_reserve = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [@my_hotel.rooms[4], @my_hotel.rooms[5], @my_hotel.rooms[6]]}
+
+      @my_hotel.make_reservation(@block_reserve[:check_in], @block_reserve[:check_out], @block_reserve[:rooms])
+
+      before_block.must_equal @my_hotel.reservations.length-1
+    end
+
+    it "Will not create a block for which one of the room has a conflicting reservation" do
+      #the first room in the block reserve has a conflict described in before/do section
+      @block_reserve2 = {check_in: "January 4, 2018", check_out: "January 25, 2018", rooms: [@my_hotel.rooms[0], @my_hotel.rooms[1], @my_hotel.rooms[2]]}
+
+      proc{@my_hotel.make_reservation(@block_reserve2[:check_in], @block_reserve2[:check_out], @block_reserve2[:rooms])}.must_raise ArgumentError
     end
 
   end
