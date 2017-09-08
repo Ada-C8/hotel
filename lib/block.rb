@@ -17,7 +17,6 @@ module BookingSystem
     end
 
     def block_total_cost
-
       return DISCOUNTED_PRICE * @date_range.length * @number_of_rooms
     end
 

@@ -7,11 +7,11 @@ module BookingSystem
     class UnavailableRoomError < StandardError
     end
 
-    attr_reader :rooms, :all_single_reservations, :all_block_reservations
+    attr_reader :rooms, :all_single_reservations, :all_blocks
     def initialize
       @rooms = (1..20).to_a
       @all_single_reservations = []
-      @all_block_reservations = []
+      @all_blocks = []
     end
 
     def make_reservation(room, check_in, check_out)
@@ -29,11 +29,11 @@ module BookingSystem
       end
     end
 
-    def block_reservation(number_of_rooms, check_in, check_out)
+    def block_off_a_block(number_of_rooms, check_in, check_out)
       #check which rooms are available for date range
       #https://stackoverflow.com/questions/25168005/how-to-select-the-first-n-elements-from-ruby-array-that-satisfy-a-predicate
 
-      check_user_input(number_of_rooms)
+      CheckUserInput.check_user_input(number_of_rooms)
 
       all_available_rooms = []
       @rooms.each do |room_num|
@@ -50,12 +50,12 @@ module BookingSystem
       #select first available rooms to fill request
       rooms_for_block = all_available_rooms[0..(number_of_rooms - 1)]
 
-      #make block reservation
-       new_block_reservation = BookingSystem::Block.new(number_of_rooms, rooms_for_block, check_in, check_out)
+      #block off a block by instantiating Block
+       new_block = BookingSystem::Block.new(number_of_rooms, rooms_for_block, check_in, check_out)
 
-       @all_block_reservations << new_block_reservation
+       @all_blocks << new_block
 
-      return new_block_reservation
+      return new_block
     end
 
     def reservations_for_specific_date(date)
@@ -88,7 +88,7 @@ module BookingSystem
     #check if room is available for selected dates
     def room_available?(room, check_in, check_out)
 
-      check_user_input(room)
+      CheckUserInput.check_user_input(room)
 
       all_res_for_room = @all_single_reservations.select {|res| res.room == room}
 
@@ -104,15 +104,15 @@ module BookingSystem
 
       #check block reservations
       all_blocks_with_room = []
-      @all_block_reservations.each do |block_res|
+      @all_blocks.each do |block|
         #find block reservations that include room number
-        if block_res.all_room_numbers.include?(room)
-          all_blocks_with_room << block_res
+        if block.all_room_numbers.include?(room)
+          all_blocks_with_room << block
         end
       end
       #check for overlapping dates
-      all_blocks_with_room.each do |block_res|
-        overlap = block_res.date_range & requested_date_range
+      all_blocks_with_room.each do |block|
+        overlap = block.date_range & requested_date_range
         if overlap.length > 0
           return false
         end
