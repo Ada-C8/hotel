@@ -1,5 +1,6 @@
 module Hotel
   class Room
+    include Comparable
     attr_reader :number, :cost
 
     def initialize(number, cost)
@@ -7,6 +8,8 @@ module Hotel
       @cost = cost
     end
 
-    # #is_avail?()
+    def <=>(other)
+      @number <=> other.number
+    end
   end
 end
