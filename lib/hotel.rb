@@ -48,7 +48,7 @@ module Hotel
 
       if block_id
         current_block = block(block_id)
-        raise(InvalidDatesError,"Dates (#{checkin}, #{checkout}) do not fall within provided block #{current_block.id}") unless DateRange.overlap?(checkin, checkout, current_block.start_date, current_block.end_date)
+        raise(InvalidDatesError, "Dates (#{checkin}, #{checkout}) do not fall within provided block #{current_block.id}") unless DateRange.overlap?(checkin, checkout, current_block.start_date, current_block.end_date)
         @rooms.each do |room|
           booked_rooms << room unless current_block.rooms.include? room
         end

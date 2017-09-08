@@ -79,7 +79,8 @@ describe 'Hotel' do
     it 'raises an error if dates do not fall within given block' do
       block = @hotel.make_block('2017-08-03', '2017-08-08', 5, 20)
 
-      proc { @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
+      proc {
+        @hotel.find_available_rooms('2017-10-14', '2017-10-15', block.id)
       }.must_raise InvalidDatesError
     end
   end
@@ -139,7 +140,8 @@ describe 'Hotel' do
     it 'raises NoRoomError if all rooms are in a block' do
       @hotel.make_block('2017-09-05', '2017-09-08', 19, 20)
 
-      proc { @hotel.make_reservation('2017-09-05', '2017-09-08')
+      proc {
+        @hotel.make_reservation('2017-09-05', '2017-09-08')
       }.must_raise NoRoomError
     end
   end
@@ -193,7 +195,8 @@ describe 'Hotel' do
     end
 
     it 'raises an error when there are not enough rooms to fill a block' do
-      proc { block2 = @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
+      proc {
+        @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
       }.must_raise NoRoomError
     end
   end
