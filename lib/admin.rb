@@ -4,15 +4,16 @@ module Hotel
     attr_reader :list_reservations
 
     def initialize
-      @list_rooms = []
-      20.times do |i|
-        @list_rooms << i
-      end
+      # @list_rooms = []
+      # 20.times do |i|
+      #   @list_rooms << i
+      # end
       @list_reservations = []
     end
 
     def add_reservation(checkin, checkout)
-      newreservation = Hotel::Reservation.new(checkin, checkout)
+      room_number = 1
+      newreservation = Hotel::Reservation.new(checkin, checkout, room_number)
       @list_reservations << newreservation
     end
 
