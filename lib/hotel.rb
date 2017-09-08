@@ -7,11 +7,12 @@ require_relative 'date_range'
 module Hotel
   class Hotel
 
-    @@reservations = []
+    #@@reservations = []
 
-    attr_reader :all_rooms
+    attr_reader :all_rooms, :reservations
 
     def initialize
+      @reservations = ReservationList.new
       @all_rooms = {1 => 200, 2 => 200, 3 => 200, 4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200}
     end
 
@@ -25,10 +26,10 @@ module Hotel
     # end #show rooms
 
     # - As an administrator, I can reserve a room for a given date range
-    def self.make_reservation(id, room, day_in, day_out)
-      ReservationList.add(id, room, day_in, day_out)
+    def make_reservation(id, room, day_in, day_out)
+      @reservations.add(id, room, day_in, day_out)
       #@@reservations << Reservation.new(id, room, day_in, day_out)
-      return ReservationList.reservations
+      #return #Hotel::ReservationList.reservations
     end #make_reservation
 
     # def self.reservations
@@ -90,8 +91,8 @@ module Hotel
 
   end #class
 end #module
+#binding.pry
 binding.pry
-
 # find if rooms is open for a given date range
 # reserve room for that date range
 #what will my reservation object look like
