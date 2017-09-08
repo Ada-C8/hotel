@@ -16,6 +16,9 @@ describe "Block class" do
 
   it "can create a block with a date range, collection of rooms, and a discounted room rate" do
     proc{Hotel::Block.new}.must_raise Exception
+    proc{Hotel::Block.new("9/17/2017", "9/18/2017", 1)}.must_raise InvalidDateError
+    proc{Hotel::Block.new(Date.today, Date.today + 1, 15)}.must_raise ArgumentError
+    proc{Hotel::Block.new(Date.today, Date.today + 1, 5, 100)}.must_raise InvalidDiscountError
     # the discount is an optional argument, default set to 0.10
     Hotel::Block.new(Date.today, Date.today + 1, 4).must_be_instance_of Hotel::Block
     Hotel::Block.new(Date.today, Date.today + 1, 4, 0.15).must_be_instance_of Hotel::Block

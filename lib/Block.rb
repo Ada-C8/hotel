@@ -8,7 +8,7 @@ module Hotel
     @@blocks = []
 
     def initialize(start_date, end_date, number_of_rooms, discount = 0.1)
-      raise ArgumentError if (1..5).to_a.include?number_of_rooms == false
+      check_input(start_date, end_date, number_of_rooms, discount)
       @block_id = Block.all.length + 1
       @start_date = start_date
       @end_date = end_date
@@ -25,6 +25,15 @@ module Hotel
     private
 
     extend Overlapping
+
+    def check_input(start_date, end_date, number_of_rooms, discount)
+      raise InvalidDateError if start_date.class != Date || end_date.class != Date
+      raise InvalidDateError if end_date <= start_date
+      raise InvalidDateError if start_date < Date.today
+      raise InvalidDiscountError if discount > 1 || discount.to_s.match(/^(0(\.\d+)?|1(\.0+)?)$/) == false
+      raise ArgumentError if number_of_rooms.class != Integer
+      raise ArgumentError if number_of_rooms < 1 || number_of_rooms > 5
+    end
 
     def collect_instance
       @@blocks.push(self)
