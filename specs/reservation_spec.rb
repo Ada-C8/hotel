@@ -36,5 +36,23 @@ describe "Reservation" do
 	  res.cost.must_equal 200
     end 
 	
+	it "checks initialize when the rate is passed and checkin/out are same day" do
+	  start_date = Date.new(2017,1,1)
+	  end_date = Date.new(2017,1,1)
+	  date = DateRange.new(start_date, end_date)
+      res = Hotels::Reservation.new(1, date, 175)
+	 
+	  res.cost.must_equal 175
+    end 
+	
+	it "checks initialize when the rate is passed " do
+	  start_date = Date.new(2017,1,1)
+	  end_date = Date.new(2017,1,3)
+	  date = DateRange.new(start_date, end_date)
+      res = Hotels::Reservation.new(1, date, 175)
+	 
+	  res.cost.must_equal 350
+    end 
+	
   end
 end
