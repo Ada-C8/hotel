@@ -29,7 +29,57 @@ describe "DateRange" do
 	  proc {DateRange.new(end_date, start_date)}.must_raise Exception
 	end
   end
-end
+end #end of date range
+
+
+
+
+
+
+describe "Reservation" do
+  describe "initialize" do
+
+    before do
+      start_date = Date.new(2017,1,1)
+      end_date = Date.new(2017,1,3)
+      date = Hotel::DateRange.new(start_date, end_date)
+      @res = Hotel::Reservation.new(1, date, 200)
+    end
+
+    it "checks initialize" do
+
+	  @res.must_respond_to :room_number
+	  @res.room_number.must_be_kind_of Integer
+	  @res.room_number.must_equal 1
+
+	  @res.must_respond_to :cost
+	  @res.cost.must_be_kind_of Integer
+	  @res.cost.must_equal 400
+    end
+
+  end #end of initialize do
+
+  describe "initialize but checks for same day problems" do
+
+  before do
+    start_date = Date.new(2017,1,1)
+    end_date = Date.new(2017,1,1)
+    date = Hotel::DateRange.new(start_date, end_date)
+    @res = Hotel::Reservation.new(1, date, 200)
+  end
+
+  it "checks for same day checkin/checkout" do
+    @res.cost.must_equal 200
+  end
+
+end #end of initialize same day
+
+
+end #end of reservation
+
+
+
+
 
 # describe "Rooms" do
 #   before do

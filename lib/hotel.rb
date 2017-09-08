@@ -39,32 +39,29 @@ module Hotel
 
   end #end of class DateRange
 
-
-
-
-
   class Reservation
     attr_reader :room_number, :start_date, :end_date, :cost
 
-		def initialize(room_number, date, cost=200)
-			@room_number = room_number
-			@start_date = date.start_date
-			@end_date = date.end_date
+    def initialize(room_number, date, cost=200)
+      @room_number = room_number
+      @start_date = date.start_date
+      @end_date = date.end_date
+
+
+      if date.start_date == date.end_date
+        @cost = cost
+      else
+        @cost = cost * (@end_date - @start_date).to_i
+      end
+    end
+
+  end #end of class Reservations
 
 
 
-      #put in something for a cost discount? if nill blah blah blah
-
-			if @start_date == @end_date
-				@cost = cost
-			else
-				@cost = cost * (@end_date - @start_date).to_i
-			end
-
-		end
 
 
-  end #class reservation
+
 
   class Hotel_Rooms
     attr_reader :number, :id, :rate, :room_number
