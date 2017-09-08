@@ -31,7 +31,6 @@ module Hotel
       end
     end
 
-
     def total_cost
       num_days = (@check_out - @check_in).to_i
       total_cost = @room_rate * num_days
