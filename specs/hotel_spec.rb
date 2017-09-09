@@ -27,20 +27,33 @@ describe "Hotel class" do
 
   describe "#make reservation" do
     before do
-      @my_hotel = Hotel::Hotel.new(20, 200)
-      @my_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
+      @bb_hotel = Hotel::Hotel.new(20, 200)
+      @bb_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
 
     end
 
     it "can be instantiated" do
-      @my_hotel.reservation_made.reservation_array.must_include 4
-      @my_hotel.reservation_collection.length.must_equal 1
+      @bb_hotel.reservation_made.reservation_array.must_include 4
+      @bb_hotel.reservation_collection.length.must_equal 1
     end
 
     it "Can call on class reservation methods" do
       # res = @my_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
-      @my_hotel.reservation_made.room_num.must_equal 4
+      @bb_hotel.reservation_made.room_num.must_equal 4
     end
 
+  end
+
+  describe "#list of reservations for a specific date" do
+    before do
+      @bb_hotel = Hotel::Hotel.new(20, 200)
+      @bb_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
+      @bb_hotel.make_reservation('sept 7 2017', 'sept 9 2017', 3)
+
+    end
+
+    it "Returns an array of reservations for that date" do
+      @bb_hotel.date_list_of_reservations('sept 9 2017').must_be_instance_of Array
+    end
   end
 end #describe
