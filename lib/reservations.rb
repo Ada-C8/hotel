@@ -67,7 +67,6 @@ module Hotel
       return available
     end
 
-
     def make_block(checkin, checkout, how_many_rooms, block_id)
       available = check_availability(checkin, checkout)
       if how_many_rooms > 5
@@ -75,7 +74,6 @@ module Hotel
       elsif how_many_rooms > available.length
         raise ArgumentError.new "There are only  #{available.length} available for your dates."
       else
-
         collection_of_rooms_blocked = []
         how_many_rooms.times do |i|
           collection_of_rooms_blocked << available[i]

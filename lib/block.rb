@@ -10,11 +10,6 @@ module Hotel
       @how_many_rooms = collection_of_rooms_blocked.length
       @block_id = block_id
       @available_rooms = collection_of_rooms_blocked
-
-      #  @available_rooms.length.times do |i|
-      # #   @collection_of_rooms << false
-      #  or  @all_rooms << false
-      #  end
     end
 
     def block_total_cost
@@ -26,10 +21,9 @@ module Hotel
     end
 
     def check_block_for_availability(block_id)
-      # @all_blocks.each do |block|
       if @collection_of_rooms_blocked == []
         available = false
-      else @collection_of_rooms_blocked == @how_many_rooms
+      else #(implicit @collection_of_rooms_blocked == @how_many_rooms)
         available = true
       end
     end
