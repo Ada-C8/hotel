@@ -5,7 +5,8 @@ describe "Testing Block class" do
   let(:rooms) { (1..5).to_a.map { |num| Hotel::Room.new(num) } }
   let(:check_in) { Date.today }
   let(:check_out) { Date.today + 2 }
-  let(:block) { Hotel::Block.new(Date.today, Date.today + 2, 0.2, rooms)}
+  let(:block) { Hotel::Block.new(Date.today, Date.today + 2, 0.8, rooms)}
+  let(:room_to_reserve) { rooms[0] }
 
   describe "#initialize" do
     before do
@@ -17,7 +18,7 @@ describe "Testing Block class" do
       @check_in = Date.today
       @check_out = Date.today + 2
 
-      @block = Hotel::Block.new(@check_in, @check_out, 0.2, @rooms)
+      @block = Hotel::Block.new(@check_in, @check_out, 0.8, @rooms)
     end
 
     it "Creates a Block with a check_in and check_out date, an array of rooms, and a discounted rate" do
@@ -34,14 +35,14 @@ describe "Testing Block class" do
       @rooms << Hotel::Room.new(5)
       @rooms << Hotel::Room.new(6)
 
-      proc {Hotel::Block.new(@check_in, @check_out, 0.2, @rooms) }.must_raise ArgumentError
+      proc {Hotel::Block.new(@check_in, @check_out, 0.8, @rooms) }.must_raise ArgumentError
     end
 
     it "Raises an error if it tries to include an unavailable room for the given dates in the block" do
       unavail_room = @rooms[0]
       unavail_room.reserve(@check_in, @check_out)
 
-      proc { Hotel::Block.new(@check_in, @check_out, 0.2, @rooms) }.must_raise ArgumentError
+      proc { Hotel::Block.new(@check_in, @check_out, 0.8, @rooms) }.must_raise ArgumentError
     end
 
     it "Adds itself to each room's list of blocks" do
@@ -50,7 +51,7 @@ describe "Testing Block class" do
         room.blocks.must_include @block
       end
 
-      new_block = Hotel::Block.new(@check_out, @check_out + 3, 0.2, @rooms)
+      new_block = Hotel::Block.new(@check_out, @check_out + 3, 0.8, @rooms)
 
       @rooms.each do |room|
         room.blocks.length.must_equal 2
@@ -99,7 +100,6 @@ describe "Testing Block class" do
   end
 
   describe "#reserve" do
-    let(:room_to_reserve) { rooms[0] }
 
     it "Reserves a room for the dates of the block" do
       block_res = block.reserve(room_to_reserve)
@@ -116,6 +116,18 @@ describe "Testing Block class" do
     it "Raises an error if it tries to reserve an room that's already reserved" do
       block.reserve(room_to_reserve)
       proc {block.reserve(room_to_reserve) }.must_raise ArgumentError
+    end
+  end
+
+  describe "#discounted_cost" do
+    it "Returns the total cost of reserving a room in a block" do
+      expected_cost = (room_to_reserve.rate * 0.8) * (check_out - check_in).to_i
+      block.discounted_cost(room_to_reserve).must_equal expected_cost
+
+      room_to_reserve.rate = 300
+      updated_expected_cost = (room_to_reserve.rate * 0.8) * (check_out - check_in).to_i
+      block.discounted_cost(room_to_reserve).must_equal updated_expected_cost
+
     end
   end
 

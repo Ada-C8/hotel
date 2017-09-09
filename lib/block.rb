@@ -16,13 +16,15 @@ module Hotel
       # TODO fix discount / rate in room and block
       raise ArgumentError.new("Can't have more than #{MAX_ROOMS} number of rooms in a block") if room_block.length > MAX_ROOMS
 
-      raise ArgumentError.new("Can't have unavailable rooms in the block") if room_block.any? { |room| room.is_booked?(check_in, check_out) || room.is_blocked?(check_in, check_out) }
+      raise ArgumentError.new("Can't have unavailable rooms in the block") if room_block.any? { |room| room.unavailable?(check_in, check_out) }
+
+      raise ArgumentError.new("Not a discounted rate") if discount >= 1 || discount <= 0
 
       @check_in = check_in
       @check_out = check_out
       valid_dates?
 
-      @discount = discount  # rate of discount as a decimal (e.g. 0.2 for 20% off)
+      @discount = discount  # discount as decimal (e.g. 0.8 for 80% of orig rate)
       @room_block = room_block # array of rooms
 
       # add block to each room
@@ -46,6 +48,11 @@ module Hotel
       raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.is_booked?(check_in, check_out)
 
       return room.reserve(check_in, check_out)
+    end
+
+    def discounted_cost(room)
+      rate = room.rate * discount
+      return total_cost(rate)
     end
 
   end # end of Block class

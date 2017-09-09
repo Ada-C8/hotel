@@ -23,22 +23,17 @@ module Hotel
     end
 
     def reserve(start_date, end_date, room)
-      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.is_booked?(start_date, end_date) || room.is_blocked?(start_date, end_date)
+      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.unavailable?(start_date, end_date)
 
       return room.reserve(start_date, end_date)
 
     end
 
-    # def all_reservations # is this necessary??
-    #   # returns a list of all reservations for the hotel
-    #   reservations = []
-    #
-    #   rooms.each do |room|
-    #     reservations.concat(room.reservations)
-    #   end
-    #
-    #   return reservations
-    # end
+    def block(start_date, end_date, discount, rooms)
+      raise ArgumentError.new("One or more rooms is unavailable for the selected dates") if rooms.any? { |room| room.unavailable?(start_date, end_date) }
+
+      return Hotel::Block.new(start_date, end_date, discount, rooms)
+    end
 
     def find_reservations_by_date(date)
       # returns a list of all reservations for the given date

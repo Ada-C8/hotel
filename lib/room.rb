@@ -50,6 +50,10 @@ module Hotel
 
     end
 
+    def unavailable?(start_date, end_date = start_date.next_day)
+      return is_booked?(start_date, end_date) || is_blocked?(start_date, end_date)
+    end
+
     def to_s
       # return human readable representation
       s = "Room number: #{room_num}\n"

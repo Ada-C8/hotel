@@ -1,16 +1,13 @@
 require_relative 'spec_helper'
 
 describe "Testing Hotel class" do
+  let(:hotel) { Hotel::Hotel.new }
+
   describe "#initialize" do
-    before do
-      @hotel = Hotel::Hotel.new
-    end
 
     it "Creates a hotel class with a hash of rooms" do
-      @hotel.must_be_instance_of Hotel::Hotel
-
-      rooms = @hotel.rooms
-      rooms.must_be_kind_of Hash
+      hotel.must_be_instance_of Hotel::Hotel
+      hotel.rooms.must_be_kind_of Hash
 
       rooms.each do |room_num, room|
         room.must_be_instance_of Hotel::Room
@@ -18,7 +15,7 @@ describe "Testing Hotel class" do
     end
 
     it "Creates a hotel with NUM_ROOMS num of rooms as the default" do
-      @hotel.rooms.length.must_equal Hotel::Hotel::NUM_ROOMS
+      hotel.rooms.length.must_equal Hotel::Hotel::NUM_ROOMS
     end
 
     it "Creates a hotel with the specified number of rooms" do
@@ -46,10 +43,6 @@ describe "Testing Hotel class" do
   end
 
   describe "#reserve" do
-    # before do
-    #   @hotel = Hotel::Hotel.new
-    #   @room1 = @hotel.rooms[1]
-    # end
     let(:hotel) { Hotel::Hotel.new }
     let(:room1) { hotel.rooms[1] }
     let(:check_in) { Date.today }
@@ -85,40 +78,40 @@ describe "Testing Hotel class" do
     before do
       @hotel = Hotel::Hotel.new
 
-      # res that doesn't conflict with 9/5/17
+      # res that doesn't conflict with 9/5/18
       5.times do |num|
         room = @hotel.rooms[1 + num]
         @hotel.reserve(Date.new(2018,9,1), Date.new(2018,9,4), room)
       end
 
-      # res that does conflict with 9/5/17
+      # res that does conflict with 9/5/18
       5.times do |num|
         room = @hotel.rooms[6 + num]
         @hotel.reserve(Date.new(2018,9,4), Date.new(2018,9,9), room)
       end
 
-      # res with start date conflicting with 9/5/17
+      # res with start date conflicting with 9/5/18
       5.times do |num|
         room = @hotel.rooms[11 + num]
         @hotel.reserve(Date.new(2018,9,5), Date.new(2018,9,9), room)
       end
 
-      # res with end date not conflicting with 9/5/17
+      # res with end date not conflicting with 9/5/18
       5.times do |num|
         room = @hotel.rooms[16 + num]
         @hotel.reserve(Date.new(2018,9,3), Date.new(2018,9,5), room)
       end
 
       @date_to_check = Date.new(2018,9,5)
-      @sept5_res = @hotel.find_reservations_by_date(@date_to_check)
+      @res_list = @hotel.find_reservations_by_date(@date_to_check)
     end
 
     it "Returns a list of reservations for that date" do
-      @sept5_res.must_be_kind_of Array
+      @res_list.must_be_kind_of Array
     end
 
     it "Doesn't include reservations w/a check-out date matching date" do
-      @sept5_res.length.must_equal 10
+      @res_list.length.must_equal 10
 
       room3 = @hotel.rooms[2]
       @hotel.reserve(Date.new(2018,9,4), Date.new(2018,9,5), room3)
