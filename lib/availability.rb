@@ -1,8 +1,9 @@
 require_relative 'rooms'
 require 'date'
+require 'pry'
 
 class Availability
-  attr_reader :calendar, :all_available_rooms, :create_calendar
+  attr_accessor :calendar, :all_available_rooms, :create_calendar
   @@calendar = []
 
   def self.create_calendar
@@ -65,6 +66,7 @@ class Availability
         finalrooms << id
       end
     end
+
     return finalrooms
   end
 
@@ -90,6 +92,27 @@ class Availability
     return bookedrooms
   end
 
+  def self.all_blocked_rooms(year, month, day)
+    check_date = Date.new(year,month,day)
+
+    blockedrooms = []
+
+      self.calendar.each do |days|
+        days.each do |date, roominfo|
+          if check_date == date
+            roominfo.each do |rooms|
+              rooms.each do |id, status|
+                if status == :blocked
+                  bookedrooms << id
+                end
+              end
+            end
+          end
+        end
+      end
+
+    return blockedrooms
+  end
 
 
 end #end of class

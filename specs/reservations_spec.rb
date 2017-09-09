@@ -8,7 +8,7 @@ describe "reservations class" do
 
   describe "initiates a new reservation" do
     it "creates a reservation object" do
-      reservation = Reservation.new(2, 2017, 9, 8, 2017, 9, 9)
+      reservation = Reservation.new(2, 2017, 9, 10, 2017, 9, 11)
       reservation.must_be_instance_of Reservation
     end
 
@@ -21,15 +21,15 @@ describe "reservations class" do
     end
 
     it "changes the status of a room to booked and does not allow another reservation to overlap" do
-      Reservation.new(1, 2017, 9, 8, 2017, 9, 9)
-      proc { Reservation.new(1, 2017, 9, 8, 2017, 9, 9)}.must_raise ArgumentError
+      Reservation.new(1, 2017, 9, 18, 2017, 9, 19)
+      proc { Reservation.new(1, 2017, 9, 18, 2017, 9, 19)}.must_raise ArgumentError
     end
 
     it "can return the total cost of a reservation" do
-      reservation = Reservation.new(1, 2017, 9, 8, 2017, 9, 9)
+      reservation = Reservation.new(1, 2017, 9, 18, 2017, 9, 19)
       reservation.total_cost.must_be_instance_of Integer
       reservation.total_cost.must_equal 200
-      another_reservation = Reservation.new(2, 2017, 9, 8, 2017, 9, 11)
+      another_reservation = Reservation.new(2, 2017, 9, 18, 2017, 9, 21)
       another_reservation.total_cost.must_be_instance_of Integer
       another_reservation.total_cost.must_equal 600
     end
