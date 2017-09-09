@@ -33,9 +33,7 @@ describe "reservation class" do
       ash_says = Hotel::Reservation.new
       d = ash_says.date_range("10-1-2017","10-5-2017")
       num = ash_says.available_room
-      ash_says.reserve_room(d, num)
-      #make_date.reserve_room.must_be_kind_of Array
-      #make_date.reserve_room.length.must_equal 6
+      ash_says.reserve_room(d, num).must_be_instance_of Array
     end
     it "adds to reservations array" do
       oddish_asks = Hotel::Reservation.new
@@ -47,25 +45,30 @@ describe "reservation class" do
     end
   end
 
-  xdescribe "total" do
+  describe "total" do
     it "returns the total cost of the stay" do
-      make_date = Hotel::Reservation.new("12-5-2017","12-10-2017")
-      make_date.total.must_equal "$1000.00"
+      charizard_chars = Hotel::Reservation.new
+      d = charizard_chars.date_range("12-5-2017","12-10-2017")
+      num = charizard_chars.available_room
+      charizard_chars.reserve_room(d, num)
+      charizard_chars.total.must_equal "$1000.00"
     end
     it "returns $200 if the stay was one night" do
-      make_date = Hotel::Reservation.new("12-5-2017","12-6-2017")
-      make_date.total.must_equal "$200.00"
+      charizard_chars = Hotel::Reservation.new
+      d = charizard_chars.date_range("12-5-2017","12-6-2017")
+      num = charizard_chars.available_room
+      charizard_chars.reserve_room(d, num)
+      charizard_chars.total.must_equal "$200.00"
     end
     it "returns $0 if the stay was zero nights" do
-      make_date = Hotel::Reservation.new("12-5-2017","12-5-2017")
-      make_date.total.must_equal "$0.00"
+      charizard_chars = Hotel::Reservation.new
+      d = charizard_chars.date_range("12-5-2017","12-5-2017")
+      num = charizard_chars.available_room
+      charizard_chars.reserve_room(d, num)
+      charizard_chars.total.must_equal "$0.00"
     end
   end
 
-
-  xdescribe "reserve room" do
-
-  end
 
 
 end

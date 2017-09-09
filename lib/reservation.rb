@@ -4,7 +4,7 @@ require "pry"
 
 module Hotel
   class Reservation
-    attr_accessor :reservations
+    attr_accessor :reservations, :stay_array
 
     def initialize
       @rooms = Hotel::Room.all
@@ -17,11 +17,11 @@ module Hotel
     def date_range(check_in, check_out)
       check_in = Date.strptime(check_in, "%m-%d-%Y") #keep this method for date
       check_out = Date.strptime(check_out, "%m-%d-%Y") #month-day-fullyear
-      stay_array = []
+      @stay_array = []
       (check_in..check_out).each do |d|
-        stay_array << "#{d.month}-#{d.day}-#{d.year}"
+        @stay_array << "#{d.month}-#{d.day}-#{d.year}"
       end
-      return stay_array
+      return @stay_array
     end
 
     def available_room #returns number array of rooms
@@ -30,13 +30,6 @@ module Hotel
         #add later!
         return room
       end
-      # available = []
-      # @hotel.each do |room|
-      #   if room.dates.length == 0
-      #     available << room.num
-      #   end
-      # end
-      # return available
     end
 
     def reserve_room(date_range, available_room)
@@ -47,20 +40,19 @@ module Hotel
       @reservations << reserved
     end
 
-    # def total
-    #   return "$#{(reserve_room.length-1) * 200}.00"
-    # end
-    #
-  # private
-  #
-  #   def available?
-  #     if @room.dates.length > 0
-  #       @room.reserved = true
-  #     end
-  #   end
+    def total
+      return "$#{(stay_array.length-1) * 200}.00"
+    end
+
+    def search_reservations(date)
+      reservations_by_date = []
+      @reservations.each do |arr|
+        if arr[0].include? date
+          reservations_by_date << arr
+        end
+      end
+      return reservations_by_date
+    end
 
   end #end class reservation
 end #end module Hotel
-
-this = Hotel::Reservation.new
-p this.reservations
