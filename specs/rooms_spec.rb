@@ -9,15 +9,24 @@ describe Hotel::Room do
     it "raises an ArgumentError for invalid parameters" do
       proc{Hotel::Room.new("A15")}.must_raise ArgumentError
     end
-    it "raies an ArgumentError if the room number already exists" do
-
+    it "initializes wiht a cost of 200 per night" do
+      room = Hotel::Room.new(5)
+      room.cost_per_night.must_equal 200
     end
   end
 
-  describe "atribute_readers" do
+  describe "attr accessors" do
     it "can retrieve the room number using .number" do
       room = Hotel::Room.new(5)
       room.number.must_equal 5
+    end
+    it "can retrieve and change the cost of a room per night" do
+      room = Hotel::Room.new(3)
+      room.cost_per_night.must_equal 200
+
+      room.cost_per_night = 150
+
+      room.cost_per_night.must_equal 150
     end
   end
 end

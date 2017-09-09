@@ -1,9 +1,11 @@
 module Hotel
   class Room
     attr_reader :number
+    attr_accessor :cost_per_night
 
     def initialize(number)
       @number = check_room_number(number)
+      @cost_per_night = 200
     end
 
     private
