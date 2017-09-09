@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'spec_helper'
 
 describe "hotel class" do
@@ -109,16 +110,17 @@ describe "hotel class" do
 
     it "Should return the reservations that overlap with date given" do
 
-      start_date = Date.today
+      date = Date.today
 
       new_hotel = HotelManagment::Hotel.new
-      new_hotel.create_reservation("marisa", "morris", start_date + 5, start_date + 10, 1)
-      new_hotel.create_reservation("marisa", "morris", start_date + 11, start_date + 16, 1)
-      new_hotel.create_reservation("marisa", "morris", start_date + 20, start_date + 25, 1)
+      new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
+      new_hotel.create_reservation("marisa", "morris", date + 11, date + 16, 1)
+      new_hotel.create_reservation("marisa", "morris", date + 20, date + 25, 1)
 
-      input = start_date + 5
+      input = date + 5
 
       new_hotel.reservations_by_date(input).must_equal [new_hotel.reservations[0]]
+
     end
 
     it "Raises ArgumentError if dates are Invalid" do
@@ -127,35 +129,12 @@ describe "hotel class" do
       proc { new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,1), 1) }.must_raise ArgumentError
     end
 
-    # TODO this is for the 2ns user story (error handling)
-    # it "text" do
-    #
-    #   start_date = Date.today
-    #
-    #   new_hotel = HotelManagment::Hotel.new
-    #   new_hotel.create_reservation("marisa", "morris", start_date + 5, start_date + 10, 1)
-    #
-    #   proc { new_hotel.create_reservation("marisa", "morris", start_date + 6, start_date + 8, 1) }.must_raise ArgumentError
-    #
-    # end
+
   end
 
   describe "rooms_not_reserved" do
-    it "Should return list of unreserved rooms" do
 
-      start_date = Date.today
-
-      new_hotel = HotelManagment::Hotel.new
-      new_hotel.create_reservation("marisa", "morris", start_date + 5, start_date + 10, 1)
-      new_hotel.create_reservation("marisa", "morris", start_date + 30, start_date + 35, 2)
-      new_hotel.create_reservation("marisa", "morris", start_date + 50, start_date + 55, 3)
-
-      new_hotel.rooms_not_reserved(start_date +5, start_date + 10).must_equal [2,3]
-
-      # new_hotel.rooms_not_reserved(start_date +1, start_date + 2).must_equal [1,2,3]
-    end
-
-    it "rooms_not_reserved should be an instance of hotel" do
+    it "Should respond to rooms_not_reserved" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.must_respond_to :rooms_not_reserved
     end
@@ -163,8 +142,53 @@ describe "hotel class" do
     it "unreserved_rooms must be instance of Array" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.unreserved_rooms.must_be_instance_of Array
-
     end
 
+    it "Should return list of unreserved rooms" do
+
+      date = Date.today
+
+      new_hotel = HotelManagment::Hotel.new
+
+      new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
+      new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 2)
+      new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 3)
+
+      new_hotel.rooms_not_reserved(date +5, date + 10).must_equal [2,3]
+      # new_hotel.rooms_not_reserved(date +1, date + 2).must_equal [1,2,3]
+    end
+  end
+
+  describe "reserve_room_for_date_range" do
+
+    it "Should respond to reserve_room_for_date_range" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.must_respond_to :reserve_room_for_date_range
+    end
+
+    it "Should reserve a room for a given date range if no conflicting reservations" do
+
+      date = Date.today
+
+      new_hotel = HotelManagment::Hotel.new
+
+      new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
+      new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 2)
+      new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 3)
+
+      # puts "test"
+
+      new_hotel.reserve_room_for_date_range("marisa", "morris", date + 36, date + 40)
+
+      new_hotel.reservations.length.must_equal 4
+    end
+  end
+
+  it "Raises ArgumentError if there are no available rooms" do
+    date = Date.today
+
+    new_hotel = HotelManagment::Hotel.new
+
+    proc { new_hotel.reserve_room_for_date_range("marisa", "morris", date + 36, date + 40) }.must_raise ArgumentError
   end
 end
