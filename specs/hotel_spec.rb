@@ -22,10 +22,9 @@ describe "The Hotel class" do
       @myhotel.array_of_rooms.must_be_kind_of Array
     end
 
-    # it "Hotel object contains an array of room objects" do
-    #   hotel = Hotel_Chain::MyHotel.new
-    #   hotel.list_of_rooms[0].must_be_instance_of Hotel_Chain::Room
-    # end
+    it "Hotel object contains an array of room objects" do
+      @myhotel.array_of_rooms[0].must_be_instance_of Hotel_Chain::Room
+    end
 
   end # end describe
 
@@ -61,7 +60,6 @@ describe "The Hotel class" do
     #you can input a specific date
     #it returns any reservations which occur on a specific date
     #it iterates through all reservation object
-    #(Date.new(start_date)..Date.new(end_date)).cover?(Date.new(date))
 
     it "returns an array" do
     @myhotel.store_reservation("8/13/17", "8/16/17")
@@ -139,18 +137,18 @@ describe "The Hotel class" do
       @myhotel.find_rooms_available("8/5/17", "8/9/17").length.must_equal 20
     end
 
-    it "returns an array of 19 objects when searching for a date range that overlaps with an existing reservations" do
+    it "returns an array of 19 objects when searching for a date range that overlaps with 1 existing reservations" do
       @myhotel.store_reservation("8/9/17", "8/11/17")
       @myhotel.find_rooms_available("8/8/17", "8/10/17").length.must_equal 19
     end
 
-    it "returns an array of 18 objects when searching for a date range that overlaps with an existing reservations" do
+    it "returns an array of 18 objects when searching for a date range that overlaps with 2 existing reservations" do
       @myhotel.store_reservation("8/9/17", "8/11/17")
       @myhotel.store_reservation("8/10/17", "8/14/17")
       @myhotel.find_rooms_available("8/8/17", "8/15/17").length.must_equal 18
     end
 
-    it "returns an array of 16 objects when searching for a date range that overlaps with overlapping existing reservations" do
+    it "returns an array of 15 objects when searching for a date range that overlaps with 5 overlapping existing reservations" do
       @myhotel.store_reservation("8/13/17", "8/15/17")
       @myhotel.store_reservation("8/13/17", "8/15/17")
       @myhotel.store_reservation("8/13/17", "8/15/17")
@@ -180,7 +178,7 @@ describe "The Hotel class" do
     it "adds reservations for different available rooms for overlapping reservation dates" do
       @myhotel.store_reservation("8/13/17", "8/15/17")
       @myhotel.store_reservation("8/13/17", "8/15/17")
-      puts @myhotel.reservations_array[1].room.room_id
+      @myhotel.reservations_array[1].room.room_id
       @myhotel.reservations_array[1].room.room_id.must_equal 2
       @myhotel.store_reservation("8/13/17", "8/15/17")
       @myhotel.reservations_array[2].room.room_id.must_equal 3
@@ -188,10 +186,6 @@ describe "The Hotel class" do
       @myhotel.reservations_array[3].room.room_id.must_equal 4
       @myhotel.store_reservation("8/13/17", "8/17/17")
       @myhotel.reservations_array[4].room.room_id.must_equal 5
-    end
-
-    it "returns the correct cost for the reservation made outside a block" do
-
     end
 
   end # end of describe
@@ -217,12 +211,12 @@ describe "The Hotel class" do
 
     it "returns a block with a reservations array with the correct number of reservations" do
       block = @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
-      block.reservation_array.length.must_equal 4
+      block.reservations_array.length.must_equal 4
     end
 
     it "returns the correct cost for the reservation made inside a block" do
       block = @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
-      block.reservation_array
+      block.reservations_array
     end
 
     it "blocks_array" do
@@ -233,7 +227,25 @@ describe "The Hotel class" do
 
   end
 
+  describe "find_unassigned_block_reservations method" do
 
+    it "returns an array" do
+      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 6, 175)
+      @myhotel.find_unassigned_block_reservations("John Smith").must_be_kind_of Array
+    end
 
+    it "returns an array of reservation objects" do
+      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 6, 175)
+      @myhotel.find_unassigned_block_reservations("John Smith")[0].must_be_instance_of Hotel_Chain::Reservation
+    end
 
-end
+    it "returns an array of reservation objects which have a status of unassigned" do
+      # 5.times do |x|
+      # @myhotel.find_unassigned_block_reservations(party_name)[x].status.must_equal "unassigned"
+      # end
+
+    end
+
+  end #end describe
+
+end #end of testing

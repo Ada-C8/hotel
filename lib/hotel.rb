@@ -13,7 +13,7 @@ module Hotel_Chain
       no_of_rooms.times do |room|
         @array_of_rooms[room] = Room.new(room+1)
       @reservations_array = []
-      @blocks_array = []
+      @blocks_array = [] #an array which holds reservations arrays grouped by block
       end
     end
 
@@ -46,7 +46,7 @@ module Hotel_Chain
       reservations_on_date.each do |reservation|
         array  << "Room #{reservation.room.room_id} is reserved from #{reservation.check_in_date} to #{reservation.check_out_date}"
       end
-      ap array
+      #ap array
       return array
     end
 
@@ -56,7 +56,7 @@ module Hotel_Chain
     #NOTE TO SELF: Do you want to reserve a particular room here or in the reservation method, which now just randomly chooses a room, regardless if it's available or not?
     def store_reservation(check_in_date, check_out_date)
       available_rooms = []
-      ap "STORE_RESERVATION START: reservations_array: #{reservations_array}"
+      #ap "STORE_RESERVATION START: reservations_array: #{reservations_array}"
       if @reservations_array.length == 0 #i.e. there are no reservations at all
         new_reservation = Hotel_Chain::Reservation.new(check_in_date, check_out_date)
         new_reservation.room = @array_of_rooms[0]
@@ -130,7 +130,7 @@ module Hotel_Chain
       end
       #ap "available_rooms: #{available_rooms}"
       # puts "***FIND ROOMS AVAILABLE ****"
-      ap "unavailable_rooms: #{unavailable_rooms}"
+      #ap "unavailable_rooms: #{unavailable_rooms}"
       # puts "***"
       final_available_rooms = @array_of_rooms - unavailable_rooms
       # puts "***"
@@ -142,7 +142,7 @@ module Hotel_Chain
     def reserve_block(party_name, check_in, check_out, no_of_rooms, room_rate)
       local_reservation_array = []
       available_rooms = find_rooms_available(check_in, check_out)
-      ap available_rooms
+      #ap available_rooms
       if available_rooms.length < no_of_rooms
         raise ArgumentError.new("There are not enough rooms available to reserve that block")
       else
@@ -157,14 +157,42 @@ module Hotel_Chain
         end
       end
       puts "RESULT:"
-      ap "Reservation_array: reservation_array"
+      ap "Reservations_array: reservations_array"
       #I passed all these arguments to block becuse I want the block object to have these attributes for ease of reference.
       new_block = Block.new(party_name, check_in, check_out, room_rate, local_reservation_array)
       @blocks_array << new_block
       return new_block
     end
 
-    def find_unassigned_block_reservations
+    def find_unassigned_block_reservations(party_name)
+
+      #if the block has the desired party name, then return that block
+      this_block = nil
+      @blocks_array.each do |block|
+        if block.party_name == party_name
+          this_block = block
+        end
+      end
+
+      #change this to a specific error
+      if this_block == nil
+        raise ArgumentError.new("There is no block of rooms reserved under that name. Please make sure you have the exact party name (or search by date)")
+      end
+
+      unassigned_reservations = []
+      this_block.reservations_array.each do |reservation|
+        if reservation.status = "unassigned"
+          unassigned_reservations << reservation
+        end
+      end
+
+      #change this to a specific error
+      if unassigned_reservations.empty?
+        raise ArgumentError.new("All the reservations made for that block of room have been assigned. You may check to see if there is a room available at the standard rate.")
+      end
+
+      return unassigned_reservations
+
     end
 
     def assign_block_reservation
