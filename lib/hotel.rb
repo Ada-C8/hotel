@@ -14,7 +14,7 @@ module Hotels
       if Date.valid_date?(start_date[0], start_date[1], start_date[2]) && Date.valid_date?(end_date[0], end_date[1], end_date[2])
       start_date = Date.new(start_date[0], start_date[1], start_date[2])
       end_date = Date.new(end_date[0], end_date[1], end_date[2])
-        if (start_date < end_date) && start_date == (Date.today || (start_date > Date.today))
+        if (start_date < end_date) && (start_date == Date.today || ((start_date > Date.today)))
           date_array << start_date
           date_array << end_date
         else
@@ -59,7 +59,7 @@ module Hotels
         unbooked_rooms << room.number
       end
     end
-    return unbooked_rooms 
+    return unbooked_rooms
     end
 
 
