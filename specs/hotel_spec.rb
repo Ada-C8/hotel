@@ -14,6 +14,10 @@ describe "Hotel class" do
     end
   end
 
+  it "Has a DEFAULT_ROOM_PRICE constant that is assigned to the integer 200" do
+    BookingSystem::Hotel::DEFAULT_ROOM_PRICE.must_equal 200
+  end
+
   before do
     @test_ob = BookingSystem::Hotel.new
     @room = 1
@@ -43,8 +47,6 @@ describe "Hotel class" do
     end
 
     it "Has an instance variable @all_block_reservations that holds objects (instances of BlockReservation class) in an Array" do
-      @test_ob.all_single_reservations.must_be_instance_of Array
-
       @test_ob.block_off_a_block(3, @check_in, @check_out)
       @test_ob.block_reservation(1, @check_in, @check_out)
       @test_ob.all_block_reservations[0].must_be_instance_of BookingSystem::BlockReservation
@@ -73,10 +75,29 @@ describe "Hotel class" do
       @test_ob.all_single_reservations.length.must_equal 1
     end
 
+    it "Can accept a price argument" do
+      @test_ob.make_single_reservation(@room, @check_in, @check_out, 100)
+      @test_ob.all_single_reservations[0].price.must_equal 100
+    end
+
+    it "Will assign price to DEFAULT_ROOM_PRICE 200, if given no price argument" do
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
+      @test_ob.all_single_reservations[0].price.must_equal 200
+    end
+
     it "Raises an UnavailableRoomError if room is unavailable" do
       @test_ob.make_single_reservation(@room, @check_in, @check_out)
 
       proc { @test_ob.make_single_reservation(@room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+
+      proc { @test_ob.make_single_reservation(@room, Date.new(2017,9,5), Date.new(2017,9,10)) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+    end
+
+    it "Will book two reservations with check out and check in being on the same day" do
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
+      @test_ob.make_single_reservation(@room, Date.new(2017,9,5), Date.new(2017,9,9))
+
+      @test_ob.all_single_reservations.length.must_equal 2
     end
   end
 

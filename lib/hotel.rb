@@ -6,11 +6,13 @@ module BookingSystem
 
     class UnavailableRoomError < StandardError
     end
-
     class UnavailableBlockError < StandardError
     end
 
+    DEFAULT_ROOM_PRICE = 200
+
     attr_reader :rooms, :all_single_reservations, :all_block_reservations, :all_blocks
+
     def initialize
       @rooms = (1..20).to_a
       @all_single_reservations = []
@@ -18,11 +20,13 @@ module BookingSystem
       @all_blocks = []
     end
 
-    def make_single_reservation(room, check_in, check_out)
+    def make_single_reservation(room, check_in, check_out, price = DEFAULT_ROOM_PRICE)
       room_available = room_available?(room, check_in, check_out)
 
+      CheckUserInput.price(price)
+
       if room_available == true
-        reservation = BookingSystem::Reservation.new(room, check_in, check_out)
+        reservation = BookingSystem::Reservation.new(room, check_in, check_out, price)
         @all_single_reservations << reservation
 
         return reservation
@@ -31,9 +35,10 @@ module BookingSystem
       end
     end
 
-    def block_reservation(room, check_in, check_out)
+    def block_reservation(room, check_in, check_out, price = DEFAULT_ROOM_PRICE)
       CheckUserInput.integer(room)
       CheckUserInput.between_1_20(room)
+      CheckUserInput.price(price)
 
       requested_date_range = DateRange.new(check_in, check_out).all_reservation_dates
 
@@ -54,7 +59,7 @@ module BookingSystem
         #if a match make block reservation
         #remove room from availablity in block
         if block.rooms_available.include?(room)
-          new_block_reservation = BookingSystem::BlockReservation.new(room, check_in, check_out)
+          new_block_reservation = BookingSystem::BlockReservation.new(room, check_in, check_out, price)
           block.remove_reserved_room_from_availability(room)
           @all_block_reservations << new_block_reservation
           return new_block_reservation

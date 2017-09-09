@@ -5,7 +5,7 @@ module BookingSystem
 
     DISCOUNT_RATE = 0.15
 
-    def initialize(room, check_in, check_out, price = ROOM_PRICE)
+    def initialize(room, check_in, check_out, price)
       super
     end
 

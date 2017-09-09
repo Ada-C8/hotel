@@ -5,7 +5,8 @@ describe "BlockReservation" do
     room = 1
     check_in = Date.new(2017,9,9)
     check_out = Date.new(2017,9,12)
-    @test_ob = BookingSystem::BlockReservation.new(room, check_in, check_out)
+    price = 200
+    @test_ob = BookingSystem::BlockReservation.new(room, check_in, check_out, price)
   end
 
   it "Has a constant DISCOUNT_RATE assigned to 0.15" do
@@ -44,7 +45,7 @@ describe "BlockReservation" do
     it "Can be called" do
       @test_ob.must_respond_to :discount_price
     end
-    
+
     it "Returns a Float" do
       @test_ob.discount_price.must_be_instance_of Float
     end
