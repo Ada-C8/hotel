@@ -66,7 +66,7 @@ module Hotel
           false
         end
       end
-      return rooms_available.uniq
+      return rooms_available.uniq.sort!
     end #room_availability
 
 
@@ -82,4 +82,5 @@ end #module
 @bb_hotel = Hotel::Hotel.new(20, 200)
 @bb_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
 @bb_hotel.make_reservation('sept 7 2017', 'sept 11 2017', 3)
-p @bb_hotel.room_availability('sept 6 2017', 'sept 8 2017').class
+@bb_hotel.make_reservation('sept 6 2017', 'sept 7 2017', 3)
+p @bb_hotel.room_availability('sept 5 2017', 'sept 6 2017')
