@@ -21,13 +21,6 @@ describe "Hotel Class" do
     end #rooms
   end #Instantiation
 
-  # describe "Access Room List" do
-  #   # it "Can show a list of all rooms in the hotel" do
-  #   #   @hotel.show_roo
-  #   # end
-  #
-  # end #Room List
-
   describe "Make Reservations" do
     it "can call Reservation List to create an array to hold reservations" do
       @hotel.reservations.must_be_kind_of Hotel::ReservationList
@@ -80,4 +73,20 @@ describe "Hotel Class" do
     end #Not Found
   end #Total Cost
 
-end #admin
+  describe "Blocks" do
+
+    it "Can call Block to create an array to store blocks" do
+      @hotel.block.must_be_kind_of Hotel::Block
+      @hotel.block.block_list.must_be_kind_of Array
+    end #access class
+
+  end #blocks
+
+end #Hotel admin
+
+# describe "Access Room List" do
+#   # it "Can show a list of all rooms in the hotel" do
+#   #   @hotel.show_roo
+#   # end
+#
+# end #Room List
