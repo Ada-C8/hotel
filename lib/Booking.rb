@@ -69,7 +69,6 @@ module HotelBooking
       block.room_ids.each do |room_id|
         room = find_room_by_id(room_id)
         room.block_room(check_in,check_out,block_id)
-        room.blocks_available << block_id
       end
 
       @all_blocks << block
@@ -81,6 +80,7 @@ module HotelBooking
     def make_reservation(check_in,check_out,room_id, block_id = nil, guest_id=nil)
 
       reservation_id = (@all_reservations.count + 1) #something
+      room= find_room_by_id(room_id)
 
       if block_id
         #TODO: think about whether or not to have a separate block reservation id logic and whether or not to store block reservations in the same place as all reservations AND store them separately, or store them in one place (either all reservations or Block reservations)
@@ -104,20 +104,27 @@ module HotelBooking
 
         #TODO: Think about if we want to make a block reservation id a +1 count of all reservations, or have separate ids for blocks
         reservation = HotelBooking::BlockReservation.new(block_check_in,block_check_out,room_id, reservation_id, block_discount)
-
         reservation.block_id = block_id
+
+        room.reserve_block_room(block_check_in,block_check_out,reservation.id, block_id, guest_id=nil)
+
       else
         reservation = HotelBooking::Reservation.new(check_in,check_out,room_id, reservation_id,block_id)
+
+        room.reserve_room(check_in,check_out,reservation_id, guest_id)
       end
 
-      #TODO: How to incorporate reserve_room logic for Block Reservations
-      room = find_room_by_id(room_id)
-      room.reserve_room(check_in,check_out,reservation.id, guest_id) if reservation.type == :standard
+      # #TODO: How to incorporate reserve_room logic for Block Reservations
+      # room = find_room_by_id(room_id)
+      # room.reserve_room(check_in,check_out,reservation.id, guest_id) if reservation.type == :standard
 
-      if reservation.type == :block
-        room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil)
-        room.blocks_available.delete(block_id)
-      end
+      # if reservation.type == :block
+      #
+      #   check_in_str,check_out_str,reservation_id, block_id, guest_id=nil)
+      #
+      #   room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil)
+      #   room.blocks_available.delete(block_id)
+      # end
 
       @all_reservations << reservation
 

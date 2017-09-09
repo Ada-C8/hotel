@@ -7,7 +7,7 @@ require_relative 'Booking'
 module HotelBooking
 
   class Room
-    attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates, :block_id_and_dates, :blocks_available
+    attr_reader :id, :nightly_rate, :type, :reserv_ids, :all_dates, :block_ids, :blocks_available
     # :status
 
     @@total_num_rooms = 20
@@ -16,9 +16,9 @@ module HotelBooking
       @id = id_number
       @nightly_rate =  nightly_rate
       @type = :standard # is this necessary
-      @reserv_id_and_dates = {}
+      @reserv_ids = []
        # holds all reservations, a hash with reservation ids as keys and values as the date range of the reservation ### check-out date should not be included
-      @block_id_and_res_dates = {}
+      @block_ids = []
       @all_dates = []
       @blocks_available = [] #block ids that have not been claimed
 
@@ -37,13 +37,12 @@ module HotelBooking
         return false if @all_dates.include?(date)
       end
 
-      @reserv_id_and_dates[reservation_id] = []
-
       (check_in...check_out).each do |date|
-        @reserv_id_and_dates[reservation_id] << date
+        @all_dates << date
       end
 
-      @all_dates = @reserv_id_and_dates.values.flatten
+      @reserv_ids << reservation_id
+
         ### future note- would it be helpful to sort, and do binary search instead of include? look into it
 
 
@@ -58,23 +57,15 @@ module HotelBooking
       #
       # check_in = block.check_in.to_s
       # check_out = block.check_out.to_s
+      #
+      # check_in = Date.parse(check_in_str)
+      # check_out = Date.parse(check_out_str)
 
-      check_in = Date.parse(check_in_str)
-      check_out = Date.parse(check_out_str)
+      # check_valid_dates(check_in,check_out)
 
-      check_valid_dates(check_in,check_out)
+      raise ArgumentError.new("This Block room is not available for this block reservation") if !(@blocks_available.include?(block_id))
 
-      raise ArgumentError.new("This room is not available for this block reservation") if !(@blocks_available.include?(block_id))
-
-      (check_in...check_out).each do |date|
-        raise ArgumentError.new("this room has already been reserved for these dates in this block") if @block_id_and_res_dates[block_id].include?(date)
-      end
-
-      #blocks_available.delete(block_id)
-
-      (check_in...check_out).each do |date|
-        @block_id_and_res_dates[block_id]<< date
-      end
+      @blocks_available.delete(block_id)
 
 
     end
@@ -90,7 +81,7 @@ module HotelBooking
         return false if @all_dates.include?(date)
       end
 
-      @block_id_and_res_dates[block_id] = []
+      @blocks_available << block_id
 
       (check_in...check_out).each do |date|
         @all_dates << date
