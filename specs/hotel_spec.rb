@@ -106,13 +106,25 @@ describe "Hotel class" do
       @test_ob.must_respond_to :block_reservation
     end
 
+    it "Will assign price to DEFAULT_ROOM_PRICE 200, if given no price argument" do
+      @test_ob.block_off_a_block(3, @check_in, @check_out)
+      @test_ob.block_reservation(@room, @check_in, @check_out)
+      @test_ob.all_block_reservations[0].price.must_equal 200
+    end
+
+    it "Can accept a price argument" do
+      @test_ob.block_off_a_block(3, @check_in, @check_out)
+      @test_ob.block_reservation(@room, @check_in, @check_out, 150)
+      @test_ob.all_block_reservations[0].price.must_equal 150
+    end
+
     it "Raises UnavailableBlockError if there are no blocks available" do
-      proc { @test_ob.block_reservation(1, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
+      proc { @test_ob.block_reservation(@room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
     end
 
     it "Raises UnavailableBlockError if there are no blocks that match date range" do
       @test_ob.block_off_a_block(3, @check_in, @check_out)
-      proc { @test_ob.block_reservation(1, Date.new(2017,10,9), Date.new(2017,10,10)) }.must_raise BookingSystem::Hotel::UnavailableBlockError
+      proc { @test_ob.block_reservation(@room, Date.new(2017,10,9), Date.new(2017,10,10)) }.must_raise BookingSystem::Hotel::UnavailableBlockError
     end
 
     it "Raises UnavailableRoomError if the room requested is not available" do
@@ -204,7 +216,6 @@ describe "Hotel class" do
       @test_ob.block_off_a_block(4, @check_in, @check_out)
       @test_ob.available_rooms(@check_in, @check_out).length.must_equal free_rooms
     end
-
   end
 
   describe "room_available? method" do
