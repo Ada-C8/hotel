@@ -1,6 +1,5 @@
 require_relative 'spec_helper'
 
-#TODO: Write more tests for Reservations
 describe 'Reservations' do
   before do
     @new_hotel = Hotel::Reservations.new
@@ -141,6 +140,18 @@ describe 'Reservations' do
     end
     it "must return the correct reservations" do
       @new_hotel.list_reservations_by_date("2017-09-21")[0].room_number.must_equal @new_booking1.room_number
+    end
+  end
+
+  describe 'make a new block' do
+    before do
+      @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", [])
+    end
+    it 'must be an instance of a block' do
+      @new_block.must_be_instance_of Hotel::Block
+    end
+    it 'must add the block to the blocks collection' do
+      @blocks.must_include(@new_block)
     end
   end
 end

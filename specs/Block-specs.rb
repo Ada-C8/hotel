@@ -16,10 +16,10 @@ end
       @new_block.must_respond_to :date_range
     end
     it 'must be an array' do
-      @new_block.date_range.must_be_kind_of Array
+      @new_block.dates.must_be_kind_of Array
     end
     it 'elements in the array must be of the date class' do
-      @new_block.date_range[0].must_be_kind_of Date
+      @new_block.dates[0].must_be_kind_of Date
     end
   end
 

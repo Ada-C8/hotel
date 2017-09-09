@@ -1,6 +1,7 @@
 require 'Booking'
 require 'DateRange'
 require 'date'
+require 'block'
 
 module Hotel
   class Reservations
@@ -11,7 +12,7 @@ module Hotel
       @room_number = room_number
       @rooms_collection = []
       all_rooms
-      # @blocks_arr = []
+      @blocks = []
     end
 
     def all_rooms
@@ -59,6 +60,28 @@ module Hotel
       end
       return rooms_available
     end
+
+    def new_block(check_in, check_out, rooms_collection, discounted_room_rate = 180)
+      block = Hotel::Block.new(check_in, check_out, rooms_collection, discounted_room_rate = 180)
+      @blocks << block
+      return block
+      #avail - check if rooms are availble
+
+    end
+
+    def block_rooms #select rooms from available list
+
+    end
+
+    def new_reservation_in_block(room)
+
+      #check if rooms are in block an available
+    end
+
+
+
+
+
 
     # def validate_room_number   #THIS DOESN"T WORK YET
     #   validation = false
