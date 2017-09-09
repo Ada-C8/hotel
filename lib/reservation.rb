@@ -1,10 +1,12 @@
-require_relative "room"
 require "date"
+require_relative "room"
+require_relative "assign_room"
+
 require "pry"
 
 module Hotel
   class Reservation
-    attr_accessor :reservations, :stay_array
+    attr_accessor :rooms, :reservations, :stay_array
 
     def initialize
       @rooms = Hotel::Room.all
@@ -36,23 +38,39 @@ module Hotel
       #take available_room and date_range,shove them into a new assign_room instance
       #this should be referencing a new class
       #assign_room should be added to @reservation array
-      reserved = Hotel::AssignRoom.new(date_range, available_room)
-      @reservations << reserved
+      @reservations << Hotel::AssignRoom.new(date_range, available_room)
+      #@reservations << reserved
     end
 
     def total
       return "$#{(stay_array.length-1) * 200}.00"
     end
 
-    def search_reservations(date)
-      reservations_by_date = []
+    def reservations_by_date(date)
+      array = []
       @reservations.each do |arr|
-        if arr[0].include? date
-          reservations_by_date << arr
+        if arr.date_range.include? date
+          array << arr
         end
       end
-      return reservations_by_date
+      return array
     end
 
   end #end class reservation
 end #end module Hotel
+
+pokemon_hotel = Hotel::Reservation.new
+
+b_dates = pokemon_hotel.date_range("11-5-2017","11-8-2017")
+b_num = pokemon_hotel.available_room
+pokemon_hotel.reserve_room(b_dates, b_num)
+
+c_dates = pokemon_hotel.date_range("11-4-2017","11-7-2017")
+c_num = pokemon_hotel.available_room
+pokemon_hotel.reserve_room(c_dates, c_num)
+
+s_dates = pokemon_hotel.date_range("11-7-2017","11-9-2017")
+s_num = pokemon_hotel.available_room
+pokemon_hotel.reserve_room(s_dates, s_num)
+
+puts pokemon_hotel.reservations_by_date("11-6-2017")

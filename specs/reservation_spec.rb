@@ -68,6 +68,26 @@ describe "reservation class" do
       charizard_chars.total.must_equal "$0.00"
     end
   end
+  describe "reservations by date" do
+    it "returns only reservations on specific dates" do
+      pokemon_hotel = Hotel::Reservation.new
+
+      b_dates = pokemon_hotel.date_range("11-5-2017","11-8-2017")
+      b_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(b_dates, b_num)
+
+      c_dates = pokemon_hotel.date_range("11-4-2017","11-7-2017")
+      c_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(c_dates, c_num)
+
+      s_dates = pokemon_hotel.date_range("11-7-2017","11-9-2017")
+      s_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(s_dates, s_num)
+
+      pokemon_hotel.reservations_by_date("11-6-2017").must_be_instance_of Array
+      pokemon_hotel.reservations_by_date("11-6-2017").length.must_equal 2
+    end
+  end
 
 
 

@@ -1,6 +1,6 @@
-require_relative "room"
-require_relative "reservation"
 require "date"
+#require_relative "room"
+
 require "pry"
 
 module Hotel
