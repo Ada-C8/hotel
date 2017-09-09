@@ -25,7 +25,7 @@ module Hotel
       @room_num = room.room_num
       @rate = room.rate
 
-      valid_dates?
+      valid_dates?(check_in, check_out)
 
     end
 

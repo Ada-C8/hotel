@@ -13,7 +13,6 @@ module Hotel
 
     def initialize(check_in, check_out, discount, room_block)
       # check input
-      # TODO fix discount / rate in room and block
       raise ArgumentError.new("Can't have more than #{MAX_ROOMS} number of rooms in a block") if room_block.length > MAX_ROOMS
 
       raise ArgumentError.new("Can't have unavailable rooms in the block") if room_block.any? { |room| room.unavailable?(check_in, check_out) }
@@ -22,7 +21,7 @@ module Hotel
 
       @check_in = check_in
       @check_out = check_out
-      valid_dates?
+      valid_dates?(check_in, check_out)
 
       @discount = discount  # discount as decimal (e.g. 0.8 for 80% of orig rate)
       @room_block = room_block # array of rooms

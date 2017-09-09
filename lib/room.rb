@@ -1,10 +1,12 @@
 require_relative 'reservation'
+require_relative 'reservable'
 
 module Hotel
 
   # NUM_ROOMS = 20
 
   class Room
+    include Reservable
     include Comparable
 
     DEFAULT_RATE = 200
@@ -14,7 +16,9 @@ module Hotel
 
     def initialize(room_num, rate = DEFAULT_RATE)
 
-      raise ArgumentError.new("Not a valid room number") if room_num < 1
+      #raise ArgumentError.new("Not a valid room number") if room_num < 1
+      valid_room_num?(room_num)
+      valid_rate?(rate)
 
       @room_num = room_num
       @reservations = []
