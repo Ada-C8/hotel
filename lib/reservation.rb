@@ -1,19 +1,22 @@
-require_relative "hotel"
+require_relative "room"
 require "date"
 require "pry"
 
 module Hotel
   class Reservation
-    attr_accessor :hotel, :check_in, :check_out
+    attr_accessor :check_in, :check_out
 
-    def initialize(check_in, check_out)
-      @check_in = Date.strptime(check_in, "%m-%d-%Y") #keep this method for date
-      @check_out = Date.strptime(check_out, "%m-%d-%Y") #month-day-fullyear
-
+    def initialize
+      @rooms = Hotel::Room.all
+      @check_in = check_in
     end
 
     #strptime could be added all at once here instead?
-    def date_range
+    #  used for adding array in reserve_room
+    #  will use for checking availability in available_room
+    def date_range(check_in, check_out)
+      @check_in = Date.strptime(check_in, "%m-%d-%Y") #keep this method for date
+      @check_out = Date.strptime(check_out, "%m-%d-%Y") #month-day-fullyear
       stay_array = []
       (@check_in..@check_out).each do |d|
         stay_array << "#{d.month}-#{d.day}-#{d.year}"
@@ -21,47 +24,49 @@ module Hotel
       return stay_array
     end
 
-    def self.available_room
-      #are there rooms with no dates?
-      #present them and pick room at random
-
-      Hotel::Room::all.map {|room| room}
-    end
-
-    def reserve_room
-      #add dates to room
-
-    end
-
-
-    def total
-      #total  = (dates.length-1) * 200
-    end
-
+    # def available_room #returns number array of rooms
+    #   #are there rooms with no dates?
+    #   #present them
+    #   available = []
+    #   @hotel.each do |room|
+    #     if room.dates.length == 0
+    #       available << room.num
+    #     end
+    #   end
+    #   return available
+    # end
+    #
+    # def reserve_room
+    #   #pick room at random (from the available list)
+    #   #add dates to room
+    #   #create a reservation
+    #   if available_room.length > 0
+    #     @room = available_room.sample #finds instance of room
+    #     @room.dates << date_range
+    #     @room.dates.flatten! #removes nested array
+    #     #update available_room?
+    #     available_room
+    #     # return @room.dates
+    #   end #create a way to schedule within other schedules .include
+    #   available_room
+    #   return @room.dates
+    # end
+    #
+    # def total
+    #   return "$#{(reserve_room.length-1) * 200}.00"
+    # end
+    #
   # private
+  #
   #   def available?
-  #     unless @dates == 0 || @dates == nil
-  #       @reserved = true
+  #     if @room.dates.length > 0
+  #       @room.reserved = true
   #     end
   #   end
 
   end #end class reservation
 end #end module Hotel
-dates = Hotel::Reservation.new("12-5-2017","12-17-2017")
-puts dates
-puts dates.date_range
 
-print self.available_room
+this = Hotel::Reservation.new
 
-# def request_dates(check_in, check_out)#default to check_in date if not provided?
-#   #date-format: shouldn't matter based on Chronic
-#   #"1-1-17", "jan 1, 17" should still be in quotes
-#   #@dates = {}
-#   @check_in = Chronic.parse()
-#   @check_out = Chronic.parse()
-#   #  hotel = Hotel::Room.all
-#   #  hotel[0].dates[:check_in] = check_in
-#   #  hotel[0].dates[:check_out] = check_out
-#   #based on dates
-#   #based on rooms
-# end
+this.date_range("12-8-2017", "12-13-2017")

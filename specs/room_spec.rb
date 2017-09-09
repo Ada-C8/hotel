@@ -8,9 +8,6 @@ describe "Room class" do
     it "must respond to :num" do
       Hotel::Room.new(1).must_respond_to :num
     end
-    it "defaults @reserved to false" do
-      Hotel::Room.new(1).reserved.must_equal false
-    end
   end
 
   describe "Room.all" do

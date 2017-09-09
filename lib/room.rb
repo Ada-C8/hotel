@@ -1,12 +1,10 @@
 module Hotel
 
   class Room
-    attr_reader :num, :reserved, :dates
+    attr_reader :num
 
-    def initialize(num, reserved = false)
+    def initialize(num)
       @num = num
-      @reserved = reserved
-      @dates = []
     end
 
     def self.all
