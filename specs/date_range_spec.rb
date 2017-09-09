@@ -34,21 +34,10 @@ describe "Hotel" do
     it "array of nights will be created" do
       @trip.night_array.must_be_kind_of Array
       @trip.make_nights_array.must_be_kind_of Array
-      # @trip.night_array.must_include [(2017)]
     end
 
     it "knows if date is included" do
       @trip.include?(@checkin).must_equal true
     end
-
-    # wrong date order
-    # wrong date entry
-    # wrong room number
-
-    # checkin = Date.new(2017,9,5)
-    # checkout = Date.new(2017,9,7)
-    # # Booking.new(checkin, checkout)
-    # total_nights = checkout - checkin
-    # total_nights.to_i
   end
 end

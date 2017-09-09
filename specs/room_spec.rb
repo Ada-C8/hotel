@@ -14,7 +14,3 @@ describe "Hotel" do
 
   end
 end
-
-#
-# room_test.room_number.must_be_kind_of Array
-#   room_test.room_number.must_include 19

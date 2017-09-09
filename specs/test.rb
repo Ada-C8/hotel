@@ -188,3 +188,75 @@ puts hotel1
     #     return block_available
     #   end
     # end
+
+
+
+    ########### comments from reservations_spec.rb #########
+
+
+    # block8 = hotel8.make_block(checkin8, checkout8, [], "sweet_16")
+    #
+    # block8.reserve_room_from_block("sweet_16").must_equal true
+
+# describe "check_block_for_availability" do
+#   checkin = Date.new(2018,10,1)
+#   checkout = Date.new(2018,10,7)
+#   block2 = Hotel::Reservations.new.make_block(checkin, checkout, 5, "wedding")
+#   block2.check_block_for_availability(checkin, checkout, "wedding").must_be_kind_of Array
+# end
+
+# @dates = Hotel::DateRange.new(@checkin, @checkout)
+# date_range = Hotel::DateRange.new(@checkin, @checkout)
+#
+# room = @hotel1.all_rooms[0]
+# @res1 = Hotel::Booking.new(@checkin, @checkout, [room], 1)
+# @hotel1.all_reservations << @res1
+# @res1 = @hotel1.mak
+# @res2 = @hotel1.make_booking(@checkin, @checkout, 1 )
+# implicitly shoveled @hote1.all_reservations << @res2
+
+#   @res1 = Hotel::Booking.new(checkin, checkout, [Hotel::Room.arr_rooms[1]], 1)
+#   @res2 = Hotel::Booking.new(checkin, checkout, [Hotel::Room.arr_rooms[2]], 2)
+#   @res3 = Hotel::Booking.new(checkin, checkout, [Hotel::Room.arr_rooms[3]], 3)
+#   @hotel1.all_reservations = [@res1, @res2, @res3]
+# end
+# before do
+#    @hotel_res = Hotel::Reservations.new
+#
+#    @start_date = Date.new(2017,9,1)
+#    @end_date = Date.new(2017,9,3)
+#    date_range = Hotel::DateRange.new(@start_date, @end_date)
+
+#    room = @hotel_res.all_rooms[0]
+#    booking1 = Hotel::Booking.new(1, [room], date_range)
+#         (id, rooms, date_range)
+#    @hotel_res.all_reservations << booking1
+#
+#    @booking2 = @hotel_res.make_booking(1, @start_date, @end_date)
+#  end
+
+# errors that that admin could mess up:
+# THIS FAILS:
+# it "is and instance of Reservations" do
+#   @hotel1.must_be_instance_of Hotel::Reservations
+# end
+
+# it "before a reservation can be made, it checks availablity" do
+# end
+
+# it "must check if date range is available" do
+#   res1.check_reservation
+# end
+
+# it "if we have availability, it creates a reservation" do
+#
+# end
+#
+# it "all_reservations is an array of all reservations" do
+#
+# end
+#
+#
+# it "reservation is pushed into all_reservations array" do
+#
+# end
