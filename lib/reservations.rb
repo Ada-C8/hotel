@@ -28,28 +28,17 @@ module Hotel
       elsif availability == []
         raise ArgumentError.new "Sorry, there are no rooms available."
       end
-      # if we have availabilities, Booking.new and push into @all_reservations
+      # if hotel has availabilities, Booking.new is created and pushed into @all_reservations
       id = @all_reservations.length
       rooms = availability.take num_of_rooms
       booking = Booking.new(checkin, checkout, rooms, id)
       @all_reservations << booking
-
-      # should I write a loop that tells it to make multiple bookings per num_of_rooms?
-      # if num_of_rooms > 1
-      #   num_of_rooms.times do
-      #     booking * num_of_rooms
-      #   end
-      # end
-      # @check_block_id
-
       return booking
     end
 
     def print_reservations
       return @all_reservations
     end
-
-
 
     def check_reservations(checkin, checkout)
       check_against = DateRange.new(checkin, checkout).night_array
@@ -67,7 +56,7 @@ module Hotel
     end
 
     def check_availability(checkin, checkout)
-      ##### write logic to check for blocks bc then it's not available
+      ##### need logic to check for blocks bc then it's not available?
       # this is the inverse of not_available array
       available = []
       @all_rooms.each do |room|
@@ -90,12 +79,10 @@ module Hotel
         collection_of_rooms_blocked = []
         how_many_rooms.times do |i|
           collection_of_rooms_blocked << available[i]
-          # @all_rooms_in_block << available[i]
         end
         new_block = Hotel::Block.new(checkin, checkout, collection_of_rooms_blocked, block_id)
         @all_blocks << new_block
         return new_block
-        # binding.pry
       end
     end
 
@@ -106,7 +93,6 @@ module Hotel
           puts "#{block} middle block"
           rooms = block.available_rooms.take block.how_many_rooms
           rez = Hotel::Block.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
-          # rez = Hotel::Booking.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
           @all_reservations << rez
           return rez
         else

@@ -110,6 +110,17 @@ puts hotel1
 
 
 ########### comments from reservations.rb ############
+#from make_booking method:
+# should I write a loop that tells it to make multiple bookings per num_of_rooms?
+# if num_of_rooms > 1
+#   num_of_rooms.times do
+#     booking * num_of_rooms
+#   end
+# end
+# @check_block_id
+
+
+
 # from initialize:
 # @all_rooms = [1..20] # do I need all_rooms?
 # @rooms = Room.new.room_number

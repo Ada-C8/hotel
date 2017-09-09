@@ -27,7 +27,6 @@ describe "Hotel" do
     end
 
     it "will count total nights" do
-      # binding.pry
       @trip.total_nights.must_equal 2
     end
 
