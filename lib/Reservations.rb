@@ -61,7 +61,13 @@ module Hotel
           end
         end
       end
-      #Also check blocks array too!
+      list_blocks_by_date(date).each do |block|
+        rooms_available.each do |room|
+          if room.room_number == booking.room_number
+            rooms_availale.delete(room)
+          end
+        end
+      end
       return rooms_available
     end
 
@@ -100,18 +106,10 @@ module Hotel
     end
 
 
-    # def block_rooms #select rooms from available list
-    #
-    # end
-
     def new_reservation_in_block(room)
 
       #check if rooms are in block an available
     end
-
-
-
-
 
 
     # def validate_room_number   #THIS DOESN"T WORK YET
@@ -180,10 +178,11 @@ module Hotel
         if date >= block.dates[0] && date < block.dates[-1]
           @blocks_list << block
         end
+      end
     end
 
     def clear_reservations #Using this for testing purposes
-      @all_reservations = []
+        @all_reservations = []
     end
 
   end
