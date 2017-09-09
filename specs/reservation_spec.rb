@@ -43,7 +43,7 @@ describe "Reservation class" do
       @test_ob.price.must_equal room_price
     end
 
-    it "Can accept other values for the price attribute" do
+    it "price parameter can accept other values for the price attribute" do
       room = 2
       check_in = Date.new(2017,9,9)
       check_out = Date.new(2017,9,12)

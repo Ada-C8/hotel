@@ -9,16 +9,6 @@ describe "Block class" do
     @test_ob = BookingSystem::Block.new( number_of_rooms, rooms_in_block, check_in, check_out)
   end
 
-  it "Has a ROOM_PRICE constant set to 200" do
-    BookingSystem::Block::ROOM_PRICE.must_equal 200
-  end
-
-  it "Has a DISCOUNTED_PRICE constant set to the ROOM_PRICE minus 15%" do
-    room_price = 200
-    discounted_price = room_price - (room_price * 0.15)
-    BookingSystem::Block::DISCOUNTED_PRICE.must_equal discounted_price
-  end
-
   describe "initialize method" do
     it "Can be called" do
       @test_ob.must_be_instance_of BookingSystem::Block
@@ -57,13 +47,3 @@ describe "Block class" do
   end
 
 end
-
-  # describe "block_total_cost" do
-  #   it "Can be called" do
-  #     @test_ob.must_respond_to :block_total_cost
-  #   end
-  #
-  #   it "Returns an Integer" do
-  #     @test_ob.block_total_cost.must_be_instance_of Float
-  #   end
-  # end
