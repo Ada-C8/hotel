@@ -13,6 +13,10 @@ describe "Hotel" do
       @my_hotel.list_of_reservations.length.must_equal 0
     end
 
+    it " should have an empty list of blocks" do
+      @my_hotel.list_of_blocks.length.must_equal 0
+    end
+
   end
 
   describe "make reservation method" do
@@ -32,6 +36,7 @@ describe "Hotel" do
       checkin = Date.new(2017,01,01)
       checkout = Date.new(2017,01,04)
       reserve = @my_hotel.make_reservation(checkin, checkout, 3)
+
       @my_hotel.list_of_reservations.must_include reserve
     end
   end
@@ -101,6 +106,12 @@ describe "Hotel" do
       available_rooms = @my_hotel.available_rooms(Booking::DateRange.new(checkin,checkout))
       available_rooms.must_be_kind_of Array
       available_rooms.length.must_equal 0
+    end
+  end
+
+  describe " reserved_by_any_block method" do
+    it " should check if room is inside of any block" do
+      
     end
   end
 end

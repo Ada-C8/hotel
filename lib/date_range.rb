@@ -10,7 +10,7 @@ module Booking
       @checkout = checkout
       if !@checkout.is_a?(Date) || !@checkin.is_a?(Date)
         raise ArgumentError.new ("Both checkin and checkout must be valid Date objects")
-      elsif @checkout < @checkin
+      elsif @checkout <= @checkin
         raise ArgumentError.new ("Entered invalid date_range")
       end
     end
