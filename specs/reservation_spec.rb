@@ -19,13 +19,32 @@ describe "reservation class" do
       dates[0].must_be_kind_of String
     end
   end
-  xdescribe "reserve room" do
-    it "creates an array of dates" do
-      make_date = Hotel::Reservation.new("12-5-2017","12-10-2017")
-      make_date.reserve_room.must_be_kind_of Array
-      make_date.reserve_room.length.must_equal 6
-    end
 
+  describe "available room" do
+    it "provides an instance of the first available room" do
+      pikachu_requests = Hotel::Reservation.new
+      pikachu_requests.available_room.must_be_instance_of Hotel::Room
+      pikachu_requests.available_room.num.must_equal 1
+    end
+  end
+
+  describe "reserve room" do
+    it "creates a reservation" do
+      ash_says = Hotel::Reservation.new
+      d = ash_says.date_range("10-1-2017","10-5-2017")
+      num = ash_says.available_room
+      ash_says.reserve_room(d, num)
+      #make_date.reserve_room.must_be_kind_of Array
+      #make_date.reserve_room.length.must_equal 6
+    end
+    it "adds to reservations array" do
+      oddish_asks = Hotel::Reservation.new
+      oddish_asks.reservations.length.must_equal 0
+      d = oddish_asks.date_range("10-1-2017","10-5-2017")
+      num = oddish_asks.available_room
+      oddish_asks.reserve_room(d, num)
+      oddish_asks.reservations.length.must_equal 1
+    end
   end
 
   xdescribe "total" do
@@ -43,23 +62,7 @@ describe "reservation class" do
     end
   end
 
-  xdescribe "available room" do
-    it "presents an array of available rooms" do
-      make_date = Hotel::Reservation.new("12-5-2017","12-5-2017")
-      make_date.available_room.must_be_instance_of Array
-      make_date.available_room.length.must_equal 20
-    end
-    it "removes room from list if it is not available" do
-      make_date = Hotel::Reservation.new("12-5-2017","12-6-2017")
-      make_date.available_room.length.must_equal 20
-      make_date.reserve_room
-      make_date.available_room.length.must_equal 19
 
-      #make_date2 = Hotel::Reservation.new("12-4-2017","12-8-2017")
-
-      #make_date2.available_room.length.must_equal 19
-    end
-  end
   xdescribe "reserve room" do
 
   end
