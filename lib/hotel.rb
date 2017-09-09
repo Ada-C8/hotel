@@ -48,7 +48,7 @@ module BookingSystem
         raise UnavailableBlockError.new("There is no block matching this date range: #{check_in} - #{check_out}")
       end
 
-      #check that room and date range match a block reservation
+      #check that room requested is available in block
       new_block_reservation = nil
       blocks_dates_match.each do |block|
         #if a match make block reservation

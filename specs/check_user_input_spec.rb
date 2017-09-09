@@ -26,4 +26,13 @@ describe "CheckUserInput module" do
       proc { BookingSystem::CheckUserInput.between_1_5(6) }.must_raise BookingSystem::Reservation::InvalidRoomError
     end
   end
+
+  describe "price method" do
+    it "Raises an InvalidPriceError if input for room is not an Integer greater than 50" do
+
+      proc { BookingSystem::CheckUserInput.price(0) }.must_raise BookingSystem::Reservation::InvalidPriceError
+
+      proc { BookingSystem::CheckUserInput.price(100.50) }.must_raise BookingSystem::Reservation::InvalidPriceError
+    end
+  end
 end
