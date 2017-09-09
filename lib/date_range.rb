@@ -6,9 +6,9 @@ class DateRange
   def initialize(check_in, check_out)
     @start = check_in
     @end = check_out
-
     if @end <= @start
       raise ArgumentError.new("This is an invalid check-in/check-out combination")
+    # rescue ArgumentError retry 
     end
   end
 

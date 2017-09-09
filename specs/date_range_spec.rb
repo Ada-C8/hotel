@@ -43,6 +43,8 @@ describe 'DateRange' do
         stay = DateRange.new(@check_in, @check_out)
         stay.include?(date_to_check).must_equal false
       end
+
+      # make sure rainge is inclusive date same as start and end
     end
 
     describe "overlap?" do
@@ -59,6 +61,10 @@ describe 'DateRange' do
         stay = DateRange.new(check_in, check_out)
         stay.overlap?(@check_in, @check_out).must_equal false
       end
+      # add test for not check in same day as check out
+      # other edge cases
+      # how ranges of dates interact
+
     end
 
 

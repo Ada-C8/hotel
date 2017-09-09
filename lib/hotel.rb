@@ -18,7 +18,8 @@ class Hotel
     @blocks = []
   end
 
-  # reserves an available room for a given date range
+  # reserves an available room (i.e., room that is not blocked or reserved)
+  # for a given date range
   def create_reservation(name, room, check_in, check_out)
     if availability(check_in, check_out).include?(room)
       new_reservation = Reservation.new(name, room, check_in, check_out)
@@ -28,6 +29,19 @@ class Hotel
       raise ArgumentError.new("That room is not available")
     end
   end
+
+  # creates a block for a given date range if rooms are available (i.e., room that is not blocked or reserved)
+  def create_block(name, rooms, check_in, check_out)
+    rooms.each do |room|
+      if !(availability(check_in, check_out).include?(room))
+        raise ArgumentError.new("These rooms are not available as a block")
+      end
+    end
+    new_block = Block.new(name, rooms, check_in, check_out)
+    @blocks << new_block
+    return new_block
+  end
+
 
   def all_reservations
     return @reservations
@@ -47,6 +61,7 @@ class Hotel
     return reservations_for_day
   end
 
+
   # check availability of rooms for a certain date range
   def availability(check_in, check_out)
     reserved_rooms = []
@@ -60,7 +75,9 @@ class Hotel
 
     @blocks.each do |block|
       if date_range.overlap?(block.dates.start, block.dates.end)
-        blocked_rooms << block.rooms
+        block.rooms.each do |room|
+          blocked_rooms << room
+        end
       end
     end
 
@@ -68,17 +85,7 @@ class Hotel
     return available_rooms
   end
 
-  # creates a block for a given date range if rooms are available
-  def create_block(name, rooms, check_in, check_out)
-    rooms.each do |room|
-      if !(availability(check_in, check_out).include?(room))
-        raise ArgumentError.new("That room is not available as a block")
-      end
-    end
-    new_block = Block.new(name, rooms, check_in, check_out)
-    @blocks << new_block
-    return new_block
-  end
+
 
   # check availability of rooms in a block and reserve room in block if available
   # pass in name of block reservation, then see if the block
@@ -86,25 +93,52 @@ class Hotel
   # reserve a room from within a block of rooms
   def reserve_block_room(name, room)
     @blocks.each do |block|
-      if name == block.name && block.rooms.include?(room) && availability(block.dates.start, block.dates.end).include?(room)
+      if check_block_availability(block, name).include?(room)
+        # if name == block.name && block.rooms.include?(room)
+        # # block.rooms.each do |blocked_room|
+        # #
+        # #   if blocked_room == room
+        #     # reservation_rooms = []
+        #     reserved_rooms = all_reservations.map {|reservation| reservation.room}
+        #     # all_reservations.each do |reservation|
+        #     #   reservation_rooms << reservation.room
+        #     # end
+        #
+        #     if !(reserved_rooms.include?(room))
         new_reservation = Reservation.new(name, room, block.dates.start, block.dates.end)
         @reservations << new_reservation
+        return new_reservation
+        #     else
+        #       raise ArgumentError.new("The room is either booked or the name and room combination is not in our records.")
+        #     end
+        #   # end
+        # # end
       else
         raise ArgumentError.new("The room is either booked or the name and room combination is not in our records.")
       end
     end
   end
 
-  def check_block_availability(name)
-    @blocks.each do |block|
-      if name == block.name
-        available_rooms_in_block = block.rooms & availability(block.dates.start, block.dates.end)
-        puts block.rooms
-        puts availability(block.dates.start, block.dates.end)
-        return available_rooms_in_block
-        #block.rooms is a set of blocked rooms - availability(block.dates.start, block.dates.end)
-      end
+  # TODO: finish method take from reserve_block_room
+  # TODO: change argument errors and throw??
+
+  # given a name check availability of rooms within a block
+  def check_block_availability(block, name)
+    # @blocks.each do |block|
+    if name == block.name
+      reserved_rooms = all_reservations.map {|reservation| reservation.room}
+      available_rooms_in_block = block.rooms - (block.rooms & reserved_rooms)
+
+
+      # available_rooms_in_block = block.rooms & availability(block.dates.start, block.dates.end)
+      # puts block.rooms
+      # puts availability(block.dates.start, block.dates.end)
+      return available_rooms_in_block
+    else
+      return false
+      #block.rooms is a set of blocked rooms - availability(block.dates.start, block.dates.end)
     end
+    # end
 
     # if block.name equals what admin passes in
     # res dates match block dates

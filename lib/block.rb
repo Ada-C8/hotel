@@ -9,8 +9,6 @@ class Block
     @rooms = rooms
     @price_night = 160
     @dates = DateRange.new(check_in, check_out)
-    @start = check_in
-    @end = check_out
 
     # super
     if rooms.length > 5 || rooms.length < 1
