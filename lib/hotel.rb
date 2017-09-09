@@ -51,12 +51,23 @@ module Hotels
       return booked_rooms
     end
 
+    def list_unbooked_rooms(list_booked_rooms)
+      unbooked_rooms = []
+    @rooms.each do |room|
+      if booked_rooms.include? room.number
+      else
+        unbooked_rooms << room.number
+      end
+    end
+    return unbooked_rooms 
+    end
+
 
 
     def find_room
       all_booked_rooms = []
       @reservations.each do |one_res|
-        all_booked_rooms << one_res.number
+        all_booked_rooms << one_res.room
       end
       @rooms.each do |room|
         unless all_booked_rooms.include? room.number
