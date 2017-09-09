@@ -2,7 +2,7 @@ require 'date'
 
 module Hotel
   class Block # << Room do I want to do this?
-    attr_reader :id, :dates, :collection_of_rooms_blocked, :block_id, :available_rooms, :how_many_rooms, :block_total_cost
+    attr_reader :id, :dates, :block_id, :available_rooms, :how_many_rooms
 
     def initialize(checkin, checkout, collection_of_rooms_blocked, block_id)
       @dates = DateRange.new(checkin, checkout)
@@ -34,41 +34,10 @@ module Hotel
       end
     end
     ##### later, if it's not empty or not full, I NEED MORE LOGIC
-    # delete @all_blocks?
-    ##### need to think about self down below :
 
     def check_block_id(block_id)
       return @block_id == block_id
     end
 
-
-    # if @collection_of_rooms_blocked == []
-    #   raise ArgumentError.new "No room blocks exist yet"
-    # else
-    #   @collection_of_rooms_blocked.each do |room|
-    #     if block_id == @block_id
-    #
-    #
-    #       if room.available.include?(true) #wait or false?
-    #         index = 0
-    #         block.collection_of_rooms_blocked.each do |get_a_room|
-    #           if get_a_room[index] == false
-    #             checkin = new_block
-    #             checkout = new_block
-    #             # rooms = how_many_rooms ###figure out
-    #             # block_id = # string? or block.available[index].number
-    #             new_rez = Booking.new(checkin, checkout, rooms, block_id)
-    #             #(checkin, checkout, collection_of_rooms_blocked, block_id)
-    #
-    #             @collection_of_rooms_blocked << new_rez
-    #             @all_reservations << new_rez
-    #             get_a_room == true
-    #           end
-    #         end
-    #       else
-    #         puts "There are no rooms avaiable for this block"
-    #       end
-    #     end
-    #   end
   end
 end

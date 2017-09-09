@@ -91,7 +91,7 @@ describe "Hotel" do
               hotel3.make_booking(checkin3, checkout3, 1)
               hotel3.make_booking(checkin3, checkout3, 1)
               hotel3.check_availability(checkin3, checkout3).length.must_equal 16
-              # binding.pry
+              #  binding.pry
               hotel3.check_reservations(checkin3, checkout3).length.must_equal 8
             end
 
@@ -131,10 +131,10 @@ describe "Hotel" do
           hotel8 = Hotel::Reservations.new
           hotel8.make_block(checkin8, checkout8, 1, "wedding")
           h = hotel8.reserve_room_from_block("wedding")
-          #  binding.pry
           h.must_be_kind_of Hotel::Block
           h.block_total_cost.must_equal 320
         end
+
       end
           # block8 = hotel8.make_block(checkin8, checkout8, [], "sweet_16")
           #
