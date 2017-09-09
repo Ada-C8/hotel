@@ -78,7 +78,6 @@ describe "Hotel class" do
 
       proc { @test_ob.make_single_reservation(@room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
     end
-
   end
 
   describe "block_reservation" do

@@ -5,7 +5,6 @@ describe "Reservation class" do
     it "Can be instantiated" do
       BookingSystem::Reservation::InvalidRoomError.new.must_be_instance_of BookingSystem::Reservation::InvalidRoomError
     end
-
   end
 
   before do
@@ -28,10 +27,9 @@ describe "Reservation class" do
       @test_ob.reservation_dates[0].must_be_instance_of Date
     end
 
-    it "Has an instance variable @room which is an Integer" do
+    it "Has an instance variable @room which is an Integer between 1-20" do
       @test_ob.room.must_be_instance_of Integer
     end
-
   end
 
   describe "total_cost method" do

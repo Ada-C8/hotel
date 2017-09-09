@@ -21,4 +21,15 @@ describe "BlockReservation" do
       @test_ob.reservation_dates.must_be_instance_of Array
     end
   end
+
+  describe "total_cost method" do
+    it "Can be called" do
+      @test_ob.must_respond_to :total_cost
+    end
+
+    it "Returns a Float" do
+      @test_ob.total_cost.must_be_instance_of Float
+    end
+  end
+
 end

@@ -43,7 +43,7 @@ describe "Block class" do
 
   describe "remove_reserved_room_from_availability method" do
     it "Can be called" do
-      @test_ob.must_respond_to :rooms_available
+      @test_ob.must_respond_to :remove_reserved_room_from_availability
     end
 
     it "Returns an Array" do
@@ -51,17 +51,19 @@ describe "Block class" do
     end
 
     it "Takes a room out of availablity when a Reservation is made" do
-      @test_ob.remove_reserved_room_from_availability(2).length.must_equal 1
+      @test_ob.remove_reserved_room_from_availability(2)
+      @test_ob.rooms_available.length.must_equal 1
     end
   end
 
-  describe "block_total_cost" do
-    it "Can be called" do
-      @test_ob.must_respond_to :block_total_cost
-    end
-
-    it "Returns an Integer" do
-      @test_ob.block_total_cost.must_be_instance_of Float
-    end
-  end
 end
+
+  # describe "block_total_cost" do
+  #   it "Can be called" do
+  #     @test_ob.must_respond_to :block_total_cost
+  #   end
+  #
+  #   it "Returns an Integer" do
+  #     @test_ob.block_total_cost.must_be_instance_of Float
+  #   end
+  # end
