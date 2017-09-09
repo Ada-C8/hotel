@@ -52,8 +52,8 @@ describe "Hotel" do
 
     it "should add only one Reservation at a time to @reservations array" do
       @hotel.create_reservation(@check_in, @check_out)
-
       all_reservations = @hotel.reservations
+
       all_reservations.must_be_kind_of Array
       all_reservations.length.must_equal 1
     end
@@ -61,12 +61,12 @@ describe "Hotel" do
     it "should return one instance of BookingSystem::Reservation" do
       @hotel.create_reservation(@check_in, @check_out)
       all_reservations = @hotel.reservations
+
       all_reservations[0].must_be_instance_of BookingSystem::Reservation
       all_reservations.length.must_equal 1
     end
 
     it "should return all instances of BookingSystem::Reservations" do
-
       20.times do
         @hotel.create_reservation(@check_in, @check_out)
       end
@@ -101,7 +101,6 @@ describe "Hotel" do
     end
 
     it "should return 1 instance of Block if other single reservations already exist" do
-
       3.times do
         @hotel.create_reservation(@check_in, @check_out)
       end
@@ -120,7 +119,6 @@ describe "Hotel" do
     end
 
     it "should raise an ArgumentError if there are no available rooms" do
-
       20.times do
         @hotel.create_reservation(@check_in, @check_out)
       end
@@ -135,7 +133,7 @@ describe "Hotel" do
       @hotel.reserve_room_in_block("Bob", 5)
       block = @hotel.block_reservations[0]
 
-      @hotel.block_reservations[0].reserved_for.must_equal "Bob"
+      block.reserved_for.must_equal "Bob"
       block.avail_block_rooms.must_be_empty
       block.avail_block_rooms.must_be_kind_of Array
     end
@@ -144,9 +142,10 @@ describe "Hotel" do
   describe "#avail_rooms_in_block?" do
     it "should return an array of available room numbers for a specific block as Integers" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
-
-      @hotel.avail_rooms_in_block?("Bob").must_be_kind_of Array
-      @hotel.avail_rooms_in_block?("Bob").each do |room_num|
+      avail_rooms = @hotel.avail_rooms_in_block?("Bob")
+      
+      avail_rooms.must_be_kind_of Array
+      avail_rooms.each do |room_num|
         room_num.must_be_kind_of Integer
       end
     end
