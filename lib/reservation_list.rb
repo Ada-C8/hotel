@@ -2,8 +2,11 @@ require 'pry'
 require_relative 'reservation'
 
 module Hotel
+
   class ReservationList #Collection of Reservations
+
       attr_reader :reservation_list
+
       def initialize
         @reservation_list = []
       end
@@ -11,7 +14,6 @@ module Hotel
       def add(id, room, day_in, day_out)
         @reservation_list << Reservation.new(id, room, day_in, day_out) #adds Reservation to group
       end
-
   end
 end
 #binding.pry

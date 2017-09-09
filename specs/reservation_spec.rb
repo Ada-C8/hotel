@@ -20,7 +20,15 @@ describe "Reservation class" do
       @init_test.room.must_equal 1
       @init_test.check_in.must_be_kind_of Date
       @init_test.check_out.must_be_kind_of Date
-    end #attributes
+    end #first set of attributes
+
+    it "can access date_range, nights_reserved, length_of_stay, and total_cost: " do
+      @init_test.date_range.must_be_kind_of Array
+      @init_test.nights_reserved.must_be_kind_of Array
+      @init_test.nights_reserved.length.must_equal 4
+      @init_test.length_of_stay.must_equal 4
+      @init_test.total_cost.must_equal 800
+    end #second set of attributes
   end #Initialize
 
   describe "Calling Check_in and Check_out" do

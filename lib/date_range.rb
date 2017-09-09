@@ -33,7 +33,6 @@ module Hotel
       return date_range
     end
 
-
   end #date class
 end #module
 #binding.pry

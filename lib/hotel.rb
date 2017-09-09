@@ -38,24 +38,11 @@ module Hotel
       found_reservations = Array.new
       dates.each do |date|
         found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.date_range.include?(Date.parse(date)) }
-        # @reservations.reservation_list.each do |reservation|
-        #   if reservation.date_range.include?(Date.parse(date))
-        #     found_reservations << reservation
-        #   end #if statement
-        # end #each reservation
       end #each date
       #found_reservations = found_reservations.uniq
       return found_reservations.flatten.uniq
     end #find_reservations
-    # def find_reservation(test_array)
-    #   letters = ["a", "b", "c"] #should create an array
-    #   found_reservations = Array.new
-    #   letters.each do |letter|
-    #     found_reservations << test_array.find_all { |reservation| reservation.include?(letter)}
-    #   end #each date
-    #   #found_reservations = found_reservations.flatten.uniq
-    #   return found_reservations.flatten.uniq
-    # end #view_reservations
+
     # # - As an administrator, I can get the total cost for a given reservation
     def total_cost(reservation_id)
       @reservations.reservation_list.each do |reservation|
