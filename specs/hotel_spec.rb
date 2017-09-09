@@ -3,24 +3,56 @@ require_relative '../lib/hotel'
 
 describe 'Hotel' do
 
-before do
-  @test_hotel = Property::Hotel.new
+  before do
+    @test_hotel = Property::Hotel.new
+  end
+
+  it "can be initialized" do
+    @test_hotel.must_be_instance_of Property::Hotel
+  end
+  it "responds to its attr_reader" do
+    @test_hotel.must_respond_to :reservations
+    @test_hotel.must_respond_to :rooms
+    @test_hotel.must_respond_to :room_price
+  end
+
+  it "can access the list of all of the rooms in the hotel" do
+    @test_hotel.rooms.must_equal (1..20).to_a
+  end
+
+  it "there should be 20 total rooms" do
+    @test_hotel.rooms.count.must_equal 20
+  end
+
+  it "room always costs $200/night" do
+    @test_hotel.room_price.must_equal 200
+  end
 end
 
-it "can access the list of all of the rooms in the hotel" do
-@test_hotel.rooms.must_equal (1..20).to_a
-end
+describe "reserve_room" do
 
-it "there should be 20 total rooms" do
-  @test_hotel.rooms.count.must_equal 20
-end
-
-it "room always costs $200/night" do
-@test_hotel.room_price.must_equal 200
-end
+    before do
+      @test_hotel = Property::Hotel.new
+      @check_in = Date.new(2017, 05, 05)
+      @check_out = @check_in + 3
+    end
 
 
+    it "cannot book invalid room number" do
+      room = "garbage"
+      proc {@test_hotel.reserve_room(room, @check_in, @check_out)}.must_raise ArgumentError
+    end
 
+  it "raises an error if tried to double-book room " do
+    room = 5
+    @test_hotel.reserve_room(room, @check_in, @check_out)
+    proc {@test_hotel.reserve_room(room, @check_in, @check_out)}.must_raise ArgumentError
+  end
+
+  it "adds the reservation to @reservations" do
+    test_rez = @test_hotel.reserve_room(10, @check_in, @check_out)
+    @test_hotel.reservations.must_include test_rez
+  end
 
 it "can reserve a room for a given date range" do
 

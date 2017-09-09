@@ -1,20 +1,21 @@
 require_relative 'range'
 
-# I can reserve a room for a given date range
-# I can access the list of reservations for a specific date
-# I can get the total cost for a given reservation
-
-
 module Property
 
-  class Reservation
+  class Reservation < Range
 
+  attr_reader :room, :price
 
-    def initialize(block)
-      @rooms = []
-      @dates = Property::Range.new(check_in, check_out)
-      @total_price = @dates.num_nights * 200
-      # super(check_in, check_out)
+    def initialize(room, check_in, check_out, price)
+      @room = room
+      @price = 200
+      # @dates = Property::Range.new(check_in, check_out)
+      # @total_price = @dates.num_nights * 200
+      super(check_in, check_out)
+    end
+
+    def total_price
+      return num_nights * @price
     end
   end
 end
