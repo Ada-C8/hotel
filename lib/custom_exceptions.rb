@@ -11,3 +11,9 @@ class ReservationNotAvailableError < ArgumentError
     super ("A reservation is not available for the date range you have entered.")
   end
 end
+
+class NoPartyByThatNameError < ArgumentError
+  def initialize
+    super ("There is no block of rooms reserved under that name. Please make sure you have the exact party name.")
+  end
+end

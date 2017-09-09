@@ -229,20 +229,30 @@ describe "The Hotel class" do
 
   describe "find_unassigned_block_reservations method" do
 
-    it "returns an array" do
+    before do
       @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 6, 175)
+      @myhotel.reserve_block("Harriet McDuck", "11/12/17", "11/14/17", 8, 150)
+    end
+
+    it "returns an array" do
       @myhotel.find_unassigned_block_reservations("John Smith").must_be_kind_of Array
     end
 
     it "returns an array of reservation objects" do
-      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 6, 175)
       @myhotel.find_unassigned_block_reservations("John Smith")[0].must_be_instance_of Hotel_Chain::Reservation
     end
 
     it "returns an array of reservation objects which have a status of unassigned" do
-      # 5.times do |x|
-      # @myhotel.find_unassigned_block_reservations(party_name)[x].status.must_equal "unassigned"
-      # end
+      6.times do |x|
+        @myhotel.find_unassigned_block_reservations("John Smith")[x].status.must_equal "unassigned"
+      end
+    end
+
+    it "returns an error if there are no block reservations found by a given party name" do
+      proc {@myhotel.find_unassigned_block_reservations("Nancy Smith")}.must_raise NoPartyByThatNameError
+    end
+
+    it "returns an error if there are no unassigned rooms for a given block" do
 
     end
 

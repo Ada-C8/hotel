@@ -176,7 +176,7 @@ module Hotel_Chain
 
       #change this to a specific error
       if this_block == nil
-        raise ArgumentError.new("There is no block of rooms reserved under that name. Please make sure you have the exact party name (or search by date)")
+        raise NoPartyByThatNameError
       end
 
       unassigned_reservations = []
@@ -196,6 +196,8 @@ module Hotel_Chain
     end
 
     def assign_block_reservation
+
+
     end
 
     def find_block_reservations_by_partyname
