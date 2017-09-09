@@ -6,13 +6,11 @@ module My_Hotel
     attr_reader :first_night, :last_night, :reservation_id, :room_number, :nights_booked, :cost
 
 
-    def initialize(first_night, last_night=first_night)
-      @first_night = first_night
-      @last_night = last_night
+    def initialize(nights)
       @reservation_id = nil
       @cost = nil
       @room_number = nil
-      @nights_booked = My_Hotel::Date_Range.new(first_night,last_night)
+      @nights_booked = nights
       @block_id = nil
       #@contact_info #could add contact_info
     end
@@ -21,13 +19,13 @@ module My_Hotel
       if rooms_avail.length != 0
         @room_number = rooms_avail.keys.sample
       else
-        raise ArgumentError.new("Can't make reservation, there are no rooms available for those dates: #{@first_night} to #{@last_night}")
+        raise ArgumentError.new("Can't make reservation, there are no rooms available for those dates: #{@nights_booked}")
       end
     end
 
     #enter discount as a decimal
     def set_cost(discount=1)
-      number_of_nights = @nights_booked.nights.to_a.length
+      number_of_nights = @nights_booked.to_a.length
       cost_per_night = ROOMS[@room_number]
       @cost = number_of_nights * cost_per_night * discount
     end

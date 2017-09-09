@@ -4,12 +4,10 @@ module My_Hotel
 
     attr_reader :first_night, :last_night, :room_numbers, :nights_held, :discount, :block_id
 
-    def initialize(first_night, last_night, array_of_rooms, discount)
-      @first_night = first_night
-      @last_night = last_night
+    def initialize(nights, array_of_rooms, discount)
       @discount = discount
       @room_numbers = array_of_rooms
-      @nights_held = My_Hotel::Date_Range.new(first_night,last_night)
+      @nights_held = nights
       @block_id = nil
       #@contact_info #could add contact_info
     end

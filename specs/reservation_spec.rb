@@ -5,7 +5,7 @@ describe "My_Hotel::Reservation" do
     @feb1 = Date.civil(2017,2,1)
     @feb2 = Date.civil(2017,2,1)
     @feb6 = Date.civil(2017,2,6)
-    @holiday = My_Hotel::Reservation.new(@feb1, @feb6)
+    @holiday = My_Hotel::Reservation.new(@feb1..@feb6)
     @rooms_avail = {1 =>200,
       2 => 200,
       3 => 200
@@ -15,7 +15,6 @@ describe "My_Hotel::Reservation" do
   describe "initialize" do
     it "can be created" do
       @holiday.must_be_kind_of My_Hotel::Reservation
-      @holiday.nights_booked.must_be_kind_of My_Hotel::Date_Range
     end
   end
 
@@ -37,7 +36,7 @@ describe "My_Hotel::Reservation" do
     it "calculates the cost of a reservation without a discount" do
       @holiday.assign_room(@rooms_avail)
       @holiday.set_cost.must_equal 1200 #nominal
-      one_night =  My_Hotel::Reservation.new(@feb1, @feb1)
+      one_night =  My_Hotel::Reservation.new(@feb1..@feb1)
       one_night.assign_room(@rooms_avail)
       one_night.set_cost.must_equal 200
     end

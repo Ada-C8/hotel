@@ -70,7 +70,7 @@ describe "My_Hotel::Hotel" do
 
     it "returns true if reservation_id is unique" do
       @ritz.make_reservation(@feb1, @feb5)
-      second = My_Hotel::Reservation.new(@feb1, @feb5)
+      second = My_Hotel::Reservation.new(@feb1..@feb5)
       @ritz.unique_reservation_id?(second).must_equal true
     end
   end
@@ -84,7 +84,7 @@ describe "My_Hotel::Hotel" do
 
     it "returns true if reservation_id is unique" do
       @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
-      second = My_Hotel::Block.new(@feb6, @may6, [1,2,3,4], 0.75)
+      second = My_Hotel::Block.new(@feb6..@may6, [1,2,3,4], 0.75)
       @ritz.unique_block_id?(second).must_equal true
     end
   end
@@ -241,9 +241,9 @@ describe "My_Hotel::Hotel" do
     end
   end
 
-  describe "open_rooms" do
+  describe "unreserved_and_unblocked" do
     it "returns an array of hashes representing open rooms for a range of dates" do
-      all_available = @ritz.open_rooms(@feb1..@feb5)
+      all_available = @ritz.unreserved_and_unblocked(@feb1..@feb5)
       all_available.must_be_kind_of Array
       all_available.length.must_equal 5
       all_available[0].must_be_kind_of Hash
@@ -251,7 +251,7 @@ describe "My_Hotel::Hotel" do
     end
 
     it "returns an array of hashes representing open rooms for one date" do
-      all_available = @ritz.open_rooms(@feb1)
+      all_available = @ritz.unreserved_and_unblocked(@feb1)
       all_available.must_be_kind_of Array
       all_available.length.must_equal 1
       all_available[0].must_be_kind_of Hash
@@ -262,27 +262,27 @@ describe "My_Hotel::Hotel" do
       20.times do
         @ritz.make_reservation(@feb1, @feb1)
       end
-      none_available = @ritz.open_rooms(@feb1)
+      none_available = @ritz.unreserved_and_unblocked(@feb1)
       none_available[0].length.must_equal 0
     end
 
     it "if you reserve a room, it is not available" do
       @ritz.make_reservation(@feb1, @feb5)
-      one_reserved = @ritz.open_rooms(@feb1..@feb5)
+      one_reserved = @ritz.unreserved_and_unblocked(@feb1..@feb5)
       one_reserved[0].length.must_equal 19
     end
     it "if you make a block, they are not available" do
       @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
-      one_reserved = @ritz.open_rooms(@feb1..@feb5)
+      one_reserved = @ritz.unreserved_and_unblocked(@feb1..@feb5)
       one_reserved[0].length.must_equal 16
     end
 
     it "if you make a block and a reservation, all those rooms are not available" do
       @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       @ritz.make_reservation(@feb1, @feb3)
-      reservation_and_block = @ritz.open_rooms(@feb1)
+      reservation_and_block = @ritz.unreserved_and_unblocked(@feb1)
       reservation_and_block[0].length.must_equal 15
-      reservation_and_block = @ritz.open_rooms(@feb5)
+      reservation_and_block = @ritz.unreserved_and_unblocked(@feb5)
     end
   end
 
@@ -364,14 +364,14 @@ describe "My_Hotel::Hotel" do
   describe "check_block_array" do
     it "raises an argument if the user attempts to make a block that includes rooms that are not available" do
       @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
-      proc{@ritz.check_block_array([1, 2, 3, 4], @feb1, @feb5)}.must_raise ArgumentError
+      proc{@ritz.check_block_array([1, 2, 3, 4], @feb1.. @feb5)}.must_raise ArgumentError
     end
     it "raises an argument if the user attempts to make a block with more than 5 rooms" do
-      proc{@ritz.check_block_array([1, 2, 3, 4, 5, 6], @feb1, @feb5)}.must_raise ArgumentError
+      proc{@ritz.check_block_array([1, 2, 3, 4, 5, 6], @feb1.. @feb5)}.must_raise ArgumentError
     end
 
     it "does not raise an argument if inputs are OK" do
-      @ritz.check_block_array([1, 2, 3, 4], @feb1, @feb5)
+      @ritz.check_block_array([1, 2, 3, 4], @feb1..@feb5)
     end
   end
 

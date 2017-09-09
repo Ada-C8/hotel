@@ -1,5 +1,6 @@
 require_relative 'reservation'
 module My_Hotel
+  #to change room prices, change the values of ROOMS
   ROOMS = {1 => 200,
     2 => 200,
     3 => 200,
@@ -30,13 +31,30 @@ module My_Hotel
       @all_blocks =[]
     end
 
+    # can be used for "As an administrator, I can access the list of all of the rooms in the hotel"
     def display_rooms
       ROOMS.keys
     end
 
+    #Can be used for "As an administrator, I can get the total cost for a given reservation"
+    def get_cost(reservation)
+      reservation.cost
+    end
+
+    def date_range(first_night, last_night)
+      if first_night != last_night
+        @nights = (first_night..last_night)
+      else
+        @nights = []
+        @nights << first_night
+      end
+    end
+
+    #can be used for "As an administrator, I can reserve an available room for a given date range"
     def make_reservation(first_night, last_night=first_night)
-      new_reservation = My_Hotel::Reservation.new(first_night, last_night)
-      rooms_avail = find_continious_open_room(first_night..last_night)
+      nights = date_range(first_night, last_night)
+      new_reservation = My_Hotel::Reservation.new(nights)
+      rooms_avail = find_continious_open_room(nights)
       new_reservation.assign_room(rooms_avail)
       new_reservation.set_cost
       new_reservation.set_reservation_id
@@ -47,9 +65,11 @@ module My_Hotel
       return new_reservation
     end
 
+    #can be used for "As an administrator, I can create a block of rooms"
     def make_block(first_night, last_night=first_night, array_of_rooms, discount)
-      check_block_array(array_of_rooms, first_night, last_night)
-      new_block = My_Hotel::Block.new(first_night, last_night, array_of_rooms, discount)
+      nights = date_range(first_night, last_night)
+      check_block_array(array_of_rooms, nights)
+      new_block = My_Hotel::Block.new(nights, array_of_rooms, discount)
       new_block.set_block_id
       while unique_block_id?(new_block) == false
         new_block.set_block_id
@@ -58,21 +78,21 @@ module My_Hotel
       new_block
     end
 
-    def check_block_array(array_of_rooms, first_night, last_night)
+    def check_block_array(array_of_rooms, nights)
       if array_of_rooms.length > 5
         raise ArgumentError.new "Only accepts blocks of 4 rooms or less, a block of #{array_of_rooms.length} was entered."
       end
-      available = find_continious_open_room(first_night..last_night)
+      available = find_continious_open_room(nights)
       available = available.keys
       if array_of_rooms - available != []
-        raise ArgumentError.new "Those rooms (#{array_of_rooms}) were not available for those dates (#{first_night..last_night})."
+        raise ArgumentError.new "Those rooms (#{array_of_rooms}) were not available for those dates (#{nights})."
       end
     end
 
-#can be used for "As an administrator, I can reserve a room from within a block of rooms"
+    #can be used for "As an administrator, I can reserve a room from within a block of rooms"
     def make_reservation_in_block(block_id)
       current_block = find_by_block_id(block_id)
-      new_reservation = My_Hotel::Reservation.new(current_block.first_night, current_block.last_night)
+      new_reservation = My_Hotel::Reservation.new(current_block.nights_held)
       rooms_avail = rooms_available_in_block(block_id)
       new_reservation.assign_room(rooms_avail)
       new_reservation.block_id = block_id
@@ -96,7 +116,7 @@ module My_Hotel
       return true
     end
 
-#can be used for "As an administrator, I can check whether a given block has any rooms available"
+    #can be used for "As an administrator, I can check whether a given block has any rooms available"
     def rooms_available_in_block(block_id)
       rooms_in_block = find_rooms_in_block(block_id)
       rooms_in_use = find_rooms_in_use_by_block_id(block_id)
@@ -120,31 +140,12 @@ module My_Hotel
     end
 
 
-    #Given a range of nights returns a hash with all
-    #the rooms => prices that are free on all nights.
-    #If no room is free on all nights, return an empty hash.
-    def find_continious_open_room(nights)
-      if nights.class == Date
-        nights = [nights]
-      end
-      array_of_rooms = open_rooms(nights)
-      free_for_range = {}
-      array_of_rooms[0].each do |room, cost|
-        free = true
-        array_of_rooms.each do |free_rooms|
-          free = free && (free_rooms[room] != nil)
-        end
-        if free == true
-          free_for_range[room] = cost
-        end
-      end
-      return free_for_range
-    end
+    #### Methods to find reserved and blocked rooms ###
+    #These can be used for "As an administrator, I can view a list of rooms that are not reserved for a given date range" --
 
-    # given a range of nights, it will return an array arrays of
-    # all the roomnumbers that are available for every night in
-    # the range. if no room is available for the whole range,
-    # returns an empty array
+    # Given a range of nights, it will return an array of arrays.
+    # Each of the inner arrays contains all the roomnumbers that
+    # are not reserved for one night. There is one inner array per night.
     def find_all_unreserved_rooms(nights)
       if nights.class == Date
         nights = [nights]
@@ -161,6 +162,9 @@ module My_Hotel
       return array_of_rooms
     end
 
+    # Given a range of nights, it will return an array of arrays.
+    # Each of the inner arrays contains all the roomnumbers that
+    # are not blocked for one night. There is one inner array per night.
     def find_all_unblocked_rooms(nights)
       if nights.class == Date
         nights = [nights]
@@ -179,7 +183,12 @@ module My_Hotel
       return array_of_rooms
     end
 
-    def open_rooms(nights)
+    # Given a range of nights, it calls the methods to find the
+    # unblocked and unreserved rooms. Then it compares those to find
+    # rooms that are available. Returns an array of arrays.
+    # The inner array has all the rooms that are available on one night.
+    # Their is one inner array per night.
+    def unreserved_and_unblocked(nights)
       if nights.class == Date
         nights = [nights]
       end
@@ -201,23 +210,34 @@ module My_Hotel
       return available_over_range
     end
 
-    #given the reservation_id, returns the reservation if it exists, or nill if it does not
-    def find_by_reservation_id(reservation_id)
-      @all_reservations.each do |reservation|
-        if reservation.reservation_id == reservation_id
-          return reservation
+    #Given a range of nights it calls the method unreserved_and_unblocked,
+    #to find all the rooms that are free over the date range.
+    #It returns a hash of the rooms that are open over the entire range,
+    #and their price.
+    def find_continious_open_room(nights)
+      if nights.class == Date
+        nights = [nights]
+      end
+      array_of_rooms = unreserved_and_unblocked(nights)
+      free_for_range = {}
+      array_of_rooms[0].each do |room, cost|
+        free = true
+        array_of_rooms.each do |free_rooms|
+          free = free && (free_rooms[room] != nil)
+        end
+        if free == true
+          free_for_range[room] = cost
         end
       end
-      return nil
+      return free_for_range
     end
 
-    def find_by_block_id(block_id)
-      @all_blocks.each do |block|
-        if block.block_id == block_id
-          return block
-        end
-      end
-      return nil
+
+
+    #### Methods to find rooms in blocks ####
+    def find_rooms_in_block(block_id)
+      block = find_by_block_id(block_id)
+      block.room_numbers
     end
 
     def find_rooms_in_use_by_block_id(block_id)
@@ -233,27 +253,41 @@ module My_Hotel
       return rooms_in_use
     end
 
-    def find_rooms_in_block(block_id)
-      block = find_by_block_id(block_id)
-      block.room_numbers
+    ####Methods to find reservations####
+    def find_by_reservation_id(reservation_id)
+      @all_reservations.each do |reservation|
+        if reservation.reservation_id == reservation_id
+          return reservation
+        end
+      end
+      return nil
     end
 
-    #given a date returns all the reservations on that day.
-    #if there are no reservations on that day, returns an empty array
+    #can be used for "As an administrator, I can access the list of reservations for a specific date"
     def find_reservations_by_date(date)
       reservations_on_date = []
       @all_reservations.each do |reservation|
-        if reservation.nights_booked.nights.include?(date)
+        if reservation.nights_booked.include?(date)
           reservations_on_date << reservation
         end
       end
       return reservations_on_date
     end
 
+    ####Methods to find blocks ####
+    def find_by_block_id(block_id)
+      @all_blocks.each do |block|
+        if block.block_id == block_id
+          return block
+        end
+      end
+      return nil
+    end
+
     def find_blocks_by_date(date)
       blocks_on_date = []
       @all_blocks.each do |block|
-        if block.nights_held.nights.include?(date)
+        if block.nights_held.include?(date)
           blocks_on_date << block
         end
       end
@@ -261,6 +295,3 @@ module My_Hotel
     end
   end
 end
-
-
-#
