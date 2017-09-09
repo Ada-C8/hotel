@@ -26,23 +26,37 @@ describe "Hotel" do
     end
   end # Describe
 
-  describe "#create_reservation(assigned_room, check_in, check_out)" do
-    # TODO: Must write a regex to check input format from the user
-    xit "check_in and check_out must be inputted as a specific format" do
-    end
+  describe "#create_reservation" do
+    # FOR UI ONLY
+    # it "check_in and check_out must be inputted as a specific format" do
+    #   check_in = 'Not a check_in date'
+    #   check_out = 'Not a check_out date'
+    #   proc {@hotel.create_reservation(check_in, check_out)}.must_raise ArgumentError
+    # end
 
-    it "check_in must be before the check_out date" do
+    # it "check_in must be before the check_out date" do
+    #   check_in = '2001-02-03'
+    #   check_out = '2001-02-04'
+    #   @hotel.create_reservation(check_in, check_out)
+    # end
+
+    it "should raise an ArgumentError if there are no available rooms for the requested date" do
       check_in = '2001-02-03'
       check_out = '2001-02-04'
-      @hotel.create_reservation(check_in, check_out)
+      20.times do
+        @hotel.create_reservation(check_in, check_out)
+      end
+      proc {@hotel.create_reservation(check_in, check_out)}.must_raise ArgumentError
     end
 
     it "should add only one Reservation at a time to @reservations array" do
       check_in = '2001-02-03'
       check_out = '2001-02-04'
       @hotel.create_reservation(check_in, check_out)
-      @hotel.reservations.must_be_kind_of Array
-      @hotel.reservations.length.must_equal 1
+
+      all_reservations = @hotel.reservations
+      all_reservations.must_be_kind_of Array
+      all_reservations.length.must_equal 1
     end
 
     it "should return one instance of BookingSystem::Reservation" do
@@ -56,13 +70,13 @@ describe "Hotel" do
     it "should return all instances of BookingSystem::Reservations" do
       check_in = '2001-02-03'
       check_out = '2001-02-04'
-      100.times do
+      20.times do
         @hotel.create_reservation(check_in, check_out)
       end
       @hotel.reservations.each do |reservation|
         reservation.must_be_instance_of BookingSystem::Reservation
       end
-      @hotel.reservations.length.must_equal 100
+      @hotel.reservations.length.must_equal 20
     end
   end # Describe
 
@@ -108,12 +122,19 @@ describe "Hotel" do
         block.must_be_instance_of BookingSystem::Block
       end
     end
-    ####################### TODO: Raise exception here
-    xit "should raise an ArgumentError if number of requested room is greater than 5 and less than 1" do
+
+    it "should raise an ArgumentError if there are no available rooms" do
+      check_in = '2001-02-03'
+      check_out = '2001-02-04'
+      20.times do
+        @hotel.create_reservation(check_in, check_out)
+      end
+      proc {@hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)}.must_raise ArgumentError
     end
   end # Describe
 
   describe "#reserve_room_in_block" do
+    # IN UI TEST FOR ONLY NUMBER OF AVAILABLE ROOMS
     it "should return an instance of the requested block" do
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
       @hotel.reserve_room_in_block("Bob", 5)
@@ -151,8 +172,13 @@ describe "Hotel" do
 
       @hotel.avail_rooms_in_block?("Sue").must_equal [16,17,18,19,20]
     end
-    ################ TODO:
-    xit "should return all available rooms in the block after reserve_room_in_block method was ran" do
+
+    it "should return all available rooms and booked rooms in the block after reserve_room_in_block method was ran" do
+        @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
+        @hotel.reserve_room_in_block("Bob", 2)
+        @hotel.block_reservations[0].reserved_rooms.length.must_equal 2
+        @hotel.block_reservations[0].avail_block_rooms.length.must_equal 3
+        @hotel.block_reservations[0].reserve_block_cost
     end
 
   end
