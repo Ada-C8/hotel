@@ -145,13 +145,20 @@ describe 'Reservations' do
 
   describe 'make a new block' do
     before do
-      @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", [])
+      @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", 5)
+      #@new_block2 = @new_hotel.new_block("2018-02-02", "2018-02-05", 3)
     end
     it 'must be an instance of a block' do
       @new_block.must_be_instance_of Hotel::Block
     end
     it 'must add the block to the blocks collection' do
-      @blocks.must_include(@new_block)
+      @new_hotel.blocks_collection.must_include(@new_block)
+    end
+    it 'must have a collection of rooms' do
+      @new_block.block_rooms_collection.must_be_kind_of Array
+    end
+    it 'must have the correct number of rooms in the collection' do
+      @new_block.block_rooms_collection.length.must_equal 5
     end
   end
 end

@@ -6,13 +6,16 @@ require 'block'
 module Hotel
   class Reservations
     attr_reader :room_number
+    attr_accessor :blocks_collection
 
     def initialize
-      @all_reservations = []
+      @all_reservations = []  #pass block reservations into this.
       @room_number = room_number
       @rooms_collection = []
       all_rooms
-      @blocks = []
+      @blocks_collection = []  #put blocks created into this  #When making reservation on a block I need to check if it's part of the block from here.
+
+      #When making a general reservation i need to check all_reservations list AN bif it's in the blocks list to see if it's availble
     end
 
     def all_rooms
@@ -40,13 +43,13 @@ module Hotel
 
     def available(check_in, check_out, room_number)
       date_range = DateRange.new(check_in, check_out).dates
-        date_range[0...-1].each do |date|
-          list_reservations_by_date(date).each do |booking|
-            if booking.room_number == room_number
-              raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
-            end
+      date_range[0...-1].each do |date|
+        list_reservations_by_date(date).each do |booking|
+          if booking.room_number == room_number
+            raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
           end
         end
+      end
     end
 
     def list_rooms_available_by_date(date)
@@ -58,20 +61,48 @@ module Hotel
           end
         end
       end
+      #Also check blocks array too!
       return rooms_available
     end
 
-    def new_block(check_in, check_out, rooms_collection, discounted_room_rate = 180)
-      block = Hotel::Block.new(check_in, check_out, rooms_collection, discounted_room_rate = 180)
-      @blocks << block
+    def new_block(check_in, check_out, number_of_rooms, block_rooms_collection = [], discounted_room_rate = 180)
+      @number_of_rooms = number_of_rooms
+      @dates = DateRange.new(check_in, check_out).dates
+      create_block_rooms_collection
+      block_rooms_collection = @block_rooms_collection
+      block = Hotel::Block.new(check_in, check_out, @block_rooms_collection, discounted_room_rate = 180)
+      @blocks_collection << block
       return block
       #avail - check if rooms are availble
 
     end
 
-    def block_rooms #select rooms from available list
+    def create_block_rooms_collection
+      if @number_of_rooms > 5 || @number_of_rooms < 1
+        raise ArgumentError.new("Blocks can only have between 1 and 5 rooms.")
+      end
+      rooms_available = @rooms_collection
+      @dates.each do |date|
+        list_reservations_by_date(date).each do |booking|
+          rooms_available.each do |room|
+            if room.room_number == booking.room_number
+              rooms_available.delete(room)
+            end
+          end
+        end
+      end
+      @block_rooms_collection = []
 
+      @number_of_rooms.times do |i|
+        @block_rooms_collection << rooms_available[i]
+      end
+      return @block_rooms_collection
     end
+
+
+    # def block_rooms #select rooms from available list
+    #
+    # end
 
     def new_reservation_in_block(room)
 
@@ -103,14 +134,14 @@ module Hotel
 
 
     #THIS DIDN"T WORK#
-      # @dates[0...-1].each do |date|
-      #   list_reservations_by_date(date)
-      #   @list.each do |booking|
-      #     if booking.room_number == room_number
-      #       return false
-      #     end
-      #   end
-      # end
+    # @dates[0...-1].each do |date|
+    #   list_reservations_by_date(date)
+    #   @list.each do |booking|
+    #     if booking.room_number == room_number
+    #       return false
+    #     end
+    #   end
+    # end
 
     #end
 
@@ -140,6 +171,15 @@ module Hotel
         end
       end
       return @list
+    end
+
+    def list_blocks_by_date(date)
+      date = Date.parse(date)
+      @block_list = []
+      @blocks_collection.each do |block|
+        if date >= block.dates[0] && date < block.dates[-1]
+          @blocks_list << block
+        end
     end
 
     def clear_reservations #Using this for testing purposes
