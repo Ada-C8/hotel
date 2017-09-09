@@ -25,6 +25,7 @@ module My_Hotel
       end
     end
 
+    #enter discount as a decimal
     def set_cost(discount=1)
       number_of_nights = @nights_booked.nights.to_a.length
       cost_per_night = ROOMS[@room_number]
@@ -38,6 +39,5 @@ module My_Hotel
       end
       @reservation_id = new_reservation_id
     end
-
   end
 end

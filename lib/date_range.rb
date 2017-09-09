@@ -26,15 +26,3 @@ module My_Hotel
     end
   end
 end
-#
-#
-# arrive = Date.civil(2017, 12, 20)
-# leave = Date.civil(2017, 12, 23)
-# puts leave
-# puts leave.prev_day
-#
-# holiday = My_Hotel::Date_Range.new(arrive, leave)
-# puts holiday.nights.class
-# holiday.nights.each do |night|
-#   puts "x =1"
-# end

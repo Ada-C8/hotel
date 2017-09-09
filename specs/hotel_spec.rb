@@ -351,7 +351,6 @@ describe "My_Hotel::Hotel" do
 
   end
 
-
   describe "make_reservation_in_block" do
     it "can make a reservation" do
       new_block = @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
@@ -367,8 +366,8 @@ describe "My_Hotel::Hotel" do
       @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
       proc{@ritz.check_block_array([1, 2, 3, 4], @feb1, @feb5)}.must_raise ArgumentError
     end
-    it "raises an argument if the user attempts to make a block with more than 4 rooms" do
-      proc{@ritz.check_block_array([1, 2, 3, 4, 5], @feb1, @feb5)}.must_raise ArgumentError
+    it "raises an argument if the user attempts to make a block with more than 5 rooms" do
+      proc{@ritz.check_block_array([1, 2, 3, 4, 5, 6], @feb1, @feb5)}.must_raise ArgumentError
     end
 
     it "does not raise an argument if inputs are OK" do

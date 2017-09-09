@@ -21,8 +21,7 @@ module My_Hotel
     19 => 200,
     20 => 200
   }
-  class Hotel
-
+  class Hotel #keeps track of all the reservations and blocks.
     attr_reader :rooms, :all_reservations, :all_blocks
 
     def initialize
@@ -60,7 +59,7 @@ module My_Hotel
     end
 
     def check_block_array(array_of_rooms, first_night, last_night)
-      if array_of_rooms.length > 4
+      if array_of_rooms.length > 5
         raise ArgumentError.new "Only accepts blocks of 4 rooms or less, a block of #{array_of_rooms.length} was entered."
       end
       available = find_continious_open_room(first_night..last_night)
@@ -86,6 +85,17 @@ module My_Hotel
       return new_reservation
     end
 
+    def unique_block_id?(new_block)
+      if @all_blocks.length != 0
+        @all_blocks.each do |one_block|
+          if one_block.block_id == new_block.block_id
+            return false
+          end
+        end
+      end
+      return true
+    end
+
 #can be used for "As an administrator, I can check whether a given block has any rooms available"
     def rooms_available_in_block(block_id)
       rooms_in_block = find_rooms_in_block(block_id)
@@ -98,17 +108,6 @@ module My_Hotel
       free_rooms
     end
 
-    def unique_block_id?(new_block)
-      if @all_blocks.length != 0
-        @all_blocks.each do |one_block|
-          if one_block.block_id == new_block.block_id
-            return false
-          end
-        end
-      end
-      return true
-    end
-
     def unique_reservation_id?(new_reservation)
       if @all_reservations.length != 0
         @all_reservations.each do |one_reservation|
@@ -118,6 +117,28 @@ module My_Hotel
         end
       end
       return true
+    end
+
+
+    #Given a range of nights returns a hash with all
+    #the rooms => prices that are free on all nights.
+    #If no room is free on all nights, return an empty hash.
+    def find_continious_open_room(nights)
+      if nights.class == Date
+        nights = [nights]
+      end
+      array_of_rooms = open_rooms(nights)
+      free_for_range = {}
+      array_of_rooms[0].each do |room, cost|
+        free = true
+        array_of_rooms.each do |free_rooms|
+          free = free && (free_rooms[room] != nil)
+        end
+        if free == true
+          free_for_range[room] = cost
+        end
+      end
+      return free_for_range
     end
 
     # given a range of nights, it will return an array arrays of
@@ -178,27 +199,6 @@ module My_Hotel
         available_over_range << free_on_night
       end
       return available_over_range
-    end
-
-    #Given a range of nights returns a hash with all
-    #the rooms => prices that are free on all nights.
-    #If no room is free on all nights, return an empty hash.
-    def find_continious_open_room(nights)
-      if nights.class == Date
-        nights = [nights]
-      end
-      array_of_rooms = open_rooms(nights)
-      free_for_range = {}
-      array_of_rooms[0].each do |room, cost|
-        free = true
-        array_of_rooms.each do |free_rooms|
-          free = free && (free_rooms[room] != nil)
-        end
-        if free == true
-          free_for_range[room] = cost
-        end
-      end
-      return free_for_range
     end
 
     #given the reservation_id, returns the reservation if it exists, or nill if it does not
