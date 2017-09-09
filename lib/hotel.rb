@@ -37,16 +37,25 @@ module Hotel
       dates = DateRange.create_range(day_in, day_out) #should create an array
       found_reservations = Array.new
       dates.each do |date|
-        @reservations.reservation_list.each do |reservation|
-          if reservation.date_range.include?(Date.parse(date))
-            found_reservations << reservation
-          end #if statement
-        end #each reservation
+        found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.date_range.include?(Date.parse(date)) }
+        # @reservations.reservation_list.each do |reservation|
+        #   if reservation.date_range.include?(Date.parse(date))
+        #     found_reservations << reservation
+        #   end #if statement
+        # end #each reservation
       end #each date
-      found_reservations = found_reservations.uniq
-      return found_reservations
-    end #view_reservations
-
+      #found_reservations = found_reservations.uniq
+      return found_reservations.flatten.uniq
+    end #find_reservations
+    # def find_reservation(test_array)
+    #   letters = ["a", "b", "c"] #should create an array
+    #   found_reservations = Array.new
+    #   letters.each do |letter|
+    #     found_reservations << test_array.find_all { |reservation| reservation.include?(letter)}
+    #   end #each date
+    #   #found_reservations = found_reservations.flatten.uniq
+    #   return found_reservations.flatten.uniq
+    # end #view_reservations
     # # - As an administrator, I can get the total cost for a given reservation
     def total_cost(reservation_id)
       @reservations.reservation_list.each do |reservation|
@@ -92,6 +101,20 @@ end #module
 #if available, should instantiate a new instance of reservation using the reservation class
 #if not available, go to next room and check.
 #if you reach the end of the list, report that no reservation is possible during that time
+
+# def find_reservation(day_in, day_out)
+#   dates = DateRange.create_range(day_in, day_out) #should create an array
+#   found_reservations = Array.new
+#   dates.each do |date|
+#     @reservations.reservation_list.each do |reservation|
+#       if reservation.date_range.include?(Date.parse(date))
+#         found_reservations << reservation
+#       end #if statement
+#     end #each reservation
+#   end #each date
+#   found_reservations = found_reservations.uniq
+#   return found_reservations
+# end #view_reservations
 
 # def self.view_all_reservations
 #   @@reservations.each do |reservation|
