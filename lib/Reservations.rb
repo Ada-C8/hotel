@@ -11,8 +11,6 @@ module Hotel
       @room_number = room_number
       @rooms_collection = []
       all_rooms
-      #(1..20).to_a
-      #@rooms_collection = []
       # @blocks_arr = []
     end
 
@@ -34,8 +32,6 @@ module Hotel
 
     def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      #validate_room_number
-      #booking.assign_room_number
       available(check_in, check_out, room_number)
       @all_reservations << booking
       return booking
@@ -54,19 +50,7 @@ module Hotel
 
     def list_rooms_available_by_date(date)
       rooms_available = @rooms_collection
-
-
-      # list_reservations_by_date(date).each do |booking|
-      #   i = 0
-      #   rooms_available.length.times do
-      #     if booking.room_number == rooms_available[i].room_number
-      #       rooms_available.delete_at(i)
-      #     end
-      #     i += 1
-      #   end
-      # end
       list_reservations_by_date(date).each do |booking|
-          #room_number = booking.room_number
         rooms_available.each do |room|
           if room.room_number == booking.room_number
             rooms_available.delete(room)
