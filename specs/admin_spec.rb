@@ -115,7 +115,7 @@ describe "Admin" do
       not_available_rooms = [not_available1, not_available2]
       date1 = Date.new(2017, 10, 3)
       date2 = date1 = Date.new(2017, 10, 9)
-      
+
       available_rooms = @admin.available_rooms_in_date_range(date1, date2)
       available_rooms.must_be_instance_of Array
       available_rooms[rand(available_rooms.length)].must_be_instance_of Hotel::Room
@@ -133,5 +133,26 @@ describe "Admin" do
     end
 
   end
+
+  describe "create_block(date1, date2, room_numbers)" do
+    it "Can create a block reservation without reserving the rooms in it" do
+      date1 = Date.new(2017, 8, 10)
+      date2 = Date.new(2017, 8, 15)
+      room_numbers = [6, 7, 8]
+      created_block = @admin.create_block(date1, date2, room_numbers)
+      created_block.must_be_instance_of Hotel::BlockReservation
+      created_block.rooms.length.must_equal 3
+      created_block.rooms[rand(3)].available.must_equal true
+      created_block.rooms.each do |room|
+        room_numbers.include?(room.room_number).must_equal true
+      end
+    end
+  end
+
+  # describe "reserve_in_block(block_reservation, room_num)" do
+  #   it "Can create an instance of a BlockReservation" do
+  #
+  #   end
+  # end
 
 end

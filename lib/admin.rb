@@ -8,6 +8,7 @@ module Hotel
       # As an administrator, I can access the list of all of the rooms in the hotel
       @rooms = Hotel::Room.all # {ID : RoomObject}
       @reservations = [] # key: reservation, value: hash
+      @block_reservations = []
     end
 
     # As an administrator, I can reserve an available room for a given date range
@@ -80,6 +81,43 @@ module Hotel
       rooms_at_date_range = available_room_numbers_at_date_range.map{|room_number| find_room(room_number)}
       return rooms_at_date_range
     end
+
+    #takes check_in date, check_out date, and an Array of room numbers (Integers)
+    def create_block(check_in, check_out, room_numbers)
+      raise ArgumentError.new("Date objects were not passed into the method") if check_in.class != Date || check_out.class != Date
+      raise ArgumentError.new("Empty array passed in") if room_numbers.length <= 0
+      raise ArgumentError.new("Array of room numbers not passed into method") if room_numbers.class != Array && room_numbers[0].class != Integer
+
+      # Compare with block reservations to see if some overlap..
+      @block_reservations.each do |other_block_reservation|
+        other_block_reservation_room_numbers = other_block_reservation.rooms.map{|room| room.room_number}
+        if other_block_reservation.overlap?(check_in, check_out) && (other_block_reservation_room_numbers & room_numbers.length > 0)
+          raise ArgumentError.new("There's overlap with this block reservation and an existing reservation's date")
+        end
+      end
+
+      # Compare with single reservations if they overlap...
+      @reservations.each do |reservation|
+        if reservation.overlap?(check_in, check_out)
+        end
+      end
+
+      # Create a Hotel::BlockReservation.new
+      generated_rooms = room_numbers.map do |room_number|
+        find_room(room_number)
+      end
+      new_block = Hotel::BlockReservation.new(check_in, check_out, generated_rooms)
+      return new_block
+    end
+
+    # def reserve_in_block(block_reservation, room_num)
+    #   room = find_room(room_num)
+    #   if !block_reserve.rooms.include?(room)
+    #     raise ArgumentError.new("Room Number #{room_num} is not in the given block reservations")
+    #   end
+    #
+    #   #
+    # end
 
   end
 end
