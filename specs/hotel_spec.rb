@@ -9,11 +9,11 @@ describe "Hotel class" do
     end
 
     it "Can create an array of rooms" do
-      Hotel::Hotel.new(20, 200).list_of_rooms.length.must_equal 20
+      Hotel::Hotel.new(20, 200).rooms.length.must_equal 20
     end
 
     it "Can call the array of rooms" do
-      Hotel::Hotel.new(20,200).list_of_rooms.must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 19, 20]
+      Hotel::Hotel.new(20,200).rooms.must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18, 19, 20]
     end
 
     it "Can call on price of rooms" do
@@ -29,7 +29,6 @@ describe "Hotel class" do
     before do
       @bb_hotel = Hotel::Hotel.new(20, 200)
       @bb_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
-
     end
 
     it "can be instantiated" do
@@ -41,7 +40,6 @@ describe "Hotel class" do
       # res = @my_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
       @bb_hotel.reservation_made.room_num.must_equal 4
     end
-
   end
 
   describe "#list of reservations for a specific date" do
@@ -49,7 +47,6 @@ describe "Hotel class" do
       @bb_hotel = Hotel::Hotel.new(20, 200)
       @bb_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
       @bb_hotel.make_reservation('sept 7 2017', 'sept 9 2017', 3)
-
     end
 
     it "Returns an array of reservations for that date" do
@@ -57,4 +54,31 @@ describe "Hotel class" do
       @bb_hotel.date_list_of_reservations('sept 9 2017').length.must_equal 2
     end
   end
-end #describe
+
+  describe "#room availability" do
+    before do
+      @hotel = Hotel::Hotel.new(4, 200)
+      @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
+      @hotel.make_reservation('sept 5 2017', 'sept 7 2017', 1)
+      @hotel.make_reservation('sept 2 2017', 'sept 4 2017', 2)
+      @hotel.make_reservation('sept 6 2017', 'sept 8 2017', 2)
+      @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
+      @hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
+    end
+
+    it "Returns an array of available rooms" do
+      @hotel.room_availability('sept 1 2017', 'sept 4 2017').must_be_instance_of Array
+    end
+
+    it "Returns the room numbers available for a certain date range" do
+      @hotel.room_availability('sept 1 2017', 'sept 3 2017').must_equal [1 ,4]
+      @hotel.room_availability('sept 5 2017', 'sept 6 2017').must_equal [2,3,4]
+      @hotel.room_availability('sept 7 2017', 'sept 8 2017').must_equal [1,3,4]
+    end
+
+    it "Returns an ArgumentError if wrong date range entered" do
+      proc {@hotel.room_availability('sept 4 2017', 'sept 3 2017')}.must_raise ArgumentError
+    end
+  end
+
+  end #describe

@@ -12,6 +12,10 @@ module Hotel
       @reservation_array = []
 
       @date_range = DateRange.new(check_in, check_out)
+      @check_in = @date_range.check_in
+      @check_out = @date_range.check_out
+
+
       @reservation_array << @date_range
 
       @room_num = room_num
