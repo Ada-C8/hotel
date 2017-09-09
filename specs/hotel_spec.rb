@@ -5,6 +5,8 @@ describe "Hotel" do
 
   before do
     @rooms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    @check_in = '2001-02-03'
+    @check_out = '2001-02-04'
     @hotel = BookingSystem::Hotel.new
   end
 
@@ -28,31 +30,28 @@ describe "Hotel" do
 
   describe "#create_reservation" do
     # FOR UI ONLY
-    # it "check_in and check_out must be inputted as a specific format" do
+    # it "check_in and @check_out must be inputted as a specific format" do
     #   check_in = 'Not a check_in date'
-    #   check_out = 'Not a check_out date'
-    #   proc {@hotel.create_reservation(check_in, check_out)}.must_raise ArgumentError
+    #   @check_out = 'Not a @check_out date'
+    #   proc {@hotel.create_reservation(check_in, @check_out)}.must_raise ArgumentError
     # end
 
-    # it "check_in must be before the check_out date" do
-    #   check_in = '2001-02-03'
-    #   check_out = '2001-02-04'
-    #   @hotel.create_reservation(check_in, check_out)
+    # it "check_in must be before the @check_out date" do
+    #   @check_in
+    #   @@check_out
+    #   @hotel.create_reservation(check_in, @check_out)
     # end
 
     it "should raise an ArgumentError if there are no available rooms for the requested date" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
+
       20.times do
-        @hotel.create_reservation(check_in, check_out)
+        @hotel.create_reservation(@check_in, @check_out)
       end
-      proc {@hotel.create_reservation(check_in, check_out)}.must_raise ArgumentError
+      proc {@hotel.create_reservation(@check_in, @check_out)}.must_raise ArgumentError
     end
 
     it "should add only one Reservation at a time to @reservations array" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
-      @hotel.create_reservation(check_in, check_out)
+      @hotel.create_reservation(@check_in, @check_out)
 
       all_reservations = @hotel.reservations
       all_reservations.must_be_kind_of Array
@@ -60,18 +59,16 @@ describe "Hotel" do
     end
 
     it "should return one instance of BookingSystem::Reservation" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
-      @hotel.create_reservation(check_in, check_out)
-      @hotel.reservations[0].must_be_instance_of BookingSystem::Reservation
-      @hotel.reservations.length.must_equal 1
+      @hotel.create_reservation(@check_in, @check_out)
+      all_reservations = @hotel.reservations
+      all_reservations[0].must_be_instance_of BookingSystem::Reservation
+      all_reservations.length.must_equal 1
     end
 
     it "should return all instances of BookingSystem::Reservations" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
+
       20.times do
-        @hotel.create_reservation(check_in, check_out)
+        @hotel.create_reservation(@check_in, @check_out)
       end
       @hotel.reservations.each do |reservation|
         reservation.must_be_instance_of BookingSystem::Reservation
@@ -104,10 +101,9 @@ describe "Hotel" do
     end
 
     it "should return 1 instance of Block if other single reservations already exist" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
+
       3.times do
-        @hotel.create_reservation(check_in, check_out)
+        @hotel.create_reservation(@check_in, @check_out)
       end
       @hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
       all_blocks =[]
@@ -124,10 +120,9 @@ describe "Hotel" do
     end
 
     it "should raise an ArgumentError if there are no available rooms" do
-      check_in = '2001-02-03'
-      check_out = '2001-02-04'
+
       20.times do
-        @hotel.create_reservation(check_in, check_out)
+        @hotel.create_reservation(@check_in, @check_out)
       end
       proc {@hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)}.must_raise ArgumentError
     end
@@ -199,25 +194,21 @@ describe "Hotel" do
     it "should return room numbers available as an Array of Integers" do
       @hotel.create_reservation('2001-02-03', '2001-02-05')
       # @reservations array is full!
-      check_in = '2001-02-03'
-      check_out = '2001-02-05'
-      @hotel.check_avail_rooms_for(check_in, check_out).must_be_kind_of Array
-      @hotel.check_avail_rooms_for(check_in, check_out).each do |room|
+      @hotel.check_avail_rooms_for(@check_in, @check_out).must_be_kind_of Array
+      @hotel.check_avail_rooms_for(@check_in, @check_out).each do |room|
         room.must_be_kind_of Integer
         end
-      @hotel.check_avail_rooms_for(check_in, check_out).must_equal [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+      @hotel.check_avail_rooms_for(@check_in, @check_out).must_equal [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     end
 
     it "should return default room numbers if no rooms are booked for requested date range" do
       @hotel.create_reservation('2001-02-01', '2001-02-02')
       # @reservations array is full!
-      check_in = '2001-02-03'
-      check_out = '2001-02-05'
-      @hotel.check_avail_rooms_for(check_in, check_out).must_be_kind_of Array
-      @hotel.check_avail_rooms_for(check_in, check_out).each do |room|
+      @hotel.check_avail_rooms_for(@check_in, @check_out).must_be_kind_of Array
+      @hotel.check_avail_rooms_for(@check_in, @check_out).each do |room|
         room.must_be_kind_of Integer
         end
-      @hotel.check_avail_rooms_for(check_in, check_out).must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+      @hotel.check_avail_rooms_for(@check_in, @check_out).must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     end
 
     #TODO: Should return an argument error if no further rooms exist!!!!!
