@@ -54,6 +54,7 @@ describe "Hotel class" do
 
     it "Returns an array of reservations for that date" do
       @bb_hotel.date_list_of_reservations('sept 9 2017').must_be_instance_of Array
+      @bb_hotel.date_list_of_reservations('sept 9 2017').length.must_equal 2
     end
   end
 end #describe

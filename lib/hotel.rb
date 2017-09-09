@@ -5,7 +5,7 @@ module Hotel
 
   class Hotel
 
-    attr_reader :list_of_rooms, :price, :reservation_collection, :reservation_made, :date_list
+    attr_reader :list_of_rooms, :price, :reservation_collection, :reservation_made
 
     def initialize(num_of_rooms, price)
       @list_of_rooms = []
@@ -27,15 +27,15 @@ module Hotel
     end
 
     def date_list_of_reservations(date)
-      @date_list = []
+      date_list = []
       date = Date.parse(date)
       @reservation_collection.each do |entry|
         # binding.pry
         if entry.date_range.check_in <= date && entry.date_range.check_out >= date
-          @date_list << [entry.room_num, entry.date_range.check_in.to_s, entry.date_range.check_out.to_s]
+          date_list << [entry.room_num, entry.date_range.check_in.to_s, entry.date_range.check_out.to_s]
         end
       end
-      return @date_list
+      return date_list
     end #def
 
     # def list_of_rooms
