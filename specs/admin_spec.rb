@@ -147,6 +147,14 @@ describe "Admin" do
         room_numbers.include?(room.room_number).must_equal true
       end
     end
+
+    it "Shouldn't create a block if there's a block that overlaps" do
+      puts "TEST ISN'T DONE YET, GO BACK AND WRITE IT"
+    end
+
+    it "Shouldn't create a block if there's a single reservation that overlaps" do
+      puts "TEST ISN'T DONE YET, GO BACK AND WRITE IT"
+    end
   end
 
   # describe "reserve_in_block(block_reservation, room_num)" do
