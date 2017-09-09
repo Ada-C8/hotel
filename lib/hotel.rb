@@ -20,6 +20,8 @@ module Hotels
         else
           raise ArgumentError.new("Invalid dates.")
         end
+      else
+        raise ArgumentError.new("Invalid dates.")
       return date_array
       end
     end
