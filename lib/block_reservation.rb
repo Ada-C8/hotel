@@ -1,30 +1,38 @@
 require 'pry'
 module Hotel
-  class BlockReservation < Reservation
-    attr_reader :check_in, :check_out, :rooms, :rate
+  #TODO: Make overlap? a mixin and add it into block_reservation and reservation
+  class BlockReservation
+    attr_reader :check_in, :check_out, :reservations, :rate
     #initialize
     #initialize would now take in check_in, check_out, and an Array of Room objects
     def initialize(check_in, check_out, rooms)
       raise ArgumentError.new("There's only one room in the rooms parameter. Try creating a regular reservation instead") if rooms.length <= 1
+      raise ArgumentError.new("You can only have a maximum of 5 rooms in a block.") if rooms.length > 6
       @check_in = check_in
       @check_out = check_out
-      @rooms = rooms # assumes in each block there's always more than 1
-      @rate = (0.05 * rooms.length).round(2) # in decimal (10%, 15%, 20%, 25%)
+      @reservations = make_reservations(rooms)
+      # Rates: 2 rooms = 10% off, 3 = 15%, 4 = 20%, 5 = 25% (Max of 5 rooms per block)
+      @rate = (0.05 * rooms.length).round(2)
     end
-    #change_availability
 
-    #overlap?
+    def make_reservations(rooms)
+      block_reservations = []
+      rooms.each do |room|
+         block_reservations << Hotel::Reservation.new(check_in, check_out, room)
+      end
+      return block_reservations
+    end
 
     def total_cost
       cost = 0
-      @rooms.each do |room|
-        if room.available
-          cost += room.cost
+      @reservations.each do |reservation|
+        if reservation.room.available
+          cost += reservation.room.cost
         end
       end
       total_days = (check_out - check_in).to_i
       cost *= total_days
-      return (cost - (cost * rate)).to_i
+      return (cost - (cost * @rate)).to_i
     end
 
   end

@@ -141,10 +141,10 @@ describe "Admin" do
       room_numbers = [6, 7, 8]
       created_block = @admin.create_block(date1, date2, room_numbers)
       created_block.must_be_instance_of Hotel::BlockReservation
-      created_block.rooms.length.must_equal 3
-      created_block.rooms[rand(3)].available.must_equal true
-      created_block.rooms.each do |room|
-        room_numbers.include?(room.room_number).must_equal true
+      created_block.reservations.length.must_equal 3
+      created_block.reservations[rand(3)].room.available.must_equal true
+      created_block.reservations.each do |reservation|
+        room_numbers.include?(reservation.room.room_number).must_equal true
       end
     end
 
