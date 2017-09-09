@@ -11,7 +11,7 @@ module Hotel
 
       @check_in = check_in
       @check_out = check_out
-      @date_range_array = (check_in...check_out).to_a
+      @date_range_array = (check_in..check_out).to_a
     end
 
 
