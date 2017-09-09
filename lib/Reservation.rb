@@ -16,16 +16,6 @@ module HotelBooking
       @type= :standard
     end #end initialize
 
-
-    def self.all #returns array
-      all_reservations = []
-
-      return all_reservations
-
-    end
-
-    ###TODO: CHANGE IMPLEMENTATION OF ROOM COST BELOW
-
     def cost
       num_nights_charged * @rate
     end

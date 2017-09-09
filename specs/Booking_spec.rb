@@ -37,11 +37,13 @@ describe "Hotel" do
     end
   end #end find_res_by_date
 
-  describe "make reservation" do
+  describe "make_reservation" do
     it "reserves a Room and makes a Reservation object " do
       new_hotel =  HotelBooking::Hotel.new
+      check_in ="2018-03-14"
+      check_out="2018-03-16"
 
-      new_hotel.make_reservation("2018-03-14", "2018-03-16", 3)
+      new_hotel.make_reservation(check_in, check_out, 3)
 
       new_reservation = new_hotel.all_reservations[0]
 
@@ -50,7 +52,7 @@ describe "Hotel" do
       new_reservation.id.must_equal 1
 
       new_res_room = new_hotel.find_room_by_id(new_reservation.room_id)
-      (Date.parse("2018-03-14")...Date.parse("2018-03-16")).to_a.each do |date|
+      (Date.parse(check_in)...Date.parse(check_out)).each do |date|
         new_res_room.all_dates.must_include date
       end
 
@@ -59,17 +61,21 @@ describe "Hotel" do
     it "makes a BlockReservation object if given a block_id" do
       new_hotel =  HotelBooking::Hotel.new
       room_id = 3
-      non_exist_block_id = 2
-      block_id = 1
+      non_exist_block_id = "B2"
+
+      rooms_in_block = [1,3,5]
 
       check_in = "2018-11-10"
       check_out = "2018-11-12"
 
-      proc {new_hotel.make_reservation(check_in, check_out, room_id, block_id)}.must_raise ArgumentError
+      proc {new_hotel.make_reservation(check_in, check_out, room_id, non_exist_block_id)}.must_raise ArgumentError
 
-      new_hotel.make_block(check_in,check_out,[1,3,5],10)
+      new_hotel.make_block(check_in,check_out,rooms_in_block,10)
 
       new_hotel.all_blocks.count.must_equal 1
+
+      new_block = new_hotel.all_blocks[0]
+      block_id = new_block.id
 
       proc {new_hotel.make_reservation(check_in,check_out,room_id,non_exist_block_id)}.must_raise ArgumentError
 
@@ -77,15 +83,18 @@ describe "Hotel" do
 
       new_hotel.make_reservation(check_in,check_out,room_id,block_id)
 
+      new_block_reservation = new_hotel.all_reservations[-1]
+      new_block_reservation.block_id.must_equal "B1"
+      # binding.pry
+    end
 
-
-
+    it "allows another guest to check-in to a room on the same day another guest checks out" do
 
     end
 
   end
 
-  describe "make block" do
+  describe "make_block" do
     it "creates a Block and reserves a room" do
       #note, need to fix: it shouldn't reserve room officially, but should be "Blocked off" test for this when the functionality is made
 
@@ -97,7 +106,7 @@ describe "Hotel" do
 
 
       new_block.must_be_instance_of HotelBooking::Block
-      new_block.id.must_equal 1
+      new_block.id.must_equal "B1"
 
       new_block.room_ids.each do |room_id|
         room = new_hotel.find_room_by_id(room_id)
@@ -105,7 +114,33 @@ describe "Hotel" do
           room.all_dates.must_include date #fix this logic later
         end
       end
+    end
 
+    it "does not allow you to create a Block if the room is reserved for any of the dates within the range you've proposed" do
+      new_hotel =  HotelBooking::Hotel.new
+
+      check_in= "2018-04-03"
+      check_out = "2018-04-17"
+      room_id = 5
+      new_hotel.make_reservation(check_in,check_out,room_id)
+
+      room = new_hotel.find_room_by_id(room_id)
+
+      (Date.parse(check_in)...Date.parse(check_out)).to_a.each do |date|
+        room.all_dates.must_include date
+      end
+
+      block_start= "2018-04-01"
+
+      proc{new_hotel.make_block(block_start,check_in,[1,5],10)}.must_raise ArgumentError
+
+      block_start2 = "2018-04-05"
+      block_end = "2018-04-08"
+
+      proc{new_hotel.make_block(block_start2,block_end,[1,5],10)}.must_raise ArgumentError
+
+      block_end2 = "2018-05-01"
+      new_hotel.make_block(check_out,block_end2,[1,5],10)
 
     end
   end
@@ -165,19 +200,21 @@ describe "Hotel" do
 
 
 
-  describe "self.find_block_by_id" do
+  describe "find_block_by_id" do
     it "can find the first and last block" do
       new_hotel = HotelBooking::Hotel.new
       # binding.pry
       # new_hotel.find_block_by_id(1).must_equal false
 
+      # binding.pry
+
       new_hotel.make_block("2018-06-13", "2018-06-15", [3,4,5], 15)
 
       first_block = new_hotel.all_blocks[0]
       first_block.must_be_instance_of HotelBooking::Block
-      first_block.id.must_equal 1
+      first_block.id.must_equal "B1"
 
-      found_block = new_hotel.find_block_by_id(1)
+      found_block = new_hotel.find_block_by_id("B1")
 
       found_block.must_equal first_block
 
@@ -215,9 +252,11 @@ describe "Hotel" do
 
       first_room.must_be_instance_of HotelBooking::Room
       first_room.id.must_equal 1
+      first_room.must_equal new_hotel.all_rooms[0]
 
       last_room.must_be_instance_of HotelBooking::Room
       last_room.id.must_equal 20
+      last_room.must_equal new_hotel.all_rooms[-1]
     end
   end
 end

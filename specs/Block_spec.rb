@@ -16,6 +16,8 @@ describe "HotelBooking::Block class " do
         room.must_be_instance_of Integer
       end
 
+      new_block.id.must_equal block_id
+
     end
   end
 end

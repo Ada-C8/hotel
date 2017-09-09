@@ -10,6 +10,15 @@ require_relative 'Block'
 
 ## THINK THROUGH: Does a Room create a Reservation based on availability vs. does a Reservation, once created, reserve a room?
 
+###Should check for valid inputs in Hotel, instead of checking everywhere?
+
+
+##### if designating reservations by type, maybe a subclass of BlockReservations is not needed unless the behaviors are very different
+#### same with room types
+
+
+###TODO: BlockReservations Have Ids that are strings. Consider: should Reservations Also have IDs that are Strings
+
 module HotelBooking
   # NUMBER_OF_ROOMS = 20  ### might not want to use constant, especially if we have subclasses of rooms (by type), and each room subclass might have a different number. may best be a constant defined by class/subclass
 
@@ -48,12 +57,19 @@ module HotelBooking
 
       raise ArgumentError.new("Number of rooms in a block must be 5 or under") if room_ids.count > 5
 
-      block_id = @all_blocks.count + 1
+      available_rooms_ids = available_rooms(check_in,check_out).map {|room| room.id}
 
+      room_ids.each do |room_id|
+        raise ArgumentError.new("The room you've selected for this block is not available for this time period.") if !(available_rooms_ids.include?(room_id))
+      end
+
+      block_id = "B" + "#{@all_blocks.count + 1}"
       block = HotelBooking::Block.new(check_in,check_out,room_ids,discounted_rate,block_id)
+
       block.room_ids.each do |room_id|
         room = find_room_by_id(room_id)
         room.block_room(check_in,check_out,block_id)
+        room.blocks_available << block_id
       end
 
       @all_blocks << block
@@ -68,6 +84,8 @@ module HotelBooking
 
       if block_id
         #TODO: think about whether or not to have a separate block reservation id logic and whether or not to store block reservations in the same place as all reservations AND store them separately, or store them in one place (either all reservations or Block reservations)
+
+        #TODO: IMPLEMTN THIS block_reservation_id = "B" + "#{reservation_id}", if decided to convert all reservation IDs to strings
 
         all_block_ids = @all_blocks.map {|block| block.id}
         raise ArgumentError.new("This block doesn't exist") if !(all_block_ids.include?(block_id))
@@ -96,7 +114,10 @@ module HotelBooking
       room = find_room_by_id(room_id)
       room.reserve_room(check_in,check_out,reservation.id, guest_id) if reservation.type == :standard
 
-      room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil) if reservation.type == :block
+      if reservation.type == :block
+        room.reserve_block_room(check_in,check_out,reservation.id, block_id, guest_id=nil)
+        room.blocks_available.delete(block_id)
+      end
 
       @all_reservations << reservation
 

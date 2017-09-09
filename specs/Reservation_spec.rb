@@ -27,18 +27,6 @@ describe "HotelBooking::Reservation class" do
 
   end #end initialize tests
 
-  describe "self.all" do
-    it "initializes with zero reservations" do
-      new_hotel_reservations = HotelBooking::Reservation.all
-
-      new_hotel_reservations.must_be_instance_of Array
-      new_hotel_reservations.count.must_equal 0
-    end
-
-
-  end #end self.all
-
-
   describe "Cost" do
     it "Returns an integer value that is the total cost of the reservation" do
       reservation = HotelBooking::Reservation.new("2018-02-14", "2018-02-16",5,1)

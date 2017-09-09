@@ -8,7 +8,7 @@ module HotelBooking
     attr_accessor :id, :guest, :check_in, :check_out, :room, :block_id
     attr_reader :all_reservations, :type
 
-    def initialize(check_in,check_out,room_id, b_res_id, block_discount,guest = nil)
+    def initialize(check_in,check_out,room_id, b_res_id, block_discount, guest = nil)
       super(check_in,check_out,room_id, b_res_id,block_discount, guest = nil)
       #how do I incorporate a block id?
       @rate = block_discount
@@ -22,4 +22,4 @@ module HotelBooking
   end
 end
 
-#can I additional parameter block_id, and still use super to inherit from Reservation
+#can I have additional parameter block_id, and still use super to inherit from Reservation

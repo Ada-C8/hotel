@@ -7,7 +7,7 @@ require_relative 'Booking'
 module HotelBooking
 
   class Room
-    attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates, :block_id_and_dates
+    attr_reader :id, :nightly_rate, :type, :reserv_id_and_dates, :all_dates, :block_id_and_dates, :blocks_available
     # :status
 
     @@total_num_rooms = 20
@@ -20,6 +20,7 @@ module HotelBooking
        # holds all reservations, a hash with reservation ids as keys and values as the date range of the reservation ### check-out date should not be included
       @block_id_and_res_dates = {}
       @all_dates = []
+      @blocks_available = [] #block ids that have not been claimed
 
       # @status =  :available #not sure if status is needed anymore.maybe a method, available?
 
@@ -63,9 +64,13 @@ module HotelBooking
 
       check_valid_dates(check_in,check_out)
 
+      raise ArgumentError.new("This room is not available for this block reservation") if !(@blocks_available.include?(block_id))
+
       (check_in...check_out).each do |date|
         raise ArgumentError.new("this room has already been reserved for these dates in this block") if @block_id_and_res_dates[block_id].include?(date)
       end
+
+      #blocks_available.delete(block_id)
 
       (check_in...check_out).each do |date|
         @block_id_and_res_dates[block_id]<< date
@@ -118,7 +123,7 @@ module HotelBooking
       check_in = Date.parse(check_in_str)
       check_out = Date.parse(check_out_str)
 
-      (check_in...check_out).each do |date|
+      (check_in..check_out).each do |date| ### double check this logic, inclusive rather than exclusive
         return false if @all_dates.include?(date)
       end
 

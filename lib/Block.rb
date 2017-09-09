@@ -17,7 +17,6 @@ module HotelBooking
       # end
 
       @id = block_id
-      @all_block_reservations = []
     end
 
   end
