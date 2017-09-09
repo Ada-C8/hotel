@@ -6,7 +6,7 @@ module Hotel
   end
 
   class Booking
-    attr_reader :check_in, :check_out, :room_number, :total_cost
+    attr_accessor :check_in, :check_out, :room_number, :total_cost, :dates
     def initialize(check_in, check_out, room_number = rand(1..20), room_rate = 200) #total_cost = 200)
       @room_number = room_number
       @check_in = Date.parse(check_in)

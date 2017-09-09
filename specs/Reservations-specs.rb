@@ -145,8 +145,12 @@ describe 'Reservations' do
 
   describe 'make a new block' do
     before do
+      @new_hotel.clear_reservations
       @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", 5)
       #@new_block2 = @new_hotel.new_block("2018-02-02", "2018-02-05", 3)
+    end
+    after do
+      @new_hotel.clear_reservations
     end
     it 'must be an instance of a block' do
       @new_block.must_be_instance_of Hotel::Block

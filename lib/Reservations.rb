@@ -36,20 +36,43 @@ module Hotel
 
     def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      available(check_in, check_out, room_number)
+      available
       @all_reservations << booking
       return booking
     end
 
-    def available(check_in, check_out, room_number)
-      date_range = DateRange.new(check_in, check_out).dates
-      date_range[0...-1].each do |date|
-        list_reservations_by_date(date).each do |booking|
-          if booking.room_number == room_number
+    #OLDER AVAILABLE METHOD -- works but does not include check for rooms in blocks
+    # def available(check_in, check_out, room_number)
+    #   date_range = DateRange.new(check_in, check_out).dates
+    #   date_range[0...-1].each do |date|
+    #     list_reservations_by_date(date).each do |booking|
+    #       if booking.room_number == room_number
+    #         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
+    #       end
+    #     end
+    #   end
+    # end
+
+    #New one does not work --
+    def available
+      @dates[0...-1].each do |date|
+        list_rooms_available_by_date(date).each do |room|
+          if room.room_number != room_number
             raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
+            return false
+          else return true
           end
         end
+        # list_blocked_rooms_by_date(date).each do |blocked_room|
+        #       if blocked_room.room_number == room_number
+        #         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
+        #         return false
+        #       end
+        #     end
+        #   end
       end
+      # end
+      # return true
     end
 
     def list_rooms_available_by_date(date)
@@ -171,18 +194,20 @@ module Hotel
       return @list
     end
 
-    def list_blocks_by_date(date)
+    def list_blocked_rooms_by_date(date)
       date = Date.parse(date)
       @block_list = []
       @blocks_collection.each do |block|
         if date >= block.dates[0] && date < block.dates[-1]
-          @blocks_list << block
+          block.each do |room|
+            @blocks_list << room
+          end
         end
       end
     end
 
     def clear_reservations #Using this for testing purposes
-        @all_reservations = []
+      @all_reservations = []
     end
 
   end
