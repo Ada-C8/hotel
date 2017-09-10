@@ -13,9 +13,7 @@ module BookingSystem
       existing_reservations.each do |reservation|
         if @check_in >= reservation.check_in && @check_in < reservation.check_out
           if reservation.class == BookingSystem::Block
-            reservation.avail_block_rooms.each do |block_room_num|
-              booked_rooms << block_room_num
-            end
+            reservation.avail_block_rooms.map { |block_room_num| booked_rooms << block_room_num }
           else
             booked_rooms << reservation.room_num
           end

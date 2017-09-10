@@ -21,6 +21,19 @@ module BookingSystem
         @all_reservations << reservation
       end
     end
+
+    def find_reservation(name)
+      found_reservation = nil
+      @all_reservations.each do |reservation|
+        if reservation.class == BookingSystem::Reservation
+          if reservation.name == name
+            found_reservation = reservation
+            return reservation
+          end
+        end
+      end
+      raise ArgumentError.new("No reservation was found") if found_reservation == nil
+    end
     # I can create a block of rooms
     def reserve_block(reserved_for, check_in, check_out, num_of_rooms)
       available_rooms = check_avail_rooms_for(check_in, check_out)
@@ -78,6 +91,8 @@ module BookingSystem
       existing_booked_rooms.empty? ? @rooms : @rooms - existing_booked_rooms
     end
 
+    private
+
     def rooms_available?(available_rooms)
       if available_rooms.empty?
         raise ArgumentError.new("No room available for your requested dates. Please choose another date") # Raise to UI
@@ -85,8 +100,6 @@ module BookingSystem
         return true
       end
     end # def
-
-    private
 
     def check_num_of_rooms(found_block, num_to_book)
       if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1

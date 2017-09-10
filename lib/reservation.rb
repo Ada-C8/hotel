@@ -13,11 +13,9 @@ module BookingSystem
       @total_cost = (dates.check_out - dates.check_in).to_i * COST
     end
 
-    def update_cost
-      @total_cost = (@check_out - @check_in).to_i * COST
-    end
-
-    # self.calculate_cost
+    # def update_cost
+    #   @total_cost = (@check_out - @check_in).to_i * COST
+    # end
 
   end # Reservation
 end # BookingSystem
