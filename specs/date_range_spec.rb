@@ -6,6 +6,7 @@ describe "DateRange" do
     check_in = '2001-02-05'
     check_out = '2001-02-10'
     @range = BookingSystem::DateRange.new(check_in, check_out)
+    @hotel = BookingSystem::Hotel.new
   end
 
   describe "#initialize" do
@@ -20,9 +21,10 @@ describe "DateRange" do
     end
   end # Describe
 
-  # describe "#overlap" do
-  #   it "should return an Array of Integers" do
-  #
+  # describe "#overlap?" do
+  #   it "should return an Array of Integers for all booked roomms for the requested dates" do
+  #     @hotel.create_reservation(check_in, check_out)
+  #     @hotel.create_reservation(check_in, check_out)
   #   end
   # end
 

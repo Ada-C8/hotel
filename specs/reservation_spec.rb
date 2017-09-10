@@ -25,17 +25,17 @@ describe "Reservation" do
 
       @reservation.must_respond_to :total_cost
       @reservation.total_cost.must_be_kind_of Integer
-      @reservation.total_cost.must_equal 0
+      @reservation.total_cost.must_equal 1000
     end
   end # Describe
 
-  describe "#calculate_cost" do
+  describe "#update_cost" do
     it "should return an integer" do
-      @reservation.calculate_cost.must_be_kind_of Integer
+      @reservation.update_cost.must_be_kind_of Integer
     end
 
     it "should return the cost of the Reservation, not including the check_out day" do
-      @reservation.calculate_cost.must_equal 1000
+      @reservation.update_cost.must_equal 1000
     end
   end # Describe
 

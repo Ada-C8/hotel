@@ -10,18 +10,17 @@ module BookingSystem
 
     def overlap?(existing_reservations)
       booked_rooms = []
-        existing_reservations.each do |reservation|
-          if @check_in >= reservation.check_in && @check_in < reservation.check_out
-            if reservation.class == BookingSystem::Block
-              reservation.avail_block_rooms.each do |block_room_num|
-                booked_rooms << block_room_num
-              end
-            else
-              booked_rooms << reservation.room_num
+      existing_reservations.each do |reservation|
+        if @check_in >= reservation.check_in && @check_in < reservation.check_out
+          if reservation.class == BookingSystem::Block
+            reservation.avail_block_rooms.each do |block_room_num|
+              booked_rooms << block_room_num
             end
-            # raise "This room is currently booked for your requested dates"
+          else
+            booked_rooms << reservation.room_num
           end
         end
+      end
       return booked_rooms
     end
 

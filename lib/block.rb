@@ -16,7 +16,6 @@ module BookingSystem
 
     def reserve_block_cost
       @block_total = ((@check_out - @check_in) * DISCOUNT_RATE * @reserved_rooms.length).to_i
-      return @block_total
     end
 
     def update_block_rooms(remaining_rooms, now_reserved_in_block)
