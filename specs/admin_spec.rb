@@ -135,32 +135,48 @@ describe "Admin" do
   end
 
   describe "create_block(date1, date2, room_numbers)" do
-    it "Can create a block reservation without reserving the rooms in it" do
+    before do
       date1 = Date.new(2017, 8, 10)
       date2 = Date.new(2017, 8, 15)
-      room_numbers = [6, 7, 8]
-      created_block = @admin.create_block(date1, date2, room_numbers)
-      created_block.must_be_instance_of Hotel::BlockReservation
-      created_block.reservations.length.must_equal 3
-      created_block.reservations[rand(3)].room.available.must_equal true
-      created_block.reservations.each do |reservation|
-        room_numbers.include?(reservation.room.room_number).must_equal true
+      @room_numbers = [6, 7, 8]
+      @blocked_reservation_1 = @admin.create_block(date1, date2, @room_numbers)
+    end
+
+    it "Can create a block reservation without reserving the rooms in it" do
+      @blocked_reservation_1.must_be_instance_of Hotel::BlockReservation
+      @blocked_reservation_1.reservations.length.must_equal 3
+      @blocked_reservation_1.reservations[rand(3)].room.available.must_equal true
+      @blocked_reservation_1.reservations.each do |reservation|
+        @room_numbers.include?(reservation.room.room_number).must_equal true
       end
     end
 
     it "Shouldn't create a block if there's a block that overlaps" do
-      puts "TEST ISN'T DONE YET, GO BACK AND WRITE IT"
+      #within check_in and check_out range and room number overlaps w/ existing block
+      date1 = Date.new(2017, 8, 11)
+      date2 = Date.new(2017, 8, 14)
+      room_numbers2 = [6, 7]
+      # binding.pry
+      proc { @admin.create_block(date1, date2, room_numbers2) }.must_raise ArgumentError
     end
 
-    it "Shouldn't create a block if there's a single reservation that overlaps" do
-      puts "TEST ISN'T DONE YET, GO BACK AND WRITE IT"
+    it "Shouldn't create a block if there's a reservation that overlaps" do
+      proc{ @admin.reserve(Date.new(2017, 8, 9), Date.new(2017, 8, 11), 6) }.must_raise ArgumentError
+    end
+
+    it "Can create multiple block reservations at the same date range but different rooms" do
+      date1 = Date.new(2017, 8, 10)
+      date2 = Date.new(2017, 8, 15)
+      room_numbers2 = [4, 5]
+      @admin.create_block(date1, date2, room_numbers2)
+      @admin.block_reservations.length.must_equal 2
     end
   end
 
-  # describe "reserve_in_block(block_reservation, room_num)" do
-  #   it "Can create an instance of a BlockReservation" do
-  #
-  #   end
-  # end
+  describe "avaialble_in_block(block_reservation, room_num)" do
+    it "Can create an instance of a BlockReservation" do
+      puts "WORK ON THIS TEST, NOT DONE"
+    end
+  end
 
 end

@@ -35,6 +35,10 @@ module Hotel
       return (cost - (cost * @rate)).to_i
     end
 
+    def rooms_available_in_block
+      
+    end
+
     # TODO: REFACTOR, this is redundant w/ Reservation class
     # (check_in >= reservation.check_in || check_out < reservation.check_out) && room_num == reservation.room.room_number
     def overlap?(other_check_in, other_check_out)

@@ -2,7 +2,7 @@ require 'pry'
 module Hotel
   class Admin
     #Wave 1
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :block_reservations
 
     def initialize
       # As an administrator, I can access the list of all of the rooms in the hotel
@@ -19,6 +19,15 @@ module Hotel
       end
       raise ArgumentError.new("Passed in invalid dates.") if check_out <= check_in
       raise ArgumentError.new("Room number passed is invalid.") if room_num > NUM_OF_ROOMS || room_num < 0
+
+      #TODO: REDUNDANT WITH BOTTOM FUNCTION
+      @block_reservations.each do |other_block_reservation|
+        # binding.pry
+        other_block_reservation_room_numbers = other_block_reservation.reservations.map{|reservation| reservation.room.room_number}
+        if other_block_reservation.overlap?(check_in, check_out) && other_block_reservation_room_numbers.include?(room_num) # the last conditional means if Array1 & Array2 have elements in common
+          raise ArgumentError.new("There's overlap with this block reservation and an existing block reservation's date")
+        end
+      end
 
       #Check all reservations if it can be made
       @reservations.each do |reservation|
@@ -90,15 +99,18 @@ module Hotel
 
       # Compare with block reservations to see if some overlap..
       @block_reservations.each do |other_block_reservation|
-        other_block_reservation_room_numbers = other_block_reservation.rooms.map{|room| room.room_number}
-        if other_block_reservation.overlap?(check_in, check_out) && (other_block_reservation_room_numbers & room_numbers.length > 0)
-          raise ArgumentError.new("There's overlap with this block reservation and an existing reservation's date")
+        # binding.pry
+        other_block_reservation_room_numbers = other_block_reservation.reservations.map{|reservation| reservation.room.room_number}
+        if other_block_reservation.overlap?(check_in, check_out) && ((other_block_reservation_room_numbers & room_numbers).length > 0) # the last conditional means if Array1 & Array2 have elements in common
+          raise ArgumentError.new("There's overlap with this block reservation and an existing block reservation's date")
         end
       end
 
       # Compare with single reservations if they overlap...
       @reservations.each do |reservation|
-        if reservation.overlap?(check_in, check_out)
+        binding.pry
+        if reservation.overlap?(check_in, check_out) && room_numbers.include?(reservation.room.room_number)
+          raise ArgumentError.new("There's overlap with this block reservation and an existing reservation's date")
         end
       end
 
@@ -107,6 +119,7 @@ module Hotel
         find_room(room_number)
       end
       new_block = Hotel::BlockReservation.new(check_in, check_out, generated_rooms)
+      @block_reservations << new_block
       return new_block
     end
 
