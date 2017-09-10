@@ -86,12 +86,41 @@ describe 'Block' do
     end
   end
 
-  xdescribe 'get_discount_rate' do
+  describe 'get_discount_rate' do
     it 'converts percentage number into equivalent Float' do
       @block.get_discount_rate(80).must_equal 0.2
       @block.get_discount_rate(75).must_equal 0.25
       @block.get_discount_rate(10).must_equal 0.9
       @block.get_discount_rate(12.5).must_equal 0.875r
+    end
+
+    it 'can convert 0 or 100' do
+      @block.get_discount_rate(0).must_equal 1
+      @block.get_discount_rate(100).must_equal 0
+    end
+
+    it 'raises DiscountError if given discount that is not 0-100' do
+      proc {
+        @block.get_discount_rate(125)
+      }.must_raise DiscountError
+
+      proc {
+        @block.get_discount_rate(-25)
+      }.must_raise DiscountError
+    end
+
+    it 'raises ArgumentError if given discount that is not a number' do
+      proc {
+        @block.get_discount_rate('hello')
+      }.must_raise ArgumentError
+
+      proc {
+        @block.get_discount_rate(true)
+      }.must_raise ArgumentError
+
+      proc {
+        @block.get_discount_rate(nil)
+      }.must_raise ArgumentError
     end
   end
 end
