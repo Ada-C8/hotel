@@ -22,7 +22,7 @@ module Hotel
       raise ArgumentError.new( "There are not avaliable rooms for that date range")
     end
 
-    def reservations_per_day(date)#hacer esto
+    def reservations_per_day(date)
       list_per_day = []
       @list_reservations.each do |reservation|
         if reservation.days_range.include?(date)
