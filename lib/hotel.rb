@@ -87,12 +87,23 @@ module Hotel
       end
     end
 
+    def reserve_block
+      @all_rooms.each do |id, room|
+        room.reservations.each_index do |resId|
+          if room.reservations[resId].class == Hotel::Block && room.reservations[resId].status == :available
+            room.reservations[resId].status = :occupied
+          end
+        end
+      end
+    end
+
   end #end of California
 end #end of Hotel
 
-new = Hotel::California.new
-new.all_rooms[1].create_reservation("2017-04-03", "2017-04-08")
-new.all_rooms[2].create_reservation("2017-04-03", "2017-04-09")
-new.all_rooms[3].create_reservation("2017-04-06", "2017-04-09")
-new.all_rooms[4].create_reservation("2017-04-06", "2017-04-09")
-p new.create_block("2017-04-03", "2017-04-10", 5)
+# new = Hotel::California.new
+# new.all_rooms[1].create_reservation("2017-04-03", "2017-04-08")
+# new.all_rooms[2].create_reservation("2017-04-03", "2017-04-09")
+# new.all_rooms[3].create_reservation("2017-04-06", "2017-04-09")
+# new.all_rooms[4].create_reservation("2017-04-06", "2017-04-09")
+# new.create_block("2017-04-03", "2017-04-10", 5)
+# p new.reserve_block
