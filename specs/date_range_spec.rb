@@ -7,12 +7,6 @@ describe 'DateRange' do
   end
 
   describe 'self.range_to' do
-    it 'raises DatesError if start date is after end date' do
-      proc {
-        DateRange.range_to(@after, @before)
-      }.must_raise DatesError
-    end
-
     it 'returns an array of Dates' do
       dates = DateRange.range_to(@before, @after)
 
@@ -29,30 +23,23 @@ describe 'DateRange' do
       dates.first.strftime.must_equal '2017-10-01'
       dates.last.strftime.must_equal '2017-10-13'
     end
-  end
 
-  xdescribe 'self.range_with' do
-    it 'raises ArgumentError if start date is after end date' do
+    it 'raises DatesError if start date is after end date' do
       proc {
-        DateRange.range_with(@after, @before)
+        DateRange.range_to(@after, @before)
       }.must_raise DatesError
     end
 
-    it 'returns an array of Dates' do
-      dates = DateRange.range_with(@before, @after)
-
-      dates.must_be_kind_of Array
-
-      dates.each do |date|
-        date.must_be_kind_of Date
-      end
+    it 'raises DatesError if dates do not span at least 1 night' do
+      proc {
+        DateRange.range_to(@before, @before)
+      }.must_raise DatesError
     end
 
-    it 'includes all dates up to AND including the end date' do
-      dates = DateRange.range_with(@before, @after)
-
-      dates.first.strftime.must_equal '2017-10-01'
-      dates.last.strftime.must_equal '2017-10-14'
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        DateRange.range_to('sea', 'HAWKS')
+      }.must_raise ArgumentError
     end
   end
 
@@ -76,9 +63,35 @@ describe 'DateRange' do
       overlap = DateRange.overlap?('2017-09-06', '2017-09-10', '2017-09-10', '2017-09-20')
       overlap.must_equal false
     end
+
+    it 'raises DatesError if either start date is after end date' do
+      proc {
+        DateRange.overlap?(@after, @before, @before, @after)
+      }.must_raise DatesError
+
+      proc {
+        DateRange.overlap?(@before, @after, @after, @before)
+      }.must_raise DatesError
+    end
+
+    it 'raises DatesError if either dates do not span at least 1 night' do
+      proc {
+        DateRange.overlap?(@before, @before, @before, @after)
+      }.must_raise DatesError
+
+      proc {
+        DateRange.overlap?(@before, @after, @before, @before)
+      }.must_raise DatesError
+    end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        DateRange.overlap?(@before, @after, 'before', 'after')
+      }.must_raise ArgumentError
+    end
   end
 
-  describe '#include_all?' do
+  describe 'self.include_all?' do
     it 'returns true if all searched dates fall within container range' do
       include_all = DateRange.include_all?('2017-10-10', '2017-10-14', @before, @after)
 
@@ -95,6 +108,32 @@ describe 'DateRange' do
       include_all = DateRange.include_all?('2017-10-10', '2017-11-14', @before, @after)
 
       include_all.must_equal false
+    end
+
+    it 'raises DatesError if either start date is after end date' do
+      proc {
+        DateRange.include_all?(@after, @before, @before, @after)
+      }.must_raise DatesError
+
+      proc {
+        DateRange.include_all?(@before, @after, @after, @before)
+      }.must_raise DatesError
+    end
+
+    it 'raises DatesError if either dates do not span at least 1 night' do
+      proc {
+        DateRange.include_all?(@before, @before, @before, @after)
+      }.must_raise DatesError
+
+      proc {
+        DateRange.include_all?(@before, @after, @before, @before)
+      }.must_raise DatesError
+    end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        DateRange.include_all?(@before, @after, 'before', 'after')
+      }.must_raise ArgumentError
     end
   end
 
@@ -114,5 +153,9 @@ describe 'DateRange' do
         DateRange.validate(2017_10_14)
       }.must_raise ArgumentError
     end
+  end
+
+  describe 'self.validate_order' do
+
   end
 end
