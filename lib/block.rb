@@ -14,6 +14,8 @@ module Hotels
    def make_reservation
      if @reservations < @block_of_rooms.length
         @reservations += 1
+      else
+        raise ArgumentError.new("All rooms are booked.")
      end
    end
 

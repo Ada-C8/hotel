@@ -36,6 +36,14 @@ describe "Wave 3: Blocks" do
       reserved_room = new_block.make_reservation
       new_block.reservations.must_equal 1
 
+      reserved_room2 = new_block.make_reservation
+      reserved_room3 = new_block.make_reservation
+      reserved_room4 = new_block.make_reservation
+      reserved_room5 = new_block.make_reservation
+
+      new_block.reservations.must_equal 5
+      proc {new_block.make_reservation}.must_raise ArgumentError
+
     end
 
     describe "list_unbooked_rooms" do
