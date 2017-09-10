@@ -41,8 +41,7 @@ module Hotel
     end
 
     def reserve_from_block(block_name, room_number, name)
-      block_index = blocks.find_index { |block| block.name == block_name.downcase }
-      block = blocks[block_index]
+      block = blocks[block_index_by_name(block_name)]
 
       reserv = Block.new({ name: name, checkin: block.checkin.strftime('%m-%d-%Y'), checkout: block.checkout.strftime('%m-%d-%Y'), rooms: room_number, discount: block.discount })
 
@@ -63,7 +62,7 @@ module Hotel
     end
 
     def block_rooms_avail(block_name)
-
+      blocks[block_index_by_name(block_name)].room.collect { |room| room.number }
     end
 
     def rooms_available(checkin_date, checkout_date)
@@ -93,6 +92,10 @@ module Hotel
       end
 
       rooms
+    end
+
+    def block_index_by_name(block_name)
+      blocks.find_index { |block| block.name == block_name.downcase }
     end
   end
 end

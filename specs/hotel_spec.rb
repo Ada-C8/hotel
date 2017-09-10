@@ -10,6 +10,7 @@ describe "Hotel" do
 
   describe "initialize" do
     it "creates a Hotel instance" do
+      hotel.must_be_instance_of Hotel::Hotel
       hotel.must_respond_to :rooms
     end
 
@@ -126,6 +127,18 @@ describe "Hotel" do
       hotel.reservations.length.must_equal 0
       hotel.reserve_from_block("hernandez", 3, "puente")
       hotel.reservations.length.must_equal 1
+    end
+  end
+
+  describe "block_rooms_avail" do
+    let(:hernandez) { hotel.new_block("hernandez", "10-01-2017", "10-04-2017", 4, "10") }
+
+    it "finds a block given the name it was reserved under" do
+      hernandez
+      hotel.block_rooms_avail("hernandez").must_equal [1, 2, 3, 4]
+
+      hotel.reserve_from_block("hernandez", 3, "puente")
+      hotel.block_rooms_avail("hernandez").must_equal [1, 2, 4]
     end
   end
 end
