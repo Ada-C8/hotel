@@ -263,7 +263,25 @@ describe "The Hotel class" do
 
   end #end describe
 
-  describe " " do
+  describe "assign a room within a block of rooms - assign_block_reservation method" do
+
+    it "returns a reservation object" do
+    @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 5, 175)
+    @myhotel.assign_block_reservation("John Smith").must_be_instance_of Hotel_Chain::Reservation
+    end
+
+    it "returns a reservation object with the status changed to assigned" do
+    @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+    @myhotel.find_unassigned_block_reservations("Mary Smith")[0].status.must_equal "unassigned"
+    @myhotel.assign_block_reservation("Mary Smith")
+    marysmith = @myhotel.blocks_array[0]
+    #only reservation at the 0 position has been assigned
+    marysmith.reservations_array[0].status.must_equal "assigned"
+      x = 1
+      3.times do
+        marysmith.reservations_array[x].status.must_equal "unassigned"
+      end
+    end
 
   end
 

@@ -199,9 +199,10 @@ module Hotel_Chain
 
     end
 
-    def assign_block_reservation
-
-
+    def assign_block_reservation(party_name)
+      unassigned_reservations = find_unassigned_block_reservations(party_name)
+      unassigned_reservations[0].status = "assigned"
+      return unassigned_reservations[0]
     end
 
     def find_block_reservations_by_partyname
