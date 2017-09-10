@@ -59,7 +59,7 @@ module Hotel
     # reserves available room for a given date range.
     def reserve_by_date(check_in, check_out)
       room_num = self.list_vacancies(check_in, check_out).sample
-      Hotel::Reservation.new(room_num, check_in, check_out)
+      Hotel::Reservation.new(room_num, check_in, check_out, discount_percent: 0.0)
     end
   end # end class
 end # end module

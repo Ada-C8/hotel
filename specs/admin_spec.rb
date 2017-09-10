@@ -152,6 +152,8 @@ Name
 
 Block.new([rooms], [dates], discount)
 
+[]
+
 Block
 Discount (float)
 Reservations (array)

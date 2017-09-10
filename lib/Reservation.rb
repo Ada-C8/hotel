@@ -4,22 +4,26 @@ require_relative 'daterange'
 
 module Hotel
   class Reservation
-    COST_PER_NIGHT = 200
+    COST_PER_NIGHT = 200.00
 
-    attr_reader :reservation_array, :total_cost, :room_num, :date_range_array
+    attr_reader :room_num, :date_range_array, :discount_percent
 
-    def initialize(room_num, check_in, check_out)
+    def initialize(room_num, check_in, check_out, discount_percent: 0.0)
 
       # @reservation_array = []
-      @total_cost = 0
+      # @total_cost = 0
       @room_num = room_num
       @date_range_array = DateRange.new(check_in, check_out).date_range_array
+      @discount_percent = discount_percent
     end
 
 
 
     def total_cost
-      (@date_range_array.length - 1) * COST_PER_NIGHT
+      full_price = (@date_range_array.length - 1) * COST_PER_NIGHT
+      discount = full_price * discount_percent
+      return total_cost = full_price - discount
+
     end
 
 
