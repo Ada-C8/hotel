@@ -2,9 +2,8 @@ module Hotel
   class Room
     attr_reader :number, :status
 
-    def initialize(number, status= :available)
+    def initialize(number)
       @number = number
-      @status = status
     end
   end
 end

@@ -2,13 +2,14 @@ require 'date'
 
 module Hotel
   class Reservation
-    attr_reader :checkin, :checkout, :room
+    attr_reader :name, :checkin, :checkout, :room
 
-    def initialize(checkin_date, checkout_date, room_number)
-      if valid_dates?(Date.strptime(checkin_date, '%m-%d-%Y'), Date.strptime(checkout_date, '%m-%d-%Y'))
-        @checkin = Date.strptime(checkin_date, '%m-%d-%Y')
-        @checkout = Date.strptime(checkout_date, '%m-%d-%Y')
-        @room = room_number
+    def initialize(args)
+      if valid_dates?(Date.strptime(args[:checkin], '%m-%d-%Y'), Date.strptime(args[:checkout], '%m-%d-%Y'))
+        @name = args[:name]
+        @checkin = Date.strptime(args[:checkin], '%m-%d-%Y')
+        @checkout = Date.strptime(args[:checkout], '%m-%d-%Y')
+        @room = args[:room]
       end
     end
 

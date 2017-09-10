@@ -10,9 +10,5 @@ describe "Room" do
       room1.number.must_equal 1
       room2.number.must_equal 20
     end
-
-    it "new rooms have a default status :available" do
-      room3.status.must_equal :available
-    end
   end
 end

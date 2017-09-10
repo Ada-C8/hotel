@@ -4,9 +4,9 @@ require 'date'
 
 describe "Hotel" do
   let(:hotel) { Hotel::Hotel.new }
-  let(:smith) { hotel.new_reservation("10-01-2017", "10-04-2017", 2) }
-  let(:garcia) { hotel.new_reservation("10-02-2017", "10-06-2017", 4) }
-  let(:jones) { hotel.new_reservation("10-02-2017", "10-04-2017", 5) }
+  let(:smith) { hotel.new_reservation("smith", "10-01-2017", "10-04-2017", 2) }
+  let(:garcia) { hotel.new_reservation("garcia", "10-02-2017", "10-06-2017", 4) }
+  let(:jones) { hotel.new_reservation("jones", "10-02-2017", "10-04-2017", 5) }
 
   describe "initialize" do
     it "creates a Hotel instance" do
@@ -39,12 +39,12 @@ describe "Hotel" do
     end
 
     it "raises an ArgumentError when a room is not available for a given range" do
-      proc { hotel.new_reservation("10-02-2017", "10-04-2017", 5) }.must_raise ArgumentError
+      proc { hotel.new_reservation("blanco", "10-02-2017", "10-04-2017", 5) }.must_raise ArgumentError
     end
 
     it "allows reservation starting on checkout date" do
       before = hotel.reservations.length
-      hotel.new_reservation("10-04-2017", "10-07-2017", 5)
+      hotel.new_reservation("blanco", "10-04-2017", "10-07-2017", 5)
 
       hotel.reservations.length.must_equal (before + 1)
     end
@@ -77,19 +77,21 @@ describe "Hotel" do
   end
 
   describe "new_block" do
-    it "can create a block of rooms, with date range, discount rate, and room numbers" do
-      block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
+    let(:block) { hotel.new_block("hernandez", "10-01-2017", "10-04-2017", 4, "10") }
+
+    it "can create a block of rooms, with date range, discount rate, and number of rooms" do
+      block
+
       hotel.blocks.length.must_equal 1
       hotel.blocks[0].room.must_be_instance_of Array
       hotel.blocks[0].must_respond_to :discount
     end
 
-    it "only accepts rooms that are available" do
+    it "only blocks rooms that are available" do
       smith
       garcia
       jones
-
-      block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
+      block
 
       hotel.blocks[0].room.wont_include 2
       hotel.blocks[0].room.wont_include 4
@@ -97,25 +99,33 @@ describe "Hotel" do
     end
 
     it "prevents its rooms from showing as available" do
-      block = hotel.new_block("10-01-2017", "10-04-2017", 4, "10")
-
+      block
       open_rooms = hotel.rooms_available("10-01-2017", "10-05-2017")
 
-      open_rooms.length.must_equal 16   
+      open_rooms.length.must_equal 16
     end
 
     it "contains a maximum of 5 rooms" do
-      proc { hotel.new_block("10-01-2017", "10-04-2017", 10, "10") }.must_raise ArgumentError
+      proc { hotel.new_block("lopez", "10-01-2017", "10-04-2017", 10, "10") }.must_raise ArgumentError
     end
   end
 
-  xdescribe "reserve_from_block" do
-    it "reserves a room from a block" do
+  describe "reserve_from_block" do
+    let(:hernandez) { hotel.new_block("hernandez", "10-01-2017", "10-04-2017", 4, "10") }
 
+    it "removes a room from a block" do
+      hernandez
+      hotel.blocks[0].room.length.must_equal 4
+
+      hotel.reserve_from_block("hernandez", 3, "fish")
+      hotel.blocks[0].room.length.must_equal 3
     end
 
-    it "will have the same reservation dates as the block" do
-
+    it "adds a blocked room to reservations" do
+      hernandez
+      hotel.reservations.length.must_equal 0
+      hotel.reserve_from_block("hernandez", 3, "puente")
+      hotel.reservations.length.must_equal 1
     end
   end
 end

@@ -15,9 +15,9 @@ module Hotel
       @blocks = []
     end
 
-    def new_reservation(checkin_date, checkout_date, room_number)
+    def new_reservation(name, checkin_date, checkout_date, room_number)
       if rooms_available(checkin_date, checkout_date).any? { |room| room.number == room_number }
-        reservation = Reservation.new(checkin_date, checkout_date, room_number)
+        reservation = Reservation.new({ name: name, checkin: checkin_date, checkout: checkout_date, room: room_number })
 
         reservations << reservation
       else
@@ -25,7 +25,7 @@ module Hotel
       end
     end
 
-    def new_block(checkin_date, checkout_date, num_of_rooms, discount)
+    def new_block(name, checkin_date, checkout_date, num_of_rooms, discount)
       case
       when num_of_rooms > 5
         raise ArgumentError.new("Maximum number of rooms for a block is 5")
@@ -34,10 +34,20 @@ module Hotel
       else
         block_rooms = rooms_available(checkin_date, checkout_date).first(num_of_rooms)
 
-        block = Block.new(checkin_date, checkout_date, block_rooms, discount)
+        block = Block.new({ name: name, checkin: checkin_date, checkout: checkout_date, room: block_rooms, discount: discount })
 
         blocks << block
       end
+    end
+
+    def reserve_from_block(block_name, room_number, name)
+      block_index = blocks.find_index { |block| block.name == block_name.downcase }
+      block = blocks[block_index]
+
+      reserv = Block.new({ name: name, checkin: block.checkin.strftime('%m-%d-%Y'), checkout: block.checkout.strftime('%m-%d-%Y'), rooms: room_number, discount: block.discount })
+
+      reservations << reserv
+      block.room.delete_if { |room| room.number == room_number }
     end
 
     def reservations_on(date)
@@ -50,6 +60,10 @@ module Hotel
       check_date = Date.strptime(date, '%m-%d-%Y')
 
       blocks.select { |block| check_date >= block.checkin && check_date < block.checkout }
+    end
+
+    def block_rooms_avail(block_name)
+
     end
 
     def rooms_available(checkin_date, checkout_date)
