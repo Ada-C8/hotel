@@ -22,9 +22,6 @@ module Hotel
 
       @cost = cost
       @reservation_array << @cost
-
-
-
     end #initialize
 
     def total_cost
@@ -33,9 +30,4 @@ module Hotel
     end
 
   end #reservation
-
-
 end #module
-
-# hotel = Hotel::Reservation.new('sept 9 2016', 'sept 9 2017', 18)
-# puts hotel.date_range.check_out

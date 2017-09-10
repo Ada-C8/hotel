@@ -1,10 +1,11 @@
 require_relative 'reservation'
+require_relative 'block'
 
 module Hotel
 
   class Hotel
 
-    attr_reader :rooms, :price, :reservation_collection, :reservation_made
+    attr_reader :rooms, :price, :reservation_collection, :block_reservation_collection, :reservation_made
 
     def initialize(num_of_rooms, price)
       @rooms = []
@@ -16,6 +17,7 @@ module Hotel
 
       @price = price
       @reservation_collection = []
+      @block_reservation_collection = []
     end #initialize
 
     def make_reservation(check_in, check_out, room_num)
@@ -29,6 +31,18 @@ module Hotel
       # @reservation_collection << @reservation_made
     end
 
+
+    def make_block_reservation(check_in, check_out, num_of_rooms)
+      if room_availability(check_in, check_out).length >= num_of_rooms
+        puts "we can create a block reservation"
+        @block_reservation = Block.new(check_in, check_out, num_of_rooms, client, discount, client, cost)
+      else
+        puts "appears we can't block rooms for you at this point"
+      end
+    end
+
+
+
     def date_list_of_reservations(date)
       date_list = []
       date = Date.parse(date)
@@ -41,12 +55,6 @@ module Hotel
       return date_list
     end #def
 
-    # def list_of_rooms
-    #   @rooms.each do |room|
-    #     puts "Room #{room}"
-    #   end
-    # end #list_of_rooms
-    # not needed for this more abstract hotel class
 
     def room_availability(check_in, check_out)
       #can be string with dates
@@ -75,8 +83,25 @@ module Hotel
           rooms_available.delete(entry.room_num)
         end
       end
+
+      @block_reservation_collection.each do |entry|
+        if check_in < entry.check_in && check_in < entry.check_out && check_out < entry.check_out && check_out > entry.check_in
+          rooms_available.delete(entry.room_num)
+        elsif check_in > entry.check_in && check_in < entry.check_out && check_out < entry.check_out && check_out > entry.check_in
+          rooms_available.delete(entry.room_num)
+        elsif check_in > entry.check_in && check_in < entry.check_out && check_out == entry.check_out && check_out > entry.check_in
+          rooms_available.delete(entry.room_num)
+        elsif check_in < entry.check_in && check_in < entry.check_out && check_out > entry.check_in && check_out == entry.check_out
+          rooms_available.delete(entry.room_num)
+        elsif check_in > entry.check_in && check_in < entry.check_out && check_out > entry.check_out
+          rooms_available.delete(entry.room_num)
+        elsif check_in == entry.check_in && check_in < entry.check_out && check_out > entry.check_in && check_out > entry.check_in
+          rooms_available.delete(entry.room_num)
+        end
+      end
       return rooms_available
     end #room_availability
+
   end #class
 end #module
 
