@@ -22,6 +22,7 @@ describe "hotel class" do
     it "Should have found_reservations array" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.found_reservations.must_be_instance_of Array
+
     end
 
     it "Should be able to add a room" do
@@ -192,26 +193,51 @@ describe "hotel class" do
   end
 
   describe "create_block" do
+
     it "Should respond to create_block" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.must_respond_to :create_block
     end
 
     it "Should be able add a new block" do
+      date = Date.today
       new_hotel = HotelManagment::Hotel.new
-      new_hotel.create_block(5).length.must_equal 1
+      new_hotel.add_20_rooms
+      new_hotel.create_block(date + 1, date + 3, 5).length.must_equal 1
+    end
+
+    it "Should be able to add a block and consider existing reservations" do
+
+      date = Date.today
+      new_hotel = HotelManagment::Hotel.new
+
+      new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
+      new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 2)
+      new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 3)
+      new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 4)
+      new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 5)
+      new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 6)
+
+      new_hotel.create_block(date + 1, date + 3, 5).length.must_equal 1
+
     end
 
     it "Should be able to access a list of all blocks" do
+      date = Date.today
       new_hotel = HotelManagment::Hotel.new
-      new_hotel.create_block(5)
+      new_hotel.add_20_rooms
+
+      new_hotel.create_block(date + 1, date + 3, 5)
       new_hotel.blocks[0].amount_of_rooms.must_equal 5
     end
+
+    it "should raise error if block room amount is greater than 5" do
+
+    end
+
+    it "Should only create block if valid number of rooms is available for date range" do
+
+    end
+
   end
 end
-
-
-
-# new_hotel = HotelManagment::Hotel.new
-# new_hotel.add_20_rooms
-# new_hotel.rooms[0].room_number.must_equal 1

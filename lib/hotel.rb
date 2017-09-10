@@ -50,6 +50,9 @@ module HotelManagment
 
     # returns an array or rooms not reserved for a given date range
     def rooms_not_reserved(check_in_date, check_out_date)
+      # guard clause: if the reservations array is empty, return a rooms array of room numbers. If no reservations, all rooms can be reserved for a block.
+      return @rooms.map { |room| room.room_number } if @reservations.empty?
+
       @reservations.each { |reservation|
         unless reservation.check_in_date >= check_in_date && reservation.check_out_date <= check_out_date
           # used local variable for unreserved_rooms
@@ -58,7 +61,6 @@ module HotelManagment
       }
       return unreserved_rooms
     end
-
 
 
     # reserves the first available room for a given date range. Uses the rooms_not reserved method.
@@ -77,9 +79,17 @@ module HotelManagment
       end
     end
 
-    def create_block(amount_of_rooms)
-      block = HotelManagment::Block.new(amount_of_rooms)
-      @blocks << block
+
+    def create_block(check_in_date, check_out_date, amount_of_rooms)
+      available_rooms = rooms_not_reserved(check_in_date, check_out_date)
+
+      if available_rooms.length >= amount_of_rooms && amount_of_rooms <= 5
+        block = HotelManagment::Block.new(check_in_date, check_out_date, amount_of_rooms)
+        @blocks << block
+      else
+        # raise error
+      end
+      return @blocks
     end
 
   end #class end
