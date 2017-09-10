@@ -35,10 +35,10 @@ module Hotel
 
     def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       dates = Hotel::DateRange.new(check_in, check_out).dates
+      booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
       unless check_availability?(dates, room_number) == true
         raise ArgumentError.new("Room number #{room_number} unavailable for those dates.")
       end
-      booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
       #available(check_in, check_out, room_number)
       @all_reservations << booking
       return booking
@@ -57,6 +57,8 @@ module Hotel
       # return true
     #end
 #Tested for Booking only and seems to work
+
+#USING THIS one:
     def list_rooms_available_by_date(date)
       rooms_available = @rooms_collection
       list_reservations_by_date(date).each do |booking|
@@ -66,9 +68,6 @@ module Hotel
           end #if end
         end #rooms avail end
       end #list do end
-      # unless block_booking == true
-      #   return rooms_available
-      # end #unless end
       list_blocked_rooms_by_date(date).each do |block|
         rooms_available.each do |room|
           if room.room_number == block.room_number
@@ -83,13 +82,15 @@ module Hotel
     def check_availability?(dates, room_number)
       available = true
       dates[0...-1].each do |date|
-        while available == true
+        unless available == false
+          room_number_array = []
           list_rooms_available_by_date(date).each do |room|
-            if room.room_number == room_number
-              available = true
-            else
-              available = false
-            end
+            room_number_array << room.room_number
+          end
+          if room_number_array.include?(room_number)
+            available = true
+          else
+            available = false
           end
         end
         return available
