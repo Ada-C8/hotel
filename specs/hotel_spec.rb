@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe Hotels::Hotel do
   before do
-    @conrad = Hotels::Hotel.new
+    @conrad = Hotels::Hotel.new("Conrad")
     @checkin = Date.new(2017, 10, 31)
     @checkout = Date.new(2017, 11, 4)
   end # ------------------------- before block
@@ -184,6 +184,24 @@ describe Hotels::Hotel do
       assert_equal (reservation.total_cost * 0.5), block.total_cost
     end
   end # ------------------------- describe #book_block block
+
+  describe '#check_block(_block_id)' do
+    it 'Returns true if there are rooms remaining' do
+      @conrad.book_block(5, @checkin, @checkout)
+      check = @conrad.check_block(@conrad.blocks[0].block_id)
+      assert_equal true, check
+      @conrad.reserve_block(@conrad.blocks[0].block_id, 3)
+      check = @conrad.check_block(@conrad.blocks[0].block_id)
+      assert_equal true, check
+    end
+    it 'Raises an ArgumentError if there are no rooms remaining' do
+      @conrad.book_block(5, @checkin, @checkout)
+      @conrad.reserve_block(@conrad.blocks[0].block_id, 5)
+      proc {
+        @conrad.reserve_block(@conrad.blocks[0].block_id, 5)
+      }.must_raise ArgumentError
+    end
+  end # ------------------------- describe #check_block block
 
   describe '#reserve_block(block_id, room_count)' do
     it 'Creates a new Reservation' do

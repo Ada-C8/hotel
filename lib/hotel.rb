@@ -9,7 +9,8 @@ module Hotels
   class Hotel
     attr_reader :rooms, :reservations, :blocks
 
-    def initialize
+    def initialize(name)
+      @name = name
       @rooms = Array.new(20) { |i| Hotels::Room.new(i + 1) }
       @reservations = []
       @blocks = []
@@ -119,6 +120,7 @@ module Hotels
       booked_ids = booked_ids(block_id, room_count).to_a.flatten
       condition = (rooms.length - booked_ids.length >= room_count)
       raise ArgumentError, 'Not enough unreserved block rooms' unless condition
+      return true
     end
 
     def reserve_block(block_id, room_count)
@@ -149,14 +151,19 @@ module Hotels
 
     def valid_room_count?(block_room_count)
       raise ArgumentError unless (1..5).cover? block_room_count
+      return true
     end # Gives error when block room count is not within range
 
     def check_block(_block_id)
       reference_block = @blocks.select(&:block_id)
+      # rooms = reference_block[0].rooms
       booked_from_block = @reservations.select(&:block_id)
+      # booked = booked_from_block.select(&:rooms).flatten
       condition = (reference_block[0].rooms.length != booked_from_block.length)
       raise ArgumentError, 'All the rooms have been reserved' unless condition
-    end # returns T/F if a given blocks has rooms that haven't been reserved
+      return true
+      # return (rooms.length - booked.length)
+    end # returns number of available rooms or raises error
 
     def booked_ids(block_id, _room_count)
       check_block(block_id)
