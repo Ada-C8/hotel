@@ -20,10 +20,6 @@ describe "Reservation class" do
     price = 200
     @test_ob = BookingSystem::Reservation.new(room, check_in, check_out, price)
   end
-  #
-  # it "Has a ROOM_PRICE constant that is assigned to the integer 200" do
-  #   BookingSystem::Reservation::DEFAULT_ROOM_PRICE.must_equal 200
-  # end
 
   describe "initialize method" do
     it "Can be instantiated" do
@@ -39,20 +35,6 @@ describe "Reservation class" do
       @test_ob.room.must_be_instance_of Integer
     end
 
-    # it "Has an instance variable @price that is set to default ROOM_PRICE" do
-    #   room_price = 200
-    #   @test_ob.price.must_equal room_price
-    # end
-
-    # it "price parameter can accept other values for the price attribute" do
-    #   room = 2
-    #   check_in = Date.new(2017,9,9)
-    #   check_out = Date.new(2017,9,12)
-    #   price = 100
-    #   @test_ob_2 = BookingSystem::Reservation.new(room, check_in, check_out, price)
-    #
-    #   @test_ob_2.price.must_equal 100
-    # end
     it "Has an instance variable @price that is an Integer" do
       @test_ob.price.must_be_instance_of Integer
     end
