@@ -20,12 +20,9 @@ module Hotel
     end
 
     # - I can reserve an available room for a given date range
-    def make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0)
-      available = open_rooms(day_in, day_out)
-      if available.length >= 1
-        first_open = available[0]
-        #if is_available?(id, day_in, day_out)
-        #puts first_open
+    def make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
+      if open_rooms(day_in, day_out).length >= 1
+        first_open = open_rooms(day_in, day_out)[0]
         @reservations.add(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: first_open)
       else
         return "No Available Rooms for this date range"
@@ -34,7 +31,7 @@ module Hotel
 
     #I can access the list of reservations for a specific date
     def find_reservation(day_in, day_out)
-      dates = DateRange.create_range(day_in, day_out) #should create an array
+      dates = DateRange.create_range(day_in, day_out)
       found_reservations = Array.new
       dates.each do |date|
         found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
@@ -55,30 +52,40 @@ module Hotel
 
     #I can view a list of rooms that are not reserved for a given date range
     def open_rooms(day_in, day_out)
-      list = find_reservation(day_in, day_out)
+      #list = find_reservation(day_in, day_out)
       occupied_rooms = Array.new
-      list.each do |reservation|
+      find_reservation(day_in, day_out).each do |reservation|
         occupied_rooms << reservation.room
       end
       open_rooms = (@all_rooms.keys - occupied_rooms)
       return open_rooms
     end
 
+    # def open_rooms(day_in, day_out)
+    #   list = find_reservation(day_in, day_out)
+    #   occupied_rooms = Array.new
+    #   list.each do |reservation|
+    #     occupied_rooms << reservation.room
+    #   end
+    #   open_rooms = (@all_rooms.keys - occupied_rooms)
+    #   return open_rooms
+    # end
+
     #I can reserve an available room for a given date range
-    def is_available?(id, number_of_rooms, day_in, day_out)
-      if open_rooms(day_in, day_out) <= number_of_rooms
-        #first_available =
-        return true
-      else
-        return false
-      end  #if/else
-    end# is_available
+    # def is_available?(id, number_of_rooms, day_in, day_out)
+    #   if open_rooms(day_in, day_out) <= number_of_rooms
+    #     #first_available =
+    #     return true
+    #   else
+    #     return false
+    #   end  #if/else
+    # end# is_available
 
     #As an administrator, I can create a block of rooms
     def create_block(block_id, number_of_rooms, day_in, day_out, discounted_rate)
       available = open_rooms(day_in, day_out)
       if available.length >= number_of_rooms
-      #if open_rooms(day_in, day_out) >= number_of_rooms
+        #if open_rooms(day_in, day_out) >= number_of_rooms
         available.take(number_of_rooms).each do |room|
           make_reservation(block_id, room, day_in, day_out, discount: discounted_rate)
         end#each
