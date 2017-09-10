@@ -7,16 +7,19 @@ module Hotel
       @rooms_set = rooms_set
     end
 
-    def totalcost
+    def totalcost_oneroom
       @price_per_night * @days_range.stay_length
     end
 
     def reserve
       if @rooms_set.length > 0
         @rooms_set.delete_at(0)
+        return @rooms_set
+      else
+        raise ArgumentError.new("There is not more rooms avaliables in the given block")
       end
-      return @rooms_set
     end
+    
 
   end #class
 end #module
