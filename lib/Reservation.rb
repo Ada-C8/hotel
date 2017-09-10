@@ -18,26 +18,10 @@ module Hotel
 
 
 
-    # def reservation_id
-    #   Hotel::Admin.reservations.length + 1
-    # end
-
-    
-
     def total_cost
       (@date_range_array.length - 1) * COST_PER_NIGHT
     end
 
-    # def self.find_all(check_in, check_out)
-    #
-    #   # take array of reservations
-    #   # interate over each to find the reservations for reserved status by date
-    #   @reservation_array.each do |reservation|
-    #     list_reservations =
-    #   end
-    #   return list_reservations
-    # end
-    #
 
 
   end # end class

@@ -87,6 +87,7 @@ describe "Admin Class" do
     it "list test" do
       date = Date.new(2017, 2, 4)
       date.must_be_instance_of Date
+
       @admin.list_reservations(date).must_be_instance_of Array
       @admin.list_reservations(date).first.must_be_instance_of Hotel::Reservation
       @admin.list_reservations(date).last.must_be_instance_of Hotel::Reservation
@@ -103,12 +104,33 @@ describe "Admin Class" do
 
   it "list_vacancies" do
     check_in = Date.new(2017, 2, 4)
+    check_in.must_be_instance_of Date
+
     check_out = Date.new(2017, 2, 5)
-    # x = Hotel::DateRange.new(check_in, check_out)
-    @admin.list_vacancies(check_in, check_out)
+    check_in.must_be_instance_of Date
 
+    @admin.list_vacancies(check_in, check_out).must_be_instance_of Array
+    @admin.list_vacancies(check_in, check_out)[0].must_be_kind_of Integer
+    @admin.list_vacancies(check_in, check_out)[-1].must_be_kind_of Integer
 
-    @admin.list_of_rooms
+    # edge cases
+    @admin.list_vacancies(check_in, check_out).wont_be_instance_of Hotel::Reservation
+    @admin.list_vacancies(check_in, check_out).wont_be_kind_of Integer
+    @admin.list_vacancies(check_in, check_out).wont_be_kind_of String
+  end
+
+  describe "reserve available room by date range" do
+    it "validates input" do
+      check_in = Date.new(2017, 2, 4)
+      check_in.must_be_instance_of Date
+
+      check_out = Date.new(2017, 2, 5)
+      check_in.must_be_instance_of Date
+
+      @admin.must_respond_to :list_vacancies
+      @admin.reserve_by_date(check_in, check_out).total_cost.must_equal 200
+      @admin.reserve_by_date(check_in, check_out). wont_equal 0
+    end
   end
 end # end admin class
 
