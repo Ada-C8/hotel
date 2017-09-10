@@ -28,15 +28,4 @@ describe "Reservation" do
     end
   end # Describe
 
-  #TODO:
-  # xdescribe "#update_cost" do
-  #   it "should return an integer" do
-  #     reservation.update_cost.must_be_kind_of Integer
-  #   end
-  #
-  #   it "should return the cost of the Reservation, not including the check_out day" do
-  #     reservation.update_cost.must_equal 1000
-  #   end
-  # end # Describe
-
 end # Describe

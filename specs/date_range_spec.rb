@@ -16,12 +16,5 @@ describe "DateRange" do
       date.check_out.must_be_instance_of Date
     end
   end # Describe
+
 end # Describe
-  # describe "#overlap?" do
-  #   it "should return all booked rooms that overlap with requested dates (reservations as well as blocks)" do
-  #     hotel.
-  #   end
-    # it "should return an Array of Integers for all booked roomms for the requested dates" do
-    #   @hotel.create_reservation(check_in, check_out)
-    #   @hotel.create_reservation(check_in, check_out)
-    # end

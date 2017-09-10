@@ -1,5 +1,3 @@
-# require 'date'
-
 module BookingSystem
   class Hotel
     attr_reader :rooms, :all_reservations, :block_reservations
@@ -16,8 +14,6 @@ module BookingSystem
       if rooms_available?(available_rooms) # IF TRUE
         assigned_room = available_rooms[0] # Assign the first available room
         reservation = Reservation.new(name, assigned_room, check_in, check_out)
-        # update_price(reservation)
-        # I need to be able to initialize the reservation with the caluclated cost
         @all_reservations << reservation
       end
     end
