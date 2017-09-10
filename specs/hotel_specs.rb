@@ -1,5 +1,4 @@
 require_relative 'spec_helper.rb'
-require "awesome_print"
 
 describe "Hotel_System::Hotel" do
   before do
@@ -225,4 +224,10 @@ describe "blocks" do
     proc {@hotel.make_block_res_if_avail(2, "2018-1-1", "2018-1-5", block)}.must_raise ArgumentError
   end
 
+  it "block res is priced at discount rate" do
+    @hotel = Hotel_System::Hotel.new(20)
+    block = @hotel.make_block(5, "2018-1-1", "2018-1-5", 0.8)
+    reservation = @hotel.make_block_res_if_avail(2, "2018-1-1", "2018-1-5", block)
+    reservation.room.price.must_equal 160
+  end
 end
