@@ -43,6 +43,24 @@ describe "reservation class" do
       oddish_asks.reserve_room(d, num)
       oddish_asks.reservations.length.must_equal 1
     end
+    it "works w/ reserve room to add reservations to different room numbers" do
+      pokemon_hotel = Hotel::Reservation.new
+
+      b_dates = pokemon_hotel.date_range("11-5-2017","11-8-2017")
+      b_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(b_dates, b_num)
+      b_num.num.must_equal 1
+
+      c_dates = pokemon_hotel.date_range("11-4-2017","11-7-2017")
+      c_num = pokemon_hotel.available_room
+      #pokemon_hotel.reserve_room(c_dates, c_num)
+      c_num.num.must_equal 2
+
+      s_dates = pokemon_hotel.date_range("11-7-2017","11-9-2017")
+      s_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(s_dates, s_num)
+      c_num.num.must_equal 2
+    end
   end
 
   describe "total" do
@@ -86,6 +104,27 @@ describe "reservation class" do
 
       pokemon_hotel.reservations_by_date("11-6-2017").must_be_instance_of Array
       pokemon_hotel.reservations_by_date("11-6-2017").length.must_equal 2
+    end
+  end
+  describe "available rooms during date range" do
+    it "provides an array of available rooms" do
+      pokemon_hotel = Hotel::Reservation.new
+
+      slowbro_dates = pokemon_hotel.date_range("10-5-2017","10-8-2017")
+      slowbro_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(slowbro_dates, slowbro_num)
+
+      teddiursa_dates = pokemon_hotel.date_range("10-4-2017","10-7-2017")
+      teddiursa_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(teddiursa_dates, teddiursa_num)
+
+      magikarp_dates = pokemon_hotel.date_range("10-7-2017","10-9-2017")
+      magikarp_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(magikarp_dates, magikarp_num)
+
+      g_dates = pokemon_hotel.date_range("10-4-2017", "10-6-2017")
+      pokemon_hotel.available_rooms_during(g_dates).length.must_equal 18
+      pokemon_hotel.available_rooms_during(g_dates).must_be_instance_of Array
     end
   end
 
