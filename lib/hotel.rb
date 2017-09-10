@@ -35,7 +35,7 @@ module Hotel
         # binding.pry
       end
 
-      reservation = Reservation.new(room_num, checkin, checkout, block)
+      reservation = Reservation.new(room_num, checkin, checkout, self, block)
       @reservations << reservation
       reservation
     end
