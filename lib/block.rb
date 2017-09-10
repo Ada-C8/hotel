@@ -2,7 +2,7 @@ module Hotel
   class Block
     attr_reader :rooms, :id, :start_date, :end_date, :dates, :discount_rate
 
-    def initialize(start_date, end_date, rooms, discount_rate)
+    def initialize(start_date, end_date, rooms, discount_rate = 0)
       @start_date = Date.parse(start_date)
       @end_date = Date.parse(end_date)
       @dates = DateRange.range_to(@start_date, @end_date)
@@ -24,7 +24,7 @@ module Hotel
     end
 
     def get_discount_rate(input)
-      raise(ArgumentError, "Discount must be number: was #{input.class}") unless input.class == (Integer || Float)
+      raise(ArgumentError, "Discount must be number: was #{input.class}") unless (input.class == Integer) || (input.class == Float)
       raise(DiscountError, "Discount must be between 0-100%: was #{input}") unless 0 <= input && input <= 100
       return (100.0 - input) / 100
     end
