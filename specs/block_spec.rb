@@ -66,9 +66,32 @@ describe 'Block' do
 
       includes_dates.must_equal false
     end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        @block.includes_dates?('sea','HAWKS')
+      }.must_raise ArgumentError
+    end
+
+    it 'raises DatesError if dates are out of order' do
+      proc {
+        @block.includes_dates?('2017-08-08', '2017-08-03')
+      }.must_raise DatesError
+    end
+
+    it 'raises DatesError if dates do not span at least 1 night' do
+      proc {
+        @block.includes_dates?('2017-08-06', '2017-08-06')
+      }.must_raise DatesError
+    end
   end
 
-  describe 'get_discount_rate' do
-
+  xdescribe 'get_discount_rate' do
+    it 'converts percentage number into equivalent Float' do
+      @block.get_discount_rate(80).must_equal 0.2
+      @block.get_discount_rate(75).must_equal 0.25
+      @block.get_discount_rate(10).must_equal 0.9
+      @block.get_discount_rate(12.5).must_equal 0.875r
+    end
   end
 end
