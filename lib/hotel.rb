@@ -140,6 +140,10 @@ module Hotel_Chain
 
 
     def reserve_block(party_name, check_in, check_out, no_of_rooms, room_rate)
+      if no_of_rooms > 5
+        raise ExceededRoomLimitForBlocksError
+      end
+
       local_reservation_array = []
       available_rooms = find_rooms_available(check_in, check_out)
       #ap available_rooms
@@ -188,7 +192,7 @@ module Hotel_Chain
 
       #change this to a specific error
       if unassigned_reservations.empty?
-        raise ArgumentError.new("All the reservations made for that block of room have been assigned. You may check to see if there is a room available at the standard rate.")
+        raise AllBlockRoomsAssignedError
       end
 
       return unassigned_reservations

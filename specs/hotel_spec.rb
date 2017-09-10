@@ -225,13 +225,17 @@ describe "The Hotel class" do
       @myhotel.blocks_array[0].must_equal newblock
     end
 
-  end
+    it "only allows a maximum of 5 rooms to be reserved in a block" do
+      proc {@myhotel.reserve_block("Harvey Hello", "11/2/17", "11/4/17", 6, 150)}.must_raise ExceededRoomLimitForBlocksError
+    end
+
+  end #end describe
 
   describe "find_unassigned_block_reservations method" do
 
     before do
-      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 6, 175)
-      @myhotel.reserve_block("Harriet McDuck", "11/12/17", "11/14/17", 8, 150)
+      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 5, 175)
+      @myhotel.reserve_block("Harriet McDuck", "11/12/17", "11/14/17", 3, 150)
     end
 
     it "returns an array" do
@@ -243,7 +247,7 @@ describe "The Hotel class" do
     end
 
     it "returns an array of reservation objects which have a status of unassigned" do
-      6.times do |x|
+      5.times do |x|
         @myhotel.find_unassigned_block_reservations("John Smith")[x].status.must_equal "unassigned"
       end
     end
@@ -252,10 +256,15 @@ describe "The Hotel class" do
       proc {@myhotel.find_unassigned_block_reservations("Nancy Smith")}.must_raise NoPartyByThatNameError
     end
 
-    it "returns an error if there are no unassigned rooms for a given block" do
-
-    end
+    #TODO: I can only do this test after I wrote a method to assign block rooms
+    # it "returns an error if there are no unassigned rooms for a given block" do
+    #
+    # end
 
   end #end describe
+
+  describe " " do
+
+  end
 
 end #end of testing
