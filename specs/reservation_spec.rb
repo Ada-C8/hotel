@@ -9,7 +9,7 @@ describe "Reservation" do
     # This has @stay_dates, @room_num, @total_cost
   end
 
-  describe "#initialize" do
+  xdescribe "#initialize" do
     it "should create an instance of Reservation" do
       @reservation.must_be_instance_of BookingSystem::Reservation
 
@@ -29,7 +29,7 @@ describe "Reservation" do
     end
   end # Describe
 
-  describe "#update_cost" do
+  xdescribe "#update_cost" do
     it "should return an integer" do
       @reservation.update_cost.must_be_kind_of Integer
     end
