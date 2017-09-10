@@ -80,10 +80,10 @@ describe "Hotel Class" do
       @hotel.block.block_list.must_be_kind_of Array
     end #access class
 
-    it "Can check if there are enough rooms available for the resquested block at the requrested time: " do
+    it "Can check if there are enough rooms available for the requested block at the requrested time: " do
       @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
       @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
-      @hotel.create_block(9000, 5, "2012/12/12", "2012/12/13").must_equal 18
+      @hotel.create_block(9000, 5, "2012/12/12", "2012/12/13", 150).length.must_equal 18
       #@hotel.create_block(9000, 20, "2012/12/12", "2012/12/13").must_equal false
       # @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
       # @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1

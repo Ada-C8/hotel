@@ -12,7 +12,7 @@ module Hotel
       end
 
       def add(id, room, day_in, day_out)
-        @reservation_list << Reservation.new(id, room, day_in, day_out) #adds Reservation to group
+        @reservation_list << Reservation.new(id, room, day_in, day_out) #
       end
   end
 end

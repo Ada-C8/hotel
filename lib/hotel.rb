@@ -26,7 +26,7 @@ module Hotel
     end #show rooms
 
     # - I can reserve an available room for a given date range
-    def make_reservation(id, room, day_in, day_out)
+    def make_reservation(id, room, day_in, day_out, discount: 0)
       if is_available?(id, room, day_in, day_out)
         @reservations.add(id, room, day_in, day_out)
       else
@@ -81,7 +81,7 @@ module Hotel
       if available.length >= number_of_rooms
       #if open_rooms(day_in, day_out) >= number_of_rooms
         available.take(number_of_rooms).each do |room|
-          make_reservation(block_id, room, day_in, day_out, discount:discounted_rate)
+          make_reservation(block_id, room, day_in, day_out, discount: discounted_rate)
         end#each
       else
         return "There are only #{available.length} rooms available during the requested dates."
