@@ -4,7 +4,7 @@ require_relative 'hotel'
 
 module Hotel
 
-  class BlockRoom<Reservation
+  class BlockRoom < Reservation
 
     attr_reader :check_in, :check_out, :num_of_rooms, :discount, :block_of_rooms
 

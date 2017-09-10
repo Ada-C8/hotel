@@ -99,11 +99,27 @@ describe "Hotel class" do
       @hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3).must_equal [[4,5,6]]
     end
 
+    it "Returns an error message if not enough rooms are availanle to book" do
+      proc {@hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 4)}.must_raise ArgumentError
+    end
+
   end
 
   describe "making room reservation in a block" do
+    before do
+      @hotel = Hotel::Hotel.new(6, 200)
+      @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
+      @hotel.make_reservation('sept 5 2017', 'sept 7 2017', 1)
+      @hotel.make_reservation('sept 2 2017', 'sept 4 2017', 2)
+      @hotel.make_reservation('sept 6 2017', 'sept 8 2017', 2)
+      @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
+      @hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
+      @hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3)
+
+    end
 
     it "Can determine if a block has available rooms and move them to booked " do
+      @hotel.reserve_room_in_block('sept 1 2017', 'sept 4 2017', 2).must_equal [6,5]
     end
 
   end #describe #block room reservation

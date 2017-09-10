@@ -1,6 +1,6 @@
 require_relative 'reservation'
-require_relative 'block'
-# require 'pry'
+require_relative 'block.rb'
+require_relative 'date_range'
 
 module Hotel
 
@@ -23,7 +23,6 @@ module Hotel
 
     def make_reservation(check_in, check_out, room_num)
       if room_availability(check_in, check_out).include?(room_num)
-        puts "Reservation made"
         @reservation_made = Reservation.new(check_in, check_out, room_num)
         @reservation_collection << @reservation_made
       else
@@ -39,6 +38,7 @@ module Hotel
         puts "we can create a block reservation"
         @block_reservation = BlockRoom.new(check_in, check_out, num_of_rooms)
         @block_reservation.block_of_rooms << available_rooms.pop(num_of_rooms)
+        @block_reservation_collection << @block_reservation
         return @block_reservation.block_of_rooms
       else
         return raise ArgumentError.new("We do not have enough rooms to reserve a block")
@@ -47,21 +47,30 @@ module Hotel
 
     # ability to reserve a room within a block of rooms
     #needs to match the date range of the block
-    def reserve_room_in_block_based_on_date(check_in, check_out, num_of_rooms)
+    def reserve_room_in_block(check_in, check_out, num_of_rooms)
 
       check_in = Date.parse(check_in)
       check_out = Date.parse(check_out)
 
       @block_reservation_collection.each do |entry|
         if check_in == entry.check_in && check_out == entry.check_out
-          if entry.available_rooms.length >= num_of_rooms
+          if entry.available_rooms[0].length >= num_of_rooms
             num_of_rooms.times do
-              @booked_rooms << @available_rooms.pop
+              entry.booked_rooms << entry.available_rooms[0].pop
             end
+            return entry.booked_rooms
           end
         end
       end
     end
+    # end
+
+    # end
+    # return entry.booked_rooms
+
+    # end
+    #   end
+    # end
 
     def date_list_of_reservations(date)
       date_list = []
@@ -137,15 +146,16 @@ module Hotel
 end #module
 
 
-# @hotel = Hotel::Hotel.new(6, 200)
-# @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
-# @hotel.make_reservation('sept 5 2017', 'sept 7 2017', 1)
-# @hotel.make_reservation('sept 2 2017', 'sept 4 2017', 2)
-# @hotel.make_reservation('sept 6 2017', 'sept 8 2017', 2)
-# @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
-# @hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
+# hotel = Hotel::Hotel.new(6, 200)
+# hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
+# hotel.make_reservation('sept 5 2017', 'sept 7 2017', 1)
+# hotel.make_reservation('sept 2 2017', 'sept 4 2017', 2)
+# hotel.make_reservation('sept 6 2017', 'sept 8 2017', 2)
+# hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
+# hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
 #
-# @hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3).must_equal [4,5,6]
+# hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3)
+
 
 
 
