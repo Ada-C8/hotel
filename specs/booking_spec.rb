@@ -131,7 +131,11 @@ describe "Booking" do
       proc{@booking.make_reservation(@checkin_day, @checkout_day, 18)}.must_raise BookingError
     end # it "will raise BookingError if more rooms are requested then are availible
 
-    # TODO : make sure that you can make a reservation on the day that all the rooms become availible (reserve all the rooms and then try to make another reservation on the day they all open up!)
+    it "will be able to book a room the day that it opens up " do
+       @booking.make_reservation(@checkin_day, @checkout_day, 20)
+      #  @booking.make_reservation(@checkout_day, (@checkout_day + 2), 20).must_be_kind_of Array
+       @booking.make_reservation(@checkout_day, (@checkout_day + 2), 20)[0].res_rooms.length.must_equal 20
+    end # it "will be able to book a room the day that it opens up " do
   end #  describe make_reservation
 
   describe "check_date_for_reservations" do
@@ -198,10 +202,6 @@ describe "Booking" do
       @booking.make_reservation(starting, ending, num_of_rooms ) # won't be in in print_reservations
       @booking.print_reservations(start_date_to_check, end_date_to_check).must_equal [["Reservation ID: 1", "Total cost: $800.0", "Rooms reserved:  1, 2,", "Date range: 2017-09-05 - 2017-09-07"]]
     end #it "will only include reservations for that date" do
-
-    #TODO
-    # In wave 2 need to test to test that it will work for 2 reservations with differnt rooms in them (will need to have added no duplicate room reservations to make_reservation)
-
   end # describe "print_reservations" do
 
   describe "availible_rooms" do
@@ -244,9 +244,8 @@ describe "Booking" do
       @booking.must_respond_to :make_block
     end # it "should be able to be called on an instnce of Booking" do
 
-    xit "will create a date_range using the date arguments given" do
-      # TODO : will need to change this to check that the date_range of the new instance of Block is correct
-      @booking.make_block("wedding", @checkin_day, @checkout_day, 1).must_equal Hotel::DateRange.new(@checkin_day, @checkout_day).nights_booked
+    it "will create a date_range using the date arguments given" do
+      @booking.make_block("wedding", @checkin_day, @checkout_day, 1)[0].date_range.must_equal Hotel::DateRange.new(@checkin_day, @checkout_day).nights_booked
     end # it "will create a date_range using the date arguments given" do
 
     it "Should raise an error if inproper dates are given" do
@@ -258,9 +257,10 @@ describe "Booking" do
     end # raise BookingError for > 5 rooms
 
     it "will raise a booking error if there are not enough rooms availible to make the block" do
-      @booking.make_reservation(@checkin_day, @checkout_day, 19)
+      @booking.make_reservation(@checkin_day, @checkout_day, 10)
+      @booking.make_block("Event", @checkin_day, @checkout_day, 5)
+      @booking.make_block("Another Event", @checkin_day, @checkout_day, 5)
       proc{@booking.make_block("wedding", @checkin_day, @checkout_day, 4)}.must_raise BookingError
-      # TODO: after I modify availible_rooms to check @all_blocks maybe do this test checking after making multiple blocks?
     end # Booking error if not enough availible rooms
 
     it "will make a new instance of Block" do
@@ -336,11 +336,6 @@ end # describe "make_block" do
   end # describe "check_date_for_block" do
 
   describe "check_block_availibility" do
-    # TODO:
-      # it can be called on @booking
-      # it will be able to find a block based on it's block_id
-      # it will return an array of the rooms that are still availible in the Block
-
       it "will be able to be be called on @booking" do
         @booking.must_respond_to :check_block_availibility
       end # it "will be able to be be called on @booking" do
@@ -353,18 +348,12 @@ end # describe "make_block" do
       end # will return an array of the rooms in the Block with that block_id"
 
       it "will raise BookingError if the block_id does not exist" do
-        # TODO
         @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
         proc{@booking.check_block_availibility("another wedding")}.must_raise BookingError
       end # it "will raise BookingError if the block_id does not exist" do
   end # describe "check_block_availibility" do
 
   describe "rooms_left_in_block" do
-    # TODO
-      #will call the check_block_availibility method for a given date range
-        #  if thre return array has rooms in it, it will return a sting that says yes and how many rooms are left in the block if
-        # If the return array is empty then it will say that there aren't any rooms left in the block to be reserved
-
       it "will be able to be called on @booking" do
         @booking.must_respond_to :rooms_left_in_block
       end # it "will be able to be called on @booking" do
@@ -381,7 +370,9 @@ end # describe "make_block" do
       end # "will return a string telling you how many rooms are left in the block"
 
       it "will tell you if there are no more rooms left in the bock" do
-        # TODO : after I write my reserve_block_room method!
+        @booking.make_block("Wedding", @checkin_day, @checkout_day, 5)
+        @booking.reserve_from_block("wedding", 5)
+        @booking.rooms_left_in_block("wedding").must_equal "There are no rooms left in the WEDDING block"
       end # it "will tell you if there are no more rooms left in the bock" do
   end #describe "rooms_left_in_block" do
 
