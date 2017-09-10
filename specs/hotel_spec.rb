@@ -224,6 +224,13 @@ describe 'Hotel' do
         block.rooms.must_include reservation.room
       end
 
+      it 'raises DatesError if reservation does not fall fully within block' do
+        block = @hotel.make_block('2017-08-03', '2017-08-08', 5, 10)
+        proc {
+          @hotel.make_reservation('2017-08-06', '2017-08-10', block.id)
+        }.must_raise DatesError
+      end
+
       it 'raises ArgumentError if passed invalid dates' do
         proc {
           @hotel.make_reservation('cat','bug')
@@ -436,9 +443,54 @@ describe 'Hotel' do
 
       it 'returns rooms that are not in block' do
         rooms = @hotel.find_rooms_not_in_blocks('2017-08-05', '2017-08-07')
+
         rooms.each do |room|
           @block.rooms.wont_include room
         end
+
+        rooms.length.must_equal 10
+      end
+
+      it 'returns rooms that are reserved, but not in blocks' do
+        @hotel.make_reservation('2017-08-03', '2017-08-07')
+
+        rooms = @hotel.find_rooms_not_in_blocks('2017-08-05', '2017-08-07')
+
+        rooms.length.must_equal 10
+      end
+
+      it 'returns empty array if all rooms are in block' do
+        @hotel.make_block('2017-08-03', '2017-08-07', 10, 20)
+
+        rooms = @hotel.find_rooms_not_in_blocks('2017-08-03', '2017-08-07')
+
+        rooms.must_equal []
+      end
+
+      it 'raises DatesError if dates are out of order' do
+        proc {
+          @hotel.find_rooms_not_in_blocks('2017-09-15', '2017-09-05')
+        }.must_raise DatesError
+      end
+
+      it 'raises ArgumentError if passed invalid date' do
+        proc {
+          @hotel.find_rooms_not_in_blocks('sea','HAWKS')
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.find_rooms_not_in_blocks('2017-08-06','HAWKS')
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.find_rooms_not_in_blocks('2017-08-06','HAWKS')
+        }.must_raise ArgumentError
+      end
+
+      it 'raises DatesError if dates do not span at least 1 night' do
+        proc {
+          @hotel.find_rooms_not_in_blocks('2017-08-06','2017-08-06')
+        }.must_raise DatesError
       end
     end
 
@@ -455,10 +507,34 @@ describe 'Hotel' do
         check.must_equal false
       end
 
-      it 'raises an exception if the dates do not fall within the block' do
+      it 'raises NoBlockError if block cannot be found' do
+        proc {
+          @hotel.block_availability?('2017-10-14', '2017-10-15', 'bad block')
+        }.must_raise NoBlockError
+      end
+
+      it 'raises DatesError if the dates do not fall within the block' do
         proc {
           @hotel.block_availability?('2017-10-14','2017-10-15', @block.id)
         }.must_raise DatesError
+      end
+
+      it 'raises DatesError if the dates are out of order' do
+        proc {
+          @hotel.block_availability?('2017-11-14','2017-10-15', @block.id)
+        }.must_raise DatesError
+      end
+
+      it 'raises DatesError if the dates do not span at least 1 night' do
+        proc {
+          @hotel.block_availability?('2017-10-14','2017-10-14', @block.id)
+        }.must_raise DatesError
+      end
+
+      it 'raises ArgumentError if passed invalid dates' do
+        proc {
+          @hotel.block_availability?('sea','HAWKS')
+        }.must_raise ArgumentError
       end
     end
 
