@@ -16,10 +16,6 @@ module Hotel
     end
 
     def includes_dates?(checkfirst, checklast)
-      DateRange.overlap?(checkfirst, checklast, @start_date, @end_date)
-    end
-
-    def includes_all_dates?(checkfirst, checklast)
       DateRange.include_all?(checkfirst, checklast, @start_date, @end_date)
     end
 

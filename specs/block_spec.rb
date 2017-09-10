@@ -34,29 +34,7 @@ describe 'Block' do
     it 'returns true for partial overlap' do
       includes_dates = @block.includes_dates?('2017-08-03', '2017-08-10')
 
-      includes_dates.must_equal true
-    end
-
-    # TODO: test exceptions
-  end
-
-  describe 'includes_all_dates?' do
-    it 'returns true if block includes provided dates' do
-      includes_all_dates = @block.includes_all_dates?('2017-08-03', '2017-08-07')
-
-      includes_all_dates.must_equal true
-    end
-
-    it 'returns false if block does not include provided dates' do
-      includes_all_dates = @block.includes_all_dates?('2017-10-14', '2017-10-18')
-
-      includes_all_dates.must_equal false
-    end
-
-    it 'returns true for partial overlap' do
-      includes_all_dates = @block.includes_all_dates?('2017-08-03', '2017-08-10')
-
-      includes_all_dates.must_equal false
+      includes_dates.must_equal false
     end
   end
 end

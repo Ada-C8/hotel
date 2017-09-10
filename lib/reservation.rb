@@ -12,7 +12,7 @@ module Hotel
       @dates = DateRange.range_to(@checkin, @checkout)
       if block
         @block = hotel.block(block)
-        raise(DatesError) unless @block.includes_all_dates?(checkin, checkout)
+        raise(DatesError) unless @block.includes_dates?(checkin, checkout)
       else
         @block = false
       end
