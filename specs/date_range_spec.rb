@@ -3,8 +3,8 @@ require_relative 'spec_helper'
 describe 'DateRange' do
 
   before(:all) do
-    @check_in = Date.new(2017, 03, 11)
-    @check_out = Date.new(2017, 03, 15)
+    @check_in = Date.new(2018, 03, 11)
+    @check_out = Date.new(2018, 03, 15)
   end
 
   describe "initialize" do
@@ -13,76 +13,84 @@ describe 'DateRange' do
     end
 
     it "raises an argument error if check_out date is before check_in" do
-      check_in = Date.new(2017, 04, 11)
+      check_in = Date.new(2018, 04, 11)
       proc { DateRange.new(check_in, @check_out)}.must_raise ArgumentError
     end
 
     it "does not raise an argument error if check_out date is after check_in" do
-      check_out = Date.new(2017, 04, 11)
-      # proc { DateRange.new(check_in, check_out)}.wont_throw Exception
+      check_out = Date.new(2018, 04, 11)
       DateRange.new(@check_in, check_out).must_be_instance_of DateRange
     end
+
+    it "raises an argument error if check_in is a day that has already passed" do
+      check_in = Date.new(2016, 11, 03)
+      proc { DateRange.new(check_in, @check_out)}.must_raise ArgumentError
+    end
   end
 
-    describe "nights" do
-      it "provides the nights of stay" do
-        stay = DateRange.new(@check_in, @check_out)
-        stay.nights.must_equal 4
-      end
+  describe "nights" do
+    it "returns the nights of the stay" do
+      stay = DateRange.new(@check_in, @check_out)
+      stay.nights.must_equal 4
     end
-
-    describe "include?" do
-      it "returns true if date is included in range" do
-        date_to_check = Date.new(2017, 03, 12)
-        stay = DateRange.new(@check_in, @check_out)
-        stay.include?(date_to_check).must_equal true
-      end
-
-      it "returns false if date is not included in range" do
-        date_to_check = Date.new(2017, 03, 15)
-        stay = DateRange.new(@check_in, @check_out)
-        stay.include?(date_to_check).must_equal false
-      end
-
-      # make sure rainge is inclusive date same as start and end
-    end
-
-    describe "overlap?" do
-      it "returns true if date ranges overlap" do
-        check_in = Date.new(2017, 03, 8)
-        check_out = Date.new(2017, 03, 22)
-        stay = DateRange.new(check_in, check_out)
-        stay.overlap?(@check_in, @check_out).must_equal true
-      end
-
-      it "returns false if date ranges do not overlap" do
-        check_in = Date.new(2017, 03, 15)
-        check_out = Date.new(2017, 03, 22)
-        stay = DateRange.new(check_in, check_out)
-        stay.overlap?(@check_in, @check_out).must_equal false
-      end
-      # add test for not check in same day as check out
-      # other edge cases
-      # how ranges of dates interact
-
-    end
-
-
   end
 
-  #   it "initialize with all rooms in hotel as array" do
-  #     Hotel.new.rooms.must_be_kind_of Array
-  #   end
-  #
-  #   it "room array elements range from 1 to 20" do
-  #     small_hotel = Hotel.new
-  #     small_hotel.rooms[0].must_equal 1
-  #     small_hotel.rooms[19].must_equal 20
-  #   end
-  #
-  #   it "can access list of all rooms in hotel" do
-  #     hotel_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-  #     Hotel.new.rooms.must_equal hotel_list
-  #
-  #   end
-  # end
+  describe "include?" do
+    it "returns true if date is included in range" do
+      date_to_check = Date.new(2018, 03, 12)
+      stay = DateRange.new(@check_in, @check_out)
+      stay.include?(date_to_check).must_equal true
+    end
+
+    it "returns false if date is not included in range" do
+      date_to_check = Date.new(2018, 03, 27)
+      stay = DateRange.new(@check_in, @check_out)
+      stay.include?(date_to_check).must_equal false
+    end
+
+    it "returns true if date_to_check is same as check-in" do
+      date_to_check = Date.new(2018, 03, 11)
+      stay = DateRange.new(@check_in, @check_out)
+      stay.include?(date_to_check).must_equal true
+    end
+
+    # tests that range excludes last day (i.e., the checkout day)
+    it "returns false if date_to_check is same as check-out day" do
+      date_to_check = Date.new(2018, 03, 15)
+      stay = DateRange.new(@check_in, @check_out)
+      stay.include?(date_to_check).must_equal false
+    end
+  end
+
+  describe "overlap?" do
+    it "returns true if date ranges overlap completely" do
+      check_in = Date.new(2018, 03, 8)
+      check_out = Date.new(2018, 03, 22)
+      stay = DateRange.new(check_in, check_out)
+      stay.overlap?(@check_in, @check_out).must_equal true
+    end
+
+    it "returns true if date ranges overlap partially" do
+      check_in = Date.new(2018, 03, 13)
+      check_out = Date.new(2018, 03, 17)
+      stay = DateRange.new(check_in, check_out)
+      stay.overlap?(@check_in, @check_out).must_equal true
+    end
+
+    it "returns false if date ranges do not overlap at all" do
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 03, 22)
+      stay = DateRange.new(check_in, check_out)
+      stay.overlap?(@check_in, @check_out).must_equal false
+    end
+
+    # can check in on the same day someone else checks out (i.e., they don't overlap)
+    it "returns false if one date range's check-in day is the same as the other date range's check-out day" do
+      check_in = Date.new(2018, 03, 15)
+      check_out = Date.new(2018, 03, 22)
+      stay = DateRange.new(check_in, check_out)
+      stay.overlap?(@check_in, @check_out).must_equal false
+    end
+  end
+
+end

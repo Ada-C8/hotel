@@ -7,11 +7,11 @@ describe 'Hotel' do
     @name = "guest"
     @rooms = [3,2,5]
 
-    @check_out_1 = Date.new(2017, 03, 14)
-    @check_in_1 = Date.new(2017, 03, 11)
+    @check_out_1 = Date.new(2018, 03, 14)
+    @check_in_1 = Date.new(2018, 03, 11)
 
-    @check_in_2 = Date.new(2017, 04, 8)
-    @check_out_2 = Date.new(2017, 04, 11)
+    @check_in_2 = Date.new(2018, 04, 8)
+    @check_out_2 = Date.new(2018, 04, 11)
   end
 
   describe "initialize" do
@@ -50,17 +50,18 @@ describe 'Hotel' do
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
       # check availability for a date within the above reservation range
-      check_out = Date.new(2017, 03, 18)
-      check_in = Date.new(2017, 03, 13)
-      proc { @small_hotel.create_reservation(1, check_in, check_out) }.must_raise ArgumentError
+      check_out = Date.new(2018, 03, 18)
+      check_in = Date.new(2018, 03, 13)
+
+      proc { @small_hotel.create_reservation("guest2", 1, check_in, check_out) }.must_raise ArgumentError
     end
 
-    it "a reservation is allowed to start on the same day that a reservation for another room ends" do
+    it "allows a reservation to start on the same day that a reservation for the same room ends" do
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
       # add another reservation for above room with check_in day same as previous reservation's check_out day
-      check_out = Date.new(2017, 03, 18)
-      check_in = Date.new(2017, 03, 14)
+      check_out = Date.new(2018, 03, 18)
+      check_in = Date.new(2018, 03, 14)
       @small_hotel.create_reservation(@name, 1, check_in, check_out)
 
       @small_hotel.all_reservations.length.must_equal 2
@@ -73,13 +74,27 @@ describe 'Hotel' do
       @small_hotel.create_block(@name, @rooms, @check_in_1, @check_out_1).must_be_instance_of Block
     end
 
-    it "raises an argument if the rooms are not available" do
+    it "raises an error if one or more rooms for the given date range are already blocked" do
       bb = Hotel.new
-      bb.create_block(@name, @rooms, @check_in_1, @check_out_1).must_be_instance_of Block
+      bb.create_block(@name, @rooms, @check_in_1, @check_out_1)
 
       #the below date range overlaps with the above block
-      check_out = Date.new(2017, 03, 17)
-      check_in = Date.new(2017, 03, 13)
+      check_out = Date.new(2018, 03, 17)
+      check_in = Date.new(2018, 03, 13)
+      rooms = [7,9,2]
+
+      # because the create block request includes room 2 which is blocked
+      # for an overlaping date range, the block should raise an argument error
+      proc { bb.create_block("guest2", rooms, check_in, check_out) }.must_raise ArgumentError
+    end
+
+    it "raises an error if one or more rooms for the given date range are already reserved" do
+      bb = Hotel.new
+      bb.create_reservation(@name, 9, @check_in_1, @check_out_1)
+
+      #the below date range overlaps with the above block
+      check_out = Date.new(2018, 03, 17)
+      check_in = Date.new(2018, 03, 13)
       rooms = [7,9,2]
 
       # because the create block request includes room 2 which is blocked
@@ -125,7 +140,7 @@ describe 'Hotel' do
     it "returns an array of reservations" do
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
       @small_hotel.create_reservation(@name, 1, @check_in_2, @check_out_2)
-      date_to_check = Date.new(2017, 03, 12)
+      date_to_check = Date.new(2018, 03, 12)
       @small_hotel.get_reservations_for_date(date_to_check).each do |reservation|
         reservation.must_be_instance_of Reservation
       end
@@ -133,15 +148,20 @@ describe 'Hotel' do
     end
 
     it "returns the correct number of reservations for a certain day" do
-      date_to_check = Date.new(2017, 03, 12)
+      date_to_check = Date.new(2018, 03, 12)
 
       # the date_to_check falls in the below date range and should be included
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
-      # the date_to_check falls in the below date range (check_out day not included)
-      check_out = Date.new(2017, 03, 13)
-      check_in = Date.new(2017, 03, 8)
+      # the date_to_check falls in the below date range
+      check_out = Date.new(2018, 03, 13)
+      check_in = Date.new(2018, 03, 8)
       @small_hotel.create_reservation(@name, 2, check_in, check_out)
+
+      # the date_to_check does not fall in the below date range (check_out day not included)
+      check_out = Date.new(2018, 03, 12)
+      check_in = Date.new(2018, 03, 10)
+      @small_hotel.create_reservation(@name, 4, check_in, check_out)
 
       # the date_to_check does not fall in the below reservation's date range
       @small_hotel.create_reservation(@name, 1, @check_in_2, @check_out_2)
@@ -155,21 +175,21 @@ describe 'Hotel' do
     it "returns an array of available reservations" do
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
-      check_out = Date.new(2017, 03, 22)
-      check_in = Date.new(2017, 03, 14)
+      check_out = Date.new(2018, 03, 22)
+      check_in = Date.new(2018, 03, 14)
       @small_hotel.create_reservation(@name, 13, check_in, check_out)
 
-      check_in = Date.new(2017, 03, 17)
-      check_out = Date.new(2017, 04, 15)
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
       @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
       @small_hotel.reserve_block_room("guest", 3)
 
-      # check availability for a date within the above reservation range
-      check_out = Date.new(2017, 03, 18)
-      check_in = Date.new(2017, 03, 13)
+      # check availability for a date within the above reservations and blocks ranges
+      check_out = Date.new(2018, 03, 18)
+      check_in = Date.new(2018, 03, 13)
 
       #availability should return an array of all rooms except rooms 1, 3, 2, 5, and 13
-      #which are booked during the provided date range
+      #which are reserved or blocked during the provided date range
       available_rooms = [4,6,7,8,9,10,11,12,14,15,16,17,18,19,20]
       @small_hotel.availability(check_in, check_out).must_equal available_rooms
     end
@@ -180,12 +200,12 @@ describe 'Hotel' do
 
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
-      check_out = Date.new(2017, 03, 22)
-      check_in = Date.new(2017, 03, 14)
+      check_out = Date.new(2018, 03, 22)
+      check_in = Date.new(2018, 03, 14)
       @small_hotel.create_reservation(@name, 13, check_in, check_out)
 
-      check_in = Date.new(2017, 03, 17)
-      check_out = Date.new(2017, 04, 15)
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
       @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
       reservation = @small_hotel.reserve_block_room("guest", 3)
       reservation.must_be_instance_of Reservation
@@ -196,12 +216,12 @@ describe 'Hotel' do
 
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
-      check_out = Date.new(2017, 03, 22)
-      check_in = Date.new(2017, 03, 14)
+      check_out = Date.new(2018, 03, 22)
+      check_in = Date.new(2018, 03, 14)
       @small_hotel.create_reservation(@name, 13, check_in, check_out)
 
-      check_in = Date.new(2017, 03, 17)
-      check_out = Date.new(2017, 04, 15)
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
       @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
       @small_hotel.reserve_block_room("guest", 3)
 
@@ -213,44 +233,81 @@ describe 'Hotel' do
 
       @small_hotel.create_reservation(@name, 1, @check_in_1, @check_out_1)
 
-      check_out = Date.new(2017, 03, 22)
-      check_in = Date.new(2017, 03, 14)
+      check_out = Date.new(2018, 03, 22)
+      check_in = Date.new(2018, 03, 14)
       @small_hotel.create_reservation(@name, 13, check_in, check_out)
 
-      check_in = Date.new(2017, 03, 17)
-      check_out = Date.new(2017, 04, 15)
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
       @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
       @small_hotel.reserve_block_room("guest", 3)
       @small_hotel.reserve_block_room("guest", 5)
       @small_hotel.reserve_block_room("guest", 2).must_be_instance_of Reservation
 
-      # @small_hotel.reserve_block_room("guest", 3)
-      # puts @small_hotel.all_reservations
+    end
 
-      # since the room is already reserved, the result should be an argument error
-      # proc {@small_hotel.reserve_block_room("guest", 3)}.must_raise ArgumentError
+    it "reserves a room within a block with the block's date range" do
+
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
+      @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
+      reservation = @small_hotel.reserve_block_room("guest", 3)
+      start = Date.new(2018, 03, 17)
+      end_date =  Date.new(2018, 04, 15)
+
+      reservation.dates.start.must_equal start
+      reservation.dates.end.must_equal end_date
+
+    end
+
+    it "raises an error if you try to reserve a room that doesn't exist in block" do
+
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
+      @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
+
+      proc {@small_hotel.reserve_block_room("guest", 7)}.must_raise ArgumentError
+    end
+
+    it "raises an error if you try to reserve a room in a block with an invalid name" do
+
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
+      @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
+
+      proc {@small_hotel.reserve_block_room("guest1", 2)}.must_raise ArgumentError
     end
   end
 
+  describe "check_block_availability" do
+    it "returns an array of available rooms in a block" do
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
+      block = @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
+      @small_hotel.reserve_block_room("guest", 3)
+      @small_hotel.check_block_availability(block, "guest").must_equal [2,5]
+    end
+
+    it "returns an empty array if all rooms within a block are reserved" do
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
+      block = @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
+      @small_hotel.reserve_block_room("guest", 3)
+      @small_hotel.reserve_block_room("guest", 2)
+      @small_hotel.reserve_block_room("guest", 5)
+
+      @small_hotel.check_block_availability(block, "guest").must_equal []
+    end
+
+    it "returns an empty array if given name does not match block's name" do
+      check_in = Date.new(2018, 03, 17)
+      check_out = Date.new(2018, 04, 15)
+      block = @small_hotel.create_block("guest", [3,2,5], check_in, check_out)
+      @small_hotel.reserve_block_room("guest", 3)
+
+      @small_hotel.check_block_availability(block, "guest1").must_equal []
+    end
+
+  end
+
 end
-
-
-# it "room array elements range from 1 to 20" do
-#   small_hotel = Hotel.new
-#   small_hotel.rooms[0].must_equal 1
-#   small_hotel.rooms[19].must_equal 20
-# end
-#
-# it "can access list of all rooms in hotel" do
-#   hotel_list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-#   Hotel.new.rooms.must_equal hotel_list
-#
-# end
-
-# it "can access list of all reservations" do
-#   Hotel.new.rooms.must_equal hotel_list
-#
-# end
-# it "holds a name" do
-#   @player.name.must_equal "Ada"
-# end

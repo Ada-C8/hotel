@@ -1,7 +1,6 @@
 require_relative 'date_range'
 
 class Reservation
-  # @@reservations = []
   attr_reader :dates, :room
 
   def initialize(name, room, check_in, check_out)
@@ -13,73 +12,8 @@ class Reservation
 
   # returns total_cost for stay
   def total_cost
-    total_cost = @price_night * @dates.nights
-    return total_cost
+    total_cost = (@price_night * @dates.nights)
+    return Money.new(total_cost * 100, "USD").format
   end
 
 end
-
-
-
-
-# def add_reservation
-#   @@reservations << self
-# end
-#
-# def self.all
-#   return @@reservations
-# end
-
-# end
-
-# returns all reservations for a specific date
-# def self.check_date(date)
-#   reservations_for_day = []
-#   Reservation.all.each do |reservation|
-#     days = reservation.dates.start
-#     # puts days
-#     # # days = days.next
-#     # # puts days
-#     # puts reservation.dates.nights
-#     reservation.dates.nights.to_i.times do
-#       if date == days
-#         reservations_for_day << reservation
-#         # reservations_for_day << reservation.room
-#       end
-#       days = days.next
-#     end
-#   end
-#   return reservations_for_day
-# end
-# end
-
-# check_out = Date.new(2017, 03, 14)
-# check_in = Date.new(2017, 03, 11)
-# test1 = Reservation.new(check_in, check_out)
-# test1.add_reservation
-#
-#
-# check_in = Date.new(2017, 03, 11)
-# check_out = Date.new(2017, 04, 11)
-# test2 = Reservation.new(check_in, check_out)
-# test2.add_reservation
-#
-# puts Reservation.all
-# date = Date.new(2017, 03, 12)
-# puts Reservation.check_date(date)
-
-# def check_date(date)
-# Reservation.all.each_with_index do |reservation, i|
-#   reservation.dates.nights.times do |reservation_days|
-#     if date == reservation_days
-#
-#       @reservations_for_day << reservation
-#     else
-#
-#     end
-#
-#   end
-#
-#
-#
-# puts Reservation.all[0].dates.start+1
