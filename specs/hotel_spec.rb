@@ -42,7 +42,7 @@ describe "Hotel class" do
 
     it "Can return an argument error if room is not available for that date range" do
       proc { @bb_hotel.make_reservation('sept 8 2017', 'sept 9 2017', 4)}.must_raise ArgumentError
-    end  ####NOTE##### Not sure how to create a test to check if there is no problem with the code 
+    end  ####NOTE##### Not sure how to create a test to check if there is no problem with the code
   end
 
   describe "#list of reservations for a specific date" do
@@ -83,5 +83,29 @@ describe "Hotel class" do
       proc {@hotel.room_availability('sept 4 2017', 'sept 3 2017')}.must_raise ArgumentError
     end
   end
+
+  describe "make block reservation method" do
+    before do
+      @hotel = Hotel::Hotel.new(6, 200)
+      @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
+      @hotel.make_reservation('sept 5 2017', 'sept 7 2017', 1)
+      @hotel.make_reservation('sept 2 2017', 'sept 4 2017', 2)
+      @hotel.make_reservation('sept 6 2017', 'sept 8 2017', 2)
+      @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
+      @hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
+    end
+
+    it "Can create an entry in the block reservations array" do
+      @hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3).must_equal [[4,5,6]]
+    end
+
+  end
+
+  describe "making room reservation in a block" do
+
+    it "Can determine if a block has available rooms and move them to booked " do
+    end
+
+  end #describe #block room reservation
 
 end #describe
