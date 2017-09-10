@@ -5,8 +5,8 @@ module Hotel
 
     def initialize(room, checkin, checkout, block = false)
       @room = room
-      @checkin = Date.parse(checkin)
-      @checkout = Date.parse(checkout)
+      @checkin = DateRange.validate(checkin)
+      @checkout = DateRange.validate(checkout)
       @dates = DateRange.range_to(@checkin, @checkout)
       # @id = create_id
       @block = block
