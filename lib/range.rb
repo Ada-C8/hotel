@@ -3,12 +3,15 @@ require 'date'
 module Property
 
   class Range
+
+    class InvalidDateRange < StandardError ; end 
+
     attr_reader :check_in, :check_out
 
     def initialize(check_in, check_out)
 
       unless check_in < check_out
-        raise ArgumentError.new "Invalid date range" #return true ?
+        raise InvalidDateRange.new("Invalid date range") #return true ?
       end
 
       @check_in = check_in
@@ -34,6 +37,5 @@ module Property
     def num_nights
       return @check_out - @check_in
     end
-
   end
 end

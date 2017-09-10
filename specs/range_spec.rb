@@ -15,13 +15,13 @@ describe 'Range' do
   it "cannot have a negative date range" do
     check_in = Date.new(2017, 02, 01)
     check_out = check_in - 5
-    proc {Property::Range.new(check_in, check_out)}.must_raise ArgumentError
+    proc {Property::Range.new(check_in, check_out)}.must_raise Property::Range::InvalidDateRange
   end
 
   it "date range must not be 0" do
     check_in = Date.new(2017, 02, 01)
     check_out = check_in
-    proc {Property::Range.new(check_in, check_out)}.must_raise ArgumentError
+    proc {Property::Range.new(check_in, check_out)}.must_raise Property::Range::InvalidDateRange
   end
 
   # it "returns true for valid date range " do
@@ -89,7 +89,7 @@ describe 'num_nights' do
   it "error for 0 nights" do
     check_in = Date.new(2017, 5, 5)
     check_out = check_in
-  proc {Property::Range.new(check_in, check_out)}.must_raise ArgumentError
+  proc {Property::Range.new(check_in, check_out)}.must_raise Property::Range::InvalidDateRange
   end
 
 end
