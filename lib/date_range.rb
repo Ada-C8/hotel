@@ -13,7 +13,6 @@ module DateRange
     dates
   end
 
-
   def self.overlap?(first_start, first_end, second_start, second_end)
     first_start = validate(first_start)
     first_end = validate(first_end)
