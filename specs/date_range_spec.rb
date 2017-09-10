@@ -19,7 +19,7 @@ describe "Hotel" do
     it "raises error if given invalid date" do
       checkin = Date.new(2017,9,8)
       checkout = Date.new(2017,9,7)
-      proc {Hotel::DateRange.new(checkin, checkout)}.must_raise StandardError
+      proc {Hotel::DateRange.new(checkin, checkout)}.must_raise DateRangeError
     end
 
     it "dates will be a date" do

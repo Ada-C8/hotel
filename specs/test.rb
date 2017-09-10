@@ -110,6 +110,12 @@ puts hotel1
 
 
 ########### comments from reservations.rb ############
+#from availability check 
+# elsif availability == []
+#   raise RoomAvailabilityError.new "Sorry, there are no rooms available."
+
+
+
 #from make_booking method:
 # should I write a loop that tells it to make multiple bookings per num_of_rooms?
 # if num_of_rooms > 1

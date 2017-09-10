@@ -28,6 +28,20 @@ module Hotel
       end
     end
     ##### later, what if it's not empty or not full?
+    # def check_reservations(checkin, checkout)
+    #   check_against = DateRange.new(checkin, checkout).night_array
+    #   not_available = []
+    #   check_against.each do |date|
+    #     @all_reservations.each do |booking|
+    #       if booking.dates.include?(date)
+    #         booking.rooms.each do |room|
+    #           not_available << room
+    #         end
+    #       end
+    #     end
+    #   end
+    #   return not_available
+    # end
 
     def check_block_id(block_id)
       return @block_id == block_id

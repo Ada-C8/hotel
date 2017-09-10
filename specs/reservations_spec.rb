@@ -23,7 +23,7 @@ describe "Hotel" do
         end
         proc do
           @hotel1.make_booking(@checkin, @checkout, 1)
-        end.must_raise ArgumentError
+        end.must_raise RoomAvailabilityError
       end
 
       it "can calculate cost of reservation" do
@@ -101,7 +101,18 @@ describe "Hotel" do
         block1.must_be_instance_of Hotel::Block
         hotel6.all_blocks.must_be_kind_of Array
       end
+
+      it "will raise an error if try to block more than 5 rooms" do
+        checkin = Date.new(2018,9,1)
+        checkout = Date.new(2018,9,7)
+        hotel6 = Hotel::Reservations.new
+        proc do
+          hotel6.make_block(checkin, checkout, 6, "wedding")
+        end.must_raise BlockAvailabilityError
+
+      end
     end
+
     describe "check_block_for_availability" do
       it "it will examine a date and see if it has a block" do
         checkin7 = Date.new(2018,9,1)
@@ -120,6 +131,19 @@ describe "Hotel" do
           h = hotel8.reserve_room_from_block("wedding")
           h.must_be_kind_of Hotel::Block
           h.block_total_cost.must_equal 320
+        end
+        it "will know if the block is booked" do
+          checkin8 = Date.new(2018,6,1)
+          checkout8 = Date.new(2018,6,3)
+          hotel8 = Hotel::Reservations.new
+          hotel8.make_block(checkin8, checkout8, 3, "bachelorette")
+          3.times do
+            hotel8.reserve_room_from_block("bachelorette")
+          end
+          # binding.pry
+          # proc do
+          #   hotel8.reserve_room_from_block("bachelorette")
+          # end.must_raise BlockAvailabilityError
         end
       end
     end

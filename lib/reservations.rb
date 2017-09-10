@@ -24,9 +24,7 @@ module Hotel
       # do we have an availability?
       availability = check_availability(checkin, checkout)
       if availability.length < num_of_rooms
-        raise ArgumentError.new "Sorry, we don't have enough rooms."
-      elsif availability == []
-        raise ArgumentError.new "Sorry, there are no rooms available."
+        raise RoomAvailabilityError.new "Sorry, we don't have enough rooms. There are only #{availability.length} rooms left"
       end
       # if hotel has availabilities, Booking.new is created and pushed into @all_reservations
       id = @all_reservations.length
@@ -70,9 +68,9 @@ module Hotel
     def make_block(checkin, checkout, how_many_rooms, block_id)
       available = check_availability(checkin, checkout)
       if how_many_rooms > 5
-        raise ArgumentError.new "You cannot block more than 5 rooms."
+        raise BlockAvailabilityError.new "You cannot block more than 5 rooms."
       elsif how_many_rooms > available.length
-        raise ArgumentError.new "There are only  #{available.length} available for your dates."
+        raise BlockAvailabilityError.new "There are only  #{available.length} available for your dates."
       else
         collection_of_rooms_blocked = []
         how_many_rooms.times do |i|
@@ -86,15 +84,13 @@ module Hotel
 
     def reserve_room_from_block(block_id)
       @all_blocks.each do  |block|
-        puts "#{block} before block"
         if block.check_block_for_availability(block_id) && block.check_block_id(block_id)
-          puts "#{block} middle block"
           rooms = block.available_rooms.take block.how_many_rooms
           rez = Hotel::Block.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
           @all_reservations << rez
           return rez
         else
-          puts "that block id is not available"
+          raise BlockAvailabilityError.new "Sorry, all of the rooms in the block have been booked."
         end
       end
     end

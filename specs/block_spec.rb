@@ -9,7 +9,6 @@ describe "Hotel" do
       collection_of_rooms = [
         Hotel::Room.new(2)
       ]
-
       @room1 = Hotel::Block.new(Date.new(2017,8,5), Date.new(2017,8,8), collection_of_rooms, "wedding")
     end
 
@@ -23,7 +22,13 @@ describe "Hotel" do
       @room1.block_total_cost.must_equal 480 #600-120
     end
 
+    it "will know if the block has availability" do
+      @room1.check_block_for_availability("wedding").must_equal true
+    end
 
+    it "will know if block doesn't have rooms" do
+      Hotel::Block.new(Date.new(2017,9,5), Date.new(2017,9,8), 2, "wedding").must_equal false
+    end
 
   end
 end

@@ -16,7 +16,7 @@ module Hotel
     def check_valid
       if @checkin < @checkout
         return true
-      else raise StandardError.new "invalid dates. Checkout date: #{@checkout} must be AFTER the Checkin date: #{@checkin}"
+      else raise DateRangeError.new "invalid dates. Checkout date: #{@checkout} must be AFTER the Checkin date: #{@checkin}"
       end
     end
 
