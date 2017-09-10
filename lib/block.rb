@@ -12,10 +12,8 @@ module Booking
       @discounted_room_rate = discounted_room_rate
     end
 
-
     def has_room_number?(room_number)
       return (@available_rooms.include?(room_number) || @already_reserved_rooms.include?(room_number))
     end
-
   end
 end

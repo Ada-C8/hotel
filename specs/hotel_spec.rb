@@ -115,17 +115,17 @@ describe "Hotel" do
   end
 
   describe " available_rooms_in_a_block method" do
-    before do
-      checkin = Date.new(2017,01,3)
-      checkout = Date.new(2017,01,28)
-    end
 
     it " should return list of rooms available in a block" do
+      checkin = Date.new(2017,01,3)
+      checkout = Date.new(2017,01,28)
       @my_hotel.create_block("Wedding", Booking::DateRange.new(checkin,checkout), [12, 13, 14], 150)
       @my_hotel.available_rooms_in_a_block("Wedding").must_equal [12, 13, 14]
     end
 
     it " should raise an error if block not found" do
+      checkin = Date.new(2017,01,3)
+      checkout = Date.new(2017,01,28)
       @my_hotel.create_block("Bday Party", Booking::DateRange.new(checkin,checkout), [12, 13, 14], 150)
       proc {@my_hotel.available_rooms_in_a_block("Wedding").must_equal [12, 13, 14]}.must_raise ArgumentError
     end
