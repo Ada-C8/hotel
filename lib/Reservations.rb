@@ -36,29 +36,16 @@ module Hotel
     def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       dates = Hotel::DateRange.new(check_in, check_out).dates
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      unless check_availability?(dates, room_number) == true
+      if check_availability?(dates, room_number) == false
         raise ArgumentError.new("Room number #{room_number} unavailable for those dates.")
+        else
+          @all_reservations << booking
+          return booking
       end
-      #available(check_in, check_out, room_number)
-      @all_reservations << booking
-      return booking
     end
 
-#Not using this
-        # list_blocked_rooms_by_date(date).each do |blocked_room|
-        #       if blocked_room.room_number == room_number
-        #         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
-        #         return false
-        #       end
-        #     end
-        #   end
-      #end
-      # end
-      # return true
-    #end
-#Tested for Booking only and seems to work
 
-#USING THIS one:
+#TESTED and WORKS - need to verify with Block reservatioins but it should work
     def list_rooms_available_by_date(date)
       rooms_available = @rooms_collection
       list_reservations_by_date(date).each do |booking|
@@ -78,7 +65,7 @@ module Hotel
       return rooms_available
     end #def end
 
-#NEWEST AVAILABLE METHOD  ##Troubleshoot tests in Bookings first#
+#TESTED and it WORKS - need to test for Block reservations
     def check_availability?(dates, room_number)
       available = true
       dates[0...-1].each do |date|
@@ -96,44 +83,21 @@ module Hotel
         return available
       end
     end
-    #OLDER AVAILABLE METHOD -- works but does not include check for rooms in blocks
-    # def available(check_in, check_out, room_number)
-    #   date_range = DateRange.new(check_in, check_out).dates
-    #   date_range[0...-1].each do |date|
-    #     list_reservations_by_date(date).each do |booking|
-    #       if booking.room_number == room_number
-    #         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
-    #       end
-    #     end
-    #   end
-    # end
 
-    # #New one does not work --
-    # def available
-    #   @dates[0...-1].each do |date|
-    #     list_rooms_available_by_date(date).each do |room|
-    #       if room.room_number != room_number
-    #         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
-    #         return false
-    #       else return true
-    #       end
-    #     end
 
 #MOSTLY TESTED but will need a few more tests most likely
     def new_block(check_in, check_out, block_name, number_of_rooms, block_rooms_collection = [], discounted_room_rate = 180)
       @number_of_rooms = number_of_rooms
       @dates = DateRange.new(check_in, check_out).dates
-      create_block_rooms_collection
+      create_block_rooms_collection #Method already checks for room availability in order to create collection
       block_rooms_collection = @block_rooms_collection
       block = Hotel::Block.new(check_in, check_out, block_name, @block_rooms_collection, discounted_room_rate = 180)
       @blocks_collection << block
       return block
-      #avail - check if rooms are availble
-
     end
 
     def create_block_rooms_collection #TESTED
-      if @number_of_rooms > 5 || @number_of_rooms < 1
+      unless @number_of_rooms <= 5 && @number_of_rooms >= 1
         raise ArgumentError.new("Blocks can only have between 1 and 5 rooms.")
       end
       rooms_available = @rooms_collection
@@ -154,24 +118,34 @@ module Hotel
       return @block_rooms_collection
     end
 
-    def in_block?
+    def in_block?(block_name, room_number)
+      found = false
       @blocks_collection.each do |block|
-        block.each do |booking|
-          if booking.room_number == @room_number
-            return true
+        unless found == true
+          if block.block_name == block_name
+            block.block_rooms_collection.each do |room|
+              if room.room_number == room_number
+              found = true
+              end
+            end
           end
         end
       end
-      return ArgumentError.new("Room number #{room_number} not included in a block.")
+      return found
     end
 
     def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
-      block_room = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      block_room.has_rooms_available?
-      #need error message if not
-      room_number = block_room.available_rooms.pop!
+      block_room_booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
+      #block_room.has_rooms_available?   #need error message if not
+      # unless in_block?(block_name, room_number) == true
+      #   return ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
+      # end
+
+      #room_number = block_room.available_rooms.pop!
       #not sure about above... can't I just compare booked rooms with rooms collection?
       #Be sure to add to booked rooms list once booked and all reservations
+      @all_reservations << block_room_booking  # TEST that it doesn't go in if not a valid booking
+      return block_room_booking
     end
 
 #I don't think I"ll need this but keep for now and hasn't been tested#

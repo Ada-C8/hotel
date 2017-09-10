@@ -174,16 +174,22 @@ describe 'Reservations' do
       @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
     end
     it 'must list the correct number of rooms for a given date' do
-      @new_block.block_rooms_collection.each do |room|
-        puts room.room_number
-      end
-      #puts @new_hotel.list_blocked_rooms_by_date
-    @new_hotel.list_blocked_rooms_by_date("2018-01-02").length.must_equal 5
+      @new_hotel.list_blocked_rooms_by_date("2018-01-02").length.must_equal 5
     end
   end
 
   describe 'reserve a room in a block' do
-
-    it 'must be'
+    before do
+      @new_hotel_with_blocks = Hotel::Reservations.new
+      @new_booking1 = @new_hotel_with_blocks.new_reservation("2018-01-01", "2018-01-05", 1)
+      @new_booking2 = @new_hotel_with_blocks.new_reservation("2018-01-01", "2018-01-04", 2)
+      @new_booking3 = @new_hotel_with_blocks.new_reservation("2018-01-01", "2018-01-05", 3)
+      @new_booking4 = @new_hotel_with_blocks.new_reservation("2018-01-01", "2018-01-13", 4)
+      @new_block = @new_hotel_with_blocks.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
+      @new_block_reservation = @new_hotel_with_blocks.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 6)
+    end
+    it 'must be an instance of Hotel Booking' do
+      @new_block_reservation.must_be_instance_of Hotel::Booking
+    end
   end
 end

@@ -1,7 +1,7 @@
 
 module Hotel
   class Block
-    attr_accessor :check_in, :check_out, :date_range, :dates, :block_rooms_collection, :discounted_room_rate, :available_rooms, :booked
+    attr_accessor :check_in, :check_out, :date_range, :dates, :block_rooms_collection, :discounted_room_rate, :available_rooms, :booked, :block_name
     def initialize(check_in, check_out, block_name, block_rooms_collection = [], discounted_room_rate = 180)
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
