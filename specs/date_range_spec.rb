@@ -138,7 +138,6 @@ describe 'DateRange' do
   end
 
   describe 'self.validate' do
-    # TODO: edge tests
     it 'returns input unchanged if input is a Date object' do
       DateRange.validate(@before).must_equal @before
     end
@@ -149,9 +148,19 @@ describe 'DateRange' do
       date.month.must_equal 10
     end
 
-    it 'raises an exception if input is neither Date or String' do
+    it 'raises ArgumentError if input is neither Date or String' do
       proc {
         DateRange.validate(2017_10_14)
+      }.must_raise ArgumentError
+
+      proc {
+        DateRange.validate(true)
+      }.must_raise ArgumentError
+    end
+
+    it 'raises ArgumentError if passed invalid String format' do
+      proc {
+        DateRange.validate('my birthday')
       }.must_raise ArgumentError
     end
   end
