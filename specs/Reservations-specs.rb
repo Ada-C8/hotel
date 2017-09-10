@@ -56,9 +56,9 @@ describe 'Reservations' do
       @new_hotel.clear_reservations
       @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
     end
-    after do
-      @new_hotel.clear_reservations
-    end
+    # after do
+    #   @new_hotel.clear_reservations
+    # end
     it 'must must raise argument error if room is not available' do
       proc{new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-04", 1)}.must_raise ArgumentError
     end
@@ -75,10 +75,10 @@ describe 'Reservations' do
       @new_hotel.clear_reservations
     end
     it 'must return an array' do
-      @new_hotel.list_rooms_available_by_date("2018-01-02").must_be_kind_of Array
+      @new_hotel.list_rooms_available_by_date("2018-01-02", false).must_be_kind_of Array
     end
     it 'must return the correct number of rooms available' do
-      @new_hotel.list_rooms_available_by_date("2018-01-03").length.must_equal 17
+      @new_hotel.list_rooms_available_by_date("2018-01-03", false).length.must_equal 17
     end
     it 'must return the correct rooms available' do
 
@@ -146,7 +146,7 @@ describe 'Reservations' do
   describe 'make a new block' do
     before do
       @new_hotel.clear_reservations
-      @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", 5)
+      @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
       #@new_block2 = @new_hotel.new_block("2018-02-02", "2018-02-05", 3)
     end
     after do
@@ -164,5 +164,10 @@ describe 'Reservations' do
     it 'must have the correct number of rooms in the collection' do
       @new_block.block_rooms_collection.length.must_equal 5
     end
+  end
+
+  describe 'reserve a room in a block' do
+
+    it 'must be'
   end
 end

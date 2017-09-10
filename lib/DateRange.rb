@@ -2,7 +2,7 @@ require 'date'
 
 module Hotel
   class DateRange
-    #attr_reader :dates  Add this?
+    attr_accessor :dates
     def initialize(check_in, check_out)
       @check_in = check_in
       @check_out = check_out

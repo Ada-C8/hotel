@@ -23,6 +23,19 @@ end
     end
   end
 
+  describe 'has_rooms_available' do
+    before do
+      @new_block1 = Hotel::Block.new("2018-01-01", "2018-01-10", "Heritage", [1, 2, 3, 4, 5])
+      @new_block1.booked = [1, 2, 3, 4]
+    end
+    it 'must return true when at least one room is available' do
+      @new_block1.has_rooms_available?.must_equal true
+    end
+    it 'must return false when no rooms available' do
+      @new_block1.booked << 5
+      @new_block1.has_rooms_available?.must_equal false
+    end
+  end
 
 
 end
