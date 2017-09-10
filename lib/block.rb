@@ -27,7 +27,7 @@ module Hotel
         available = true
       end
     end
-    ##### later, if it's not empty or not full, I NEED MORE LOGIC
+    ##### later, what if it's not empty or not full?
 
     def check_block_id(block_id)
       return @block_id == block_id
