@@ -28,30 +28,28 @@ module Hotel
     end
 
     def available_room
-      # @rooms.each do |room|
-      #   #unless room is reserved, return the first room
-      #   #add later!
-      #   return room
-      # end
-
-      #push reservation room numbers into array
+      #takes rooms with no reservations
       res_nums = []
       @reservations.each do |res|
         res_nums << res.room_number.num
       end
-      #compare hotel room numbers with res_nums
       @rooms.each do |room|
         unless res_nums.include? room.num
-          return room #returns first available room
+          return room #returns first instance
         end
       end
+
     end
 
     def reserve_room(date_range, available_room)
       #take available_room and date_range,shove them into a new assign_room instance
-      #this should be referencing a new class
-      #assign_room should be added to @reservation array
-      @reservations << Hotel::AssignRoom.new(date_range, available_room)
+
+      #check valid available_room
+      if available_rooms_during(date_range).include? available_room
+        @reservations << Hotel::AssignRoom.new(date_range, available_room)
+      else
+        raise ArgumentError.new("This room isn't available")
+      end
     end
 
     def total
@@ -88,7 +86,9 @@ module Hotel
 
       #takes available rooms in date_range from @reservations
       @reservations.each do |res|
-        if (res.date_range & date_range).empty?
+        nights = res.date_range
+        nights.pop #removes check out day
+        if (nights & date_range).empty?
           available_rooms << res
         end
       end

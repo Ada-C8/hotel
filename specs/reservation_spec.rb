@@ -109,22 +109,22 @@ describe "reservation class" do
   describe "available rooms during date range" do
     it "provides an array of available rooms" do
       pokemon_hotel = Hotel::Reservation.new
-
-      slowbro_dates = pokemon_hotel.date_range("10-5-2017","10-8-2017")
+      #this room should open up as available
+      slowbro_dates = pokemon_hotel.date_range("10-1-2017","10-4-2017")
       slowbro_num = pokemon_hotel.available_room
       pokemon_hotel.reserve_room(slowbro_dates, slowbro_num)
-
+      #this room is not available
       teddiursa_dates = pokemon_hotel.date_range("10-4-2017","10-7-2017")
       teddiursa_num = pokemon_hotel.available_room
       pokemon_hotel.reserve_room(teddiursa_dates, teddiursa_num)
-
+      #this room is available
       magikarp_dates = pokemon_hotel.date_range("10-7-2017","10-9-2017")
       magikarp_num = pokemon_hotel.available_room
       pokemon_hotel.reserve_room(magikarp_dates, magikarp_num)
 
-      g_dates = pokemon_hotel.date_range("10-4-2017", "10-6-2017")
-      pokemon_hotel.available_rooms_during(g_dates).length.must_equal 18
-      pokemon_hotel.available_rooms_during(g_dates).must_be_instance_of Array
+      bellossum_dates = pokemon_hotel.date_range("10-4-2017", "10-6-2017")
+      pokemon_hotel.available_rooms_during(bellossum_dates).length.must_equal 19
+      pokemon_hotel.available_rooms_during(bellossum_dates).must_be_instance_of Array
     end
   end
 
