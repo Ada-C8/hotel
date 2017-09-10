@@ -51,6 +51,7 @@ module DateRange
     unless first < second
       raise(DatesError, 'Start date must be at least 1 day before end date')
     end
+    true
   end
 
   def self.validate(input)
