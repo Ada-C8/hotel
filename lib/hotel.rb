@@ -4,12 +4,13 @@ require 'date'
 
 module HotelManagment
   class Hotel
-    attr_reader :rooms, :reservations, :found_reservations, :unreserved_rooms
+    attr_reader :rooms, :reservations, :found_reservations, :unreserved_rooms, :blocks
     def initialize
       @rooms = []
       @reservations = []
       @found_reservations = []
       @unreserved_rooms = []
+      @blocks = []
     end
 
     def add_20_rooms
@@ -22,6 +23,7 @@ module HotelManagment
     end
 
 
+    # creates a reservation
     def create_reservation(first_name, last_name, check_in_date, check_out_date, room_number)
 
       if check_in_date < DateTime.now || check_out_date < check_in_date
@@ -34,6 +36,7 @@ module HotelManagment
     end
 
 
+
     def reservations_by_date(date)
       @reservations.each { |reservation|
         if reservation.check_in_date <= date && reservation.check_out_date >= date
@@ -44,6 +47,8 @@ module HotelManagment
     end
 
 
+
+    # returns an array or rooms not reserved for a given date range
     def rooms_not_reserved(check_in_date, check_out_date)
       @reservations.each { |reservation|
         unless reservation.check_in_date >= check_in_date && reservation.check_out_date <= check_out_date
@@ -55,6 +60,8 @@ module HotelManagment
     end
 
 
+
+    # reserves the first available room for a given date range. Uses the rooms_not reserved method.
     def reserve_room_for_date_range(first_name, last_name, check_in_date, check_out_date)
 
       # set the rooms_not_reserved method and arguments to a local variable.
@@ -67,8 +74,12 @@ module HotelManagment
         raise ArgumentError, 'No Available Rooms for Given Dates'
       else
         create_reservation(first_name, last_name, check_in_date, check_out_date, rooms_unreserved_for_this_date[0])
-
       end
+    end
+
+    def create_block(amount_of_rooms)
+      block = HotelManagment::Block.new(amount_of_rooms)
+      @blocks << block
     end
 
   end #class end

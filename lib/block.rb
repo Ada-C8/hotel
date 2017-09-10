@@ -1,4 +1,5 @@
 # block
+require 'date'
 
 module HotelManagment
   class Block
@@ -6,9 +7,9 @@ module HotelManagment
 
     BLOCKRATE = 100
 
-    def initialize(amount_of_rooms)
+    def initialize(check_in_date, check_out_date, amount_of_rooms)
       @amount_of_rooms = amount_of_rooms
     end
-    
+
   end #class end
 end #module end

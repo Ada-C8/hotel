@@ -167,9 +167,7 @@ describe "hotel class" do
     end
 
     it "Should reserve a room for a given date range if no conflicting reservations" do
-
       date = Date.today
-
       new_hotel = HotelManagment::Hotel.new
 
       new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
@@ -182,13 +180,38 @@ describe "hotel class" do
 
       new_hotel.reservations.length.must_equal 4
     end
+
+
+    it "Raises ArgumentError if there are no available rooms" do
+      date = Date.today
+
+      new_hotel = HotelManagment::Hotel.new
+
+      proc { new_hotel.reserve_room_for_date_range("marisa", "morris", date + 36, date + 40) }.must_raise ArgumentError
+    end
   end
 
-  it "Raises ArgumentError if there are no available rooms" do
-    date = Date.today
+  describe "create_block" do
+    it "Should respond to create_block" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.must_respond_to :create_block
+    end
 
-    new_hotel = HotelManagment::Hotel.new
+    it "Should be able add a new block" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.create_block(5).length.must_equal 1
+    end
 
-    proc { new_hotel.reserve_room_for_date_range("marisa", "morris", date + 36, date + 40) }.must_raise ArgumentError
+    it "Should be able to access a list of all blocks" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.create_block(5)
+      new_hotel.blocks[0].amount_of_rooms.must_equal 5
+    end
   end
 end
+
+
+
+# new_hotel = HotelManagment::Hotel.new
+# new_hotel.add_20_rooms
+# new_hotel.rooms[0].room_number.must_equal 1
