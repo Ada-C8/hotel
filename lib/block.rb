@@ -5,7 +5,7 @@ module BookingSystem
     attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :avail_block_rooms, :reserved_rooms, :block_total
 
     DISCOUNT_RATE = 150
-
+    # To create a block you need a date range, collection of rooms and a discounted room rate
     def initialize(reserved_for, check_in, check_out, avail_block_rooms)
       dates = DateRange.new(check_in, check_out)
       @reserved_for = reserved_for

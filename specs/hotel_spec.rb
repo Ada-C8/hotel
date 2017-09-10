@@ -88,6 +88,14 @@ describe "Hotel" do
   end
 
   describe "#reserve_block" do
+    it "should raise and ArgumentError if the number of rooms for a block is greater than 5 or less than 0" do
+      proc { hotel.reserve_block(@name, @check_in, @check_out, 10) }.must_raise ArgumentError
+    end
+
+    it "should raise and ArgumentError if the number of rooms for a block is less than 1" do
+      proc { hotel.reserve_block(@name, @check_in, @check_out, 0) }.must_raise ArgumentError
+    end
+
     it "should create one instance of BookingSystem::Block" do
       res_block_setup.must_be_instance_of BookingSystem::Block
     end
@@ -128,6 +136,10 @@ describe "Hotel" do
       create_twenty_res
 
       proc {hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)}.must_raise ArgumentError
+    end
+
+    it "should raise an ArgumentError if the num_of_rooms requested is greater than 5" do
+
     end
   end # Describe
 
