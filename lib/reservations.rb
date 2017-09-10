@@ -1,7 +1,7 @@
 module Hotel
   class Reservation
 
-  attr_reader :total_nights, :check_in, :check_out, :room, :block_id
+  attr_reader :total_nights, :check_in, :check_out, :room, :block_id, :guest
 
   def initialize(guest, check_in, check_out, room, block_id = nil)
     @guest = guest

@@ -1,5 +1,6 @@
 require_relative 'reservations'
 require_relative 'rooms'
+require_relative 'block'
 
 
 module Hotel
@@ -38,6 +39,8 @@ module Hotel
       raise StandardError.new "only possible to book 5 rooms in a block"
     end
 
+    ### Does this work to just say block.add_room?
+
     num_rooms.times do
       room = assign_room(check_in, check_out)
       @blocks.each do |block_in_array|
@@ -46,6 +49,8 @@ module Hotel
         end
       end
     end
+
+    return block
   end
 
 
