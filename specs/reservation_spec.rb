@@ -23,9 +23,9 @@ describe 'Reservation' do
     end # end test
   end # end #self.print_list
 
-  describe 'self.list_by_date' do
+  describe 'self.on_date' do
     it 'returns a list of reservations for a specific date' do
-      
+      Hotel::Reservation.on_date(Date.new(2018, 1, 17)).must_equal [kitten_expo]
     end # end test
-  end # end #self.list_by_date
+  end # end #self.on_date
 end # end of all Reservation tests

@@ -31,5 +31,11 @@ module Hotel
       end
       return bookings
     end # end #self.print_list
+
+    def self.on_date(date)
+      @@reservations.select do | reservation |
+        reservation.check_in == date
+      end
+    end # end #self.on_date
   end # end of Reservation
 end # end of Hotel module
