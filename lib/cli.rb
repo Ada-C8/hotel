@@ -54,20 +54,12 @@ module Hotel
 
     def change_room_cost
       room_number = get_room_number
-      ###
+      new_cost = get_value
 
-      cost = "cost"
-      until cost =~ (/\d/)
-        print "\n\tNew Cost: "
-        cost = gets.chomp
-      end
-        p cost
 
-      new_cost = nil
       hotel.rooms.each do |room|
         if room.number == room_number
-          hotel.room.cost_per_night = cost
-          new_cost = room.cost_per_night
+          room.cost_per_night = new_cost
         end
       end
 
@@ -106,15 +98,26 @@ module Hotel
       return choice
     end
 
+    def get_value
+      print "\n\tNew Cost: "
+      value = gets.chomp
+      until value =~ (/\d/)
+        puts "Invalid Cost."
+        print "New Cost: "
+        value = gets.chomp
+      end
+      return value.to_i
+    end
+
     def get_room_number
       print "\n\tRoom Number: "
       room_number = gets.chomp
       until room_number =~ (/^([1-9]|1[0123456789]|20)$/)
         puts "Invalid Room Number."
-        puts "Room Number: "
+        print "Room Number: "
         room_number = gets.chomp
       end
-      return room_number
+      return room_number.to_i
     end
 
   end
