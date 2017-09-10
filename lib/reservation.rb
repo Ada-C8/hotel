@@ -21,7 +21,7 @@ module Hotel
 
     def get_total
       num_nights = @dates.length
-      @total_cost = @room.cost * num_nights
+      @total_cost = @room.rate * num_nights
       @total_cost *= @block.discount_rate if @block
     end
 

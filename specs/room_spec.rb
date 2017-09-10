@@ -14,7 +14,7 @@ describe 'Room' do
     end
 
     it 'has a cost' do
-      @room.cost.must_equal 200
+      @room.rate.must_equal 200
     end
   end
 end
