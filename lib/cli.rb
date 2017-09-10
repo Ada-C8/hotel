@@ -1,6 +1,7 @@
 require_relative 'hotel'
 require 'terminal-table'
 require 'chronic'
+require 'pry'
 
 module Hotel
   class Cli
@@ -13,34 +14,42 @@ module Hotel
 
     def begin
       while true
+        run_program
+      end
+    end
+
+    def run_program
+      begin
         display_user_menu
         choice = get_menu_option
 
         case choice
-        when "A"
-          reserve_room
-        when "B"
-          reserve_room_from_block
-        when "C"
-          make_block_of_rooms
-        when "D"
-          view_reservations
-        when "E"
-          view_all_reservations
-        when "F"
-          view_available_rooms
-        when "G"
-          view_available_rooms_in_block
-        when "H"
-          change_room_cost
-        when "I"
-          view_rooms
-        when "X"
-          abort("Thank you! Have a nice day!")
-        else
-          raise ArgumentError.new "not a valid choice"
+          when "A"
+            reserve_room
+          when "B"
+            reserve_room_from_block
+          when "C"
+            make_block_of_rooms
+          when "D"
+            view_reservations
+          when "E"
+            view_all_reservations
+          when "F"
+            view_available_rooms
+          when "G"
+            view_available_rooms_in_block
+          when "H"
+            change_room_cost
+          when "I"
+            view_rooms
+          when "X"
+            abort("Thank you! Have a nice day!")
+          else
+            raise ArgumentError.new "not a valid choice"
         end
-
+      rescue
+        puts "I'm sorry! Something went wrong! Please try again"
+        return true
       end
     end
 
@@ -58,11 +67,16 @@ module Hotel
       X. Exit the program"
     end
 
+    def get_input
+      input = gets.chomp
+      return input
+    end
+
     def get_menu_option
       choice = nil
       until choice =~ (/^[A-Ia-i]|[Xx]$/)
         print "\nPlease choose an option: "
-        choice = $stdin.gets.chomp
+        choice = get_input
       end
       return choice.upcase
     end
@@ -70,18 +84,19 @@ module Hotel
     ### Write in option of no room preference
     # choice A
     def reserve_room
-
       check_in= get_date_for("check in", Date.today)
 
-      check_out = get_date_for("check out", check_in + 1)
+      check_out = get_date_for("check out", check_in)
 
       print "Guest Name: "
-      guest = gets.chomp
+      guest = get_input
 
-      print "Preferred Room: "
-      room = get_room
+      print "Preferred Room (Type N for no preference): "
+      room_number = get_room
 
-      hotel.make_reservation(guest, check_in, check_out, room.number)
+      res = hotel.make_reservation(guest, check_in, check_out, room_number)
+
+      show_table_of_reservations([res.last])
     end
 
     # choice B
@@ -89,7 +104,7 @@ module Hotel
       block = get_block
 
       print "Guest Name: "
-      guest = gets.chomp
+      guest = get_input
 
       hotel.make_reservation_from_block(guest, block.id)
     end
@@ -112,10 +127,9 @@ module Hotel
     # choice D
     def view_reservations
       date = get_date_for("see reservations for")
-      hotel.get_res_by_date(date)
+      reservations = hotel.get_res_by_date(date)
 
-
-      show_table_of_rooms(block.rooms_in_block)
+      show_table_of_reservations(reservations)
     end
 
     # choice E
@@ -170,7 +184,7 @@ module Hotel
       num_rooms = nil
       until num_rooms =~ (/[1-5]/)
         print "How many rooms would you like to reserve? "
-        num_rooms = gets.chomp
+        num_rooms = get_input
       end
       return num_rooms.to_i
     end
@@ -188,7 +202,7 @@ module Hotel
     def get_date(action, must_be_after_date)
       begin
         print "What date would you like to #{action}?  "
-        input = gets.chomp
+        input = get_input
 
         date = Chronic.parse(input).to_date
 
@@ -205,7 +219,7 @@ module Hotel
     def get_block
       while true
         print "Block ID: "
-        block_id = gets.chomp
+        block_id = get_input
 
         hotel.blocks.each do |block|
           if block.id = block_id
@@ -222,23 +236,27 @@ module Hotel
       until value =~ (/\d/)
         puts "Invalid Cost."
         print "New Cost: "
-        value = gets.chomp
+        value = get_input
       end
       return value.to_i
     end
 
     def get_room
       print "\n\tRoom Number: "
-      room_number = gets.chomp
-      until room_number =~ (/^([1-9]|1[0-9]|20)$/)
+      room_number = get_input
+      until room_number =~ (/^([1-9]|1[0-9]|20|[Nn])$/)
         puts "Invalid Room Number."
         print "Room Number: "
-        room_number = gets.chomp
+        room_number = get_input
+      end
+
+      if room_number == "N" || room_number == "n"
+        return nil
       end
 
       hotel.rooms.each do |room|
         if room.number == room_number.to_i
-          return room
+          return room.number
         end
       end
       raise StandardError.new "No room found"
@@ -253,6 +271,7 @@ module Hotel
         end
       end
       puts table
+      return table
     end
 
     def show_table_of_reservations(reservations)
@@ -266,6 +285,7 @@ module Hotel
         end
       end
       puts table
+      return table
     end
   end
 end # end of hotel module

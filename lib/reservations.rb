@@ -37,6 +37,8 @@ module Hotel
 
   def calculate_res_length
     if @check_in >= @check_out || @check_in < Date.today
+      puts @check_in
+      puts @check_out
       raise ArgumentError.new "invalid dates"
     else
       length = @check_out - @check_in
