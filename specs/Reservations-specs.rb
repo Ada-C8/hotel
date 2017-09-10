@@ -60,7 +60,7 @@ describe 'Reservations' do
     #   @new_hotel.clear_reservations
     # end
     it 'must must raise argument error if room is not available' do
-      proc{new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-04", 1)}.must_raise ArgumentError
+      proc{ new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-04", 1) }.must_raise ArgumentError
     end
   end
 
@@ -75,10 +75,10 @@ describe 'Reservations' do
       @new_hotel.clear_reservations
     end
     it 'must return an array' do
-      @new_hotel.list_rooms_available_by_date("2018-01-02", false).must_be_kind_of Array
+      @new_hotel.list_rooms_available_by_date("2018-01-02").must_be_kind_of Array
     end
     it 'must return the correct number of rooms available' do
-      @new_hotel.list_rooms_available_by_date("2018-01-03", false).length.must_equal 17
+      @new_hotel.list_rooms_available_by_date("2018-01-03").length.must_equal 17
     end
     it 'must return the correct rooms available' do
 
@@ -163,6 +163,20 @@ describe 'Reservations' do
     end
     it 'must have the correct number of rooms in the collection' do
       @new_block.block_rooms_collection.length.must_equal 5
+    end
+  end
+
+  describe 'list block rooms by date' do
+    before do
+      @new_hotel.clear_reservations
+      @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
+    end
+    it 'must list the correct number of rooms for a given date' do
+      @new_block.block_rooms_collection.each do |room|
+        puts room.room_number
+      end
+      #puts @new_hotel.list_blocked_rooms_by_date
+    @new_hotel.list_blocked_rooms_by_date("2018-01-02").length.must_equal 5
     end
   end
 

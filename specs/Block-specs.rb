@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'Block' do
 before do
-  @new_hotel = Hotel::Reservations.new
+  @hotel = Hotel::Reservations.new
   @new_block = Hotel::Block.new("2018-01-01", "2018-01-10", [])
 end
   describe 'initialize' do
