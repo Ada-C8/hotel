@@ -68,8 +68,7 @@ module Hotel
 
     #I can reserve an available room for a given date range
     def is_available?(id, room, day_in, day_out)
-      x = open_rooms(day_in, day_out)
-      if x.include?(room)
+      if open_rooms(day_in, day_out).include?(room)
         return true
       else
         return false
@@ -77,7 +76,12 @@ module Hotel
     end# is_available
 
     #As an administrator, I can create a block of rooms
-    def create_block(block_id, rooms, day_in, day_out)
+    def create_block(block_id, number_of_rooms, day_in, day_out)
+      available = open_rooms(day_in, day_out) #>= number_of_rooms
+        return available.length
+      # else
+      #   return false
+      #end
 
       #find avaiable rooms for the requested date range (up to five)
       #establish discounted rate
@@ -88,18 +92,16 @@ module Hotel
 
     # The collection of rooms should only include rooms that are available for the given date range
 
-
-
-
-
-
   end #class
 end #module
-binding.pry
+# binding.pry
 # @boetel = Hotel::Hotel.new
-# @boetel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+# @boetel.make_reservation(2222, 2, "2017/12/12", "2017/12/15")
 # @boetel.make_reservation(1201, 1, "2017/12/12", "2017/12/15")
-# @boetel.make_reservation(1204, 2, "2017/12/05", "2017/12/12")
+# @boetel.make_reservation(1204, 4, "2017/12/10", "2017/12/12")
+# open = @boetel.open_rooms("2017/12/12", "2017/12/14")
+
+
 # @boetel.make_reservation(1203, 3, "2017/12/1", "2017/12/15")
 # @boetel.make_reservation(1204, 4, "2017/12/1", "2017/12/15")
 # @boetel.make_reservation(1205, 5, "2017/12/1", "2017/12/15")
