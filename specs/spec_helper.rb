@@ -11,7 +11,6 @@ require 'date'
 #Require any classes
 require_relative '../lib/hotel.rb'
 require_relative '../lib/reservation.rb'
-require_relative '../lib/date_range.rb'
 require_relative '../lib/block.rb'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
