@@ -6,6 +6,9 @@ describe "Hotel" do
   let(:room_5) { ada_inn.hotel[4] }
   let(:room_6) { ada_inn.hotel[5] }
   let(:room_7) { ada_inn.hotel[6] }
+  let(:room_8) { ada_inn.hotel[7] }
+  let(:room_9) { ada_inn.hotel[8] }
+
 
   describe "initialize" do
     it "Creates a hotel that is an array of 20 rooms with room numbers" do
@@ -33,6 +36,11 @@ describe "Hotel" do
       @res4 = ada_inn.reserve(Date.new(2017,6,9), 3, room_7)
     end # before
 
+    let(:d1) {Date.new(2020,01,01)}
+    let(:d2) {Date.new(2017,6,12)}
+    let(:d6) {Date.new(2018,01,06)}
+    # let(:new_block) { ReservationSystem::Block.new(d6,2,[room_4, room_5, room_6, room_7], 120)}
+
     describe "reserve" do
       it "Creates a reservation object" do
         @res1.must_be_instance_of ReservationSystem::Reservation
@@ -56,13 +64,29 @@ describe "Hotel" do
       end #valid number error
 
       it "Raises an error if the room is unavailable for given date range" do
-          proc {ada_inn.reserve(Date.new(2017,10,13), 1, room_4)}.must_raise Reservable::UnavailableError
-          proc {ada_inn.reserve(Date.new(2017,6,10), 5, room_5)}.must_raise Reservable::UnavailableError
-          proc {ada_inn.reserve(Date.new(2017,6,10), 1, room_7)}.must_raise Reservable::UnavailableError
+        proc {ada_inn.reserve(Date.new(2017,10,13), 1, room_4)}.must_raise Reservable::UnavailableError
+        proc {ada_inn.reserve(Date.new(2017,6,10), 5, room_5)}.must_raise Reservable::UnavailableError
+        proc {ada_inn.reserve(Date.new(2017,6,10), 1, room_7)}.must_raise Reservable::UnavailableError
 
-          ada_inn.reserve(Date.new(2017,6,14), 20, room_6) #because there is no wont_raise
+        ada_inn.reserve(Date.new(2017,6,14), 20, room_6) #because there is no wont_raise
       end
     end # "reserve"
+
+    describe "reserve_block" do
+      it "Creates a block object" do
+        block_res = ada_inn.reserve_block(d1, 2, [room_4, room_5], 150)
+
+        block_res.must_be_instance_of ReservationSystem::Block
+      end # "returns a block object"
+
+      it "Limits the maximum number of rooms to 5" do
+        proc {ada_inn.reserve_block(d6,2,[room_4, room_5, room_6, room_7, room_8, room_9], 120)}.must_raise Reservable::RoomLimit
+      end # "Limits the maximum number of rooms to 5"
+
+      it "Raises an error if a room is already reserved or blocked" do
+        proc {ada_inn.reserve_block(d2,1,[room_5], 120)}.must_raise Reservable::UnavailableError
+      end # "Raises an error if a room is already reserved or blocked"
+    end # reserve_block
 
     describe "search_reservations_by_date" do
       it "Can list reservations including a specific date" do
@@ -85,6 +109,26 @@ describe "Hotel" do
       end # "Can list available rooms by date range"
 
     end # "search_available_rooms_by_dates"
+
+
+      describe "search_available_rooms_by_block" do #TODO
+        it "Can check whether a given block has any rooms available" do
+
+        end # "Can check whether a given block has any rooms available"
+
+
+      end # "search_available_rooms_by_block"
+
+      describe "reserve_within_block" do #TODO
+        it "Can reserve a room from within a block" do
+
+        end #"Can reserve a room from within a block"
+
+        it "Has reservation dates that match date range of the block" do
+
+        end # "Has reservation dates that match date range of the block"
+      end # "reserve_within_block"
+
 
   end # "hotel instance methods"
 

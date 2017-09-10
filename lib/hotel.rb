@@ -9,6 +9,7 @@ module ReservationSystem
     attr_accessor :hotel, :all_reservations, :new_reservation
 
     BASE_ROOM_RATE = 200
+    BLOCK_ROOM_LIMIT = 5
 
     def initialize
       @hotel = Array.new
@@ -32,6 +33,24 @@ module ReservationSystem
 
     end # reserve
 
+    def reserve_block(start_date, nights, rooms_list, block_rate)
+      valid_date?(start_date)
+      positive_integer?(nights)
+
+      if rooms_list.length > BLOCK_ROOM_LIMIT
+        rooms_list = rooms_list[0,5]
+        raise RoomLimit.new("Blocks may only contain #{BLOCK_ROOM_LIMIT} rooms. Your block will include the first #{BLOCK_ROOM_LIMIT} rooms only.")
+      end
+
+      rooms_list.each do |room|
+        raise UnavailableError.new("One or more rooms are unavailable on one of the dates given") if !room.available?(start_date, nights)
+      end
+
+      @new_block = ReservationSystem::Block.new(start_date, nights, rooms_list, block_rate)
+
+
+    end # reserve_block
+
     def search_reservations_by_date(date)
       valid_date?(date)
       list = Array.new
@@ -53,6 +72,10 @@ module ReservationSystem
 
       return rooms
     end # "search_available_rooms_by_dates"
+
+
+
+
 
   end #Hotel class
 
