@@ -19,5 +19,5 @@ require_relative '../lib/reservation'
 
 
 
-
-Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+#
+# Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
