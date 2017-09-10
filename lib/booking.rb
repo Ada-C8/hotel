@@ -31,10 +31,23 @@ module Hotel
       end
     end # initialize
 
-    def make_reservation(start_date, end_date, num_rooms )
+    def valid_dates(start_date, end_date)
       if end_date < start_date
         raise BookingError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
-      else
+      elsif end_date == start_date
+        raise BookingError.new("You must book at least one night. You entered: checkin day = #{start_date} and checkout date = #{end_date} ")
+      end # if
+    end # valid_dates
+
+    def get_date_array(start_date, end_date)
+      dates = Hotel::DateRange.new(start_date, end_date).nights_booked
+    end # get_date_array
+
+    def make_reservation(start_date, end_date, num_rooms )
+
+      valid_dates(start_date, end_date)
+
+      if start_date < end_date
         availible = availible_rooms(start_date, end_date)
         if num_rooms > 20
           raise BookingError.new("You can't book that many rooms because we only have 20 rooms in the hotel.")
@@ -42,7 +55,8 @@ module Hotel
           raise BookingError.new("We don't have that many rooms availible for those dates. We only have #{availible.length} rooms availible for those dates. ")
         end # if/elsif
 
-        dates_booked = Hotel::DateRange.new(start_date, end_date).nights_booked
+        dates_booked = get_date_array(start_date, end_date)
+
         reservation_id = @all_reservations.length + 1
         rooms = []
         i = 0
@@ -63,7 +77,7 @@ module Hotel
       # iterate though @all_reservations for each day requested and if the day is included in the Booking then it will look at the Reservation that included that date and add the room(s) in that reservation to a new array not_availible.
       # TODO
       #maybe change this method to use a mehtod_name(block).each or method_name(reservation).each where methof_name is a method that can return either the @all_reservations array or the @all_blocks array. Then we don't have to make a new method to search for a block in a given date range? Not sure if there is enough overlap for this, but something to keep in mind!
-      days = Hotel::DateRange.new(start_date, end_date).nights_booked
+      days = get_date_array(start_date, end_date)
       date_reservations = []
 
       days.each do |day|
@@ -140,9 +154,9 @@ module Hotel
 
       block_id = block_id.upcase
 
-      if start_date > end_date
-        raise BookingError.new("Your checkin day must be before your checkout day! You entered checkin day = #{start_date} and checkout day = #{end_date}")
-      elsif num_of_rooms > 5
+      valid_dates(start_date, end_date)
+
+      if num_of_rooms > 5
         raise BookingError.new("You can only request a maximum of five rooms per block.")
       elsif num_of_rooms > availible.length
         raise BookingError.new("You cannot request that many rooms for your block. There are only #{availible.length} rooms left for that date range.")
@@ -150,7 +164,7 @@ module Hotel
         raise BookingError.new("Please use a different block ID, the block ID #{block_id} is already in use")
       end # if/elsif
 
-      dates = Hotel::DateRange.new(start_date, end_date).nights_booked
+      dates = get_date_array(start_date, end_date)
 
       rooms = []
       i = 0
@@ -166,7 +180,7 @@ module Hotel
     end #make_block
 
     def check_date_for_block(start_date, end_date)
-      days = Hotel::DateRange.new(start_date, end_date).nights_booked
+      days = get_date_array(start_date, end_date)
       date_blocks = []
 
       days.each do |day|
@@ -248,7 +262,6 @@ module Hotel
       end # .each
     end # return_one_block
 
-    # TODO : move most of this funtionality into Block class
     def reserve_from_block(block_id, num_of_rooms)
       id = block_id.upcase
       all_block_id = []

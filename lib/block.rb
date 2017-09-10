@@ -32,7 +32,7 @@ module Hotel
       rooms = []
       i = 0
       num_of_rooms.times do
-        rooms << @block_rooms[i] # TODO: how to delete  from @block_rooms?
+        rooms << @block_rooms[i] 
         i += 1
       end # .each
 
@@ -44,7 +44,7 @@ module Hotel
       cost = (num_of_rooms * @date_range.length * 180.0)
 
       reserved_rooms_from_block << Hotel::Reservation.new(reservation_id, cost, rooms, @date_range)
-      
+
     end # reserve_room
   end # Block
 end # Hotel

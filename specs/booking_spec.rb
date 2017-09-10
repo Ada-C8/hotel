@@ -152,14 +152,14 @@ describe "Booking" do
     end # it "should return an empty array is there are no reservations for the date given" do
 
     it "should return an array of all the reservations for the date range given" do
-      checkin_day = Date.new(2017, 9, 5)
-      checkout_day = Date.new(2017, 9, 7)
+      in_day = Date.new(2017, 9, 5)
+      out_day = Date.new(2017, 9, 7)
       num_of_rooms = 1
       start_date_to_check = Date.new(2017, 9, 6) #both reservations include the 5th of September
       end_date_to_check = Date.new(2017, 9, 9)
 
-      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
-      @booking.make_reservation(checkin_day, checkout_day, num_of_rooms )
+      @booking.make_reservation(in_day, out_day, num_of_rooms )
+      @booking.make_reservation(in_day, out_day, num_of_rooms )
       @booking.check_date_for_reservations(start_date_to_check, end_date_to_check).length.must_equal 2
       @booking.check_date_for_reservations(start_date_to_check, end_date_to_check)[1].res_id.must_equal 2
 
@@ -418,6 +418,11 @@ end # describe "make_block" do
         @booking.reserve_from_block("wedding", 1)
         @booking.all_blocks[0].block_rooms.length.must_equal 4
       end # it "will have removed the room reserved from the Blocks @block_rooms" do
-
     end # describe "reserve_block_room" do
+
+    describe "valid_dates" do
+      it "will raise BookingError if checkin and checkout day are the same" do
+        proc{@booking.make_reservation(@checkin_day, @checkin_day, 2)}.must_raise BookingError
+      end # it "will raise BookingError if checkin and checkout day are the same" do
+    end # describe "valid_dates" do
 end # Booking
