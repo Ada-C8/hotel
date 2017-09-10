@@ -189,8 +189,36 @@ describe 'Reservations' do
       @new_block_reservation = @new_hotel_with_blocks.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 6)
     end
     it 'must be an instance of Hotel Booking' do
-
       @new_block_reservation.must_be_instance_of Hotel::Booking
+    end
+    it 'must raise an error if the room is not in the block' do
+      proc {@new_block_reservation1 = @new_hotel_with_blocks.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 20)}.must_raise ArgumentError
+    end
+    it 'must raise an error if the room selected is not available' do
+      proc { @new_block_reservation1 = @new_hotel_with_blocks.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 6)}.must_raise ArgumentError
+    end
+  end
+
+  describe 'block has rooms available' do
+    before do
+      @new_hotel_with_blocks1 = Hotel::Reservations.new
+      @new_booking1 = @new_hotel_with_blocks1.new_reservation("2018-01-01", "2018-01-05", 1)
+      @new_booking2 = @new_hotel_with_blocks1.new_reservation("2018-01-01", "2018-01-04", 2)
+      @new_booking3 = @new_hotel_with_blocks1.new_reservation("2018-01-01", "2018-01-05", 3)
+      @new_booking4 = @new_hotel_with_blocks1.new_reservation("2018-01-01", "2018-01-13", 4)
+      @new_block = @new_hotel_with_blocks1.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
+      @new_block_reservation = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 6)
+      @new_block_reservation2 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 7)
+    end
+    it 'must return true if there are rooms available in block to be booked' do
+      @new_block.has_rooms_available?.must_equal true
+    end
+    it 'must return false if there are NOT any rooms available in block to be booked' do
+      @new_block_reservation3 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 8)
+      @new_block_reservation4 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 9)
+      @new_block_reservation5 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 10)
+      
+      @new_block.has_rooms_available?.must_equal false
     end
   end
 end

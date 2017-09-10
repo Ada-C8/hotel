@@ -118,34 +118,81 @@ module Hotel
       return @block_rooms_collection
     end
 
+#Testing, not working to produce an error when room is not in the block
     def in_block?(block_name, room_number)
-      found = false
       @blocks_collection.each do |block|
           if block.block_name == block_name
             block.block_rooms_collection.each do |room|
               if room.room_number == room_number
-              found = true
+              return true
               end
             end
           end
       end
-      return found
+      return ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
     end
 
     def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
       block_room_booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      #block_room.has_rooms_available?   #need error message if not
-      unless in_block?(block_name, room_number) == true
-        return ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
-      end
+      in_block?(block_name, room_number)
 
-      #room_number = block_room.available_rooms.pop!
-      #not sure about above... can't I just compare booked rooms with rooms collection?
-      #Be sure to add to booked rooms list once booked and all reservations
+      check_block_room_available(block_name, room_number)
+      add_block_booking_to_block(block_name, block_room_booking)
+
       @all_reservations << block_room_booking  # TEST that it doesn't go in if not a valid booking
       return block_room_booking
     end
 
+    def add_block_booking_to_block(block_name, block_room_booking)
+      @blocks_collection.each do |block|
+        if block.block_name == block_name
+          block.booked << block_room_booking
+        end
+      end
+    end
+
+    def check_block_room_available(block_name, room_number)
+      @blocks_collection.each do |block|
+        if block.block_name == block_name
+          block.booked.each do |booking|
+            if booking.room_number == room_number
+              raise ArgumentError.new("Unable to book. Room number #{room_number} has already been booked.")
+            end
+          end
+        end
+      end
+      return true
+    end
+    def list_reservations_by_date(date) #TESTED
+      date = Date.parse(date)
+      list = []
+      @all_reservations.each do |reservation|
+        if date >= reservation.check_in && date < reservation.check_out  #check_out date excluded
+          list << reservation
+        end
+      end
+      return list
+    end
+
+    def list_blocked_rooms_by_date(date)  #TESTED
+      date = Date.parse(date)
+      blocks_list = []
+      @blocks_collection.each do |block|
+        if date >= block.dates[0] && date < block.dates[-1]
+          block.block_rooms_collection.each do |room|
+            blocks_list << room
+          end
+        end
+      end
+      return blocks_list
+    end
+
+    def clear_reservations #Using this for testing purposes
+      @all_reservations = []
+    end
+
+  end
+end
 #I don't think I"ll need this but keep for now and hasn't been tested#
     # def assign_block_room(check_in, check_out, room_number)
     #   date_range = DateRange.new(check_in, check_out).dates
@@ -159,10 +206,6 @@ module Hotel
     #   end
     # end
 
-#I moved this function under the block class - delete later
-    # def block_check_room_available(room_number, dates)
-    #     list_reservations_by_date
-    # end
 
 #Not required and not yet incorporated nor tested
     # def validate_room_number   #THIS DOESN"T WORK YET
@@ -200,34 +243,3 @@ module Hotel
     #     #room_number = @rooms_collection
     #   #end
     # end
-
-    def list_reservations_by_date(date) #TESTED
-      date = Date.parse(date)
-      list = []
-      @all_reservations.each do |reservation|
-        if date >= reservation.check_in && date < reservation.check_out  #check_out date excluded
-          list << reservation
-        end
-      end
-      return list
-    end
-
-    def list_blocked_rooms_by_date(date)  #TESTED
-      date = Date.parse(date)
-      blocks_list = []
-      @blocks_collection.each do |block|
-        if date >= block.dates[0] && date < block.dates[-1]
-          block.block_rooms_collection.each do |room|
-            blocks_list << room
-          end
-        end
-      end
-      return blocks_list
-    end
-
-    def clear_reservations #Using this for testing purposes
-      @all_reservations = []
-    end
-
-  end
-end
