@@ -23,12 +23,6 @@ describe 'Reservation' do
       (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
 
-    it 'factors block discount into total if part of block' do
-      block = @hotel.make_block('2017-08-03', '2017-08-08', 10, 25)
-      reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
-      reservation.total_cost.must_equal 750
-    end
-
     it 'can be initialized with various date formats (Date or String)' do
       date1 = Date.new(2017, 9, 5)
       date2 = Date.new(2017, 9, 10)
@@ -56,6 +50,42 @@ describe 'Reservation' do
       proc {
         Hotel::Reservation.new(@room, 'sea', 'HAWKS', @hotel)
       }.must_raise ArgumentError
+    end
+  end
+
+  describe 'get_total' do
+    it 'factors block discount into total if part of block' do
+      block = @hotel.make_block('2017-08-03', '2017-08-08', 10, 25)
+      reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
+      reservation.total_cost.must_equal 750
+    end
+
+    it 'returns total without discount if not part of block' do
+      @reservation.total_cost.must_equal 400
+    end
+
+    it 'can have 0% (no) discount in block' do
+        block = @hotel.make_block('2017-08-03', '2017-08-08', 10, 0)
+        reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
+        reservation.total_cost.must_equal 1000
+    end
+
+    it 'can have 100% (gratis) discount in block' do
+        block = @hotel.make_block('2017-08-03', '2017-08-08', 10, 100)
+        reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
+        reservation.total_cost.must_equal 0
+    end
+
+    it 'can have float as discount in block' do
+        block = @hotel.make_block('2017-08-03', '2017-08-08', 10, 12.5)
+        reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
+        reservation.total_cost.must_equal 875
+    end
+
+    it 'defaults to 0% (no) discount' do
+        block = @hotel.make_block('2017-08-03', '2017-08-08', 10)
+        reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
+        reservation.total_cost.must_equal 1000
     end
   end
 

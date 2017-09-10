@@ -23,7 +23,6 @@ module Hotel
       num_nights = @dates.length
       @total_cost = @room.cost * num_nights
       @total_cost *= @block.discount_rate if @block
-      return @total_cost
     end
 
     def includes_dates?(checkfirst, checklast)
