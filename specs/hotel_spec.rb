@@ -72,22 +72,6 @@ describe "Hotel" do
       end
     end # "reserve"
 
-    describe "reserve_block" do
-      it "Creates a block object" do
-        block_res = ada_inn.reserve_block(d1, 2, [room_4, room_5], 150)
-
-        block_res.must_be_instance_of ReservationSystem::Block
-      end # "returns a block object"
-
-      it "Limits the maximum number of rooms to 5" do
-        proc {ada_inn.reserve_block(d6,2,[room_4, room_5, room_6, room_7, room_8, room_9], 120)}.must_raise Reservable::RoomLimit
-      end # "Limits the maximum number of rooms to 5"
-
-      it "Raises an error if a room is already reserved or blocked" do
-        proc {ada_inn.reserve_block(d2,1,[room_5], 120)}.must_raise Reservable::UnavailableError
-      end # "Raises an error if a room is already reserved or blocked"
-    end # reserve_block
-
     describe "search_reservations_by_date" do
       it "Can list reservations including a specific date" do
         list = ada_inn.search_reservations_by_date(Date.new(2017,06,13))
@@ -107,28 +91,61 @@ describe "Hotel" do
         search1.must_include room_4 && room_7
         search1.wont_include room_5 && room_6
       end # "Can list available rooms by date range"
-
     end # "search_available_rooms_by_dates"
 
 
-      describe "search_available_rooms_by_block" do #TODO
-        it "Can check whether a given block has any rooms available" do
+    describe "reserve_block" do
+      let(:block_res) {ada_inn.reserve_block(d1, 2, [room_4, room_5], 150)}
 
-        end # "Can check whether a given block has any rooms available"
+      it "Creates a block object" do
+        block_res.must_be_instance_of ReservationSystem::Block
+      end # "returns a block object"
 
+      it "Limits the maximum number of rooms to 5" do
+        proc {ada_inn.reserve_block(d6,2,[room_4, room_5, room_6, room_7, room_8, room_9], 120)}.must_raise Reservable::RoomLimit
+      end # "Limits the maximum number of rooms to 5"
 
-      end # "search_available_rooms_by_block"
+      it "Raises an error if a room is already reserved or blocked" do
+        proc {ada_inn.reserve_block(d2,1,[room_5], 120)}.must_raise Reservable::UnavailableError
 
-      describe "reserve_within_block" do #TODO
-        it "Can reserve a room from within a block" do
+        block_res
+        proc {ada_inn.reserve_block(d1+1,3,[room_4, room_5, room_6, room_7], 120)}.must_raise Reservable::UnavailableError
+      end # "Raises an error if a room is already reserved or blocked"
+    end # reserve_block
 
-        end #"Can reserve a room from within a block"
+    describe "search_available_rooms" do
+      let(:block) {ada_inn.reserve_block(d1, 2, [room_4, room_5], 150)}
 
-        it "Has reservation dates that match date range of the block" do
+      it "Can check whether a given block has any rooms available" do
+        block
+        ada_inn.search_available_rooms(block).must_be_kind_of Array
+        ada_inn.search_available_rooms(block).must_include room_4 && room_5
+        ada_inn.search_available_rooms(block).wont_include room_7
 
-        end # "Has reservation dates that match date range of the block"
-      end # "reserve_within_block"
+        #TODO update for after a room can be reserved within a block
+        ada_inn.reserve_within(block, room_4)
 
+        ada_inn.search_available_rooms(block).must_include room_5
+        ada_inn.search_available_rooms(block).wont_include room_4
+      end # "Can check whether a given block has any rooms available"
+    end # "search_available_rooms"
+
+    describe "reserve_within" do
+      let(:block) {ada_inn.reserve_block(d1, 2, [room_4, room_5], 150)}
+
+      it "Can reserve a room from within a block" do
+        ada_inn.reserve_within(block, room_4).must_be_instance_of ReservationSystem::Reservation
+      end #"Can reserve a room from within a block"
+
+      it "Cannot reserve a room that is not within the block" do
+        proc {ada_inn.reserve_within(block, room_7)}.must_raise Reservable::UnavailableError
+      end
+
+      it "Has reservation dates that match date range of the block" do
+        ada_inn.reserve_within(block, room_4)
+        room_4.nights_reserved.must_include d1 && d1+1
+      end # "Has reservation dates that match date range of the block"
+    end # "reserve_within"
 
   end # "hotel instance methods"
 

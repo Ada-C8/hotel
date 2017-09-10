@@ -39,19 +39,19 @@ describe "Room" do
     let(:blocked_rooms) {[@hotel_california.hotel[1], @hotel_california.hotel[2], @hotel_california.hotel[3]]}
 
     it "Returns true if a room is available for a given date range" do
-      @fancy_room.available?(d1,1).must_equal true
-      @fancy_room.available?(d6,20).must_equal true
+      @fancy_room.not_reserved?(d1,1).must_equal true
+      @fancy_room.not_reserved?(d6,20).must_equal true
 
-      blocked_rooms.each {|room| room.available?(d1,20).must_equal true}
+      blocked_rooms.each {|room| room.not_blocked?(d1,20).must_equal true}
     end #returns true
 
     it "Returns false if a room is not available on any day in a date range" do
-      @fancy_room.available?(d1,3).must_equal false
-      @fancy_room.available?(d3,20).must_equal false
+      @fancy_room.not_reserved?(d1,3).must_equal false
+      @fancy_room.not_reserved?(d3,20).must_equal false
 
       ReservationSystem::Block.new(d3, 10, blocked_rooms, 180)
 
-      blocked_rooms.each {|room| room.available?(d6,10).must_equal false}
+      blocked_rooms.each {|room| room.not_blocked?(d6,10).must_equal false}
     end #returns false
   end #available?
 
