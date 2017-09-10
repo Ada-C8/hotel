@@ -5,7 +5,7 @@ module Hotel
   class Booking
     attr_reader :id, :rooms, :date_range, :nights, :total_cost, :block_info
 
-    def initialize(id, rooms, date_range, block_info = []) #blockname and price? or whole block?
+    def initialize(id, rooms, date_range, block_info: nil) #blockname and price? or whole block?
       @id = id
       @block_info = block_info
       @rooms = rooms

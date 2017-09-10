@@ -29,7 +29,7 @@ module Hotel
       # make this in to separate method
       rooms_to_book = rooms_available.shift(num_rooms)
       # binding.pry
-      booking = Booking.new(id,rooms_to_book,date_range, block_info)
+      booking = Booking.new(id,rooms_to_book,date_range, block_info: false)
       @all_reservations << booking
       return booking
     end

@@ -5,7 +5,7 @@ describe "Block Class" do
     id = 1
     rooms = [Hotel::Room.new(3),Hotel::Room.new(2),Hotel::Room.new(1)]
     date_range = Hotel::DateRange.new(Date.new(2017,3,9),Date.new(2017,3,13))
-    @wedding = Hotel::Block.new(id, rooms, date_range, "Royal Wedding",175)
+    @wedding = Hotel::Block.new(id, rooms, date_range, "Royal Wedding")
   end
   it "can be instantiated" do
     @wedding.must_be_kind_of Hotel::Block
@@ -37,7 +37,7 @@ describe "Block Class" do
       @wedding.book_room_in_block(2).must_be_kind_of Hotel::Booking
     end
     it "booking will have correct total_cost" do
-      
+
     end
   end
 end

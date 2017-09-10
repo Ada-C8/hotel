@@ -6,7 +6,7 @@ describe "Booking class" do
     rooms = [Hotel::Room.new(15),Hotel::Room.new(16)]
     date_range = Hotel::DateRange.new(Date.new(2017,9,5),Date.new(2017,9,8))
     block_info = []
-    @reservation = Hotel::Booking.new(id, rooms, date_range,block_info)
+    @reservation = Hotel::Booking.new(id, rooms, date_range)
   end
   describe "Initialize" do
     it "can be instantiated" do

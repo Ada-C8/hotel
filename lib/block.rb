@@ -6,10 +6,9 @@ module Hotel
   class Block < Booking
     attr_reader :id, :rooms, :date_range, :nights, :total_cost, :block_info, :block_name, :discount, :reserved_rooms
 
-    def initialize(id, rooms, date_range, block_info = nil, block_name, discount)
-      super(id, rooms, date_range, block_info)
-      @discount_room_price = discount
-      @block_name = block_name
+    def initialize(id, rooms, date_range, block_info)
+      super(id, rooms, date_range)
+      @block_info = block_info
       @reserved_rooms = []
     end
 

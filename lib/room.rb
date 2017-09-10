@@ -5,9 +5,10 @@ module Hotel
   class Room
     attr_reader :room_number, :cost
 
-    def initialize(room_number)
+    def initialize(room_number, booked: nil)
       @room_number = room_number
       @cost = 200
+      @booked = booked
     end
   end
 end
