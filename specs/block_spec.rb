@@ -18,5 +18,26 @@ describe "Block Class" do
     @wedding.must_respond_to :date_range
     @wedding.must_respond_to :nights
     @wedding.must_respond_to :block_info
+    @wedding.must_respond_to :reserved_rooms
+  end
+  describe "rooms_available_block" do
+    it "returns an array with the available rooms" do
+      @wedding.rooms_available_block.length.must_equal 3
+      @wedding.rooms_available_block.must_be_kind_of Array
+    end
+    it "returns rooms objects" do
+      @wedding.rooms_available_block[0].must_be_kind_of Hotel::Room
+    end
+  end
+  describe "book_room_in_block" do
+    it "will raise exception if user tries book more rooms than are available" do
+      proc{@wedding.book_room_in_block(4)}.must_raise InvalidRoomQuantity
+    end
+    it "will return a booking object" do
+      @wedding.book_room_in_block(2).must_be_kind_of Hotel::Booking
+    end
+    it "booking will have correct total_cost" do
+      
+    end
   end
 end

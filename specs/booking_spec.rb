@@ -21,6 +21,7 @@ describe "Booking class" do
       @reservation.must_respond_to :block_info
     end
     it "total cost must return the appropriate amount for 2 rooms, and be an Integer" do
+      # binding.pry
       @reservation.total_cost.must_equal 1200
     end
     it "total cost must be an integer" do

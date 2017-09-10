@@ -16,7 +16,7 @@ module Hotel
     # check_availability(check_in,check_out)
     # date_range = DateRange.new(check_in,check_out)
 
-    def make_reservation(check_in,check_out,num_rooms, block_info = nil)
+    def make_reservation(check_in,check_out,num_rooms, block_info = [])
       date_range = DateRange.new(check_in,check_out)
       id = (@all_reservations.length + 1)
       rooms_available = check_availability(check_in,check_out)
@@ -28,6 +28,7 @@ module Hotel
 
       # make this in to separate method
       rooms_to_book = rooms_available.shift(num_rooms)
+      # binding.pry
       booking = Booking.new(id,rooms_to_book,date_range, block_info)
       @all_reservations << booking
       return booking
