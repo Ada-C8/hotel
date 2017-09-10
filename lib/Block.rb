@@ -1,4 +1,4 @@
-require_relative 'date_range'
+
 module My_Hotel
   class Block
 
@@ -12,12 +12,30 @@ module My_Hotel
       #@contact_info #could add contact_info
     end
 
+    def create_booking(all_blocks)
+      set_block_id
+      while unique_block_id?(all_blocks) == false
+        set_block_id
+      end
+    end
+
     def set_block_id
       new_block_id = ""
       4.times do
         new_block_id = new_block_id + (rand(9)).to_s
       end
       @block_id = new_block_id
+    end
+
+    def unique_block_id?(all_blocks)
+      if all_blocks.length != 0
+        all_blocks.each do |one_block|
+          if one_block.block_id == block_id
+            return false
+          end
+        end
+      end
+      return true
     end
   end
 end
