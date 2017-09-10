@@ -2,7 +2,7 @@ require 'date'
 
 module BookingSystem
   class Block
-    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :avail_block_rooms, :reserved_rooms, :block_total
+    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :reserved_rooms, :block_total
 
     DISCOUNT_RATE = 150
     # To create a block you need a date range, collection of rooms and a discounted room rate
