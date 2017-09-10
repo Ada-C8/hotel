@@ -4,7 +4,7 @@ module ReservationSystem
   class Block
     include Reservable
     attr_reader :rooms, :block_rate, :start_date, :nights, :dates_blocked
-
+    
     def initialize(start_date, nights, rooms_list, block_rate)
       @rooms = rooms_list
       @start_date = start_date

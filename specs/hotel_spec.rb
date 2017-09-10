@@ -39,7 +39,6 @@ describe "Hotel" do
     let(:d1) {Date.new(2020,01,01)}
     let(:d2) {Date.new(2017,6,12)}
     let(:d6) {Date.new(2018,01,06)}
-    # let(:new_block) { ReservationSystem::Block.new(d6,2,[room_4, room_5, room_6, room_7], 120)}
 
     describe "reserve" do
       it "Creates a reservation object" do
@@ -101,7 +100,7 @@ describe "Hotel" do
       end # "returns a block object"
 
       it "Limits the maximum number of rooms to 5" do
-        proc {ada_inn.reserve_block(d6,2,[room_4, room_5, room_6, room_7, room_8, room_9], 120)}.must_raise Reservable::RoomLimit
+        proc {ada_inn.reserve_block(d6,2,[room_4, room_5, room_6, room_7, room_8, room_9], 120)}.must_raise Reservable::RoomLimitError
       end # "Limits the maximum number of rooms to 5"
 
       it "Raises an error if a room is already reserved or blocked" do
@@ -150,9 +149,13 @@ describe "Hotel" do
       end
     end # "reserve_within"
 
-    describe "override_rate" do #TODO decide if ovverride is available for a reservation or for a room in general
+    describe "change_room_rate" do
       it "Can change a room rate" do
-        #TODO changes room rate, check reservation prices are updated
+        @res3.cost.must_equal 200
+        ada_inn.change_room_rate(room_6, 180)
+
+        room_6.rate.must_equal 180
+        @res3.cost.must_equal 180
       end
     end
 

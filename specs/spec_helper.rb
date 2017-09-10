@@ -2,8 +2,6 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'pry'
-#TODO END OF ASSIGNMENT remove pry
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/skip_dsl'

@@ -2,7 +2,6 @@ require_relative 'reservable'
 require_relative 'room'
 
 module ReservationSystem
-  #TODO END OF ASSIGNMENT Go through each file and auto indent"
   class Hotel
     include Reservable
 
@@ -10,12 +9,13 @@ module ReservationSystem
 
     BASE_ROOM_RATE = 200
     BLOCK_ROOM_LIMIT = 5
+    NUMBER_OF_ROOMS = 20
 
-    def initialize
+    def initialize(rooms: NUMBER_OF_ROOMS)
       @hotel = Array.new
       @all_reservations = Array.new
 
-      20.times do |num| #TODO refactor for a constant
+      NUMBER_OF_ROOMS.times do |num|
         @hotel << ReservationSystem::Room.new(num + 1)
       end
     end # initialize
@@ -61,7 +61,7 @@ module ReservationSystem
 
       if rooms_list.length > BLOCK_ROOM_LIMIT
         rooms_list = rooms_list[0,5]
-        raise RoomLimit.new("Blocks may only contain #{BLOCK_ROOM_LIMIT} rooms. Your block will include the first #{BLOCK_ROOM_LIMIT} rooms only.")
+        raise RoomLimitError.new("Blocks may only contain #{BLOCK_ROOM_LIMIT} rooms. Your block will include the first #{BLOCK_ROOM_LIMIT} rooms only.")
       end
 
       rooms_list.each do |room|
@@ -92,8 +92,8 @@ module ReservationSystem
       end
     end # "reserve_within"
 
-    def override_rate(room, rate)
-
+    def change_room_rate(room, rate)
+      room.rate = rate
     end
 
   end #Hotel class

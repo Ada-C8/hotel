@@ -27,16 +27,11 @@ describe "Reservation" do
       @new_res.room.must_be_instance_of ReservationSystem::Room
       @new_res.room.must_equal @room_50
     end
+  end # "initialize"
 
-    it "Creates a reservation with a default rate unless otherwise specified" do
-      @new_res.rate.must_equal ReservationSystem::Hotel::BASE_ROOM_RATE
-
-      another_res = ReservationSystem::Reservation.new(@date - 6, 2, @room_50, rate: 210)
-      another_res.rate.must_equal 210
-    end
-
+  describe "cost" do
     it "returns the cost of a specific reservation" do
       @new_res.cost.must_equal ReservationSystem::Hotel::BASE_ROOM_RATE * 9
     end
-  end # "initialize"
+  end # cost
 end # "Reservation"

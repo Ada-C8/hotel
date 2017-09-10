@@ -10,7 +10,7 @@ module Reservable
   class UnavailableError < StandardError
   end
 
-  class RoomLimit < StandardError
+  class RoomLimitError < StandardError
   end
 
   #Error checking
@@ -18,16 +18,14 @@ module Reservable
     unless date.kind_of? Date
       raise DateError.new("Invalid Date! You submitted #{date}, which is not a Date object.")
     end
-  end # valid_date? method
-  #TODO CLI rescue
+  end # valid_date? method #TODO CLI rescue
 
   def positive_integer?(num)
     unless (num.kind_of? Integer) && num > 0
-      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.") #TODO CLI: rescue
+      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.")
     end
-  end # positive_integer? method
-  #TODO CLI rescue
-  
+  end # positive_integer? method   #TODO CLI rescue
+
   #Useful methods
   def date_range(start, nights)
     array = Array.new
