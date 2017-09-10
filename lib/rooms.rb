@@ -1,12 +1,16 @@
-# What do I want this to do?
-# I want this to be a place holder for the rooms in an array.
-# There are 20 rooms, numbered 1 - 20
+# Room logic.
+# 20 rooms numbered 1 - 20.
+# Each room is $200
+
 
 module HotelHedwig
   class Rooms
-    attr_reader
-    def initialize
-      
+
+    attr_reader :room_num, :room_cost
+    
+    def initialize(room_num)
+      @room_num = room_num
+      @room_cost = 200
     end
   end
 end

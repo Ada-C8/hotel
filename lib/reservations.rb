@@ -1,5 +1,4 @@
-require_relative 'rooms'
-require_relative 'hotel'
+# All reservation logic here, keep it simple.
 
 module HotelHedwig
   class Reservations
@@ -7,14 +6,14 @@ module HotelHedwig
     def initialize
 
     end
+
+    def method for date range (365 days in a year)
+
+    end
+
+    def method for available/unavailable dates
+
+    end
+
   end
 end
-
-# Start pseudocode to build
-
-# User Stories Wave 1;
-
-# As an administrator, I can access the list of all of the rooms in the hotel
-# As an administrator, I can reserve a room for a given date range
-# As an administrator, I can access the list of reservations for a specific date
-# As an administrator, I can get the total cost for a given reservation
