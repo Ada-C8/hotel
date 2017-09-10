@@ -30,11 +30,6 @@ module Hotel
       if room_num.nil?
         raise(NoRoomError, "No available rooms for dates #{checkin} - #{checkout}")
       end
-      if block
-        raise(DatesError) unless block(block).includes_all_dates?(checkin, checkout)
-        # binding.pry
-      end
-
       reservation = Reservation.new(room_num, checkin, checkout, self, block)
       @reservations << reservation
       reservation

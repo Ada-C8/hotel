@@ -10,7 +10,12 @@ module Hotel
       @checkin = DateRange.validate(checkin)
       @checkout = DateRange.validate(checkout)
       @dates = DateRange.range_to(@checkin, @checkout)
-      @block = block ? hotel.block(block) : false
+      if block
+        @block = hotel.block(block)
+        raise(DatesError) unless @block.includes_all_dates?(checkin, checkout)
+      else
+        @block = false
+      end
       get_total
     end
 

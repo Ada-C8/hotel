@@ -38,13 +38,11 @@ describe 'Reservation' do
       Hotel::Reservation.new(@room, '5/9/17', '10/9/17, 2017', @hotel)
     end
 
-    # TODO: @total_cost discount for blocks
-
-    # it 'has 9-character @id value' do
-    #   @reservation.id.must_be_kind_of String
-    #   @reservation.id.length.must_equal 9
-    #   @reservation.id[0..4].must_equal 'R0905'
-    # end
+    it 'raises DatesError if dates are out of order' do
+      proc {
+        Hotel::Reservation.new(@room, '2017-09-15', '2017-09-07', @hotel)
+      }.must_raise DatesError
+    end
   end
 
   describe '#includes_dates?' do
@@ -57,5 +55,7 @@ describe 'Reservation' do
       overlap = @reservation.includes_dates?('2017-10-14', '2017-10-15')
       overlap.must_equal false
     end
+
+    # TODO: exceptions
   end
 end
