@@ -138,6 +138,7 @@ describe 'DateRange' do
   end
 
   describe 'self.validate' do
+    # TODO: edge tests
     it 'returns input unchanged if input is a Date object' do
       DateRange.validate(@before).must_equal @before
     end
@@ -156,6 +157,26 @@ describe 'DateRange' do
   end
 
   describe 'self.validate_order' do
+    it 'returns true if it is two dates in correct order' do
+      DateRange.validate_order(@before, @after).must_equal true
+    end
 
+    it 'raises DatesError if input is two dates in incorrect order' do
+      proc {
+        DateRange.validate_order(@after, @before)
+      }.must_raise DatesError
+    end
+
+    it 'raises DatesError if input dates do not span at least 1 night' do
+      proc {
+        DateRange.validate_order(@after, @after)
+      }.must_raise DatesError
+    end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        DateRange.validate_order('sea', 'HAWKS')
+      }.must_raise ArgumentError
+    end
   end
 end
