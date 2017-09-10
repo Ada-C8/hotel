@@ -7,6 +7,7 @@ module Hotels
     def initialize
       @rooms = make_rooms
       @reservations = []
+      @block_instance = []
     end
 #check to make sure in future, end_date is after start_date
     def check_dates(start_date, end_date)
@@ -72,7 +73,7 @@ module Hotels
       else
       room = list_unbooked_rooms.sample
       return room
-      end 
+      end
     end
 
     def make_reservation(find_room, date_range)
@@ -80,6 +81,26 @@ module Hotels
       return @reservations
     end
 
+    def make_blocks(date_range, number_of_rooms)
+      booked_rooms = self.list_booked_rooms(date_range)
+      unbooked_rooms= self.list_unbooked_rooms(booked_rooms)
+      block_of_rooms = []
+      if unbooked_rooms.length >= number_of_rooms && number_of_rooms <= 5
+         number_of_rooms.times do
+         found_room = self.find_room(unbooked_rooms)
+         block_of_rooms << found_room
+         self.make_reservation(found_room, date_range)
+         end
+
+      else
+        raise ArgumentError.new("Not enough rooms available.")
+      end
+        return block_of_rooms
+    end
+
+    def make_block_instance(date_range, block_of_rooms)
+      @block_instance << Hotels::Block.new(date_range, block_of_rooms)
+    end
 
 
   end

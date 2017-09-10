@@ -131,6 +131,29 @@ describe "Hotel" do
     end
   end
 
+  describe "make_blocks" do
+    it "can make blocks of rooms" do
+      new_hotel = Hotels::Hotel.new
+      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = new_hotel.date_range(dates)
+      number_of_rooms = 5
+      blocks = new_hotel.make_blocks(date_range, number_of_rooms)
+
+      blocks[0].must_be_instance_of Hotels::Rooms
+      blocks.length.must_equal 5
+    end
+
+    it "throws argument error when room number is too high" do
+      new_hotel = Hotels::Hotel.new
+      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = new_hotel.date_range(dates)
+      number_of_rooms = 6
+
+      proc {new_hotel.make_blocks(date_range, number_of_rooms)}.must_raise ArgumentError
+     
+    end
+  end
+
 
 
 
