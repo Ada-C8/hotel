@@ -26,8 +26,10 @@ describe "reservations" do
       @reservation.room_number.must_equal @room_number
       @reservation.room_number.must_be_kind_of Integer
     end
-    it "should create a constant variable COST" do
-      Booking::Reservation::COST.must_equal 200
+    it "should create an instance variable rate" do
+      @reservation.must_respond_to :rate
+      @reservation.rate.must_equal 200
+      @reservation.rate.must_be_kind_of Integer
     end
   end
 

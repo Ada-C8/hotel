@@ -86,10 +86,15 @@ describe "Hotel" do
       checkout = Date.new(2017,01,12)
       @my_hotel.make_reservation(checkin, checkout, 7)
 
+      checkin = Date.new(2017,01,3)
+      checkout = Date.new(2017,01,28)
+      @my_hotel.create_block("Wedding", Booking::DateRange.new(checkin,checkout), [12, 13, 14], 150)
+
       checkin = Date.new(2017,01,02)
       checkout = Date.new(2017,01,12)
       available_rooms = @my_hotel.available_rooms(Booking::DateRange.new(checkin,checkout))
-      available_rooms.must_equal [1, 2, 5, 6, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19,20 ]
+
+      available_rooms.must_equal [1, 2, 5, 6, 8, 9, 10, 11, 15,16,17,18,19,20 ]
     end
 
     it "should return an empty array if no available rooms found" do
@@ -109,9 +114,40 @@ describe "Hotel" do
     end
   end
 
-  describe " reserved_by_any_block method" do
-    it " should check if room is inside of any block" do
-      
+  describe " available_rooms_in_a_block method" do
+    before do
+      checkin = Date.new(2017,01,3)
+      checkout = Date.new(2017,01,28)
+    end
+
+    it " should return list of rooms available in a block" do
+      @my_hotel.create_block("Wedding", Booking::DateRange.new(checkin,checkout), [12, 13, 14], 150)
+      @my_hotel.available_rooms_in_a_block("Wedding").must_equal [12, 13, 14]
+    end
+
+    it " should raise an error if block not found" do
+      @my_hotel.create_block("Bday Party", Booking::DateRange.new(checkin,checkout), [12, 13, 14], 150)
+      proc {@my_hotel.available_rooms_in_a_block("Wedding").must_equal [12, 13, 14]}.must_raise ArgumentError
+    end
+  end
+
+  describe "reserve_room_from_block method" do
+    before do
+      checkin = Date.new(2017,01,3)
+      checkout = Date.new(2017,01,28)
+      @my_hotel.create_block("Wedding", Booking::DateRange.new(checkin,checkout), [12, 13, 14], 150)
+    end
+
+    it "should reserve a room from given block " do
+      @my_hotel.available_rooms_in_a_block("Wedding").must_equal [12,13,14]
+
+      @my_hotel.reserve_room_from_block(13, "Wedding")
+      @my_hotel.available_rooms_in_a_block("Wedding").must_equal [12,14]
+    end
+
+    it "should raise an argument error if room is not available in the block" do
+      @my_hotel.available_rooms_in_a_block("Wedding").must_equal [12,13,14]
+      proc {@my_hotel.reserve_room_from_block(16, "Wedding")}.must_raise ArgumentError
     end
   end
 end

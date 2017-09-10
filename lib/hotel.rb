@@ -1,15 +1,15 @@
 require_relative 'date_range'
+require_relative 'block'
 
 module Booking
   class Hotel
-    attr_reader :list_of_rooms, :list_of_reservations
+    attr_reader :list_of_rooms, :list_of_reservations, :list_of_blocks
 
     def initialize
       @list_of_rooms = [*1..20]
       @list_of_reservations = []
       @list_of_blocks = []
     end
-
 
     #I can reserve an available room for a given date range
     def make_reservation(checkin, checkout, room_number)
@@ -21,7 +21,6 @@ module Booking
       end
       return reserve
     end
-
 
     #returns list of reservations for specific date
     def list_of_reservations_for_a_date(date)
@@ -45,7 +44,7 @@ module Booking
       # returns an array of true (available) rooms
       result = []
       available_rooms.each_with_index do | is_available, room_number|
-        if room_number != 0 && is_available && !reserved_by_any_block(date_range, room_number)
+        if room_number != 0 && is_available && !reserved_by_any_block?(date_range, room_number)
           result << room_number
         end
       end
@@ -64,7 +63,6 @@ module Booking
 
     # Creates block from available rooms in a given date range
     def create_block(block_name, date_range, rooms, discounted_room_rate)
-      # date_range = DateRange.new(checkin, checkout)
       available_room_list = available_rooms(date_range)
       rooms.each do |room|
         if !available_room_list.include?(room)
@@ -78,6 +76,7 @@ module Booking
     def available_rooms_in_a_block(block_name)
       return find_block(block_name).available_rooms
     end
+
 
     def find_block(block_name)
       @list_of_blocks.each do |block|
@@ -98,6 +97,6 @@ module Booking
         raise ArgumentError.new("The room is not available in this block")
       end
     end
-    
+
   end
 end
