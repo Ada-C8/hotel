@@ -55,6 +55,22 @@ describe "Wave 3: Blocks" do
       end
     end
 
+    describe "cost_of_reservation" do
+      it "can calculate cost of reservation" do
+        new_hotel = Hotels::Hotel.new
+        dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+        date_range = new_hotel.date_range(dates)
+        number_of_rooms = 5
+        blocks = new_hotel.make_blocks(date_range, number_of_rooms)
+        new_block = Hotels::Block.new(date_range, blocks)
+        reserved_room = new_block.make_reservation
+
+        cost = new_block.cost_of_reservation(blocks[0])
+        cost.must_equal 200
+
+      end
+    end
+
   end
 
 

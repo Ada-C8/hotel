@@ -22,12 +22,9 @@ module Hotels
      unbooked_rooms = @block_of_rooms[@reservations..-1]
    end
 
-
-
-
-
-
-
+   def cost_of_reservation(room)
+     cost = @date_range.length * (room.price - @discount)
+   end
 
   end
 end
