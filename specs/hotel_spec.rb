@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe Hotels::Hotel do
   before do
-    @conrad = Hotels::Hotel.new("Conrad")
+    @conrad = Hotels::Hotel.new('Conrad')
     @checkin = Date.new(2017, 10, 31)
     @checkout = Date.new(2017, 11, 4)
   end # ------------------------- before block
@@ -39,7 +39,11 @@ describe Hotels::Hotel do
       assert_equal 20, @conrad.list_all_rooms.length
     end
     it 'Should contain room names (String)' do
-      @conrad.list_all_rooms[5].must_be_kind_of String
+      @conrad.list_all_rooms[0].must_be_kind_of String
+    end
+    it 'Should contain a legitimate room name' do
+      name = 'Room 1'
+      @conrad.list_all_rooms.include?(name).must_equal true
     end
   end # ------------------------- describe #list_all_rooms block
 
@@ -73,9 +77,9 @@ describe Hotels::Hotel do
       }.must_raise ArgumentError
     end
     it 'Cannot reserve rooms that have been set for a block' do
-      4.times { @conrad.book_block(4, @checkin, @checkout) }
+      4.times { @conrad.book_block(5, @checkin, @checkout) }
       proc {
-        @conrad.reserve_room(@checkin, @checkout, 5)
+        @conrad.reserve_room(@checkin, @checkout)
       }.must_raise ArgumentError
     end
   end # ------------------------- describe #reserve_room block

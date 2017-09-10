@@ -1,5 +1,3 @@
-require 'awesome_print'
-require 'csv'
 require_relative 'room'
 require_relative 'reservation'
 require_relative 'dates'
@@ -31,22 +29,19 @@ module Hotels
       (reserved_rooms - reserved_blocks) + blocked_rooms
     end # returns Array of Reservations/Blocks for the (date)
 
-    def list_reserved_rooms(date)
-      list = list_reservations(date)
+    def list_rooms(method)
+      list = method
       rooms = []
-      list.each do |res|
-        rooms << res.rooms
-      end
+      list.each { |res| rooms << res.rooms }
       rooms.flatten
+    end # returns an Array of Rooms that are selected based on the method
+
+    def list_reserved_rooms(date)
+      list_rooms(list_reservations(date))
     end # returns an Array of Rooms that are reserved for the (date)
 
     def list_unavailable_rooms(date)
-      list = list_unavailable(date)
-      rooms = []
-      list.each do |res|
-        rooms << res.rooms
-      end
-      rooms = rooms.flatten
+      list_rooms(list_unavailable(date))
     end # returns an Array of Rooms that are unavailable for the (date)
 
     def list_unreserved_rooms(date)
@@ -67,30 +62,18 @@ module Hotels
         unreserved << unreserved_rooms
       end
       unreserved
-    end # Returns Array of Hashes (Date as keys; Array of Rooms as values)
+    end # returns Array of Hashes (Date as keys; Array of Rooms as values)
 
-    def available?(checkin, checkout = nil)
+    def available_rooms(checkin, checkout = nil)
       date_range = []
       Hotels::Dates.add_dates(date_range, checkin, checkout, 1)
       available = []
       date_range.each do |date|
-        available_rooms = {}
-        available_rooms[date] = list_available_rooms(date)
+        available_rooms = list_available_rooms(date)
         available << available_rooms
       end
       available
-    end # Returns Array of Hashes (Date as keys; Array of Rooms as values)
-
-    def available_rooms(checkin, checkout = nil)
-      available_rooms_by_date = available?(checkin, checkout)
-      available_rooms = []
-      available_rooms_by_date.each do |hash|
-        hash.each do |_key, value|
-          available_rooms << value.flatten
-        end
-      end
-      available_rooms
-    end
+    end # returns an Array of Hashes (Date as keys, Array of Room as values)
 
     def check_available_rooms(checkin, checkout = nil)
       available_rooms = available_rooms(checkin, checkout)
@@ -120,8 +103,8 @@ module Hotels
       booked_ids = booked_ids(block_id, room_count).to_a.flatten
       condition = (rooms.length - booked_ids.length >= room_count)
       raise ArgumentError, 'Not enough unreserved block rooms' unless condition
-      return true
-    end
+      true
+    end # returns true or an error
 
     def reserve_block(block_id, room_count)
       reference_block = @blocks.select(&:block_id)
@@ -147,23 +130,20 @@ module Hotels
         reservation.rooms << room unless booked_ids.include? room_id
         booked_ids << room_id
       end
-    end # adds Room(s) to the reservation
+    end # adds Room(s) to the Reservation from a block
 
     def valid_room_count?(block_room_count)
       raise ArgumentError unless (1..5).cover? block_room_count
-      return true
-    end # Gives error when block room count is not within range
+      true
+    end # gives error when block room count is not within range
 
     def check_block(_block_id)
       reference_block = @blocks.select(&:block_id)
-      # rooms = reference_block[0].rooms
       booked_from_block = @reservations.select(&:block_id)
-      # booked = booked_from_block.select(&:rooms).flatten
       condition = (reference_block[0].rooms.length != booked_from_block.length)
       raise ArgumentError, 'All the rooms have been reserved' unless condition
-      return true
-      # return (rooms.length - booked.length)
-    end # returns number of available rooms or raises error
+      true
+    end # returns true or an error
 
     def booked_ids(block_id, _room_count)
       check_block(block_id)
@@ -174,7 +154,7 @@ module Hotels
         booked_ids = booked_rooms.map(&:room_id)
         return booked_ids
       end
-    end # returns the IDs of reservations made from the (block_id)
+    end # returns the IDs of Reservations made from the (block_id)
 
     def book_block(room_count, checkin, checkout = nil)
       valid_room_count?(room_count)
@@ -187,7 +167,7 @@ module Hotels
         @blocks << booked
         booked
       end
-    end # returns the reservation of the block booking
+    end # returns the Reservation of the block booking
 
     def random_room(reservation, checkin, checkout, room_count = 1)
       available_rooms = check_available_rooms(checkin, checkout)
@@ -197,7 +177,7 @@ module Hotels
         reservation.rooms << room unless full_rooms.include? room
         full_rooms << room
       end
-    end # adds Room(s) to the reservation
+    end # adds Room(s) to the Reservation
 
     def id_gen(checkin)
       other_ids = @reservations.map(&:id)
@@ -210,23 +190,6 @@ module Hotels
         new_id = temp_id unless other_ids.include? temp_id
       end
       new_id
-    end # generates a unique id number
-
-    # def id_check(reservation)
-    #   reservation = reservation
-    #   if reservation.class == String
-    #     @reservations.each_with_index do |appt, index|
-    #       reservation = @reservations[index] if reservation.equal? appt.id
-    #     end
-    #   end
-    #   reservation
-    # end # returns the corresponding reservation to a given reservation ID
+    end # generates a new unique ID number
   end # Hotel class
 end # Hotels module
-
-# conrad = Hotels::Hotel.new
-# checkin = Date.new(2017, 10, 31)
-# checkout = Date.new(2017, 11, 4)
-#
-# 4.times { conrad.book_block(5, checkin, checkout) }
-# conrad.book_block(1, checkin, checkout)

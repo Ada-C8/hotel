@@ -1,4 +1,3 @@
-require 'awesome_print'
 require_relative 'room'
 require_relative 'dates'
 
