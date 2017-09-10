@@ -16,7 +16,7 @@ module BookingSystem
       @block_total = 0
     end
 
-    def update_block_rooms(remaining_rooms, now_reserved_in_block)
+    def update_rooms_in_block(remaining_rooms, now_reserved_in_block)
       @avail_block_rooms = remaining_rooms
       @reserved_rooms = now_reserved_in_block
       reserve_block_cost

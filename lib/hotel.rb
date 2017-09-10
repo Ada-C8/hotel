@@ -64,7 +64,7 @@ module BookingSystem
       avail_rooms = avail_rooms_in_block(reserved_name) # Check which room numbers are available in the block
       now_reserved_in_block = avail_rooms[0..num_to_book - 1] # Book number of requested rooms in the current block
       remaining_rooms = avail_rooms - now_reserved_in_block # Remaining rooms in requested block
-      found_block.update_block_rooms(remaining_rooms, now_reserved_in_block) # Updates available and reserved rooms in the requested block
+      found_block.update_rooms_in_block(remaining_rooms, now_reserved_in_block) # Updates available and reserved rooms in the requested block
     end
     # As an administrator, I can check whether a given block has any rooms available
     def avail_rooms_in_block(reserved_name)
