@@ -28,5 +28,3 @@ describe "Block class" do
 
   end # initialize
 end # Block class
-
-# TODO All of the availability checking logic from Wave 2 should now respect room blocks as well as individual reservations

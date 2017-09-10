@@ -19,15 +19,15 @@ module Reservable
       raise DateError.new("Invalid Date! You submitted #{date}, which is not a Date object.")
     end
   end # valid_date? method
+  #TODO CLI rescue
 
   def positive_integer?(num)
     unless (num.kind_of? Integer) && num > 0
-      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.") #TODO rescue
+      raise PositiveIntegerError.new("Invalid number! You submitted #{num}, which is not a positive integer.") #TODO CLI: rescue
     end
   end # positive_integer? method
-
-  # TODO rescue valid_date and positive_integer
-
+  #TODO CLI rescue
+  
   #Useful methods
   def date_range(start, nights)
     array = Array.new

@@ -21,7 +21,7 @@ module ReservationSystem
       date_array = date_range(start, nights)
       availability = true
 
-      date_array.each { |date| availability = false if self.nights_reserved.include?(date) }
+      date_array.each { |date| availability = false if self.nights_reserved.include?(date) || self.blocked_nights.include?(date)}
 
       return availability
     end #available?
