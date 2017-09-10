@@ -35,20 +35,4 @@ describe "Block" do
     end
   end # Describe
 
-  xdescribe "#update_block_rooms" do
-    it "should return the discounted total of the rooms that were reserved within the block" do
-      hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
-      hotel.reserve_room_in_block("Bob", 2)
-      hotel.block_reservations[0].reserve_block_cost
-      hotel.block_reservations[0].block_total.must_equal 600
-    end
-
-    it "should return the block total after the rooms were reserved in the Block" do
-      hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)
-      hotel.reserve_room_in_block("Bob", 2)
-      block = hotel.find_requested_block("Bob")
-      block.reserve_block_cost.must_equal 600
-    end
-  end
-
 end # Describe
