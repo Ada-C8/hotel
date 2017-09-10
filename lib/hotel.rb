@@ -75,6 +75,13 @@ module BookingSystem
         return found_block.avail_block_rooms
       end
     end # def
+    # I can view a list of rooms that are not reserved for a given date range
+    def check_avail_rooms_for(next_check_in, next_check_out) # WAVE 2
+      next_reservation = DateRange.new(next_check_in, next_check_out)
+      check_dates(next_reservation)
+      existing_booked_rooms = next_reservation.overlap?(@all_reservations)
+      existing_booked_rooms.empty? ? @rooms : @rooms - existing_booked_rooms
+    end
     # I can access the list of all_reservations for a specific date
     def all_reservations_on(date)
       current_reservations = []
@@ -83,12 +90,6 @@ module BookingSystem
         current_reservations << reservation if date >= reservation.check_in && date < reservation.check_out
       end
       return current_reservations
-    end
-    # I can view a list of rooms that are not reserved for a given date range
-    def check_avail_rooms_for(next_check_in, next_check_out) # WAVE 2
-      next_reservation = DateRange.new(next_check_in, next_check_out)
-      existing_booked_rooms = next_reservation.overlap?(@all_reservations)
-      existing_booked_rooms.empty? ? @rooms : @rooms - existing_booked_rooms
     end
 
     private
@@ -102,15 +103,12 @@ module BookingSystem
     end # def
 
     def check_num_of_rooms(found_block, num_to_book)
-      if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1
-        raise ArgumentError.new("Please choose an appropriate number of rooms")
-      end
+      raise ArgumentError.new("Please choose an appropriate number of rooms") if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1
     end
 
-
-    # def update_price(reservation)
-    #   reservation.calculate_cost
-    # end
+    def check_dates(next_reservation)
+      raise ArgumentError.new("Invalid dates") if next_reservation.check_in > next_reservation.check_out
+    end
 
   end # Class
 end # BookingSystem

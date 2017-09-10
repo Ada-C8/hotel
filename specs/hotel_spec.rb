@@ -217,14 +217,14 @@ describe "Hotel" do
       proc { hotel.avail_rooms_in_block("Bob") }.must_raise ArgumentError
     end
   end
-  ###################
+
   describe "#all_reservations(date)" do
     it "should return an array of all Reservations instances with the requested date" do
-      hotel.create_reservation("Sue", '2001-02-03', '2001-02-05')
+      hotel.create_reservation("Sue", '2001-02-01', '2001-02-10')
       hotel.create_reservation("Bob", '2001-02-01', '2001-02-03')
+      current_reservations = hotel.all_reservations_on('2001-02-02')
 
-      current_reservations = hotel.all_reservations_on('2001-02-03')
-      current_reservations.length.must_equal 1
+      current_reservations.length.must_equal 2
       current_reservations.must_be_kind_of Array
     end
   end # Describe
@@ -246,6 +246,10 @@ describe "Hotel" do
       avail_rooms.must_be_kind_of Array
       avail_rooms.each { |room| room.must_be_kind_of Integer }
       avail_rooms.must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    end
+
+    it "should return an ArgumentError if date range is invalid" do
+      proc { hotel.check_avail_rooms_for(@check_out, @check_in) }.must_raise ArgumentError
     end
 
   end # Describe
