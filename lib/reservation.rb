@@ -1,6 +1,5 @@
 require_relative 'date_range'#take note this needs to be included at the top
-require 'pry'
-require 'Date'
+# require 'Date'
 
 module Hotel
 

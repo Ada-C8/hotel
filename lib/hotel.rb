@@ -1,4 +1,3 @@
-require 'pry'
 require_relative 'reservation'
 
 module Hotel
@@ -20,10 +19,14 @@ module Hotel
     end #initialize
 
     def make_reservation(check_in, check_out, room_num)
-      @reservation_made = Reservation.new(check_in, check_out, room_num)
-      # binding.pry
-
-      @reservation_collection << @reservation_made
+      if room_availability(check_in, check_out).include?(room_num)
+        puts "Reservation made"
+        @reservation_made = Reservation.new(check_in, check_out, room_num)
+        @reservation_collection << @reservation_made
+      else
+        raise ArgumentError.new("It appears the room you requested is booked during that date range")
+      end
+      # @reservation_collection << @reservation_made
     end
 
     def date_list_of_reservations(date)
@@ -73,7 +76,7 @@ module Hotel
         end
       end
       return rooms_available
-    end #room_availability    
+    end #room_availability
   end #class
 end #module
 

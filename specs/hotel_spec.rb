@@ -27,7 +27,7 @@ describe "Hotel class" do
 
   describe "#make reservation" do
     before do
-      @bb_hotel = Hotel::Hotel.new(20, 200)
+      @bb_hotel = Hotel::Hotel.new(4, 200)
       @bb_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
     end
 
@@ -37,9 +37,12 @@ describe "Hotel class" do
     end
 
     it "Can call on class reservation methods" do
-      # res = @my_hotel.make_reservation('sept 8 2017', 'sept 10 2017', 4)
       @bb_hotel.reservation_made.room_num.must_equal 4
     end
+
+    it "Can return an argument error if room is not available for that date range" do
+      proc { @bb_hotel.make_reservation('sept 8 2017', 'sept 9 2017', 4)}.must_raise ArgumentError
+    end  ####NOTE##### Not sure how to create a test to check if there is no problem with the code 
   end
 
   describe "#list of reservations for a specific date" do
@@ -81,4 +84,4 @@ describe "Hotel class" do
     end
   end
 
-  end #describe
+end #describe
