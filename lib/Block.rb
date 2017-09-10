@@ -10,6 +10,7 @@ module Hotel
       @block_rooms_collection = block_rooms_collection
       @discounted_room_rate = discounted_room_rate
       @booked = []
+      @block_name = block_name
       #@available_rooms = @block_rooms_collection
     end
 

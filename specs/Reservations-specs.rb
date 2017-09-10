@@ -189,6 +189,7 @@ describe 'Reservations' do
       @new_block_reservation = @new_hotel_with_blocks.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 6)
     end
     it 'must be an instance of Hotel Booking' do
+
       @new_block_reservation.must_be_instance_of Hotel::Booking
     end
   end

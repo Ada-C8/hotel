@@ -121,7 +121,6 @@ module Hotel
     def in_block?(block_name, room_number)
       found = false
       @blocks_collection.each do |block|
-        unless found == true
           if block.block_name == block_name
             block.block_rooms_collection.each do |room|
               if room.room_number == room_number
@@ -129,7 +128,6 @@ module Hotel
               end
             end
           end
-        end
       end
       return found
     end
@@ -137,9 +135,9 @@ module Hotel
     def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
       block_room_booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
       #block_room.has_rooms_available?   #need error message if not
-      # unless in_block?(block_name, room_number) == true
-      #   return ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
-      # end
+      unless in_block?(block_name, room_number) == true
+        return ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
+      end
 
       #room_number = block_room.available_rooms.pop!
       #not sure about above... can't I just compare booked rooms with rooms collection?
