@@ -21,22 +21,22 @@ module Hotel
     def book_room_in_block(num_rooms)
       if num_rooms > 5 || num_rooms > @rooms.length
 
-      block_info = [@block_name, @discount_room_price]
+      # block_info = [@block_name, @discount_room_price]
       rooms_available_block.length
         raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough rooms left in the block to handle your request of #{num_rooms} rooms.")
       end
-
-      rooms_arr = []
-      num_rooms.times do
-        copy = self.rooms.shift(1)
-        copy1 = copy
-        self.reserved_rooms << copy1
-        rooms_arr << copy1
-      end
-
-      booking = Hotel::Booking.new(0,rooms_arr, @date_range, [@block_name, @discount_room_price])
-
-      return booking
+      #
+      # rooms_arr = []
+      # num_rooms.times do
+      #   copy = self.rooms.shift(1)
+      #   copy1 = copy
+      #   self.reserved_rooms << copy1
+      #   rooms_arr << copy1
+      # end
+      #
+      # booking = Hotel::Booking.new(0,rooms_arr, @date_range, [@block_name, @discount_room_price])
+      #
+      # return booking
     end
   end
 end
