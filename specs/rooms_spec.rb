@@ -1,5 +1,5 @@
 
-#require_relative '../lib/rooms'
+
 require_relative './spec_helper.rb'
 
 describe "Rooms wave 1" do

@@ -1,5 +1,5 @@
 
-# require_relative '../lib/reservations'
+
 require_relative './spec_helper.rb'
 
 describe "Reservations Wave 1" do
