@@ -25,6 +25,21 @@ module DateRange
     false
   end
 
+  def self.include_all?(search_start, search_end, contain_start, contain_end)
+    search_start = validate(search_start)
+    search_end = validate(search_end)
+    contain_start = validate(contain_start)
+    contain_end = validate(contain_end)
+
+    search_dates = DateRange.range_to(search_start, search_end)
+    contain_dates = DateRange.range_to(contain_start, contain_end)
+
+    search_dates.each do |search_date|
+      return false unless contain_dates.include? search_date
+    end
+    true
+  end
+
   def self.validate_order(first, second)
     first = validate(first)
     second = validate(second)

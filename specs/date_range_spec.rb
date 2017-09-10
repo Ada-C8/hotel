@@ -78,6 +78,26 @@ describe 'DateRange' do
     end
   end
 
+  describe '#include_all?' do
+    it 'returns true if all searched dates fall within container range' do
+      include_all = DateRange.include_all?('2017-10-10', '2017-10-14', @before, @after)
+
+      include_all.must_equal true
+    end
+
+    it 'returns false if no searched dates fall within container range' do
+      include_all = DateRange.include_all?('2017-11-10', '2017-11-14', @before, @after)
+
+      include_all.must_equal false
+    end
+
+    it 'returns false for partial overlap' do
+      include_all = DateRange.include_all?('2017-10-10', '2017-11-14', @before, @after)
+
+      include_all.must_equal false
+    end
+  end
+
   describe 'self.validate' do
     it 'returns input unchanged if input is a Date object' do
       DateRange.validate(@before).must_equal @before
