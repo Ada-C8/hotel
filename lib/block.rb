@@ -19,6 +19,10 @@ module Hotel
       DateRange.overlap?(checkfirst, checklast, @start_date, @end_date)
     end
 
+    def includes_all_dates?(checkfirst, checklast)
+      DateRange.include_all?(checkfirst, checklast, @start_date, @end_date)
+    end
+
     def get_discount_rate(input)
       raise(ArgumentError, "Discount must be number: was #{input.class}") unless input.class == (Integer || Float)
       raise(DiscountError, "Discount must be between 0-100%: was #{input}") unless 0 < input && input < 100
