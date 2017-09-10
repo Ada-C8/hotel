@@ -40,7 +40,7 @@ describe "My_Hotel::Hotel" do
 
     it "can make a one-night reservation" do
       @ritz.must_be_kind_of My_Hotel::Hotel
-      holiday = @ritz.make_reservation(@feb1, @feb1)
+      holiday = @ritz.make_reservation(@feb1)
       holiday.must_be_kind_of My_Hotel::Reservation
     end
 
@@ -58,34 +58,6 @@ describe "My_Hotel::Hotel" do
       @ritz.all_reservations.length.must_equal 1
       @ritz.make_reservation(@feb1, @feb3)
       @ritz.all_reservations.length.must_equal 2
-    end
-  end
-
-  describe "unique_reservation_id?" do
-    it "returns false if reservation_id is not unique" do
-      first =  @ritz.make_reservation(@feb1, @feb5)
-      second = first.dup
-      @ritz.unique_reservation_id?(second).must_equal false
-    end
-
-    it "returns true if reservation_id is unique" do
-      @ritz.make_reservation(@feb1, @feb5)
-      second = My_Hotel::Reservation.new(@feb1..@feb5)
-      @ritz.unique_reservation_id?(second).must_equal true
-    end
-  end
-
-  describe "unique_block_id?" do
-    it "returns false if reservation_id is not unique" do
-      first =  @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
-      second = first.dup
-      @ritz.unique_block_id?(second).must_equal false
-    end
-
-    it "returns true if reservation_id is unique" do
-      @ritz.make_block(@feb1, @feb5, [1,2,3,4], 0.75)
-      second = My_Hotel::Block.new(@feb6..@may6, [1,2,3,4], 0.75)
-      @ritz.unique_block_id?(second).must_equal true
     end
   end
 
@@ -152,6 +124,11 @@ describe "My_Hotel::Hotel" do
       new_block.block_id.must_be_kind_of String
     end
 
+    it "can make a one-night block" do
+      new_block = @ritz.make_block(@feb1, [1, 2, 3, 4], 0.75)
+      new_block.must_be_kind_of My_Hotel::Block
+    end
+
     it "updates all_blocks" do
       new_block = @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       @ritz.all_blocks.length.must_equal 1
@@ -172,7 +149,6 @@ describe "My_Hotel::Hotel" do
       @ritz.find_by_block_id(5).must_be_nil
     end
   end
-
 
   describe "find_all_unreserved_rooms " do
     it "returns an array" do
@@ -238,6 +214,13 @@ describe "My_Hotel::Hotel" do
       @ritz.make_reservation(@feb1, @feb5)
       free_rooms = @ritz.find_all_unblocked_rooms(@feb5)
       free_rooms = free_rooms[0].length.must_equal 16
+    end
+  end
+
+  describe "get_cost" do
+    it "returns the cost of a reservation" do
+      holiday = @ritz.make_reservation(@feb1, @feb5)
+      @ritz.get_cost(holiday).must_equal 1000
     end
   end
 
@@ -309,7 +292,7 @@ describe "My_Hotel::Hotel" do
       end
     end
 
-    it "if no rooms are available, it must return an Error" do
+    it "if no rooms are available, it must return an empty hash" do
       20.times do |i|
         @ritz.make_reservation(@feb1, @feb5)
       end
@@ -345,7 +328,8 @@ describe "My_Hotel::Hotel" do
       reservation_in_block.length.must_equal 2
     end
 
-    it "returns an error if block does not exist" do
+    it "returns an er
+    ror if block does not exist" do
       proc{@ritz.find_rooms_in_use_by_block_id(0000)}.must_raise ArgumentError
     end
 
@@ -376,47 +360,4 @@ describe "My_Hotel::Hotel" do
   end
 
 
-
-
 end
-
-
-
-
-
-
-
-
-
-
-#
-#
-# describe "display_reservations" do
-#   it "must put out a list of all the reservations" do
-#     #TODO: Test
-#   end
-# end
-#
-#
-# describe "rooms_available_date" do
-#   it "must return a list of availble rooms" do
-#     #TODO: Test - List == array?
-#     #- List == correct list
-#     # rejects bad dates
-#   end
-# end
-#
-# describe "rooms_available_block" do
-#   it "must return a list of availble rooms in a block" do
-#     #TODO: Test - List == array?
-#     #- List == correct list
-#     # rejects bad dates
-#     #rejects bad block ids
-#   end
-# end
-#
-# describe "make block" do
-#   it "must allow the admin to assign a block_id to rooms" do
-#     #TODO: test
-#   end
-# end
