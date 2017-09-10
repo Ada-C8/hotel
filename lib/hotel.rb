@@ -60,7 +60,7 @@ module BookingSystem
     # As an administrator, I can reserve a room from within a block of rooms
     def reserve_room_in_block(reserved_name, num_to_book)
       found_block = find_block(reserved_name)
-      check_num_of_rooms(found_block, num_to_book) # Raise ArgumentError to UI
+      check_num_input(found_block, num_to_book) # Raise ArgumentError to UI
       avail_rooms = avail_rooms_in_block(reserved_name) # Check which room numbers are available in the block
       now_reserved_in_block = avail_rooms[0..num_to_book - 1] # Book number of requested rooms in the current block
       remaining_rooms = avail_rooms - now_reserved_in_block # Remaining rooms in requested block
@@ -108,7 +108,7 @@ module BookingSystem
       end
     end # def
 
-    def check_num_of_rooms(found_block, num_to_book)
+    def check_num_input(found_block, num_to_book)
       raise ArgumentError.new("Please choose an appropriate number of rooms") if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1
     end
 

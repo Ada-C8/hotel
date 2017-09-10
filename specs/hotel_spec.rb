@@ -137,10 +137,6 @@ describe "Hotel" do
 
       proc {hotel.reserve_block("Bob", '2001-02-03', '2001-02-05', 5)}.must_raise ArgumentError
     end
-
-    it "should raise an ArgumentError if the num_of_rooms requested is greater than 5" do
-
-    end
   end # Describe
 
   describe "#find_block" do
@@ -262,7 +258,6 @@ describe "Hotel" do
     it "should return an ArgumentError if date range is invalid" do
       proc { hotel.check_avail_rooms_for(@check_out, @check_in) }.must_raise ArgumentError
     end
-
   end # Describe
 
 end # Describe
