@@ -48,6 +48,10 @@ describe "Hotel" do
       proc { create_one_res }.must_raise ArgumentError
     end
 
+    it "should raise an ArgumentError if the name is not a String" do
+      proc { hotel.create_reservation(12345, @check_in, @check_out) }.must_raise ArgumentError
+    end
+
     it "should add only one Reservation at a time to @reservations array" do
       create_one_res
 
@@ -249,7 +253,7 @@ describe "Hotel" do
     it "should return default room numbers if no rooms are booked for requested date range" do
       hotel.create_reservation("Bob", '2001-02-01', '2001-02-02')
       avail_rooms = hotel.check_avail_rooms_for(@check_in, @check_out)
-      # @reservations array is full!
+
       avail_rooms.must_be_kind_of Array
       avail_rooms.each { |room| room.must_be_kind_of Integer }
       avail_rooms.must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]

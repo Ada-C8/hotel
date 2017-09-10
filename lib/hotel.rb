@@ -13,7 +13,8 @@ module BookingSystem
     end
     # I can reserve a room for a given date range
     def create_reservation(name, check_in, check_out)
-      available_rooms = check_avail_rooms_for(check_in, check_out) # Returns array of all available rooms
+      valid?(name) # Checks name input
+      available_rooms = check_avail_rooms_for(check_in, check_out) # Returns array of all available rooms and checks valid dates input
       if rooms_available?(available_rooms) # Your code should raise an exception when asked to reserve a room that is not available
         assigned_room = available_rooms[0] # Assign the first available room
         reservation = Reservation.new(name, assigned_room, check_in, check_out)
@@ -31,10 +32,11 @@ module BookingSystem
           end
         end
       end
-      raise ArgumentError.new("No reservation was found") if found_reservation == nil
+      no_reservation(found_reservation)
     end
     # I can create a block of rooms
     def reserve_block(reserved_for, check_in, check_out, num_of_rooms)
+      valid?(reserved_for)
       check_room_input(num_of_rooms) # Raised to UI. Max of 5 rooms and no less than 1
       available_rooms = check_avail_rooms_for(check_in, check_out)
       if rooms_available?(available_rooms) # Will raise an ArgumentError for UI
@@ -55,7 +57,7 @@ module BookingSystem
           return block
         end
       end
-      raise ArgumentError.new("Reservation for your requested block was not found. Please try again.") if block_found == nil
+      no_reservation(block_found)
     end # def
     # As an administrator, I can reserve a room from within a block of rooms
     def reserve_room_in_block(reserved_name, num_to_book)
@@ -70,6 +72,7 @@ module BookingSystem
     def avail_rooms_in_block(reserved_name)
       found_block = find_block(reserved_name)
       if found_block.avail_block_rooms.empty?
+        #TODO: CHANGE THIS INTO A DIFFERENT ERROR
         raise ArgumentError.new("There are no more rooms available to reserve for this block")
       else
         return found_block.avail_block_rooms
@@ -78,7 +81,7 @@ module BookingSystem
     # I can view a list of rooms that are not reserved for a given date range
     def check_avail_rooms_for(next_check_in, next_check_out) # WAVE 2
       next_reservation = DateRange.new(next_check_in, next_check_out)
-      check_dates(next_reservation)
+      valid_dates?(next_reservation)
       existing_booked_rooms = next_reservation.overlap?(@all_reservations)
       existing_booked_rooms.empty? ? @rooms : @rooms - existing_booked_rooms
     end
@@ -94,13 +97,25 @@ module BookingSystem
 
     private
 
-    def check_room_input(num_of_rooms)
+    def valid?(name)
+      if name.class != String
+        raise ArgumentError.new("Please enter a valid name")
+      end
+    end
+
+    def valid_dates?(next_reservation) # Your code should raise an error when an invalid date range is provided
+      # pattern = /\d{4}\W\d+\W\d+/
+      raise ArgumentError.new("Invalid dates") if next_reservation.check_in > next_reservation.check_out
+    end
+
+    def check_room_input(num_of_rooms) # User input must be less than or equal to 5 and greater than 0
       if num_of_rooms > 5 || num_of_rooms < 1
         raise ArgumentError.new ("You can only reserve up to a max of 5 rooms and at least 1 room when reserving a block")
       end
     end
 
-    def rooms_available?(available_rooms)
+    # TODO: CHANGE THIS AS A DIFFERENT ERROR
+    def rooms_available?(available_rooms) # Checks for all current available rooms under all reservations
       if available_rooms.empty?
         raise ArgumentError.new("No room available for your requested dates. Please choose another date") # Raise to UI
       else
@@ -108,12 +123,14 @@ module BookingSystem
       end
     end # def
 
-    def check_num_input(found_block, num_to_book)
-      raise ArgumentError.new("Please choose an appropriate number of rooms") if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1
+    def no_reservation(found_reservation) # Raise ArgumentError f no reservation was found
+      raise ArgumentError.new("No reservation was found") if found_reservation == nil
     end
 
-    def check_dates(next_reservation) # Your code should raise an error when an invalid date range is provided
-      raise ArgumentError.new("Invalid dates") if next_reservation.check_in > next_reservation.check_out
+    def check_num_input(found_block, num_to_book) # Can only reserve a room less than the number rooms they set aside
+      if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1
+        raise ArgumentError.new("Please choose an appropriate number of rooms")
+      end
     end
 
   end # Class
