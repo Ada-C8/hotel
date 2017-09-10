@@ -17,20 +17,23 @@ describe "Admin Class" do
 
     @admin = Hotel::Admin.new
 
-    room_nums = 1
+    room_num = 1
+    room_num.must_be_kind_of Integer
+    room_num.wont_be_instance_of String
+
     check_in = Date.new(2017,2,3)
+    check_in.must_be_instance_of Date
+
     check_out = Date.new(2017, 2,7)
-    @admin.add_reservation(room_nums, check_in, check_out)
+    check_in.must_be_instance_of Date
+
+    @admin.add_reservation(room_num, check_in, check_out)
   end
 
   describe "initialize" do
     it "@reservations returns reservations array" do
       @admin.reservations.must_be_kind_of Array
     end
-
-    # it "@reservations array is empty" do
-    #   @admin.reservations.must_be_empty
-    # end
 
     it "@room_nums returns an array" do
       @admin.room_nums.must_be_kind_of Array
@@ -44,39 +47,56 @@ describe "Admin Class" do
       # edge classes
       @admin.room_nums.first.wont_equal 0
       @admin.room_nums.last.wont_equal 21
-      @admin.room_nums.first.wont_equal ("!"..")")
+      @admin.room_nums.first.wont_be_instance_of String
+      @admin.room_nums.last.wont_be_instance_of String
     end
 
     describe "List of rooms method" do
       it "returns of all rooms" do
+        @admin.room_nums.must_be_kind_of Array
         @admin.list_of_rooms.must_be_kind_of Array
+
+        # normative classes
+        @admin.list_of_rooms.first.must_equal 1
+        @admin.list_of_rooms.last.must_equal 20
+
+        # edge classes
+        @admin.list_of_rooms.first.wont_equal 0
+        @admin.list_of_rooms.last.wont_equal 21
+        @admin.room_nums.first.wont_be_instance_of String
+        @admin.room_nums.last.wont_be_instance_of String
       end
-
     end
-
-
-    #  it "Admin responds to room_nums method" do
-    #    @admin.room_nums.must_respond_to :room_nums
-    #  end
   end # end initialize
 
   describe "add_reservation" do
     it "thing that is added is a reservation" do
       @admin.reservations[0].must_be_instance_of Hotel::Reservation
+      @admin.reservations[-1].must_be_instance_of Hotel::Reservation
+
     end
 
     it "verify reservation is added to array" do
       @admin.reservations.length.must_equal 1
+      @admin.reservations.length.wont_equal 2
+
     end
   end
 
   describe "list_reservations tests" do
     it "list test" do
       date = Date.new(2017, 2, 4)
-       @admin.list_reservations(date).must_be_instance_of Array
+      date.must_be_instance_of Date
+      @admin.list_reservations(date).must_be_instance_of Array
+      @admin.list_reservations(date).first.must_be_instance_of Hotel::Reservation
+      @admin.list_reservations(date).last.must_be_instance_of Hotel::Reservation
 
+      # edge cases
       date = Date.new(2017, 2, 9)
-     @admin.list_reservations(date).wont_be_instance_of Hotel::Reservation
+      date.must_be_instance_of Date
+      @admin.list_reservations(date).wont_be_instance_of Hotel::Reservation
+      @admin.list_reservations(date).wont_be_kind_of Integer
+      @admin.list_reservations(date).wont_be_kind_of String
     end
   end
 
@@ -96,13 +116,13 @@ end # end admin class
 
 Reservations
 Block
-  Discount
-  Reservations
-    Room number
-    dates
-      Date
-    Price
-    Name
+Discount
+Reservations
+Room number
+dates
+Date
+Price
+Name
 
 =end
 
@@ -111,12 +131,12 @@ Block
 Block.new([rooms], [dates], discount)
 
 Block
-  Discount (float)
-  Reservations (array)
-    Room number
-    dates
-      Date
-    Price
-    Name
+Discount (float)
+Reservations (array)
+Room number
+dates
+Date
+Price
+Name
 
 =end

@@ -20,8 +20,8 @@ module Hotel
       return Array.new(room_nums)
     end
 
-    def add_reservation(room_selection, check_in, check_out)
-      @reservations << Hotel::Reservation.new(room_selection, check_in, check_out)
+    def add_reservation(room_num, check_in, check_out)
+      @reservations << Hotel::Reservation.new(room_num, check_in, check_out)
     end
 
     def list_reservations(date)
@@ -49,14 +49,11 @@ module Hotel
           end
 
         end
-      end
-
+      end # end date_range loop
       return available_rooms
     end
-
-
-  end
-end
+  end # end class
+end # end module
 
 # puts Hotel::Admin.new.room_selection
 
