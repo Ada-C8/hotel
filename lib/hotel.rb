@@ -15,8 +15,7 @@ module Hotel
       #@first_open = first_open
       @reservations = ReservationList.new
       #As an administrator, I can access the list of all of the rooms in the hotel
-      @all_rooms = {1 => 200, 2 => 200, 3 => 200 }
-      #4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200
+      @all_rooms = {1 => 200, 2 => 200, 3 => 200, 4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200}
     end
 
     # - I can reserve an available room for a given date range
@@ -52,7 +51,6 @@ module Hotel
 
     #I can view a list of rooms that are not reserved for a given date range
     def open_rooms(day_in, day_out)
-      #list = find_reservation(day_in, day_out)
       occupied_rooms = Array.new
       find_reservation(day_in, day_out).each do |reservation|
         occupied_rooms << reservation.room
@@ -61,31 +59,12 @@ module Hotel
       return open_rooms
     end
 
-    # def open_rooms(day_in, day_out)
-    #   list = find_reservation(day_in, day_out)
-    #   occupied_rooms = Array.new
-    #   list.each do |reservation|
-    #     occupied_rooms << reservation.room
-    #   end
-    #   open_rooms = (@all_rooms.keys - occupied_rooms)
-    #   return open_rooms
-    # end
-
-    #I can reserve an available room for a given date range
-    # def is_available?(id, number_of_rooms, day_in, day_out)
-    #   if open_rooms(day_in, day_out) <= number_of_rooms
-    #     #first_available =
-    #     return true
-    #   else
-    #     return false
-    #   end  #if/else
-    # end# is_available
-
     #As an administrator, I can create a block of rooms
-    def create_block(block_id, number_of_rooms, day_in, day_out, discounted_rate)
+    #you should just be blocking off the rooms so it's only available to actually make the reservation if they have the code -- but it needs to remove the room from the list of open rooms?
+    #maybe a reservation status like confirmed or just held for block? than it can change to confirmed if they have the code?
+    def create_block(block_id, number_of_rooms, day_in, day_out, discounted_rate, block_code)
       available = open_rooms(day_in, day_out)
       if available.length >= number_of_rooms
-        #if open_rooms(day_in, day_out) >= number_of_rooms
         available.take(number_of_rooms).each do |room|
           make_reservation(block_id, room, day_in, day_out, discount: discounted_rate)
         end#each
@@ -93,15 +72,9 @@ module Hotel
         return "There are only #{available.length} rooms available during the requested dates."
       end #if statment
     end
-
-    #find avaiable rooms for the requested date range (up to five)
-    #establish discounted rate
-    #
-    # The collection of rooms should only include rooms that are available for the given date range
-
   end #class
 end #module
-binding.pry
+#binding.pry
 # @boetel = Hotel::Hotel.new
 # q
 # @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")

@@ -34,33 +34,33 @@ describe "Hotel Class" do
     end #array
 
     it "Can make a Reservation by calling Reservation List:" do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
       @hotel.reservations.reservation_list[0].must_be_kind_of Hotel::Reservation
     end #call class
 
     it "Can check if a room is available before making a reservation for that room " do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-      @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
-      @hotel.is_available?(1000, 4, "2012/12/13", "2012/12/19").must_equal true
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
+      @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 4).must_equal true
     end
 
     it "Will tell you if a room is not available " do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-      @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
-      @hotel.is_available?(1000, 2, "2012/12/13", "2012/12/19").must_equal false
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
+      @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 2).must_equal false
     end
   end #make reservations
 
   describe "Find Reservations" do
     it "Can find and return a single reservation for a specific date: " do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
       found = @hotel.find_reservation("2012/12/12", "2012/12/13")
       found[0].view_reservation.must_equal "ID: 2222, Room: 2, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3, Total Cost: 600"
     end #find a single reservation for a specific date
 
     it "Can return an array of open rooms for a particular date range: " do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-      @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
       @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
       @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
     end #open rooms
@@ -69,12 +69,12 @@ describe "Hotel Class" do
 
   describe "Total Cost" do
     it "Given an ID number it can find the Total Cost of a reservation: " do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
       @hotel.total_cost(2222).must_equal 600
     end #ID Number
 
     it "Returns 'Reservation Not Found' if it can't find the ID number: " do
-      @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
       @hotel.total_cost(2223).must_equal "Reservation Not Found"
     end #Not Found
   end #Total Cost
