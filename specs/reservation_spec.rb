@@ -43,6 +43,20 @@ describe 'Reservation' do
         Hotel::Reservation.new(@room, '2017-09-15', '2017-09-07', @hotel)
       }.must_raise DatesError
     end
+
+    it 'raises DatesError if dates do not span at least 1 night' do
+      proc {
+        Hotel::Reservation.new(@room, '2017-09-05', '2017-09-05', @hotel)
+      }.must_raise DatesError
+
+
+    end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        Hotel::Reservation.new(@room, 'sea', 'HAWKS', @hotel)
+      }.must_raise ArgumentError
+    end
   end
 
   describe '#includes_dates?' do
@@ -56,6 +70,27 @@ describe 'Reservation' do
       overlap.must_equal false
     end
 
-    # TODO: exceptions
+    it 'returns true for partial overlap' do
+      overlap = @reservation.includes_dates?('2017-09-06', '2017-09-20')
+      overlap.must_equal true
+    end
+
+    it 'raises DatesError if dates are out of order' do
+      proc {
+        @reservation.includes_dates?('2017-09-15', '2017-09-07')
+      }.must_raise DatesError
+    end
+
+    it 'raises DatesError if dates do not span at least 1 night' do
+      proc {
+        @reservation.includes_dates?('2017-09-05', '2017-09-05')
+      }.must_raise DatesError
+    end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        @reservation.includes_dates?('sea', 'HAWKS')
+      }.must_raise ArgumentError
+    end
   end
 end
