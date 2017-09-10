@@ -1,12 +1,18 @@
 module DateRange
   require 'date'
+
   def self.range_to(start_date, end_date)
-    find_range(start_date, end_date)
+    start_date = validate(start_date)
+    end_date = validate(end_date)
+    validate_order(start_date, end_date)
+    dates = []
+    while start_date < end_date
+      dates << start_date
+      start_date += 1
+    end
+    dates
   end
 
-  def self.range_with(start_date, end_date)
-    find_range(start_date, end_date, :inclusive)
-  end
 
   def self.overlap?(first_start, first_end, second_start, second_end)
     first_start = validate(first_start)
@@ -56,18 +62,5 @@ module DateRange
     else
       raise(ArgumentError, "Input #{input.class} cannot be converted into Date")
     end
-  end
-
-  def self.find_range(start_date, end_date, flag = false)
-    start_date = validate(start_date)
-    end_date = validate(end_date)
-    validate_order(start_date, end_date)
-    dates = []
-    while start_date < end_date
-      dates << start_date
-      start_date += 1
-    end
-    dates << end_date if flag == :inclusive
-    dates
   end
 end

@@ -31,7 +31,7 @@ describe 'DateRange' do
     end
   end
 
-  describe 'self.range_with' do
+  xdescribe 'self.range_with' do
     it 'raises ArgumentError if start date is after end date' do
       proc {
         DateRange.range_with(@after, @before)
