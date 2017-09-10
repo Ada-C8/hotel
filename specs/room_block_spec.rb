@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "RoomBlock" do
 
   before do
-    @room_block = Hotel::RoomBlock.new("Marcel Luedtke", 2017,9,17, 2017,9,19, 2)
+    @room_block = Hotel::RoomBlock.new("Marcel Luedtke", "2017/9/17", "2017/9/19", 2)
   end
 
   it "Is a child of Reservation" do
@@ -11,16 +11,18 @@ describe "RoomBlock" do
   end
 
   it "Returns an argument error is the number of rooms reserved is less than 2 or greater than 1" do
-    proc {Hotel::RoomBlock.new("Marcel Luedtke", 2017,9,17, 2017,9,19, 1)}.must_raise ArgumentError
-    proc {Hotel::RoomBlock.new("Marcel Luedtke", 2017,9,17, 2017,9,19, 6)}.must_raise ArgumentError
+    proc {Hotel::RoomBlock.new("Marcel Luedtke", "2017/9/17", "2017/9/19", 1)}.must_raise ArgumentError
+    proc {Hotel::RoomBlock.new("Marcel Luedtke", "2017/9/17", "2017/9/19", 6)}.must_raise ArgumentError
   end
 
-  it "has a total method that returns the reservation total minus 20%" do
-    @room_block.total.must_equal 640.00
+  it "has a total method that returns the reservation total for the correct room price" do
+    @room_block.total.must_equal 760.00
+    @room_block.room_price(100)
+    @room_block.total.must_equal 400.00
   end
 
   it "The room price can be set by the administrator" do
-    @room_block.room_price = 100
+    @room_block.room_price(100)
     @room_block.total.must_equal 400
   end
 

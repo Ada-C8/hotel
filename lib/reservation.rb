@@ -1,13 +1,14 @@
 require 'date'
+require 'pry'
 
 module Hotel
   class Reservation
     attr_reader :client, :arrival_date, :departure_date, :number_of_rooms, :type
 
-    def initialize(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
+    def initialize(client, arrival_date, departure_date, number_of_rooms)
       @client = client.gsub(/[A-Za-z']+/,&:capitalize)
-      @arrival_date = Date.new(arrival_year.to_i, arrival_month.to_i, arrival_day.to_i)
-      @departure_date = Date.new(departure_year.to_i, departure_month.to_i, departure_day.to_i)
+      @arrival_date = Date.parse(arrival_date.sub(/[\/]/, '-'))
+      @departure_date = Date.parse(departure_date.sub(/[\/]/, '-'))
       @number_of_rooms = number_of_rooms.to_i
       @room_price = 200.00
       @type = "Regular"
@@ -21,7 +22,16 @@ module Hotel
     end
 
     def total
-      return @room_price * stay_length * @number_of_rooms
+      return (@room_price * stay_length * @number_of_rooms).round(2)
+    end
+
+    def summary
+      puts "Name: #{client}"
+      puts "Dates: From #{arrival_date} to #{departure_date}"
+      puts "Stay length: #{stay_length}"
+      puts "Number of rooms: #{number_of_rooms}"
+      puts "Type: #{type}"
+      puts "Total price: #{total}"
     end
 
   end # End of class Reservation

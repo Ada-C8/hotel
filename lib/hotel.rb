@@ -5,61 +5,77 @@ module Hotel
     def initialize(number_of_rooms)
       @number_of_rooms = number_of_rooms.to_i
       @reservations = []
-      # @room_block = []
-      @list_of_rooms = create_list_of_rooms
-    end
-
-    def create_list_of_rooms
-      list_of_rooms = Array.new
+      @list_of_rooms = Array.new
       @number_of_rooms.times do |i|
-        list_of_rooms << Room.new(i+1)
+        @list_of_rooms << Room.new(i+1)
       end
-      return list_of_rooms
     end
 
-    def make_reservation(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
-      available_rooms = available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
-      if available_rooms == "No avaibility at these dates."
+    def make_reservation(client, arrival_date, departure_date, number_of_rooms)
+      available_rooms = available_at_period(arrival_date, departure_date,)
+      if available_rooms == nil
         raise NoAvailableRoomError.new("No avaibility at these dates.")
       elsif available_rooms.length < number_of_rooms.to_i
         raise NoAvailableRoomError.new("Only #{available_rooms.length} rooms available at these dates.")
       else
         number_of_rooms.to_i.times do |i|
-          available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).first.booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
+          available_at_period(arrival_date, departure_date,).first.booked << {"arrival" => Date.parse(arrival_date.sub(/[\/]/, '-')), "departure" => Date.parse(departure_date.sub(/[\/]/, '-'))}
         end
       end
-      @reservations << Reservation.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
+      @reservations << Reservation.new(client, arrival_date, departure_date, number_of_rooms)
     end
 
-    def create_block(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
-      available_rooms = available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
-      if available_rooms == "No avaibility at these dates."
+    def create_block(client, arrival_date, departure_date, number_of_rooms)
+      available_rooms = available_at_period(arrival_date, departure_date)
+      if find_block(client) != nil
+        raise ArgumentError.new("This client already has a room block")
+      elsif available_rooms == nil
         raise NoAvailableRoomError.new("No avaibility at these dates.")
       elsif available_rooms.length < number_of_rooms.to_i
         raise NoAvailableRoomError.new("Only #{available_rooms.length} rooms available at these dates.")
       else
         number_of_rooms.to_i.times do |i|
-          available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day).first.booked << {"arrival" => Date.new(arrival_year, arrival_month, arrival_day), "departure" => Date.new(departure_year, departure_month, departure_day)}
+          available_at_period(arrival_date, departure_date).first.booked << {"arrival" => Date.parse(arrival_date.sub(/[\/]/, '-')), "departure" => Date.parse(departure_date.sub(/[\/]/, '-'))}
         end
       end
-      @reservations << RoomBlock.new(client, arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day, number_of_rooms)
+      @reservations << RoomBlock.new(client, arrival_date, departure_date, number_of_rooms)
     end
 
-    def reservations_by_date(year, month, day)
-      reservations_at_date = []
-      date = Date.new(year.to_i, month.to_i, day.to_i)
+    def find_block(client_name)
       @reservations.each do |reservation|
-        if date >= reservation.arrival_date && date < reservation.departure_date
-          reservations_at_date << reservation
+        if reservation.class == RoomBlock
+          if reservation.client == client_name.gsub(/[A-Za-z']+/,&:capitalize)
+            return reservation
+          end
         end
       end
-      return reservations_at_date
+      return nil
     end
 
+    def find_reservation(client_name)
+      @reservations.each do |reservation|
+        if reservation.class == Reservation
+          if reservation.client == client_name.gsub(/[A-Za-z']+/,&:capitalize)
+            return reservation
+          end
+        end
+      end
+      return nil
+    end
 
+    # def reservations_by_date(date)
+    #   reservations_at_date = []
+    #   date = Date.parse(date.sub(/[\/]/, '-'))
+    #   @reservations.each do |reservation|
+    #     if date >= reservation.arrival_date && date < reservation.departure_date
+    #       reservations_at_date << reservation
+    #     end
+    #   end
+    #   return reservations_at_date
+    # end
 
-    def available_at_date(year, month, day)
-      date = Date.new(year.to_i, month.to_i, day.to_i)
+    def available_at_date(date)
+      date = Date.parse(date.sub(/[\/]/, '-'))
       available_rooms = []
       @list_of_rooms.each do |room|
         booked = false
@@ -74,15 +90,15 @@ module Hotel
         available_rooms << room if booked == false
       end
       if available_rooms.empty?
-        return "No avaibility at these dates."
+        return nil
       else
         return available_rooms
       end
     end
 
-    def available_at_period(arrival_year, arrival_month, arrival_day, departure_year, departure_month, departure_day)
-      arrival_date = Date.new(arrival_year.to_i, arrival_month.to_i, arrival_day.to_i)
-      departure_date = Date.new(departure_year.to_i, departure_month.to_i, departure_day.to_i)
+    def available_at_period(arrival_date, departure_date)
+      arrival_date = Date.parse(arrival_date.sub(/[\/]/, '-'))
+      departure_date = Date.parse(departure_date.sub(/[\/]/, '-'))
       available_rooms = []
       @list_of_rooms.each do |room|
         booked = false
@@ -94,7 +110,7 @@ module Hotel
         available_rooms << room if booked == false
       end
       if available_rooms.empty?
-        return "No avaibility at these dates."
+        return nil
       else
         return available_rooms
       end
