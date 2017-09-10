@@ -93,7 +93,6 @@ describe "Hotel" do
       end # "Can list available rooms by date range"
     end # "search_available_rooms_by_dates"
 
-
     describe "reserve_block" do
       let(:block_res) {ada_inn.reserve_block(d1, 2, [room_4, room_5], 150)}
 
@@ -122,7 +121,6 @@ describe "Hotel" do
         ada_inn.search_available_rooms(block).must_include room_4 && room_5
         ada_inn.search_available_rooms(block).wont_include room_7
 
-        #TODO update for after a room can be reserved within a block
         ada_inn.reserve_within(block, room_4)
 
         ada_inn.search_available_rooms(block).must_include room_5
@@ -137,15 +135,26 @@ describe "Hotel" do
         ada_inn.reserve_within(block, room_4).must_be_instance_of ReservationSystem::Reservation
       end #"Can reserve a room from within a block"
 
-      it "Cannot reserve a room that is not within the block" do
-        proc {ada_inn.reserve_within(block, room_7)}.must_raise Reservable::UnavailableError
-      end
-
       it "Has reservation dates that match date range of the block" do
         ada_inn.reserve_within(block, room_4)
         room_4.nights_reserved.must_include d1 && d1+1
       end # "Has reservation dates that match date range of the block"
+
+      it "Cannot reserve a room that is not within the block" do
+        proc {ada_inn.reserve_within(block, room_7)}.must_raise Reservable::UnavailableError
+      end
+
+      it "Cannot reserve a room that is already reserved" do
+        ada_inn.reserve_within(block, room_4)
+        proc {ada_inn.reserve_within(block, room_4)}.must_raise Reservable::UnavailableError
+      end
     end # "reserve_within"
+
+    describe "override_rate" do #TODO decide if ovverride is available for a reservation or for a room in general
+      it "Can change a room rate" do
+        #TODO changes room rate, check reservation prices are updated
+      end
+    end
 
   end # "hotel instance methods"
 

@@ -80,7 +80,6 @@ module ReservationSystem
       return available_rooms
     end # "search_available_rooms"
 
-
     def reserve_within(block, room)
       raise UnavailableError.new("This room is not in this block") if !block.rooms.include?(room)
 
@@ -92,6 +91,10 @@ module ReservationSystem
         raise UnavailableError.new("This blocked room is already reserved")
       end
     end # "reserve_within"
+
+    def override_rate(room, rate)
+
+    end
 
   end #Hotel class
 
