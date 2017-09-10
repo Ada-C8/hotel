@@ -32,16 +32,16 @@ describe 'Reservations' do
       new_booking1.must_be_instance_of Hotel::Booking
     end
     it 'must raise an error if the check-in date is in the past' do
-      proc{new_booking = @new_hotel.new_reservation("2017-06-01", "2017-09-21")}.must_raise Hotel::InvalidDateError
+      proc{new_booking = @new_hotel.new_reservation("2017-06-01", "2017-09-21", 2)}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the check-in date is the same as the check-out date' do
-      proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-20")}.must_raise Hotel::InvalidDateError
+      proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-20"), 3}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the check_in date is after the check-out date' do
-      proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-18")}.must_raise Hotel::InvalidDateError
+      proc{new_booking = @new_hotel.new_reservation("2017-09-20", "2017-09-18"), 4}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the date is not valid on calendar' do
-      proc{new_booking = @new_hotel.new_reservation("2018-02-30", "2018-02-31")}.must_raise ArgumentError
+      proc{new_booking = @new_hotel.new_reservation("2018-02-30", "2018-02-31"), 5}.must_raise ArgumentError
     end
     it 'allows a new reservation to be made on a room on the same day as previous check-out' do
       @new_hotel.clear_reservations
@@ -51,7 +51,7 @@ describe 'Reservations' do
     end
   end
 
-  describe 'available' do
+  describe 'check availability' do
     before do
       @new_hotel.clear_reservations
       @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
@@ -81,7 +81,7 @@ describe 'Reservations' do
       @new_hotel.list_rooms_available_by_date("2018-01-03").length.must_equal 17
     end
     it 'must return the correct rooms available' do
-
+      @new_hotel.list_rooms_available_by_date("2018-01-03")[0].room_number.must_equal 3
     end
   end
   # describe 'assign room number' do
