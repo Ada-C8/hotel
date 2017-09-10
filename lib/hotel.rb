@@ -76,25 +76,26 @@ module Hotel
     end# is_available
 
     #As an administrator, I can create a block of rooms
-    def create_block(block_id, number_of_rooms, day_in, day_out)
-      available = open_rooms(day_in, day_out) #>= number_of_rooms
-        return available.length
-      # else
-      #   return false
-      #end
-
-      #find avaiable rooms for the requested date range (up to five)
-      #establish discounted rate
-      #
+    def create_block(block_id, number_of_rooms, day_in, day_out, discounted_rate)
+      available = open_rooms(day_in, day_out)
+      if available.length >= number_of_rooms
+      #if open_rooms(day_in, day_out) >= number_of_rooms
+        available.take(number_of_rooms).each do |room|
+          make_reservation(block_id, room, day_in, day_out, discount:discounted_rate)
+        end#each
+      else
+        return "There are only #{available.length} rooms available during the requested dates."
+      end #if statment
     end
-    # To create a block you need a date range, collection of rooms and a discounted room rate
 
-
+    #find avaiable rooms for the requested date range (up to five)
+    #establish discounted rate
+    #
     # The collection of rooms should only include rooms that are available for the given date range
 
   end #class
 end #module
-# binding.pry
+#binding.pry
 # @boetel = Hotel::Hotel.new
 # @boetel.make_reservation(2222, 2, "2017/12/12", "2017/12/15")
 # @boetel.make_reservation(1201, 1, "2017/12/12", "2017/12/15")

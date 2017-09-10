@@ -7,7 +7,7 @@ module Hotel
 
     attr_reader :id, :room, :check_in, :check_out, :date_range, :nights_reserved, :total_cost, :length_of_stay
 
-    def initialize(id, room, day_in, day_out)
+    def initialize(id, room, day_in, day_out, discount:0)
       @id = id
       @room = room
       @check_in = DateRange.check_in(day_in)#day_in
@@ -15,7 +15,7 @@ module Hotel
       @date_range = DateRange.create_range(@check_in, @check_out)
       @nights_reserved = @date_range[0..-2]
       @length_of_stay = @date_range.length - 1
-      @total_cost = (200 * @length_of_stay).to_i
+      @total_cost = ((200 - discount) * @length_of_stay).to_i
     end
 
     def view_reservation
@@ -25,7 +25,7 @@ module Hotel
 
 end #module
 
-#binding.pry
+binding.pry
 #maybe checkin and checkout are entered from daterange
 #total cost of res.$
 #dates of reservation
