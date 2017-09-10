@@ -1,4 +1,5 @@
 require_relative 'reservation'
+require_relative 'block'
 
 module Hotel
 
@@ -29,6 +30,17 @@ module Hotel
         end
         @reservations << reservation
       end
+    end
+
+    def reserve_block # individual reservation in the block
+
+      # @all_rooms.each_index do |i|
+      #   if @all_rooms[i].block.length == 1 && @all_rooms[i].status == :available
+      #     puts @all_rooms[i].status
+      #     # all_rooms is in hotel, @reservations is in room....
+      #     # @all_rooms[i].reservations << Hotel::Reservation.new(all_rooms[i].start_date, all_rooms[i].end_date)
+      #   end
+      # end
     end
 
   end #end of Room
