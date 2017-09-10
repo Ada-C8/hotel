@@ -25,7 +25,6 @@ module Hotel
       @all_reservations = []
       @all_rooms = []
       @all_blocks = []
-
       (1..20).each do |number|
         @all_rooms << Hotel::Room.new(number)
       end
@@ -55,34 +54,28 @@ module Hotel
     end # get_rooms
 
     def make_reservation(start_date, end_date, num_rooms )
-
       valid_dates(start_date, end_date)
-
       if start_date < end_date
         availible = availible_rooms(start_date, end_date)
         if num_rooms > 20
-          raise BookingError.new("You can't book that many rooms because we only have 20 rooms in the hotel.")
+          raise BookingError.new("You can't reserve that many rooms because we only have 20 rooms in the hotel.")
         elsif num_rooms > availible.length
           raise BookingError.new("We don't have that many rooms availible for those dates. We only have #{availible.length} rooms availible for those dates. ")
         end # if/elsif
-
         dates_booked = get_date_array(start_date, end_date)
         reservation_id = @all_reservations.length + 1
         rooms = get_rooms(start_date, end_date, num_rooms)
         cost = (num_rooms * dates_booked.length * 200.0)
         @all_reservations << Hotel::Reservation.new(reservation_id, cost, rooms, dates_booked)
-
       end # if/else
     end # make_reservation
+
 
     def check_date_for_reservations(start_date, end_date)
       # it will have a method that checks if there is a reservation for the date(s) requested
       # iterate though @all_reservations for each day requested and if the day is included in the Booking then it will look at the Reservation that included that date and add the room(s) in that reservation to a new array not_availible.
-      # TODO
-      #maybe change this method to use a mehtod_name(block).each or method_name(reservation).each where methof_name is a method that can return either the @all_reservations array or the @all_blocks array. Then we don't have to make a new method to search for a block in a given date range? Not sure if there is enough overlap for this, but something to keep in mind!
       days = get_date_array(start_date, end_date)
       date_reservations = []
-
       days.each do |day|
         @all_reservations.each do |res|
           if res.date_range.include?(day)
@@ -96,7 +89,7 @@ module Hotel
     end # check_date_for_reservations
 
     def print_reservations(start_date, end_date)
-      # Not sure if we need this and if simply calling check_date_for_reservations is enough for the user to be able to access all the reservations for a given date(range)
+      # Not sure if we need this and if simply calling check_date_for_reservations is enough for the user to be able to access all the reservations for a given date(range)?
       reservations = check_date_for_reservations(start_date, end_date)
       nice_format_reservations = []
       reservations.each do |res|
@@ -115,50 +108,37 @@ module Hotel
     end #print_reservations
 
     def availible_rooms(start_date, end_date)
-
-      # TODO: need to iterate though @all_bookings and remove those rooms from availible! Maybe generate an array of bookings for a given date from the check_date_for_reservations method? Or have a different method that returns an array of bookings?
       reservations = check_date_for_reservations(start_date, end_date)
       blocks = check_date_for_block(start_date, end_date)
       reserved = []
       blocked = []
       availible = []
-
       #creates an array of all the rooms that are reserved for the given date range
       reservations.each do |res|
         res.res_rooms.each do |room|
           reserved << room
         end # .each
       end # .each
-
+      #creates an array of all the rooms that are in a block for the given date range
       blocks.each do |block|
         block.block_rooms.each do |room|
           blocked << room
         end # .each
       end # .each
-
       # creates an array of all the availible rooms for the given date range
       @all_rooms.each do |room|
         if !(reserved.include?(room)) && !(blocked.include?(room))
           availible << room
         end # if
       end # .each
-
       return availible
     end # availible_rooms
 
     def make_block(block_id, start_date, end_date, num_of_rooms)
-
       availible = availible_rooms(start_date, end_date)
-
-      all_block_id = []
-      @all_blocks.each do |block|
-        all_block_id << block.block_id
-      end # .each
-
+      all_block_id = return_all_block_ids
       block_id = block_id.upcase
-
       valid_dates(start_date, end_date)
-
       if num_of_rooms > 5
         raise BookingError.new("You can only request a maximum of five rooms per block.")
       elsif num_of_rooms > availible.length
@@ -166,19 +146,14 @@ module Hotel
       elsif all_block_id.include?(block_id)
         raise BookingError.new("Please use a different block ID, the block ID #{block_id} is already in use")
       end # if/elsif
-
       dates = get_date_array(start_date, end_date)
       rooms = get_rooms(start_date, end_date, num_of_rooms)
       @all_blocks << Hotel::Block.new(block_id, rooms, dates)
-
-      # TODO: should this method return the insance of Block created instead of the @all_blocks array?
-
     end #make_block
 
     def check_date_for_block(start_date, end_date)
       days = get_date_array(start_date, end_date)
       date_blocks = []
-
       days.each do |day|
         @all_blocks.each do |block|
           if block.date_range.include?(day)
@@ -191,26 +166,27 @@ module Hotel
       return date_blocks
     end # check_date_for_block
 
-    def check_block_availibility(block_id)
-      # will iterate though the @all_block array to find the block with the right ID
-        # if the block ID doesn't exsist
-        # if the ID does exist then it will rerurn the Block.block_rooms array
-          # if this array is empty then there is not avaibility
-          # if there are rooms in the array then there is still availible in the block
-            # Then this array can be passed to the reserve_from_block method so that you can book directly from the block
-            #Will have to have another method that will return true or false depending on the return array of the check_block_availibility method to be a simple way to check if there is availibility in the block
-
-      id = block_id.upcase
-
+    def return_all_block_ids
       all_block_id = []
       @all_blocks.each do |block|
         all_block_id << block.block_id
       end # .each
+     return all_block_id
+   end # return_all_block_ids
 
+    def check_block_availibility(block_id)
+      # will iterate though the @all_block array to find the block with the right ID
+      # if the block ID doesn't exsist
+      # if the ID does exist then it will rerurn the Block.block_rooms array
+      # if this array is empty then there is not avaibility
+      # if there are rooms in the array then there is still availible in the block
+      # Then this array can be passed to the reserve_from_block method so that you can book directly from the block
+      #Will have to have another method that will return true or false depending on the return array of the check_block_availibility method to be a simple way to check if there is availibility in the block
+      id = block_id.upcase
+      all_block_id = return_all_block_ids
       if !(all_block_id.include?(id))
         raise BookingError.new("That booking ID does not exist!")
       end # if
-
       block_rooms_remaining = []
       @all_blocks.each do |block|
         if block.block_id == id
@@ -222,16 +198,11 @@ module Hotel
 
     def rooms_left_in_block(block_id)
       id = block_id.upcase
-      all_block_id = []
-      @all_blocks.each do |block|
-        all_block_id << block.block_id
-      end # .each
+      all_block_id = return_all_block_ids
       if !(all_block_id.include?(id))
         raise BookingError.new("That booking ID does not exist!")
       end # if
-
       rooms_left = check_block_availibility(block_id)
-
       if rooms_left.length == 0
         return "There are no rooms left in the #{id} block"
       elsif rooms_left.length > 0
@@ -243,14 +214,10 @@ module Hotel
       # will return the block that has the ID that you're searching for
       # this method will be called in the reserve_from_block method to reserve a room from a specific block!
       id = block_id.upcase
-      all_block_id = []
-      @all_blocks.each do |block|
-        all_block_id << block.block_id
-      end # .each
+      all_block_id = return_all_block_ids
       if !(all_block_id.include?(id))
         raise BookingError.new("That booking ID does not exist!")
       end # if
-
       @all_blocks.each do |block|
         if block.block_id == id
           return block
@@ -260,26 +227,16 @@ module Hotel
 
     def reserve_from_block(block_id, num_of_rooms)
       id = block_id.upcase
-      all_block_id = []
-      @all_blocks.each do |block|
-        all_block_id << block.block_id
-      end # .each
+      all_block_id = return_all_block_ids
       if !(all_block_id.include?(id))
         raise BookingError.new("That booking ID does not exist!")
       end # if
-
       reservation_id = @all_reservations.length + 1
-
       block_reservations = return_one_block(id).reserve_room(reservation_id, num_of_rooms)
-
       block_reservations.each do |res|
         @all_reservations << res
       end # .each
-
       return block_reservations
     end # reserve_from_block
-
-
-
   end # Booking
 end # Hotel
