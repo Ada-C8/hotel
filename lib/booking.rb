@@ -43,6 +43,17 @@ module Hotel
       dates = Hotel::DateRange.new(start_date, end_date).nights_booked
     end # get_date_array
 
+    def get_rooms(start_date, end_date, num)
+      availible = availible_rooms(start_date, end_date)
+      rooms = []
+      i = 0
+      num.times do
+        rooms << availible[i]
+        i += 1
+      end # .times
+      return rooms
+    end # get_rooms
+
     def make_reservation(start_date, end_date, num_rooms )
 
       valid_dates(start_date, end_date)
@@ -56,17 +67,9 @@ module Hotel
         end # if/elsif
 
         dates_booked = get_date_array(start_date, end_date)
-
         reservation_id = @all_reservations.length + 1
-        rooms = []
-        i = 0
-        num_rooms.times do
-          rooms << availible[i]
-          i += 1
-          # availible = availible_rooms(start_date, end_date)
-        end
+        rooms = get_rooms(start_date, end_date, num_rooms)
         cost = (num_rooms * dates_booked.length * 200.0)
-
         @all_reservations << Hotel::Reservation.new(reservation_id, cost, rooms, dates_booked)
 
       end # if/else
@@ -165,14 +168,7 @@ module Hotel
       end # if/elsif
 
       dates = get_date_array(start_date, end_date)
-
-      rooms = []
-      i = 0
-      num_of_rooms.times do
-        rooms << availible[i]
-        i +=1
-      end # .each
-
+      rooms = get_rooms(start_date, end_date, num_of_rooms)
       @all_blocks << Hotel::Block.new(block_id, rooms, dates)
 
       # TODO: should this method return the insance of Block created instead of the @all_blocks array?
