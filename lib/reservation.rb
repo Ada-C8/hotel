@@ -1,9 +1,9 @@
-require_relative 'date_range'
+
 module My_Hotel
 
   class Reservation
     attr_accessor :block_id
-    attr_reader :first_night, :last_night, :reservation_id, :room_number, :nights_booked, :cost
+    attr_reader :reservation_id, :room_number, :nights_booked, :cost
 
 
     def initialize(nights)
@@ -12,14 +12,22 @@ module My_Hotel
       @room_number = nil
       @nights_booked = nights
       @block_id = nil
-      #@contact_info #could add contact_info
+      #@contact_info, payment info #could add these
+    end
+
+    def create_booking(all_reservations, rooms_avail, discount=1, block_id=nil)
+      assign_room(rooms_avail)
+      set_cost(discount)
+      set_reservation_id
+      @block_id = block_id
+      while unique_reservation_id?(all_reservations) == false
+        set_reservation_id
+      end
     end
 
     def assign_room(rooms_avail)
       if rooms_avail.length != 0
         @room_number = rooms_avail.keys.sample
-      else
-        raise ArgumentError.new("Can't make reservation, there are no rooms available for those dates: #{@nights_booked}")
       end
     end
 
@@ -37,5 +45,17 @@ module My_Hotel
       end
       @reservation_id = new_reservation_id
     end
+
+    def unique_reservation_id?(all_reservations)
+      if all_reservations.length != 0
+        all_reservations.each do |one_reservation|
+          if one_reservation.reservation_id == @reservation_id
+            return false
+          end
+        end
+      end
+      return true
+    end
+
   end
 end

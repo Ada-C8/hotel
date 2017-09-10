@@ -3,8 +3,9 @@ require_relative 'spec_helper'
 describe "My_Hotel::Reservation" do
   before do
     @feb1 = Date.civil(2017,2,1)
-    @feb2 = Date.civil(2017,2,1)
     @feb6 = Date.civil(2017,2,6)
+    @may20 = Date.civil(2017,5,20)
+    @may21 = Date.civil(2017,5,21)
     @holiday = My_Hotel::Reservation.new(@feb1..@feb6)
     @rooms_avail = {1 =>200,
       2 => 200,
@@ -36,7 +37,7 @@ describe "My_Hotel::Reservation" do
     it "calculates the cost of a reservation without a discount" do
       @holiday.assign_room(@rooms_avail)
       @holiday.set_cost.must_equal 1200 #nominal
-      one_night =  My_Hotel::Reservation.new(@feb1..@feb1)
+      one_night = My_Hotel::Reservation.new(@feb1..@feb1)
       one_night.assign_room(@rooms_avail)
       one_night.set_cost.must_equal 200
     end
@@ -54,4 +55,19 @@ describe "My_Hotel::Reservation" do
       @holiday.reservation_id.length.must_equal 6
     end
   end
+
+  describe "unique_reservation_id?" do
+    it "returns false if reservation_id is not unique and true if it is" do
+      @holiday.set_reservation_id
+      another= My_Hotel::Reservation.new(@may20..@may21)
+      another.set_reservation_id
+      another.unique_reservation_id?([@holiday]).must_equal true
+      until @holiday.reservation_id == another.reservation_id
+          another.set_reservation_id
+      end
+      another.unique_reservation_id?([@holiday]).must_equal false
+    end
+
+  end
+
 end
