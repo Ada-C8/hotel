@@ -52,13 +52,6 @@ module Hotel_System
       return @block
     end
 
-    def date_object_checker(date)
-      if date.class != Date
-        date = Date.parse(date)
-      end
-      return date
-    end
-
     def reservations_by_date(date)
       date = date_object_checker(date)
       @reservations_by_date = []
@@ -141,7 +134,6 @@ module Hotel_System
       date_range = inquiry_date_range_generator(check_in, check_out)
       boolean = []
       date_range.each do |date|
-        # p availability_room_hash_by_date(date)
         if availability_room_hash_by_date(date)[room_number] == :block
           boolean << true
         else
@@ -151,7 +143,6 @@ module Hotel_System
       if boolean.include? false
         raise ArgumentError.new("Block room not available")
       else
-
         make_block_reservation(room_number, check_in, check_out, block)
       end
     end
@@ -183,7 +174,6 @@ module Hotel_System
       return @block_rooms
     end
 
-
     private
 
     def fill_hotel(num_of_rooms)
@@ -195,7 +185,12 @@ module Hotel_System
       return room_array
     end
 
-
+    def date_object_checker(date)
+      if date.class != Date
+        date = Date.parse(date)
+      end
+      return date
+    end
 
   end #class end
 end # module end
