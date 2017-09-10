@@ -2,8 +2,6 @@ module Hotels
   # Contains information regarding individual Rooms in Hotels::Hotel
   class Room
     attr_reader :room_name, :room_id
-
-    # W1-C2 Every room is identical, and a room always costs $200/night
     REGULAR_RATE = 200
     BLOCK_RATE = 100
 

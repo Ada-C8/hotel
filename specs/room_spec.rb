@@ -10,7 +10,7 @@ describe 'Room' do
       @room.must_be_instance_of Hotels::Room
     end
     it 'Has an ID number' do
-      @room.room_id.must_equal 5
+      assert_equal 5, @room.room_id
     end
     it 'Has a rate for regular reservation nights' do
       Hotels::Room::REGULAR_RATE.must_be_kind_of Integer
