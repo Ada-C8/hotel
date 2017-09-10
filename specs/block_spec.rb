@@ -35,4 +35,16 @@ describe 'Block class' do
       proc{@blocknew.reserve}.must_raise ArgumentError
     end
   end
+
+  describe 'room_avaliable_block' do
+    it 'returns true if there is rooms avaliables' do
+      @blocknew.room_avaliable_block?.must_equal true
+    end
+    it 'returns false if there is not rooms avaliables' do
+      4.times do
+        @blocknew.reserve
+      end
+      @blocknew.room_avaliable_block?.must_equal false
+    end
+  end
 end

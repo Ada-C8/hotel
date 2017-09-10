@@ -12,14 +12,19 @@ module Hotel
     end
 
     def reserve
-      if @rooms_set.length > 0
+      if room_avaliable_block?
         @rooms_set.delete_at(0)
         return @rooms_set
       else
         raise ArgumentError.new("There is not more rooms avaliables in the given block")
       end
     end
-    
+
+    def room_avaliable_block?
+      @rooms_set.length > 0 ? true : false
+    end
+
+
 
   end #class
 end #module
