@@ -23,7 +23,21 @@ describe 'Reservation' do
       (@reservation.total_cost % @reservation.dates.length).must_equal 0
     end
 
-    # TODO: various date formats 'August 31st, 2017'
+    it 'factors block discount into total if part of block' do
+      block = @hotel.make_block('2017-08-03', '2017-08-08', 10, 25)
+      reservation = @hotel.make_reservation('2017-08-03', '2017-08-08', block.id)
+      reservation.total_cost.must_equal 750
+    end
+
+    it 'can be initialized with various date formats (Date or String)' do
+      date1 = Date.new(2017, 9, 5)
+      date2 = Date.new(2017, 9, 10)
+      Hotel::Reservation.new(@room, date1, date2, @hotel)
+      Hotel::Reservation.new(@room, '2017-09-05', '2017-09-10', @hotel)
+      Hotel::Reservation.new(@room, 'September 5th, 2017', 'September 10th, 2017', @hotel)
+      Hotel::Reservation.new(@room, '5/9/17', '10/9/17, 2017', @hotel)
+    end
+
     # TODO: @total_cost discount for blocks
 
     # it 'has 9-character @id value' do
