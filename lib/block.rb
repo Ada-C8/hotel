@@ -6,7 +6,7 @@ module Hotel
 
   class BlockRoom<Reservation
 
-    attr_reader :check_in, :check_out, :num_of_rooms, :discount, :collection_of_rooms
+    attr_reader :check_in, :check_out, :num_of_rooms, :discount, :collection_of_rooms, :available_rooms, :booked_rooms
 
     ## just creating a block of rooms that have not been booked yet##
     def initialize(check_in, check_out, num_of_rooms = 5, client = nil, discount = 15, cost = 200)
@@ -19,6 +19,13 @@ module Hotel
       @reservation_array << @num_of_rooms
 
       @collection_of_rooms = []
+
+      @available_rooms = []
+      @reservation_array << @available_rooms
+
+      @booked_rooms = []
+      @reservation_array << @booked_rooms
+
 
       # @rooms_in_block = []
       # @status_of_rooms = nil

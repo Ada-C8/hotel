@@ -19,6 +19,8 @@ describe "initialization" do
     @block.check_out.must_be_instance_of Date
     @block.collection_of_rooms.must_be_instance_of Array
     @block.cost.must_equal 200
+    @block.booked_rooms.must_be_instance_of Array
+    @block.available_rooms.must_be_instance_of Array
   end
 
 

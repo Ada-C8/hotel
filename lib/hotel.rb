@@ -36,6 +36,7 @@ module Hotel
       if room_availability(check_in, check_out).length >= num_of_rooms
         puts "we can create a block reservation"
         @block_reservation = Block.new(check_in, check_out, num_of_rooms, client, discount, client, cost)
+        @num_of_rooms << rooms_available.pop(num_of_rooms)
       else
         puts "appears we can't block rooms for you at this point"
       end
@@ -84,6 +85,7 @@ module Hotel
         end
       end
 
+####NOTE##### need to relook at logic
       @block_reservation_collection.each do |entry|
         if check_in < entry.check_in && check_in < entry.check_out && check_out < entry.check_out && check_out > entry.check_in
           rooms_available.delete(entry.room_num)
