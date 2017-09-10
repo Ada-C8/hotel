@@ -45,7 +45,7 @@ module Hotels
       booked_rooms = []
       date_range.each do |date|
        @reservations.each do |one_res|
-         if one_res.dates.include? date
+         if one_res.date_range.include? date
             booked_rooms << one_res.room
          end
        end
@@ -56,9 +56,9 @@ module Hotels
     def list_unbooked_rooms(list_booked_rooms)
       unbooked_rooms = []
     @rooms.each do |room|
-      if booked_rooms.include? room.number
+      if list_booked_rooms.include? room
       else
-        unbooked_rooms << room.number
+        unbooked_rooms << room
       end
     end
     return unbooked_rooms
@@ -66,24 +66,13 @@ module Hotels
 
 
 
-    def find_room
-      all_booked_rooms = []
-      @reservations.each do |one_res|
-        all_booked_rooms << one_res.room
-      end
-      @rooms.each do |room|
-        unless all_booked_rooms.include? room.number
-         return room
-       else
-          @reservations.each do |one_res|
-            unless one_res.date_range.include? !date_range
-              return room
-            else
-              puts "Hotel is booked."
-            end
-          end
-        end
-      end
+    def find_room(list_unbooked_rooms)
+      if list_unbooked_rooms.length == 0
+        raise ArgumentError.new("Hotel is booked.")
+      else
+      room = list_unbooked_rooms.sample
+      return room
+      end 
     end
 
     def make_reservation(find_room, date_range)

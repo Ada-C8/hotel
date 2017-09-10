@@ -1,7 +1,5 @@
-require 'minitest/autorun'
-require 'minitest/reporters'
-require 'minitest/skip_dsl'
-require_relative '../lib/hotel'
+
+# require_relative '../lib/hotel'
 require_relative './spec_helper.rb'
 
 describe "Hotel" do
@@ -52,9 +50,84 @@ describe "Hotel" do
 
       date_range.must_be_instance_of Array
       date_range.length.must_equal 2
-      
+
       test_date = Date.new(2020, 9, 11)
       date_range[1].must_equal test_date
+    end
+  end
+
+  describe "list_booked_rooms" do
+    it "can list booked rooms" do
+      new_hotel = Hotels::Hotel.new
+      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = new_hotel.date_range(dates)
+      list_booked = new_hotel.list_booked_rooms(date_range)
+      unbooked = new_hotel.list_unbooked_rooms(list_booked)
+      find_room = new_hotel.find_room(unbooked)
+      new_res = new_hotel.make_reservation(find_room, date_range)
+      list_booked = new_hotel.list_booked_rooms(date_range)
+
+      list_booked[0].must_equal find_room
+      list_booked.length.must_equal 2
+    end
+  end
+
+  describe "list_unbooked_rooms" do
+    it "can list booked rooms" do
+      new_hotel = Hotels::Hotel.new
+      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = new_hotel.date_range(dates)
+      list_booked = new_hotel.list_booked_rooms(date_range)
+      unbooked = new_hotel.list_unbooked_rooms(list_booked)
+      find_room = new_hotel.find_room(unbooked)
+      new_res = new_hotel.make_reservation(find_room, date_range)
+      list_booked = new_hotel.list_booked_rooms(date_range)
+      unbooked = new_hotel.list_unbooked_rooms(list_booked)
+      check_lists = unbooked.include? list_booked[0]
+
+
+      unbooked[0].must_be_instance_of Hotels::Rooms
+      unbooked.length.must_equal 19
+      check_lists.must_equal false
+    end
+  end
+
+  describe "find_room" do
+    it "can find a room" do
+      new_hotel = Hotels::Hotel.new
+      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = new_hotel.date_range(dates)
+      list_booked = new_hotel.list_booked_rooms(date_range)
+      unbooked = new_hotel.list_unbooked_rooms(list_booked)
+      find_room = new_hotel.find_room(unbooked)
+      new_res = new_hotel.make_reservation(find_room, date_range)
+      dates2 = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range2 = new_hotel.date_range(dates2)
+      list_booked2 = new_hotel.list_booked_rooms(date_range2)
+      unbooked2 = new_hotel.list_unbooked_rooms(list_booked2)
+      find_room2 = new_hotel.find_room(unbooked2)
+
+      find_room2.must_be_instance_of Hotels::Rooms
+
+    end
+    it "won't book when hotel is full" do
+      new_hotel = Hotels::Hotel.new
+
+      proc {new_hotel.find_room([])}.must_raise ArgumentError
+    end
+  end
+
+
+
+  describe "make_reservation" do
+    it "can make a reservation" do
+      new_hotel = Hotels::Hotel.new
+      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = new_hotel.date_range(dates)
+      find_room = Hotels::Rooms.new(1)
+      new_res = new_hotel.make_reservation(find_room, date_range)
+
+      new_res[0].must_be_instance_of Hotels::Reservations
     end
   end
 

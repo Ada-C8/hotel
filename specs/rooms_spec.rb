@@ -1,7 +1,5 @@
-require 'minitest/autorun'
-require 'minitest/reporters'
-require 'minitest/skip_dsl'
-require_relative '../lib/rooms'
+
+#require_relative '../lib/rooms'
 require_relative './spec_helper.rb'
 
 describe "Rooms wave 1" do
