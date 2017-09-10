@@ -4,12 +4,7 @@ require_relative 'room'
 module Reservable
 
   def valid_dates?(start_date, end_date)
-    # if @check_in >= @check_out
-    #   raise ArgumentError.new("Check out must be later than check in")
-    #
-    # elsif @check_in < Date.today
-    #   raise ArgumentError.new("Can't reserve a room for date that's already passed")
-    # end
+
     raise TypeError.new("#{start_date} must be of type Date") if start_date.class != Date
     raise TypeError.new("#{end_date} must be of type Date") if end_date.class != Date
     raise ArgumentError.new("Check out must be later than check in") if start_date >= end_date
@@ -20,6 +15,10 @@ module Reservable
   def valid_room_num?(num)
     raise TypeError.new("#{num} must of type Integer") if num.class != Integer
     raise ArgumentError.new("Invalid number of rooms") if num < 1
+  end
+
+  def valid_room?(room)
+    raise TypeError.new("#{room} must be of type Hotel::Room") if room.class != Hotel::Room
   end
 
   def valid_room_block?(room_block, check_in, check_out)
@@ -35,7 +34,7 @@ module Reservable
     raise ArgumentError.new("Rate must be greater than 0") if rate < 1
   end
 
-  def valid_discount(discount)
+  def valid_discount?(discount)
     # must be decimal representing percentage of full cost (e.g. 0.8 for 80% of orig rate)
     raise TypeError.new("#{discount} must be of type Float") if discount.class != Float
     raise ArgumentError.new("Not a discounted rate") if discount >= 1 || discount <= 0
@@ -45,6 +44,12 @@ module Reservable
     num_nights = (@check_out - @check_in).to_i
     return (num_nights * rate)
   end
+
+# TODO finish implementing
+  # def total_cost(room_num)
+  #   num_nights = (@check_out - @check_in).to_i
+  #   return (num_nights * )
+  # end
 
   def include?(date)
     return date >= @check_in && date < @check_out

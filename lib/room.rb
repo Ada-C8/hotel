@@ -3,11 +3,11 @@ require_relative 'reservable'
 
 module Hotel
 
-  # NUM_ROOMS = 20
-
   class Room
     include Reservable
     include Comparable
+
+    @@all_rooms = []
 
     DEFAULT_RATE = 200
 
@@ -16,14 +16,15 @@ module Hotel
 
     def initialize(room_num, rate = DEFAULT_RATE)
 
-      #raise ArgumentError.new("Not a valid room number") if room_num < 1
       valid_room_num?(room_num)
       valid_rate?(rate)
 
       @room_num = room_num
-      @reservations = []
-      @blocks = []
+      @reservations = [] # array of res_ids
+      @blocks = []  # array of block_ids
       @rate = rate
+
+      @@all_rooms << self
 
     end
 
@@ -33,29 +34,50 @@ module Hotel
 
     def reserve(start_date, end_date)
 
-      raise ArgumentError.new("Room #{room_num} isn't available for the given dates") if is_booked?(start_date, end_date)
+      raise ArgumentError.new("Room #{room_num} isn't available for the given dates") if booked?(start_date, end_date)
 
       new_reservation = ::Hotel::Reservation.new(start_date, end_date, self)
-      reservations << new_reservation
+      reservations << new_reservation#.reservation_id
 
       return new_reservation
 
     end
 
-    def is_booked?(start_date, end_date = start_date.next_day)
+    def booked?(start_date, end_date = start_date.next_day)
 
       return array_include_date?(reservations, start_date, end_date)
 
     end
 
-    def is_blocked?(start_date, end_date = start_date.next_day)
+    def blocked?(start_date, end_date = start_date.next_day)
 
       return array_include_date?(blocks, start_date, end_date)
 
     end
 
     def unavailable?(start_date, end_date = start_date.next_day)
-      return is_booked?(start_date, end_date) || is_blocked?(start_date, end_date)
+      return booked?(start_date, end_date) || blocked?(start_date, end_date)
+    end
+
+    def self.all
+      # @all_rooms.sort!
+      return @@all_rooms
+    end
+
+    def self.find(room_num)
+      rooms = self.all
+
+      rooms.each do |room|
+        if room.room_num == room_num
+          return room
+        end
+      end
+
+      return nil
+    end
+
+    def self.clear
+      @@all_rooms = []
     end
 
     def to_s
@@ -65,13 +87,13 @@ module Hotel
       s += "Reservations:\n"
 
       reservations.each do |reservation|
-        s += reservation.to_s
+        s += Hotel::Reservation.find(reservation).to_s
       end
 
-      s += "Blocks:\n"
-      blocks.each do |block|
-        s += block.to_s
-      end
+      # s += "Blocks:\n"
+      # blocks.each do |block|
+      #   s += block.to_s
+      # end
 
       return (s += "\n")
 
@@ -97,3 +119,9 @@ module Hotel
   end # end of Room class
 
 end
+
+room = Hotel::Room.new(1)
+room2 = Hotel::Room.new(2)
+
+puts Hotel::Room.all
+# puts Hotel::Room.all_rooms

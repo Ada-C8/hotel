@@ -8,25 +8,22 @@ module Hotel
     include Comparable
     include Reservable
 
-    attr_accessor :check_in, :check_out, :room_num, :rate
+    @@all_reservations = []
+
+    attr_accessor :check_in, :check_out, :room_num, :rate, :reservation_id
 
     def initialize(check_in, check_out, room)
 
-      # # check input move check input type != date to user interface
-      # check_in = check_date(check_in)
-      # check_out = check_date(check_out)
-      #
-      # raise ArgumentError.new("Invalid date(s)") if check_in == nil || check_out == nil
+      valid_dates?(check_in, check_out)
+      valid_room?(room)
 
-      # raise ArgumentError.new("Check out must be later than check in") if check_in >= check_out
-      # @reservation_id = rand(100000..999999)
+      @reservation_id = @@all_reservations.length + 1
       @check_in = check_in
       @check_out = check_out
       @room_num = room.room_num
       @rate = room.rate
 
-      valid_dates?(check_in, check_out)
-
+      @@all_reservations << self
     end
 
     def ==(other_reservation)
@@ -37,13 +34,33 @@ module Hotel
     #   return date >= check_in && date < check_out
     # end
 
-    # def total_cost
-    #   num_nights = (check_out - check_in).to_i
-    #   # return num_nights * ::Hotel::Room::DEFAULT_RATE
-    #   return num_nights * rate
-    # end
+    def total_cost
+      num_nights = (check_out - check_in).to_i
+      # return num_nights * ::Hotel::Room::DEFAULT_RATE
+      return num_nights * rate
+    end
 
-    #private
+    def self.all
+      return @@all_reservations
+    end
+
+    def self.find(reservation_id)
+      reservations = self.all
+
+      reservations.each do |reservation|
+        if reservation.reservation_id == reservation_id
+          return reservation
+        end
+      end
+
+      return nil
+    end
+
+    def self.clear
+      # clears all reservations (for testing)
+      @@all_reservations = []
+    end
+
 
     def to_s
       # return human readable representation
@@ -55,23 +72,6 @@ module Hotel
       return s
 
     end
-
-    # private
-    # move check_date to user interface
-    # def check_date(date)
-    #   if date.is_a?Date
-    #     return date
-    #   else
-    #     begin date = Date.parse(date)
-    #     rescue ArgumentError
-    #       return nil
-    #     rescue TypeError
-    #       return nil
-    #     else
-    #       return date
-    #     end
-    #   end
-    # end
 
   end # end of Reservation class
 end
