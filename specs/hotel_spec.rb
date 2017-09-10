@@ -552,5 +552,3 @@ describe 'Hotel' do
     end
   end
 end
-
-# TODO: lots and lots of edge case testing
