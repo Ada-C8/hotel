@@ -1,6 +1,8 @@
+require 'date'
+
 module BookingSystem
   class Block
-    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :block_total, :avail_block_rooms, :reserved_rooms
+    attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :avail_block_rooms, :reserved_rooms, :block_total
 
     DISCOUNT_RATE = 150
 

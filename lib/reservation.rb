@@ -1,3 +1,5 @@
+require 'date'
+
 module BookingSystem
   class Reservation
     attr_reader :name, :check_in, :check_out, :room_num, :total_cost
