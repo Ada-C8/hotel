@@ -25,11 +25,5 @@ module Hotel
     def includes_dates?(checkfirst, checklast)
       DateRange.overlap?(checkfirst, checklast, @checkin, @checkout)
     end
-
-    private
-
-    # def create_id
-    #   format('R%.2d%.2d%.4d', @checkin.month, @checkin.day, rand(9999))
-    # end
   end
 end
