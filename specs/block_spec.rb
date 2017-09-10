@@ -3,7 +3,8 @@ require_relative 'spec_helper'
 describe 'Block' do
   before do
     # - To create a block you need a date range, collection of rooms and a discounted room rate
-    @block = Hotel::Block.new('2017-08-03', '2017-08-07', 5, 20)
+    @hotel = Hotel::Hotel.new(20)
+    @block = @hotel.make_block('2017-08-03', '2017-08-07', 5, 20)
   end
 
   describe 'initialize' do
@@ -13,8 +14,37 @@ describe 'Block' do
 
     it 'has 9-character @id value' do
       @block.id.must_be_kind_of String
-      @block.id.length.must_equal 9
+      @block.id.length.must_equal 9r
       @block.id[0..4].must_equal 'B0803'
+    end
+
+    it 'has array of Room objects' do
+      @block.rooms.must_be_kind_of Array
+      @block.rooms.each do |room|
+        room.must_be_kind_of Hotel::Room
+      end
+    end
+
+    it 'raises ArgumentError if passed invalid dates' do
+      proc {
+        Hotel::Block.new('sea','HAWKS', 5, 20)
+      }.must_raise ArgumentError
+    end
+
+    it 'raises DatesError if dates are out of order' do
+      proc {
+        Hotel::Block.new('2017-08-08', '2017-08-03', 5, 20)
+      }.must_raise DatesError
+    end
+
+    it 'raises DatesError if dates do not span at least 1 night' do
+      proc {
+        Hotel::Block.new('2017-08-06', '2017-08-06', 5, 20)
+      }.must_raise DatesError
+    end
+
+    it 'has 0 >= n >= 1 discount_rate value' do
+      @block.discount_rate.must_equal 0.8
     end
   end
 
@@ -36,5 +66,9 @@ describe 'Block' do
 
       includes_dates.must_equal false
     end
+  end
+
+  describe 'get_discount_rate' do
+
   end
 end
