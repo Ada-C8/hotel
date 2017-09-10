@@ -29,11 +29,6 @@ describe "Reservaton Class" do
       new_reservation.check_out_date.must_be_instance_of Date
     end
 
-    # it "reservation_number must be instance of integer" do
-    #   new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10),1,1)
-    #   new_reservation.reservation_number.must_be_instance_of Integer
-    # end
-
 
     it "room_number must be instance of integer" do
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
