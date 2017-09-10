@@ -7,10 +7,6 @@ module Hotel
 
     attr_reader :room_number, :rooms_available
 
-    def initialize
-      @room_number = room_number
-    end # end #initialize
-
     #########################
     def self.initialize_rooms
       @@rooms_available = (1..20).to_a
