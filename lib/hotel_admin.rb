@@ -2,8 +2,8 @@
 # [X] As an administrator, I can get the total cost for a given reservation
 # [X] As an administrator, I can reserve a room for a given date range
 # [X] As an administrator, I can reserve an available room for a given date range
-# [ ] As an administrator, I can access the list of reservations for a specific date
-# [] As an administrator, I can view a list of rooms that are not reserved for a given date range
+# [X] As an administrator, I can access the list of reservations for a specific date
+# [X] As an administrator, I can view a list of rooms that are not reserved for a given date range
 
 
 require 'date'
@@ -54,6 +54,25 @@ module BookingSystem
       return reservations_on_date
     end
 
+    def rooms_available_for_date_range(date_range)
+
+      raise InvalidDateRangeError.new("Range must be a DateRange object") if !date_range.is_a? DateRange
+
+      unavailable_room_ids = []
+
+      @reservation_list.each do |reservation|
+        if reservation.date_range.include?(date_range)
+          unavailable_room_ids << reservation.room_id
+        end
+      end
+
+      available_rooms = @room_list.reject { |room| unavailable_room_ids.include?(room.id) }
+
+      return available_rooms
+    end
+
+
+
 
   end#of_HotelAdmin_class
 end#of_module_BookingSystem
@@ -68,6 +87,30 @@ end#of_module_BookingSystem
 
 
 
+# REFACTORED METHODS:
+# def rooms_available_for_date_range(date_range)
+#   raise InvalidDateRangeError.new("Range must be a DateRange object") if !date_range.is_a? DateRange
+#
+#   unavailable_room_ids = []
+#
+#   @reservation_list.each do |reservation|
+#     if reservation.date_range.include?(date_range)
+#       unavailable_room_ids << reservation.room_id
+#     end
+#   end
+#
+#   available_rooms = []
+#
+#   @room_list.each do |room|
+#     if unavailable_room_ids.include?(room.id) == false
+#       available_rooms << room
+#     end
+#   end
+#
+#   return available_rooms
+# end
+
+
 
 
 =begin
@@ -78,15 +121,4 @@ source: https://stackoverflow.com/questions/3296539/comparision-of-date-in-ruby
 
 .between?(start_date, end_date)
 source: https://stackoverflow.com/questions/4521921/how-to-know-if-todays-date-is-in-a-date-range
-
-
-VERSION1
-# def check_availability
-#
-#   raise ArgumentError.new("Dates conflict with room requested") if @all_reservations.any? { |reservation|
-#     reservation.room_id == room_id && start_date.between?(reservation.start_date, reservation.end_date) && start_date < reservation.end_date
-#   }
-#   # If the new reservation's start date exists in between the existing reservation's start and end dates, and does not land on its end date, then we reject the reservation.
-# end
-
 =end

@@ -17,7 +17,7 @@ module BookingSystem
 
       raise InvalidDateError.new("End date is not a valid date object") if !end_date.is_a? Date
       @end_date = end_date
-      
+
       @date_range = get_date_range
       @total_cost = get_total_cost
     end
@@ -29,7 +29,7 @@ module BookingSystem
     end
 
     def get_date_range
-      raise ArgumentError.new("Invalid date range") if @end_date <= @start_date #if end_date is older or equal to start_date, raise error
+      raise InvalidDateRangeError.new("Invalid date range") if @end_date <= @start_date #if end_date is older or equal to start_date, raise error
       range = DateRange.new(@start_date, @end_date)
       return range
     end

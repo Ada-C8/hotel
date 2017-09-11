@@ -64,9 +64,8 @@ describe "HotelAdmin" do
   end
 
   describe "#find_reservations_by_date" do
-
     before do
-      #including initial reservation: @hotel_admin_test.reserve_room(@first_name, @last_name, 1, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+      #include: @hotel_admin_test.reserve_room(@first_name, @last_name, 1, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
       @hotel_admin_test.reserve_room(@first_name, @last_name, 1, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
       @hotel_admin_test.reserve_room(@first_name, @last_name, 2, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
       @hotel_admin_test.reserve_room(@first_name, @last_name, 3, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
@@ -76,6 +75,27 @@ describe "HotelAdmin" do
     it "provides list of reservations for a specific date" do
       @hotel_admin_test.find_reservations_by_date(Date.new(2017, 9, 5)).must_be_instance_of Array
       @hotel_admin_test.find_reservations_by_date(Date.new(2017, 9, 5)).length.must_equal 5
+    end
+  end
+
+  describe "#rooms_available_for_date_range" do
+    before do
+      #include: @hotel_admin_test.reserve_room(@first_name, @last_name, 1, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 2, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 3, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 4, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+    end
+
+    it "ensures given date range argument is a DateRange object" do
+      proc { @hotel_admin_test.rooms_available_for_date_range("range") }.must_raise InvalidDateRangeError
+    end
+
+    it "provides list of rooms available for a given date range " do
+      start_date = Date.new(2017, 9, 1)
+      end_date = Date.new(2017, 9, 5)
+      range = DateRange.new(start_date, end_date)
+      @hotel_admin_test.rooms_available_for_date_range(range).must_be_instance_of Array
+      @hotel_admin_test.rooms_available_for_date_range(range).length.must_equal(16)
     end
   end
 end#of_"HotelAdmin"

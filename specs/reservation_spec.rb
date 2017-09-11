@@ -4,16 +4,16 @@ require_relative 'spec_helper'
 
 describe "Reservation" do
   before do
-    first_name = "Jane"
-    last_name = "Doe"
+    @first_name = "Jane"
+    @last_name = "Doe"
 
-    room_id = 1
-    room_rate = 200.00
+    @room_id = 1
+    @room_rate = 200.00
 
-    start_date = Date.new(2017, 9, 1) #Date.new(YYYY, M, D)
-    end_date = Date.new(2017, 9, 5)
+    @start_date = Date.new(2017, 9, 1) #Date.new(YYYY, M, D)
+    @end_date = Date.new(2017, 9, 5)
 
-    @reservation_test = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)
+    @reservation_test = BookingSystem::Reservation.new(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date)
   end
 
   describe "#initialize" do
@@ -56,16 +56,11 @@ describe "Reservation" do
     end
 
     it "raises an error if date range is invalid" do
-      first_name = "Jane"
-      last_name = "Doe"
-
-      room_id = 1
-      room_rate = 200.00
 
       start_date = Date.new(2017, 9, 1)
       end_date = Date.new(2015, 9, 5)
 
-      proc {BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)}.must_raise ArgumentError
+      proc {BookingSystem::Reservation.new(@first_name, @last_name, @room_id, @room_rate, start_date, end_date)}.must_raise InvalidDateRangeError
     end
   end
 
