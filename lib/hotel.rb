@@ -46,30 +46,29 @@ module HotelManagment
       return @found_reservations
     end
 
-    # ------------------------------------------------------------------
 
     # returns an array or rooms not reserved for a given date range
     def rooms_not_reserved(check_in_date, check_out_date)
       # guard clause: if the reservations array is empty, return a rooms array of room numbers. If no reservations, all rooms can be reserved for a block.
-      return @rooms.map { |room| room.room_number } if @reservations.empty?
+      return @rooms.map { |room| room.room_number } if @reservations.empty? && @blocks.empty?
 
       unreserved_rooms = @rooms.map { |room| room.room_number }
-
+      # if !@reservation.empty?
       @reservations.each { |reservation|
         if (reservation.check_in_date >= check_in_date && reservation.check_in_date <= check_out_date) || (reservation.check_out_date >= check_in_date && reservation.check_out_date <= check_out_date)
           unreserved_rooms.delete(reservation.room_number)
         end
-      }
-      
+        }
+      # end
+
       @blocks.each { |block|
-        if (block.check_in_date >= check_in_date &&  block.check) || (block.check_out_date <= check_out_date && block.check_out_date <= check_out_date)
+        if (block.check_in_date >= check_in_date &&  block.check_in_date <= check_out_date) || (block.check_out_date >= check_in_date && block.check_out_date <= check_out_date)
           unreserved_rooms - block.rooms
         end
       }
       return unreserved_rooms
     end
 
-    # ------------------------------------------------------------------
 
     # reserves the first available room for a given date range. Uses the rooms_not reserved method.
     def reserve_room_for_date_range(first_name, last_name, check_in_date, check_out_date)
@@ -91,14 +90,29 @@ module HotelManagment
     def create_block(check_in_date, check_out_date, amount_of_rooms)
       available_rooms = rooms_not_reserved(check_in_date, check_out_date)
 
-      if available_rooms.length >= amount_of_rooms && amount_of_rooms <= 5
+      if amount_of_rooms > 5
+        raise ArgumentError, '5 rooms is the Maximum a block allows'
+      else
+        available_rooms.length >= amount_of_rooms && amount_of_rooms <= 5
         block = HotelManagment::Block.new(check_in_date, check_out_date, amount_of_rooms)
         block.rooms = available_rooms.pop(amount_of_rooms)
         @blocks << block
-      else
-        # raise error
+        return block
       end
-      # return @blocks
+    end
+
+
+    def reserve_room_in_block(first_name, last_name, block_id)
+      block = @blocks.select {|block| block.id == block_id}[0]
+
+      if block.rooms.empty?
+        # TODO make test
+        raise ArgumentError, 'No rooms left in block'
+      else
+        room_number = block.rooms.pop
+        HotelManagment::BlockReservation.new(first_name, last_name, block.check_in_date, block.check_out_date, room_number)
+      end
+
     end
 
   end #class end

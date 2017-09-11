@@ -129,8 +129,6 @@ describe "hotel class" do
 
       proc { new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,1), 1) }.must_raise ArgumentError
     end
-
-
   end
 
   describe "rooms_not_reserved" do
@@ -146,19 +144,28 @@ describe "hotel class" do
     end
 
     it "Should return list of unreserved rooms" do
-
       date = Date.today
-
       new_hotel = HotelManagment::Hotel.new
       new_hotel.add_20_rooms
+
       new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
       new_hotel.create_reservation("marisa", "morris", date + 6, date + 11, 1)
       new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 2)
       new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 3)
 
-      new_hotel.rooms_not_reserved(date +5, date + 10).must_equal [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-      # new_hotel.rooms_not_reserved(date +1, date + 2).must_equal [1,2,3]
+      new_hotel.rooms_not_reserved(date + 5, date + 10).must_equal [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     end
+    # # TODO
+    # it "should return list of rooms not in blocks" do
+    #
+    #   date = Date.today
+    #   new_hotel = HotelManagment::Hotel.new
+    #   new_hotel.add_20_rooms
+    #
+    #   new_hotel.create_block(date + 5, date + 10, 5)
+    #   new_hotel.rooms_not_reserved(date + 5, date + 10).length.must_equal 15
+    #
+    # end
   end
 
   describe "reserve_room_for_date_range" do
@@ -204,10 +211,11 @@ describe "hotel class" do
       date = Date.today
       new_hotel = HotelManagment::Hotel.new
       new_hotel.add_20_rooms
-      new_hotel.create_block(date + 1, date + 3, 5).length.must_equal 1
+      new_hotel.create_block(date + 1, date + 3, 5)
+      new_hotel.blocks.length.must_equal 1
     end
 
-    it "Should be able to add a block and consider existing reservations" do
+    it "Should be able to add a block considering existing reservations" do
       date = Date.today
       new_hotel = HotelManagment::Hotel.new
       new_hotel.add_20_rooms
@@ -215,8 +223,8 @@ describe "hotel class" do
       new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 2)
       new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 3)
 
-
-      new_hotel.create_block(date + 1, date + 3, 5).length.must_equal 1
+      new_hotel.create_block(date + 1, date + 3, 5)
+      new_hotel.blocks.length.must_equal 1
     end
 
     it "Should be able to access a list of all blocks" do
@@ -229,12 +237,40 @@ describe "hotel class" do
     end
 
     it "should raise error if block room amount is greater than 5" do
+      date = Date.today
+      new_hotel = HotelManagment::Hotel.new
 
+      proc {new_hotel.create_block(date + 1, date + 4, 6) }.must_raise ArgumentError
+    end
+  end
+
+  describe "reserve_room_in_block" do
+
+    it "Should respond to reserve_room_in_block" do
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.must_respond_to :reserve_room_in_block
     end
 
-    it "Should only create block if valid number of rooms is available for date range" do
+    it "Must be instance of BlockReservation" do
+      date = Date.today
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.add_20_rooms
+      block = new_hotel.create_block(date + 1, date + 2, 5)
+      block_reservation = new_hotel.reserve_room_in_block("marisa", "morris", block.id)
+      block_reservation.must_be_instance_of HotelManagment::BlockReservation
+    end
+
+    it "Should raise argument error if there are no rooms left in the block " do
+      date = Date.today
+      new_hotel = HotelManagment::Hotel.new
+      new_hotel.add_20_rooms
+      block = new_hotel.create_block(date + 1, date + 2, 5)
+      block.rooms = []
+
+      proc { new_hotel.reserve_room_in_block("marisa", "morris", block.id) }.must_raise ArgumentError
 
     end
 
   end
+
 end
