@@ -36,4 +36,3 @@ module Hotel
 
   end #date class
 end #module
-#binding.pry

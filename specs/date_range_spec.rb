@@ -14,10 +14,6 @@ describe "DateRange Class" do
     it "can instantiate a DateRange class" do
       Hotel::DateRange.new.must_be_kind_of Hotel::DateRange
     end #instantiate DateRange
-
-    # it "can create a hash of rooms" do
-    #   @test_hotel.rooms.must_be_kind_of Hash
-    # end #rooms
   end #Instantiation
 
   describe "Check In, Check Out, and Range Objects" do

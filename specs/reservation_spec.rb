@@ -42,16 +42,6 @@ describe "Reservation class" do
     it "can create a date_range given a check_in and check_out date" do
       @res_test.nights_reserved.length.must_equal 4
     end
-end #check_in, check_out
-
-
-
-# describe "Viewing Reservations" do
-#   it "Can return a formatted string for a specific reservation" do
-#     @res_test.view_reservation.must_equal "ID: 1111, Room: 1, Check in: 2001-01-01, Check Out: 2001-01-05, Total Nights: 4, Total Cost: 800"
-#   end #format
-# end#VR
-
-
+  end #check_in, check_out
 
 end #Reservation class

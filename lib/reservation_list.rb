@@ -13,7 +13,6 @@ module Hotel
 
       def add(id, day_in, day_out, discount, block_name, room)
         @reservation_list << Reservation.new(id, day_in, day_out, discount, block_name, room)
-      end #add
-  end #class
-end #module
-#binding.pry
+      end
+  end
+end

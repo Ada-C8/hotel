@@ -140,6 +140,11 @@ describe "Hotel Class" do
     end
 
     it "Can check whether there are rooms remaining with a specific block " do
+      @hotel.create_block(1212, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 2, block_name: "WEDDING")
+      @hotel.reserve_in_block("WEDDING")
+      @hotel.block_open_rooms?("HELD").must_equal true
+      @hotel.reserve_in_block("WEDDING")
+      @hotel.block_open_rooms?("HELD").must_equal nil
     end
 
     it "Can reserve a room from the block " do
@@ -148,27 +153,14 @@ describe "Hotel Class" do
       @hotel.reservations.reservation_list.length.must_equal 1
       @hotel.block.block_list.length.must_equal 4
       @hotel.reservations.reservation_list[0].id.must_equal 1212
-      #should lessen block count by one
     end
 
     it "Can apply discounted room rate " do
+      @hotel.create_block(1212, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
+      @hotel.reserve_in_block("WEDDING")
+      @hotel.total_cost(1212).must_equal 450
     end
 
   end #blocks
 
 end #Hotel admin
-
-# proc {
-#   @hotel.make_reservation(1000, "2001/1/10", "2001/1/5", room: 1)
-# }.must_raise ArgumentError
-# it "Can check if a room is available before making a reservation for that room " do
-#   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-#   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
-#   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 4).must_equal true
-# end
-#
-# it "Can tell you if a room is not available " do
-#   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-#   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
-#   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 2).must_equal false
-# end
