@@ -34,7 +34,6 @@ module Hotel
       DateRange.check_dates(day_in, day_out)
       DateRange.create_range(day_in, day_out).each do |date|
         found_reservations << all_reservations.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
-        # found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
       end #each date
       return found_reservations.flatten.uniq
     end #find_reservations
@@ -71,13 +70,19 @@ module Hotel
         raise ArgumentError, "Not Enough Rooms Available to Form Block"
       end
     end
+
+    def reserve_in_block(block_name)
+      room = @block.block_list.find { |reservation| block_name.include?(block_name.upcase)}
+      @reservations.reservation_list << room
+      @block.block_list.delete(room)
+    end
   end #class
 end #module
 
-# @boetel = Hotel::Hotel.new
-# @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
-# @boetel.create_block(1545, "2017/12/12", "2017/12/14", discount: 50, number_of_rooms: 5, block_name: "HELD")
-# binding.pry
+@boetel = Hotel::Hotel.new
+@boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
+@boetel.create_block(1545, "2017/12/12", "2017/12/14", discount: 50, number_of_rooms: 2, block_name: "HELD")
+binding.pry
 
 
 # @hotel = Hotel::Hotel.new
@@ -94,7 +99,7 @@ end #module
 # @boetel.find_reservations("2017/12/14", "2017/12/15")
 # open = @boetel.open_rooms("2017/12/12", "2017/12/14")
 
-
+        # found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
 
 # @boetel.make_reservation(1205, 5, "2017/12/1", "2017/12/15")
 # @boetel.make_reservation(1206, 6, "2017/12/1", "2017/12/15")
