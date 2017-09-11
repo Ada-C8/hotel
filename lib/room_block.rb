@@ -5,6 +5,7 @@ require 'pry'
 module Hotel
   class RoomBlock < Reservation
     attr_reader :type, :available
+    attr_accessor :room_price
     def initialize(client, arrival_date, departure_date, number_of_rooms)
       super
       @room_price = 190.00

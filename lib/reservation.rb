@@ -18,11 +18,11 @@ module Hotel
       if @departure_date <= @arrival_date
         raise ArgumentError.new("Your departure date can't be before your arrival date.")
       end
-      return @departure_date - @arrival_date
+      return (@departure_date - @arrival_date).to_i
     end
 
     def total
-      return (@room_price * stay_length * @number_of_rooms).round(2)
+      return "%.2f" % (@room_price * stay_length * @number_of_rooms)
     end
 
     def summary

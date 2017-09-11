@@ -3,7 +3,7 @@ require_relative 'reservation'
 require_relative 'room'
 require_relative 'hotel'
 require_relative 'NoAvailableRoomError'
-require_relative 'cli'
+require_relative 'cli_methods'
 
 module Hotel
 
@@ -25,43 +25,41 @@ module Hotel
     puts "See all reservations > 7"
     puts "Quit > X"
 
-    choice = gets.chomp
+    print "\nChoice: "
 
-    quit = true if choice == "X"
+    choice = gets.chomp
+    legal_choices = ["1","2","3","4","5","6","7","X"]
+    until legal_choices.include? choice
+      print "\nPlease enter a valid choice: "
+      choice = gets.chomp
+    end
 
     case choice
     when "1"
 
-      print "Client's name: "
+      print "\nClient's name: "
       client_name = gets.chomp
 
       print "Arrival date (mm/dd/yyyy): "
       arrival = gets.chomp
-      arrival_array = arrival.split("/")
-      # arrival_date = arrival_array[2] + ", " + arrival_array[0] + ", " + arrival_array[1]
 
       print "Departure date (mm/dd/yyyy): "
       departure = gets.chomp
-      departure_array = departure.split("/")
-      # departure_date = departure_array[2] + ", " + departure_array[0] + ", " + departure_array[1]
 
       print "Number of rooms: "
       num_rooms = gets.chomp
 
-      puts "Confirm reservation of #{num_rooms} room(s) for #{client_name} from #{arrival} to #{departure}? Y/N"
-      confirm = gets.chomp
+    puts "Confirm reservation of #{num_rooms} room(s) for #{client_name} from #{arrival} to #{departure}? Y/N"
 
-      until confirm == "Y" || confirm == "N"
-        puts "Please answer Y or N."
-        confirm = gets.chomp
-      end
+    answer = confirm_yes_no
 
-      if confirm == "Y"
-        hotel.make_reservation(client_name, arrival_array[2].to_i, arrival_array[0].to_i, arrival_array[1].to_i, departure_array[2].to_i, departure_array[0].to_i, departure_array[1].to_i, num_rooms)
-        puts "Reservation confirmed. The total is $#{hotel.find_reservation(client_name).total}."
-      else
-        puts "Reservation cancelled."
-      end
+    if answer == "Y" || answer == "YES"
+      hotel.make_reservation(client_name, arrival, departure, num_rooms)
+      puts "Reservation confirmed. The total is $#{hotel.find_reservation(client_name).total}."
+    else
+      puts "Reservation cancelled."
+    end
+
     when "2"
       print "Name on the reservation: "
       client_name = gets.chomp
@@ -77,35 +75,28 @@ module Hotel
 
       print "Arrival date (mm/dd/yyyy): "
       arrival = gets.chomp
-      arrival_array = arrival.split("/")
-      # arrival_date = arrival_array[2] + ", " + arrival_array[0] + ", " + arrival_array[1]
 
       print "Departure date (mm/dd/yyyy): "
       departure = gets.chomp
-      departure_array = departure.split("/")
-      # departure_date = departure_array[2] + ", " + departure_array[0] + ", " + departure_array[1]
 
       print "Number of rooms: "
       num_rooms = gets.chomp
 
-      print "The current cost per room is $200. Do you want to enter a special rate? Y/N"
-      rate = 160.00
-      answer = gets.chomp
-      if answer == "Y"
-        print "Enter a new rate: "
+      print "The current cost per room is $190. Do you want to enter a special rate? Y/N"
+      answer = confirm_yes_no
+
+      rate = 190.00
+
+      if answer == "Y" || answer == "YES"
+        print "\nEnter a new rate: "
         rate = gets.chomp.to_f
       end
 
       puts "Confirm room block of #{num_rooms} rooms for #{client_name} from #{arrival} to #{departure}? Y/N"
-      confirm = gets.chomp
+      answer = confirm_yes_no
 
-      until confirm == "Y" || confirm == "N"
-        puts "Please answer Y or N."
-        confirm = gets.chomp
-      end
-
-      if confirm == "Y"
-        hotel.create_block(client_name, arrival_array[2].to_i, arrival_array[0].to_i, arrival_array[1].to_i, departure_array[2].to_i, departure_array[0].to_i, departure_array[1].to_i, num_rooms)
+      if answer == "Y" || answer == "YES"
+        hotel.create_block(client_name, arrival, departure, num_rooms)
         block = hotel.find_block(client_name)
         block.room_price = rate
         puts "Room block confirmed. The total is $#{block.total}."
@@ -148,13 +139,11 @@ module Hotel
     when "6"
       print "From (mm/dd/yyyy): "
       arrival = gets.chomp
-      arrival_array = arrival.split("/")
 
       print "To (mm/dd/yyyy): "
       departure = gets.chomp
-      departure_array = departure.split("/")
 
-      avaibility = hotel.available_at_period(arrival_array[2].to_i, arrival_array[0].to_i, arrival_array[1].to_i, departure_array[2].to_i, departure_array[0].to_i, departure_array[1].to_i)
+      avaibility = hotel.available_at_period(arrival, departure)
 
       if avaibility == nil
         puts "No availibility at these dates."
@@ -166,32 +155,16 @@ module Hotel
       end
     when "7"
       reservations = hotel.reservations
-      if reservations == nil
+      if reservations == []
         puts "No reservations."
       else
         puts "Here are all the reservations:"
         reservations.each do |res|
           res.summary
-          # puts "\n#{res.client}:"
-          # puts "- Arrival date: #{res.arrival_date}"
-          # puts "- Departure date: #{res.departure_date}"
-          # puts "- Stay length: #{res.stay_length}"
-          # puts "- Number of rooms #{res.number_of_rooms}"
-          # puts "- Type: #{res.type}"
-          # puts "- Total cost #{res.total}"
         end
       end
-
+    when "X"
+      quit = true
     end
   end
-
-
-
-
-
-
-
-
-
-
 end
