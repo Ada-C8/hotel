@@ -11,48 +11,10 @@ Each room should have a room number.
 #   Admin
 #     Reservations
 
-test_ob = Hotel::Admin.new
-
-puts "
-
-This is a block #{test_ob.add_block([1,2,3,4], Date.new(2017,2,3), Date.new(2017, 2,7), 1)}
-
-"
 
 
 
-puts "List of available rooms #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
-
-"
-
-#second block
-puts test_ob.create_block_by_date(4, Date.new(2017,2,3), Date.new(2017, 2,7), 2)
-
-puts "List of available rooms after second block is created. #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
-
-"
-
-
-puts "list_available_blocked_rooms #{test_ob.list_available_blocked_rooms(1)}
-
-"
-puts "finding rooms from block #{test_ob.find_rooms_from_block(1, 2)}
-
-"
-
-
-puts "Adding #{test_ob.add_reservation_to_block(1, 2, Date.new(2017,2,3), Date.new(2017, 2,7))} reservation to block
-
-"
-puts "list of reservations #{test_ob.list_reservations(Date.new(2017,2,3))}
-
-"
-
-puts test_ob.reservations_array
-
-
-
-xdescribe "Admin Class" do
+describe "Admin Class" do
 
   before do
 
@@ -68,7 +30,11 @@ xdescribe "Admin Class" do
     check_out = Date.new(2017, 2,7)
     check_in.must_be_instance_of Date
 
-    @admin.add_block(rooms_per_block, check_in, check_out, discount_percent: 0.0)
+    block_id = 1
+
+    @admin.create_block_by_date(rooms_per_block, check_in, check_out, block_id, discount_percent: 0.0)
+
+
   end
 
   describe "initialize" do
@@ -110,10 +76,11 @@ xdescribe "Admin Class" do
     end
   end # end initialize
 
-  xdescribe "add_block" do
+  describe "add_block" do
     it "thing that is added is a block" do
       @admin.blocks[0].must_be_instance_of Hotel::Block
       @admin.blocks[-1].must_be_instance_of Hotel::Block
+
 
     end
 
@@ -124,7 +91,7 @@ xdescribe "Admin Class" do
     end
   end
 
-  xdescribe "list_reservations tests" do
+  describe "list_reservations tests" do
     it "list test" do
       date = Date.new(2017, 2, 4)
       date.must_be_instance_of Date
@@ -159,8 +126,10 @@ xdescribe "Admin Class" do
     @admin.list_vacancies(check_in, check_out).wont_be_kind_of Integer
     @admin.list_vacancies(check_in, check_out).wont_be_kind_of String
   end
+  #
 
-  describe "reserve available room by date range" do
+
+  describe "create block by date range" do
     it "validates input" do
       rooms_per_block = 4
       rooms_per_block.must_be_kind_of Integer
@@ -171,14 +140,107 @@ xdescribe "Admin Class" do
       check_out = Date.new(2017, 2, 5)
       check_in.must_be_instance_of Date
 
+      block_id = 2
+      block_id.must_be_kind_of Integer
+
+      # @admin.create_block_by_date(rooms_per_block, check_in, check_out,block_id)
+      #
+      # @admin.blocks.must_equal 1
+
       @admin.must_respond_to :list_vacancies
 
-      puts "this is the list of blocked rooms #{@admin.create_block_by_date(rooms_per_block, check_in, check_out)}"
-      # @admin.create_block_by_date(rooms_per_block, check_in, check_out).total_cost.must_equal 200
-      # @admin.create_block_by_date(rooms_per_block, check_in, check_out).wont_equal 0
+      @admin.blocks.length.must_equal 1
+
+      # @admin.create_block_by_date(rooms_per_block, check_in, check_out, 2).total_cost.must_equal 200
+      # @admin.create_block_by_date(rooms_per_block, check_in, check_out, 2).wont_equal 0
     end
+
+    describe "find_block" do
+      it "takes integer id" do
+        id = 1
+        @admin.find_block(id).must_be_kind_of Hotel::Block
+
+        @admin.find_block(id).must_be_kind_of Hotel::Block
+
+        @admin.find_block(id).wont_be_kind_of String
+
+
+        id = 0
+        @admin.find_block(id).wont_be_kind_of Hotel::Block
+      end
+
+      it "returns block object" do
+        @admin.find_block(1).must_be_instance_of Hotel::Block
+      end
+    end
+
+    describe "list_available_blocked_rooms" do
+      it "returns an array with room numbers" do
+        @admin.list_available_blocked_rooms(2).must_be_instance_of Array
+        @admin.list_available_blocked_rooms(2).first.must_be_kind_of Integer
+        @admin.list_available_blocked_rooms(2).last.must_be_kind_of Integer
+
+
+        #edge cases
+
+        @admin.list_available_blocked_rooms(2).first.wont_be_kind_of String
+        @admin.list_available_blocked_rooms(2).last.wont_be_kind_of String
+      end
+    end
+
+    describe "find_rooms_from_block" do
+      it "returns array of a specific block's rooms" do
+        @admin.find_rooms_from_block(2, 4).must_be_kind_of Array
+        @admin.find_rooms_from_block(2, 4).first.must_equal 1
+        @admin.find_rooms_from_block(2, 4).last.must_equal 4
+        @admin.find_rooms_from_block(2, 4).first.wont_equal 0
+        @admin.find_rooms_from_block(2, 4).last.wont_equal 99
+
+      end
+    end
+
+    describe "add_reservation_to_block" do
+
+    end
+
   end
 end # end admin class
+
+test_ob = Hotel::Admin.new
+
+
+
+
+
+puts "List of available rooms #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
+
+"
+
+#second block
+puts test_ob.create_block_by_date(4, Date.new(2017,2,3), Date.new(2017, 2,7), 2)
+
+puts "List of available rooms after second block is created. #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
+
+"
+
+#
+# puts "list_available_blocked_rooms #{test_ob.list_available_blocked_rooms(1)}
+#
+# "
+# puts "finding rooms from block #{test_ob.find_rooms_from_block(1, 2)}
+#
+# "
+#
+#
+# puts "Adding #{test_ob.add_reservation_to_block(1, 2, Date.new(2017,2,3), Date.new(2017, 2,7))} reservation to block
+#
+# "
+# puts "list of reservations #{test_ob.list_reservations(Date.new(2017,2,3))}
+#
+# "
+
+puts "testing list_available_blocked_rooms"
+puts test_ob.list_available_blocked_rooms(1)
 
 =begin
 

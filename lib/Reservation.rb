@@ -8,7 +8,7 @@ module Hotel
 
     attr_reader :total_cost, :room_num, :date_range_array
 
-    def initialize(room_num, check_in, check_out)
+    def initialize(room_num, check_in, check_out, discount_percent: 0)
 
       # @reservation_array = []
       @total_cost = 0
@@ -17,7 +17,7 @@ module Hotel
     end
 
 
-
+    
     # def total_cost
     #   (@date_ranges_array.length - 1) * COST_PER_NIGHT
     # end
