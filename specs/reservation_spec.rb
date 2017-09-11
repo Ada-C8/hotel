@@ -18,6 +18,18 @@ describe "reservation class" do
       dates.must_be_instance_of Array
       dates[0].must_be_kind_of String
     end
+    it "raises an error if dates don't meet regex format" do
+      pikadate = Hotel::Reservation.new
+      puts proc { pikadate.date_range("12-7-2017","12-7-17") }.must_raise ArgumentError
+    end
+    it "raises an error if dates are in the past" do
+      pikadate = Hotel::Reservation.new
+      proc { pikadate.date_range("9-7-2017","9-8-2017") }.must_raise ArgumentError
+    end
+    it "raises an error if dates aren't in ascending order" do
+      pikadate = Hotel::Reservation.new
+      proc { pikadate.date_range("12-17-2017","12-5-2017") }.must_raise ArgumentError
+    end
   end
 
   describe "available room" do
@@ -53,6 +65,7 @@ describe "reservation class" do
 
       c_dates = pokemon_hotel.date_range("11-4-2017","11-7-2017")
       c_num = pokemon_hotel.available_room
+      #purposefully commented out, shows reserved_room adds to @reservations
       #pokemon_hotel.reserve_room(c_dates, c_num)
       c_num.num.must_equal 2
 
@@ -125,6 +138,19 @@ describe "reservation class" do
       bellossum_dates = pokemon_hotel.date_range("10-4-2017", "10-6-2017")
       pokemon_hotel.available_rooms_during(bellossum_dates).length.must_equal 19
       pokemon_hotel.available_rooms_during(bellossum_dates).must_be_instance_of Array
+    end
+    #doesn't work
+    xit "returns an argument error if room entered is unavailable" do
+      pokemon_hotel = Hotel::Reservation.new
+
+      slowbro_dates = pokemon_hotel.date_range("1-18-2018","2-1-2018")
+      slowbro_num = pokemon_hotel.available_room
+      pokemon_hotel.reserve_room(slowbro_dates, slowbro_num)
+
+      bellossum_dates = pokemon_hotel.date_range("1-19-2018", "1-20-2018")
+
+      pokemon_hotel.reserve_room(bellossum_dates, slowbro_num)
+      proc { pokemon_hotel.reserve_room(bellossum_dates, 1) }.must_raise ArgumentError
     end
   end
 

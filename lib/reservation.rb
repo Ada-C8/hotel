@@ -6,6 +6,7 @@ require "pry"
 
 module Hotel
   class Reservation
+    DATE = /^[0-9]{1,2}-[0-9]{1,2}-[0-9]{4}$/
     attr_accessor :rooms, :reservations, :stay_array
 
     def initialize
@@ -17,8 +18,26 @@ module Hotel
     #  used for adding array in reserve_room
     #  will use for checking availability in available_room
     def date_range(check_in, check_out)
+      #test regex, test dates in past
+      arr = []
+      arr << check_in
+      arr << check_out
+      arr.each do |date_entered|
+        if DATE.match(date_entered)
+          if Date.strptime(date_entered, "%m-%d-%Y") < Date.today
+            raise ArgumentError.new("These are dates in the past")
+          end
+        else
+          raise ArgumentError.new("Date does not match XX-XX-XXX format")
+        end
+      end
+      #test dates in ascending order
       check_in = Date.strptime(check_in, "%m-%d-%Y") #keep this method for date
       check_out = Date.strptime(check_out, "%m-%d-%Y") #month-day-fullyear
+      if check_out < check_in
+        raise ArgumentError.new("Dates are in an invalid range/wrong order?")
+      end
+      #create range
       @stay_array = []
       (check_in..check_out).each do |d|
         @stay_array << "#{d.month}-#{d.day}-#{d.year}"
@@ -98,25 +117,3 @@ module Hotel
 
   end #end class reservation
 end #end module Hotel
-
-# pokemon_hotel = Hotel::Reservation.new
-#
-# b_dates = pokemon_hotel.date_range("11-5-2017","11-8-2017")
-# b_num = pokemon_hotel.available_room
-# pokemon_hotel.reserve_room(b_dates, b_num)
-
-# c_dates = pokemon_hotel.date_range("11-4-2017","11-7-2017")
-# c_num = pokemon_hotel.available_room
-# pokemon_hotel.reserve_room(c_dates, c_num)
-#
-# s_dates = pokemon_hotel.date_range("11-7-2017","11-9-2017")
-# s_num = pokemon_hotel.available_room
-# pokemon_hotel.reserve_room(s_dates, s_num)
-# puts pokemon_hotel.reservations
-# pokemon_hotel.reservations.each do  |res|
-#   res.room_number.each do |i|
-#     puts i.num
-#   end
-# end
-# g_dates = pokemon_hotel.date_range("11-4-2017", "11-6-2017")
-# p pokemon_hotel.available_rooms_during(g_dates)
