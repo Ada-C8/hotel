@@ -12,9 +12,8 @@ module Hotel
       @date_range = date_range
       @nights = date_range.nights
       @total_cost = (@nights * rooms.inject(0){|sum,room| sum + room.cost})
-      # @total_cost = 0
-      # total_cost[@block_name
     end
+    # ran out of time to update total cost for a block, ideally I would pass through a discount and have that applied to total cost
     # to book a roomin a block we would need to have total_cost update with the discounted range_of_dates
     # def calc_total_cost
     #   if @block_info.length > 0
