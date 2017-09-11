@@ -34,6 +34,19 @@ describe "Admin" do
       @admin.reservations_at_date(Date.new(2017,10,7)).length.must_equal 1
     end
 
+    it "Shouldn't create a reservation if there's a block that overlaps in date and room number" do
+      date1 = Date.new(2017, 8, 10)
+      date2 = Date.new(2017, 8, 15)
+      room_numbers = [6, 7, 8]
+      @admin.create_block(date1, date2, room_numbers)
+      # both check in and check out overlap
+      proc{@admin.reserve(Date.new(2017, 8, 11), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
+      # check-in overlaps
+      proc{@admin.reserve(Date.new(2017, 8, 12), Date.new(2017, 8, 20), 6)}.must_raise ArgumentError
+      # check-out overlaps
+      proc{@admin.reserve(Date.new(2017, 8, 9), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
+    end
+
     it "Returns an ArgumentError if the reservation can't be made" do
       # check_in_date is later than check_out_date
       proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise ArgumentError
@@ -172,14 +185,14 @@ describe "Admin" do
       proc { @admin.create_block(date1, date2, room_numbers2) }.must_raise ArgumentError
     end
 
-    it "Shouldn't create a block if there's a reservation that overlaps in date and room number" do
-      # both check in and check out overlap
-      proc{@admin.reserve(Date.new(2017, 8, 11), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
-      # check-in overlaps
-      proc{@admin.reserve(Date.new(2017, 8, 12), Date.new(2017, 8, 20), 6)}.must_raise ArgumentError
-      # check-out overlaps
-      proc{@admin.reserve(Date.new(2017, 8, 9), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
-
+    it "Shouldn't create a block if there's an existing reservation that overlaps in date and room number" do
+      @admin.reserve(Date.new(2017, 4, 20), Date.new(2017, 4, 25), 13)
+      #check in and check out overlaps
+      proc{@admin.create_block(Date.new(2017, 4, 21), Date.new(2017, 4, 24), [13, 14, 15])}.must_raise ArgumentError
+      #check in overlaps
+      proc{@admin.create_block(Date.new(2017, 4, 21), Date.new(2017, 4, 26), [13, 14, 15])}.must_raise ArgumentError
+      #check out overlaps
+      proc{@admin.create_block(Date.new(2017, 4, 19), Date.new(2017, 4, 24), [13, 14, 15])}.must_raise ArgumentError
     end
 
     it "Can create multiple block reservations at the same date range but different rooms" do

@@ -22,7 +22,6 @@ module Hotel
 
       #TODO: REDUNDANT WITH BOTTOM FUNCTION
       @block_reservations.each do |other_block_reservation|
-        # binding.pry
         other_block_reservation_room_numbers = other_block_reservation.rooms.map{|room| room.room_number}
         if other_block_reservation.overlap?(check_in, check_out) && other_block_reservation_room_numbers.include?(room_num) # the last conditional means if Array1 & Array2 have elements in common
           raise ArgumentError.new("There's overlap with this block reservation and an existing block reservation's date")
@@ -100,7 +99,6 @@ module Hotel
 
       # Compare with block reservations to see if some overlap..
       @block_reservations.each do |other_block_reservation|
-        # binding.pry
         other_block_reservation_room_numbers = other_block_reservation.rooms.map{|room| room.room_number}
         if other_block_reservation.overlap?(check_in, check_out) && ((other_block_reservation_room_numbers & room_numbers).length > 0) # the last conditional means if Array1 & Array2 have elements in common
           raise ArgumentError.new("There's overlap with this block reservation and an existing block reservation's date")
@@ -109,7 +107,6 @@ module Hotel
 
       # Compare with single reservations if they overlap...
       @reservations.each do |reservation|
-        binding.pry
         if reservation.overlap?(check_in, check_out) && room_numbers.include?(reservation.room.room_number)
           raise ArgumentError.new("There's overlap with this block reservation and an existing reservation's date")
         end
