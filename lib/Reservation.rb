@@ -1,4 +1,3 @@
-require 'pry'
 require 'date'
 module HotelBooking
 
@@ -8,8 +7,8 @@ module HotelBooking
 
     def initialize(check_in,check_out,room_id, res_id, rate = 200, guest = nil)
       @id = res_id
-      @check_in = Date.parse(check_in) #ruby Date object
-      @check_out = Date.parse(check_out) #ruby Date object
+      @check_in = check_in #ruby Date object
+      @check_out = check_out #ruby Date object
       @room_id= room_id
       @guest =  guest
       @rate = rate

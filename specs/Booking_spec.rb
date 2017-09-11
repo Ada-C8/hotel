@@ -10,7 +10,6 @@ describe "Hotel" do
         room.must_be_instance_of HotelBooking::Room
       end
 
-
     end
 
   end
@@ -58,7 +57,10 @@ describe "Hotel" do
 
     end
 
-    it "makes a BlockReservation object if given a block_id" do
+  end
+
+  describe "make_block_reservation" do
+    it "makes a BlockReservation object if given a block id and room id" do
       new_hotel =  HotelBooking::Hotel.new
       room_id = 3
       non_exist_block_id = "B2"
@@ -68,7 +70,7 @@ describe "Hotel" do
       check_in = "2018-11-10"
       check_out = "2018-11-12"
 
-      proc {new_hotel.make_reservation(check_in, check_out, room_id, non_exist_block_id)}.must_raise ArgumentError
+      proc {new_hotel.make_block_reservation(non_exist_block_id, room_id)}.must_raise ArgumentError
 
       new_hotel.make_block(check_in,check_out,rooms_in_block,10)
 
@@ -77,19 +79,13 @@ describe "Hotel" do
       new_block = new_hotel.all_blocks[0]
       block_id = new_block.id
 
-      proc {new_hotel.make_reservation(check_in,check_out,room_id,non_exist_block_id)}.must_raise ArgumentError
+      new_hotel.make_block_reservation(block_id,room_id)
 
-      # binding.pry
-
-      new_hotel.make_reservation(check_in,check_out,room_id,block_id)
+      proc {new_hotel.make_block_reservation(block_id,room_id)}.must_raise ArgumentError
 
       new_block_reservation = new_hotel.all_reservations[-1]
       new_block_reservation.block_id.must_equal "B1"
-      # binding.pry
-    end
-
-    it "allows another guest to check-in to a room on the same day another guest checks out" do
-
+      new_block_reservation.type.must_equal :block
     end
 
   end
@@ -110,7 +106,7 @@ describe "Hotel" do
 
       new_block.room_ids.each do |room_id|
         room = new_hotel.find_room_by_id(room_id)
-        (Date.parse("2018-03-14")...Date.parse("2018-03-16")).to_a.each do |date|
+        (Date.parse("2018-03-14")...Date.parse("2018-03-16")).each do |date|
           room.all_dates.must_include date #fix this logic later
         end
       end
@@ -149,8 +145,8 @@ describe "Hotel" do
   describe "available_rooms" do
     before do
       @new_hotel = HotelBooking::Hotel.new
-      @check_in = "June 1, 2018"
-      @check_out = "June 30, 2018"
+      @check_in = Date.parse("June 1, 2018")
+      @check_out = Date.parse("June 30, 2018")
       @june_rooms = @new_hotel.available_rooms(@check_in, @check_out)
     end
 
@@ -203,12 +199,11 @@ describe "Hotel" do
   describe "find_block_by_id" do
     it "can find the first and last block" do
       new_hotel = HotelBooking::Hotel.new
-      # binding.pry
-      # new_hotel.find_block_by_id(1).must_equal false
+      proc {new_hotel.find_block_by_id(1)}.must_raise ArgumentError
 
-      # binding.pry
+      room_ids = [3,4,5]
 
-      new_hotel.make_block("2018-06-13", "2018-06-15", [3,4,5], 15)
+      new_hotel.make_block("2018-06-13", "2018-06-15", room_ids, 15)
 
       first_block = new_hotel.all_blocks[0]
       first_block.must_be_instance_of HotelBooking::Block
@@ -221,23 +216,6 @@ describe "Hotel" do
     end
 
   end
-
-  describe "self.setup_rooms" do
-    it "returns an array of all room objects, with the accurate number of rooms" do
-      test_all_rooms = HotelBooking::Hotel.setup_rooms
-
-      test_all_rooms.must_be_instance_of Array
-
-      test_all_rooms.each do |room|
-        room.must_be_instance_of HotelBooking::Room
-        room.nightly_rate.must_equal 200
-      end
-
-      test_all_rooms.count.must_equal 20
-
-    end
-
-  end #end self.setup_rooms
 
   describe "find_room_by_id" do
     it "can find the first and last room" do
@@ -257,6 +235,72 @@ describe "Hotel" do
       last_room.must_be_instance_of HotelBooking::Room
       last_room.id.must_equal 20
       last_room.must_equal new_hotel.all_rooms[-1]
+    end
+  end
+
+  describe "find_available_rooms_by_block" do
+    it "Gives you an array of available rooms in a particular block and updates properly" do
+      new_hotel =  HotelBooking::Hotel.new
+      rooms_in_block = [1,3,5]
+      room_id = 3
+      non_exist_block_id = "B2"
+      check_in = "2018-11-10"
+      check_out = "2018-11-12"
+      discounted_rate = 10
+
+      new_hotel.make_block(check_in,check_out,rooms_in_block,discounted_rate)
+      new_hotel.all_blocks.count.must_equal 1
+
+      new_block = new_hotel.all_blocks[-1]
+      block_id = new_block.id
+
+      proc {new_hotel.find_available_rooms_by_block(non_exist_block_id)}.must_raise ArgumentError
+
+      avail_rooms_in_block = new_hotel.find_available_rooms_by_block(block_id)
+
+      avail_rooms_in_block.must_be_instance_of Array
+
+      avail_rooms_in_block.each do |room|
+        room.must_be_instance_of HotelBooking::Room
+        room.blocks_available.must_include block_id
+      end
+
+      avail_rooms_in_block.count.must_equal 3
+
+      new_hotel.make_block_reservation(block_id, room_id)
+
+      updated_available_rooms_in_block = new_hotel.find_available_rooms_by_block(block_id)
+
+      updated_available_rooms_in_block.count.must_equal 2
+
+    end
+  end
+
+  describe "check valid dates " do
+    before do
+      @new_hotel = HotelBooking::Hotel.new
+    end
+    it "raises an error if the check-out dates is earlier than the check-in date" do
+      check_in= Date.parse("March 3, 2018")
+      check_out = Date.parse("February 20, 2018")
+
+      proc { @new_hotel.check_valid_dates(check_in, check_out)}.must_raise ArgumentError
+    end
+
+    it "Raises an error when given a check-in or check-out date earlier than today" do
+
+      check_in = Date.parse("2016-08-09")
+      check_out = Date.parse("2016-08-12")
+
+      proc { @new_hotel.check_valid_dates(check_in, check_out)}.must_raise ArgumentError
+    end
+
+    it "raises an error if given input is not a Date object" do
+      check_in= 1
+      check_out= 100
+
+      proc { @new_hotel.check_valid_dates(check_in, check_out)}.must_raise ArgumentError
+
     end
   end
 end

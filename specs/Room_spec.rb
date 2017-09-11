@@ -1,7 +1,5 @@
 require 'date'
-require 'pry'
 require_relative 'spec_helper'
-
 
 describe "HotelBooking::Room class" do
   describe "initialize" do
@@ -31,56 +29,114 @@ describe "HotelBooking::Room class" do
   describe "reserve_room" do
     it "can reserve a room if given the check-in/out date, reservation id, and guest id" do
       room = HotelBooking::Room.new(666)
-      check_in_str = "2018-08-09"
-      check_out_str = "2018-08-12"
+      check_in= Date.parse("2018-08-09")
+      check_out = Date.parse("2018-08-12")
 
-      room.reserve_room(check_in_str, check_out_str, 1, 13)
+      room.reserve_room(check_in, check_out, 1, 13)
 
-      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
+      (check_in...check_out).each do |date|
         room.all_dates.must_include date
       end
 
-      room.reserve_room("2018-08-10", "2018-08-11", 42, 16).must_equal false
+      check_in2 = Date.parse("2018-09-28")
+      check_out2= Date.parse("2018-10-1")
 
-      check_in_str2 = "2018-09-28"
-      check_out_str2 = "2018-10-1"
-
-      room.reserve_room(check_in_str2, check_out_str2, 8, 23)
-      (Date.parse(check_in_str2)...Date.parse(check_out_str2)).each do |date|
+      room.reserve_room(check_in2, check_out2, 8, 23)
+      (check_in2...check_out2).each do |date|
         room.all_dates.must_include date
       end
-    end
-
-    it "Raises an error when we try to book a room with a check-in or check-out date earlier than today" do
-      room = HotelBooking::Room.new(123)
-      check_in_str = "2016-08-09"
-      check_out_str = "2016-08-12"
-
-      proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
-    end
-
-    it "raises an error if the check-in or check-out date is invalid" do
-      room = HotelBooking::Room.new(123)
-      check_in_str = "February 30, 2018"
-      check_out_str = "February 31, 2018"
-
-      proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
-
-    end
-
-    it "raises an error if the check-out dates is earlier than the check-in date" do
-      room = HotelBooking::Room.new(123)
-      check_in_str = "March 3, 2018"
-      check_out_str = "February 20, 2018"
-
-      proc { room.reserve_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
     end
 
   end #end reserve_room
 
-  describe "self.all" do
+
+  describe "available_all_days?" do
+    it "returns the correct Boolean value" do
+      new_hotel = HotelBooking::Hotel.new
+      room1 = new_hotel.all_rooms[0]
+
+      check_in = Date.parse("2018-03-14")
+      check_out = Date.parse("2018-03-18")
+
+      room1.available_all_days?(check_in, check_out).must_equal true
+      room1.available_all_days?(check_in, check_out).must_be_instance_of TrueClass
+
+      room1.reserve_room(check_in, check_out, 1, 2)
+
+      check_in2 = Date.parse("2018-03-16")
+      check_out2= Date.parse("2018-03-17")
+
+      room1.available_all_days?(check_in2, check_out2).must_equal false
+      room1.available_all_days?(check_in2, check_out2).must_be_instance_of FalseClass
+
+      #### can make reservations that check-in on the same day that somebody checks out
+      check_in3 = Date.parse("2018-03-18")
+      check_out3 = Date.parse("2018-03-21")
+
+      room1.available_all_days?(check_in3, check_out3).must_equal true
+      room1.available_all_days?(check_in3, check_out3).must_be_instance_of TrueClass
+    end
+
+  end #end available_all_days
+
+  describe "block room" do
+    it "can block a room if given the check-in/out date and block id so that it is unavailable to reserve via regular reservations" do
+      room = HotelBooking::Room.new(666)
+      check_in = Date.parse("2018-08-09")
+      check_out = Date.parse("2018-08-12")
+      block_id = 3
+
+      room.block_room(check_in, check_out, block_id)
+
+      (check_in...check_out).each do |date|
+        room.all_dates.must_include date
+      end
+
+      check_in2 = Date.parse("2018-09-28")
+      check_out2 = Date.parse("2018-10-1")
+
+      room.reserve_room(check_in2, check_out2, 8, 23)
+      (check_in2...check_out2).each do |date|
+        room.all_dates.must_include date
+      end
+    end
+  end
+
+  describe "reserve_block_room" do
+    it "can reserve a room in a given block if given the check-in/out date, reservation id, and block id" do
+      hotel = HotelBooking::Hotel.new
+
+      rooms_in_block = [1,3]
+
+      block_room_wanted = 3
+
+      check_in = "2018-08-09"
+      check_out = "2018-08-12"
+      discounted_rate = 10
+
+      hotel.make_block(check_in, check_out, rooms_in_block,discounted_rate)
+
+      block1 = hotel.all_blocks[-1]
+
+      hotel.all_blocks.count.must_equal 1
+      block1.must_be_instance_of HotelBooking::Block
+      block1.id.must_equal "B1"
+
+      room = hotel.find_room_by_id(block_room_wanted)
+
+      room.reserve_block_room(block1.id, 99)
+
+      (block1.check_in...block1.check_out).each do |date|
+        room.all_dates.must_include date
+      end
+
+    end
+
+  end #end reserve_block_room
+
+  describe "self.setup_rooms" do
     it "returns an array of all room objects, with the accurate number of rooms" do
-      test_all_rooms = HotelBooking::Room.all
+      test_all_rooms = HotelBooking::Hotel.setup_rooms
 
       test_all_rooms.must_be_instance_of Array
 
@@ -90,131 +146,7 @@ describe "HotelBooking::Room class" do
       end
 
       test_all_rooms.count.must_equal 20
-
     end
-
-
-
-  end #end self.all
-
-  describe "available_all_days?" do
-    it "returns the correct Boolean value" do
-      room1 = HotelBooking::Room.all[0]
-
-      check_in = "2018-03-14"
-      check_out = "2018-03-18"
-
-      room1.available_all_days?(check_in, check_out).must_equal true
-      room1.available_all_days?(check_in, check_out).must_be_instance_of TrueClass
-
-      room1.reserve_room(check_in, check_out, 1, 2)
-
-      check_in2 = "2018-03-16"
-      check_out2= "2018-03-17"
-
-      room1.available_all_days?(check_in2, check_out2).must_equal false
-      room1.available_all_days?(check_in2, check_out2).must_be_instance_of FalseClass
-
-      #### can make reservations that check-in on the same day that somebody checks out
-      check_in3 = "2018-03-18"
-      check_out3 = "2018-03-21"
-
-      room1.available_all_days?(check_in3, check_out3).must_equal true
-      room1.available_all_days?(check_in3, check_out3).must_be_instance_of TrueClass
-
-    end
-
-
-
-  end #end available_all_days
-
-  describe "block room" do
-    it "can block a room if given the check-in/out date and block id so that it is unavailable to reserve via regular reservations" do
-      room = HotelBooking::Room.new(666)
-      check_in_str = "2018-08-09"
-      check_out_str = "2018-08-12"
-      block_id = 3
-
-      room.block_room(check_in_str, check_out_str, block_id)
-
-      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
-        room.all_dates.must_include date
-      end
-
-      room.reserve_room("2018-08-10", "2018-08-11", 42, 16).must_equal false
-
-      check_in_str2 = "2018-09-28"
-      check_out_str2 = "2018-10-1"
-
-      room.reserve_room(check_in_str2, check_out_str2, 8, 23)
-      (Date.parse(check_in_str2)...Date.parse(check_out_str2)).each do |date|
-        room.all_dates.must_include date
-      end
-    end
-  end
-
-  xdescribe "reserve_block_room" do
-    it "can reserve a room if given the check-in/out date, reservation id, and guest id" do
-      hotel = HotelBooking::BookingProgram.new
-
-      rooms_in_block = [1,3]
-
-      block_room_wanted = 3
-
-      check_in_str = "2018-08-09"
-      check_out_str = "2018-08-12"
-      discounted_rate = 10
-
-      hotel.make_block(check_in_str, check_out_str, rooms_in_block,discounted_rate)
-
-      block1 = hotel.all_blocks[0]
-
-      hotel.all_blocks.count.must_equal 1
-      block1.must_be_instance_of HotelBooking::Block
-      block1.id.must_equal 1
-
-      room = HotelBooking::Room.find_by_id(block_room_wanted)
-
-      #check for when trying to make a block reservation for a room that is not in the block e.g.proc{room.reserve_block_room(check_in_str, check_out_str, 1, 20)}.must_raise ArgumentError
-
-      room.reserve_block_room(check_in_str, check_out_str, 99, block1.id)
-
-      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
-        room.all_dates.must_include date
-      end
-
-      (Date.parse(check_in_str)...Date.parse(check_out_str)).each do |date|
-        room.block_id_and_res_dates[block1.id].must_include date
-      end
-
-    end
-
-    xit "Raises an error when we try to book a room with a check-in or check-out date earlier than today" do
-      room = HotelBooking::Room.new(123)
-      check_in_str = "2016-08-09"
-      check_out_str = "2016-08-12"
-
-      proc { room.reserve_block_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
-    end
-
-    xit "raises an error if the check-in or check-out date is invalid" do
-      room = HotelBooking::Room.new(123)
-      check_in_str = "February 30, 2018"
-      check_out_str = "February 31, 2018"
-
-      proc { room.reserve_block_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
-
-    end
-
-    xit "raises an error if the check-out dates is earlier than the check-in date" do
-      room = HotelBooking::Room.new(123)
-      check_in_str = "March 3, 2018"
-      check_out_str = "February 20, 2018"
-
-      proc { room.reserve_block_room(check_in_str, check_out_str, 1, 13)}.must_raise ArgumentError
-    end
-
-  end #end reserve_block_room
-
+  end #end self.setup_rooms
 
 end #end HotelBooking::Room class tests
