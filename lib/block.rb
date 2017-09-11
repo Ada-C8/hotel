@@ -23,5 +23,10 @@ module BookingSystem
       @discount_room_rate = discount_room_rate
     end
 
+    def list_room_ids
+      room_ids = @rooms_array.map { |room| room.id }
+      return room_ids
+    end
+
   end#of_Block_class
 end#of_module_BookingSystem

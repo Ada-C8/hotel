@@ -7,7 +7,12 @@ describe "Block Class" do
     before do
       @block_id = "Block1"
       @date_range = DateRange.new(Date.new(2017, 9, 1), Date.new(2017, 9, 5))
-      @rooms_array = [1, 2, 3, 4, 5]
+      @rooms_array = [
+        BookingSystem::Room.new(1, 200.00),
+        BookingSystem::Room.new(2, 200.00),
+        BookingSystem::Room.new(3, 200.00),
+        BookingSystem::Room.new(4, 200.00),
+        BookingSystem::Room.new(5, 200.00)]
       @discount_room_rate = 0.20
 
       @block = BookingSystem::Block.new(@block_id, @date_range, @rooms_array, @discount_room_rate)
