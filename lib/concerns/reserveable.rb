@@ -1,7 +1,7 @@
 module Hotel
   module Reserveable
     module InstanceMethods
-        include Hotel::Dateable::InstanceMethods
+      include Hotel::Dateable::InstanceMethods
 
 
       def reserve(check_in, check_out, room, name, contact_info)
@@ -16,14 +16,9 @@ module Hotel
       end#reserve
 
       def rooms_available?(check_in, check_out)
-        # binding.pry
-        # #searches through the reservation list to find available rooms
-        #
-        # check_in_date = Date.new(check_in[0], check_in[1], check_in[2])
-        # check_out_date = Date.new(check_out[0], check_out[1], check_out[2])
+        blocks_for_date = number_rooms_blocked_by_date_range(check_in, check_out)
         wanted_dates = get_date_range(check_in, check_out)
         reserved_rooms_for_dates = []
-        blocks_for_date = 0
 
         case
         when @reservations_list == []
@@ -37,15 +32,15 @@ module Hotel
 
           end
         end
-        #if blocks_for_date.length <= (@all_rooms - reserved_rooms_for_dates).length ? @all_rooms - reserved_rooms_for_dates : raise ArgumentError.new("Blocks for this date prohibit us from reserving rooms")
-        return @all_rooms - reserved_rooms_for_dates
+
+        available_rooms = @all_rooms - reserved_rooms_for_dates
+        if blocks_for_date >= available_rooms.length
+          raise ArgumentError.new("Blocks for this date prohibit us from reserving rooms")
+        else
+          available_rooms
+        end
       end#rooms_available
 
-
-      # #ability to do searchy things
-      # def finder(search_term, instance_variable)
-      #   reservations_list.find_all{|reservation| reservation.send(instance_variable).include?(search_term)}
-      # end
 
       def reservations_by_name(name_request)
         finder( name_request, :name, reservations_list)

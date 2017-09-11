@@ -9,6 +9,7 @@ require_relative '../lib/admin'
 require_relative '../lib/reservation'
 require_relative '../lib/concerns/dateable'
 require_relative '../lib/concerns/reserveable'
+require_relative '../lib/room'
 
 
 

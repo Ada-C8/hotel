@@ -25,7 +25,7 @@ require_relative 'spec_helper'
     end
 
     it "can find a block from the block_list by name" do
-      @admin.create_block(Date.new(2012, 07, 20), Date.new(2012, 07, 24), "Bill Murray", "Japan", 5, 14)
+      @admin.create_block(Date.new(2012, 07, 20), Date.new(2012, 07, 24), "Bill Murray", "Japan", 5, 3)
       this_block = @admin.find_block_name("Bill Murray")
       this_block.each do |block|
         block.must_be_instance_of Hotel::Block
@@ -45,9 +45,16 @@ require_relative 'spec_helper'
     end
 
     it "can convert a block to a reservation by name" do
+
       @admin.convert_block_to_reservation("Bill Murray")
       @admin.rooms_available?(Date.new(2012, 7, 18), Date.new(2012, 7, 19)).length.must_equal 6
       @admin.block_list.length.must_equal 0
+    end
+
+    it "can find a number of rooms blocked by date range" do
+      num_blocked = @admin.number_rooms_blocked_by_date_range(Date.new(2012, 07, 16), Date.new(2012, 07, 19))
+      num_blocked.must_equal 14
+
     end
 
   end#end blockable
