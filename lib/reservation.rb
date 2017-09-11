@@ -1,4 +1,5 @@
 require 'date'
+require 'csv'
 
 module Hotel
   class Reservation

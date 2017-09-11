@@ -1,4 +1,5 @@
 require 'date'
+require 'csv'
 
 module Hotel
   STANDARD_RATE = 200
@@ -16,7 +17,7 @@ module Hotel
     end
 
     def new_reservation(name, checkin_date, checkout_date, room_number)
-      if rooms_available(checkin_date, checkout_date).any? { |room| room.number == room_number }
+      if rooms_available(checkin_date, checkout_date).any? { |room| room == room_number }
         reservation = Reservation.new({ name: name, checkin: checkin_date, checkout: checkout_date, room: room_number })
 
         reservations << reservation
@@ -46,7 +47,7 @@ module Hotel
       reserv = Block.new({ name: name, checkin: block.checkin.strftime('%m-%d-%Y'), checkout: block.checkout.strftime('%m-%d-%Y'), rooms: room_number, discount: block.discount })
 
       reservations << reserv
-      block.room.delete_if { |room| room.number == room_number }
+      block.room.delete_if { |room| room == room_number }
     end
 
     def reservations_on(date)
@@ -62,11 +63,11 @@ module Hotel
     end
 
     def block_rooms_avail(block_name)
-      blocks[block_index_by_name(block_name)].room.collect { |room| room.number }
+      blocks[block_index_by_name(block_name)].room.collect { |room| room }
     end
 
     def rooms_available(checkin_date, checkout_date)
-      rooms.reject { |room| booked_rooms(checkin_date, checkout_date).include?(room.number) }
+      rooms.reject { |room| booked_rooms(checkin_date, checkout_date).include?(room) }
     end
 
     def booked_rooms(checkin_date, checkout_date)
@@ -76,7 +77,7 @@ module Hotel
 
       checkin.upto(checkout) do |date|
         booked_rooms << reservations_on(date.strftime('%m-%d-%Y')).collect { |reserv| reserv.room }
-        booked_rooms << blocks_on(date.strftime('%m-%d-%Y')).collect { |block| block.room.collect { |room| room.number } }
+        booked_rooms << blocks_on(date.strftime('%m-%d-%Y')).collect { |block| block.room.collect { |room| room } }
       end
 
       booked_rooms.flatten.uniq
@@ -84,14 +85,17 @@ module Hotel
 
     private
     def make_rooms
-      rooms = []
+      new_rooms = []
       i = 0
       NUMBER_OF_ROOMS.times do
-        rooms << Room.new(i + 1)
+        new_rooms << i + 1
         i += 1
       end
 
-      rooms
+      CSV.open("./csv/rooms.csv", "w", headers: true) do |csv|
+        csv << ["Number"]
+        new_rooms.each { |room| csv << [room] }
+      end
     end
 
     def block_index_by_name(block_name)

@@ -22,7 +22,7 @@ describe "Hotel" do
     it "provides a list of all rooms" do
       hotel.rooms.must_be_instance_of Array
       hotel.rooms.length.must_equal 20
-      hotel.rooms[18].number.must_equal 19
+      hotel.rooms[18].must_equal 19
     end
   end
 

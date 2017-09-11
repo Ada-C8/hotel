@@ -1,3 +1,5 @@
+require 'csv'
+
 module Hotel
   class Block < Reservation
 
