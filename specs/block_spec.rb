@@ -158,19 +158,8 @@ describe "Testing Block class" do
 
     it "Raises an error if it tries to reserve an room that's already reserved" do
       block.reserve(room_to_reserve)
-      proc {block.reserve(room_to_reserve) }.must_raise ArgumentError
-    end
-  end
-
-  xdescribe "#discounted_cost" do
-    it "Returns the total cost of reserving a room in a block" do
-      expected_cost = (room_to_reserve.rate * 0.8) * (check_out - check_in).to_i
-      block.discounted_cost(room_to_reserve).must_equal expected_cost
-
-      room_to_reserve.rate = 300
-      updated_expected_cost = (room_to_reserve.rate * 0.8) * (check_out - check_in).to_i
-      block.discounted_cost(room_to_reserve).must_equal updated_expected_cost
-
+      proc { block.reserve(room_to_reserve) }.must_raise ArgumentError
+      proc { room_to_reserve.reserve(today, two_days_later) }.must_raise ArgumentError
     end
   end
 
