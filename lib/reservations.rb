@@ -18,9 +18,11 @@ module HotelHedwig
 
       # Raise an argument error IF the check-in date is after the check-out date! Method?
 
+      # Why is invalid_date raising a warning???
+
       def invalid_date
         if @check_in < @check_out
-          raise ArgumentError.new "Invalid date selection, please check and change your check-in and check-out dates."
+          raise ArgumentError.new("Invalid date selection, please check and change your check-in and check-out dates.")
         end
       end
     end

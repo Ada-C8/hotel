@@ -8,36 +8,43 @@
 
 # Somehow I need this to provide reservation list that is DATE specific.  This will be tricky (IMO).
 
-# require_relative 'rooms'
-# require_relative 'reservations'
-#
-# module HotelHedwig
-#   class Reservations
-#     attr_reader
-#     def initialize
-#
-#     end
+require_relative 'rooms'
+require_relative 'reservations'
 
-# # Start pseudocode
-# Remember to not duplicate methods!
+module HotelHedwig
+  class Reservations
+    attr_reader :rooms, :check_in, :check_out, :total_charges
+    def initialize(rooms, check_in, check_out, total_charges)
+      @rooms = rooms
+      @check_in = check_in
+      @check_out = check_out
+      @total_charges = total_charges
+    end
 
-#     def method to access all of the rooms
-#
-#     end
-#
-#     def method to reserve a room in a date range.
-#
-#     end
-#
-#     def method to access list of reservations for a specific date.
-#
-#     end
-#
-#     def method to get total cost for a given reservation.
-#
-#     end
-#   end
-# end
+    # Start pseudocode
+    # Remember to not duplicate methods!
+
+    def all_rooms
+      @rooms = []
+    end
+
+    def reserve_room(room, check_in, check_out)
+
+
+    end
+
+    def date_reservations
+
+    end
+
+    # Calculating costs take 3, not sure how to best calculate this or if it belongs here.  The idea is using the base amount aka room_cost (200) multiplied by the number of days customer stays.  Check out day minus check in day provides that number.  I hope. This should also allow for a one day stay ex. 200 * (day 2 - day 1) = 200 * 1 = 200.
+
+    def total_charges
+      @room_rate = room_rate * (@check_out - @check_in).to_i
+    end
+  end
+end
+
 
 # User Stories Wave 1 (methods);
 
@@ -51,4 +58,3 @@
 # The hotel has 20 rooms, and they are numbered 1 through 20
 # Every room is identical, and a room always costs $200/night
 # The last day of a reservation is the checkout day, so the guest should not be charged for that night
-# For this wave, any room can be reserved at any time, and you don't need to check whether reservations conflict with each other (this will come in wave 2!)
