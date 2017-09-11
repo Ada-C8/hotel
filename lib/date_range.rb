@@ -19,9 +19,6 @@ module Hotel
 
     def overlap?(start_date, end_date)
       # comparing one instance of date to another
-      # start_date = Date.parse(start_date)
-      # end_date = Date.parse(start_date)
-
       if (self.check_in < Date.parse(end_date)) && (self.check_out >= Date.parse(start_date))
         return true
       else
