@@ -1,29 +1,39 @@
 require 'date'
 
 module Hotel
-
   class DateRange
-    attr_reader :checkin, :checkout
+    attr_reader :checkin_date, :checkout_date
 
-# Checkin and checkout dates are instances of the Date class
+    # Checkin and checkout dates are instances of the Date class
     def initialize(checkin_date, checkout_date)
+      if !checkin_date.is_a?(Date) || !checkout_date.is_a?(Date)
+        raise ArgumentError.new("Checkin or Checkout dates is not Date object")
+      end
+
+      if checkin_date > checkout_date
+        raise ArgumentError.new("Checkin date must be before Checkout date")
+      end
+
       @checkin_date = checkin_date
-
       @checkout_date = checkout_date
-
     end
 
-# Check if date is included in date range
-    def date_include?(date)
-      if date >= @checkin_date && date <= @checkout_date
+    # check if reservation date request is within date range.
+    def date_include?(start_date, end_date)
+      # if date >= @checkin_date && date <= @checkout_date
+      if start_date >= @checkin_date && end_date <= @checkout_date
         return true
       else
-        raise ArgumentError.new("#{date} is an invalid date!")
+        return false
       end
     end
 
-    def date_overlap?(start_date, end_date)
-    # (@checkin_date - end_date) * (start_date - @checkout_date) >= 0
+    # check if the room is overbooked
+    def date_overlap?(date_range)
+      #(@checkin_date - end_date) * (start_date - @checkout_date) >= 0
+      # Will this method work?
+      start_date = date_range.checkin_date
+      end_date = date_range.checkout_date
 
       if (start_date <= @checkout_date) && (end_date > @checkin_date)
         return true
