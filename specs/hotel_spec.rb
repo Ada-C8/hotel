@@ -100,7 +100,7 @@ describe "hotel" do
         output = Hotel.all_blocks
         output.must_be_instance_of Array
       end
-      it "should match what is currently in the csv" do
+      it "total amount of blocks should match what is currently in the csv" do
         output = Hotel.all_blocks
         output.length.must_equal 1
       end
@@ -108,7 +108,7 @@ describe "hotel" do
         output = Hotel.all_blocks
         output[0].must_be_instance_of Hotel::Block
       end
-      it "should have a check_in date that i want " do
+      it "first element should match what is in csv " do
         output = Hotel.all_blocks
         expected_output = Date.new(2017, 9, 20)
         output[0].check_in.must_equal expected_output
