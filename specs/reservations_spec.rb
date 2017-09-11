@@ -6,6 +6,7 @@ describe "Reservations class" do
     @hotel = Hotel::Reservations.new
     @hotel.make_reservation(@check_in,@check_out,1)
     @hotel.make_reservation(@check_in,@check_out,1)
+    @block = @hotel.make_reservation(@check_in - 10,@check_out - 10,5, block_name: "party")
   end
   describe "initializes" do
     it "initializes" do
@@ -87,6 +88,12 @@ describe "Reservations class" do
       @hotel.make_reservation(@check_in + 1, @check_out + 1,20)
       # can book rooms on the following day AKA checkout day
       @hotel.make_reservation(@check_in + 2, @check_out + 2,20)
+    end
+    it "will create a block, " do
+      @block.must_be_kind_of Hotel::Booking
+    end
+    it "will raise an exception if user tried to block off more than 5 rooms." do
+      proc{@hotel.make_reservation(@check_in - 10,@check_out - 10,7, block_name: "pool party")}.must_raise InvalidRoomQuantity
     end
   end
 end
