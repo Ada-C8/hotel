@@ -150,17 +150,18 @@ describe "Admin" do
 
     it "Can create a block reservation without reserving the rooms in it" do
       @blocked_reservation_1.must_be_instance_of Hotel::BlockReservation
-      @blocked_reservation_1.reservations.length.must_equal 3
-      @blocked_reservation_1.reservations[rand(3)].room.available.must_equal true
-      @blocked_reservation_1.reservations.each do |reservation|
-        @room_numbers.include?(reservation.room.room_number).must_equal true
+      @blocked_reservation_1.rooms.length.must_equal 3
+      @blocked_reservation_1.rooms.each do |room|
+        @room_numbers.include?(room.room_number).must_equal true
       end
     end
 
     it "Can create a block reservation at the check out date of another (block) reservation" do
       @admin.create_block(Date.new(2017, 8, 15), Date.new(2017, 8, 17), [6, 7, 8])
       @admin.block_reservations.length.must_equal 2 # includes the old block reservation and new block reservation
-      [6, 7, 8].include?(@admin.block_reservations[1].reservations[rand(3)].room.room_number).must_equal true
+      @admin.block_reservations[1].rooms.each do |room|
+        [6, 7, 8].include?(room.room_number).must_equal true
+      end
     end
 
     it "Shouldn't create a block if there's a block that overlaps in date and room number" do
