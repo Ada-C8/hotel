@@ -1,66 +1,43 @@
 require_relative 'spec_helper'
 
-xdescribe 'Room' do
-  before do
-    @puppy_room = Hotel::Room.new
-    @kitten_room = Hotel::Room.new
-    @bat_room = Hotel::Room.new
-  end # end before
-
+describe 'Room' do
   describe 'initialize' do
     it 'creates an instance of Room' do
-      @puppy_room.class.must_equal Hotel::Room
     end # end test
   end # end #initialize
 
-  describe 'assign_room' do
-    it 'removes unavailable rooms from the rooms_available array each time a room is booked' do
-      Hotel::Room.rooms_available.length # 20
-      @puppy_room.assign_room # -1
-      @kitten_room.assign_room # -1
-      Hotel::Room.rooms_available.length.must_equal 18
+  describe 'self.all' do
+    it "Returns an Array when Room.all is called" do
+      Hotel::Room.all.must_be_kind_of Array
     end # end test
 
-    it 'assigns a different room number as they are assigned and made unavailable' do
-      @puppy_room.assign_room # room 1
-      @kitten_room.assign_room # room 2
-      @bat_room.assign_room # room 3
-      @bat_room.room_number.must_equal 3
-    end # end test
-  end # end assign_room
-
-  describe 'check_out_of_room' do
-    it 'returns the room number to the rooms_available array when a guest checks out' do
-      @puppy_room.assign_room # room 1
-      @kitten_room.assign_room # room 2
-      @puppy_room.check_out_of_room # return 1 to array
-
-      Hotel::Room.rooms_available.must_include 1
+    it "Verifies the number of rooms is correct" do
+      total_rooms = CSV.read("support/rooms.csv", 'r').length
+      Hotel::Room.all.length.must_equal total_rooms
     end # end test
 
-    it 'will sort the rooms_available array each time a room is assigned so the remaining rooms are in order (this will help when consecutive rooms need to be booked together)' do
-      @puppy_room.assign_room # room 1
-      @kitten_room.assign_room # room 2
-      @bat_room.assign_room # room 3
-      @puppy_room.check_out_of_room # room 1
-      @kitten_room.check_out_of_room # room 2
-      @bat_room.check_out_of_room # room 3
-
-      Hotel::Room.rooms_available.must_equal [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
-    end # end test
-  end # end #check_out_of_room
-
-  describe 'available?' do
-    it 'compares list of reservation with list of rooms' do
-      Hotel::Reservation.reservations.room.wont_equal Hotel::Reservation.rooms_available
+    it "Verifies everything in the Array is a Room" do
+      Hotel::Room.all.each do |room|
+        room.must_be_kind_of Hotel::Room
+      end
     end # end test
 
-    it 'returns false if a room is already on the list of reservations for a given date' do
-
+    it "Matches the first and last room numbers with the CSV file" do
+      Hotel::Room.all.first.room_number.must_equal 1
+      Hotel::Room.all.last.room_number.must_equal 20
     end # end test
+  end # end #self.all
 
-    it 'returns true if a room is not on the list of reservations for a given date' do
+  describe 'self.find(room_number)' do
+    it "Can find the room 1 from the CSV" do
+      Hotel::Room.find(1).room_number.must_equal Hotel::Room.all.first.room_number
+    end
 
+    it "Can find the last order from the CSV" do
+      Hotel::Room.find(20).room_number.must_equal Hotel::Room.all.last.room_number
+    end
+    it 'raises an ArgumentError if room number does not exist' do
+      proc{Hotel::Room.find(666)}.must_raise Hotel::InvalidRoomError
     end # end test
-  end # end #available?
+  end # end #self.find(room_number)
 end # end all Room tests

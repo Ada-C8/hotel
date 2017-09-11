@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
-puppy_expo = Hotel::Reservation.new('Finn', Date.new(2017, 10, 13), Date.new(2017, 10, 31), 13)
-kitten_expo = Hotel::Reservation.new('Girlie', Date.new(2018, 1, 17), Date.new(2018, 1, 31), 11)
+puppy_expo = Hotel::Reservation.new('Finn', Date.new(2017, 10, 13), Date.new(2017, 10, 31), Hotel::Room.find(13))
+kitten_expo = Hotel::Reservation.new('Girlie', Date.new(2018, 1, 17), Date.new(2018, 1, 31), Hotel::Room.find(11))
 
 describe 'Reservation' do
   describe 'initialize' do
@@ -31,7 +31,11 @@ describe 'Reservation' do
 
   describe 'self.available_rooms' do
     it 'excludes reservations outside a given date range' do
-      
+      given_range = Hotel::DateRange.new(Date.new(2017, 01, 01), Date.new(2017, 12, 31))
+
+      Hotel::Reservation.available_rooms(given_range).map do |room|
+        room.room_number
+      end.wont_include 13
     end # end test
   end # end #self.available_rooms
 end # end of all Reservation tests

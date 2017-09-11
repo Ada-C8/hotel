@@ -26,7 +26,7 @@ module Hotel
     def self.print_list
       bookings = []
       @@reservations.each do |booking|
-        bookings << "Name: #{booking.guest_name}\nCheck In: #{booking.check_in}\nCheck Out: #{booking.check_out}\nRoom Number: #{booking.room}\nTotal Cost: $#{booking.cost}" # turns out you can't use instance variables within a class method
+        bookings << "Name: #{booking.guest_name}\nCheck In: #{booking.check_in}\nCheck Out: #{booking.check_out}\nRoom Number: #{booking.room.room_number}\nTotal Cost: $#{booking.cost}" # turns out you can't use instance variables within a class method
       end
       return bookings
     end # end #self.print_list
@@ -39,7 +39,7 @@ module Hotel
 
     def self.available_rooms(date_range) # list reservations on given date range
       reservations_in_range = @@reservations.reject do |reservation| # excludes reservastions outside date range
-        reservation.check_out < date_range.check_in && reservation.check_in > date_range.check_out
+        reservation.check_out < date_range.check_in || reservation.check_in > date_range.check_out
       end
 
       rooms_in_range = reservations_in_range.map do |reservation| # iterates over reservations_in_range and converts each reservation into its room number (instead of list of obj, becomes list of int)

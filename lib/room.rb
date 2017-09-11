@@ -1,5 +1,6 @@
 require 'date'
 require 'csv'
+require_relative 'invalid_room_error'
 
 module Hotel
   class Room
@@ -17,5 +18,14 @@ module Hotel
       end
       return all_rooms
     end # end #self.all
+
+    def self.find(room_number)
+      self.all.each do |room|
+        if room_number == room.room_number
+          return room
+        end
+      end
+      raise InvalidRoomError.new ('Invalid Room Number')
+    end # end #self.find
   end # end Room class
 end # Hotel module

@@ -22,16 +22,4 @@ describe 'DateRange' do
       @puppy_dates.length_of_stay.must_equal 18
     end # end test
   end # end #length_of_stay
-
-  describe 'is_available?' do
-    xit 'checks if a room is available on given dates' do
-
-    end # end test
-  end # end #is_available?
-
-  describe 'reserve_room' do
-    xit 'reserves room if given dates are available' do
-
-    end # end test
-  end # end #reserve_room
 end # end of all DateRange tests
