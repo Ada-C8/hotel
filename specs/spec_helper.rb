@@ -16,6 +16,7 @@ require 'minitest/skip_dsl'
 require_relative '../lib/daterange'
 require_relative '../lib/admin'
 require_relative '../lib/reservation'
+require_relative '../lib/block'
 
 
 

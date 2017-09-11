@@ -1,12 +1,13 @@
 require_relative 'reservation'
+require_relative 'block'
 
 module Hotel
   class Admin
 
-    attr_reader :room_nums, :reservations
+    attr_reader :room_nums, :blocks
 
     def initialize
-      @reservations = []
+      @blocks = []
       @room_nums = []
       20.times do |i|
         @room_nums << (i + 1)
@@ -21,22 +22,22 @@ module Hotel
 
 
 
-    def add_reservation(room_num, check_in, check_out)
-      @reservations << Reservation.new(room_num, check_in, check_out)
+    def add_block(room_num_array, check_in, check_out, discount_percent: 0.0)
+      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, discount_percent: 0.0)
     end
 
-
-
-    def list_reservations(date)
-      rez_by_date = []
-
-      @reservations.each do |reservation|
-        if reservation.date_range_array.include?(date)
-          rez_by_date << reservation
-        end
-      end
-      return rez_by_date
-    end
+    #TODO
+    #TODO:
+    # def list_reservations(date)
+    #   block_by_date = []
+    #
+    #   @blocks.each do |block|
+    #     if block.date_range_array.include?(date)
+    #       block_by_date << block
+    #     end
+    #   end
+    #   return block_by_date
+    # end
 
 
     # lists room vacancies that can be utilized for booking available rooms
@@ -46,9 +47,11 @@ module Hotel
       date_range = DateRange.new(check_in, check_out).date_range_array
 
       date_range.each do |date|
-        reservations.each do |reservation|
-          if reservation.date_range_array.include?(date)
-            available_rooms.delete(reservation.room_num)
+        @blocks.each do |block|
+          if block.block_date_range_array.include?(date)
+            block.room_num_array.each do |room_num|
+              available_rooms.delete(room_num)
+            end
           end
         end
       end # end date_range loop
@@ -56,10 +59,10 @@ module Hotel
     end
 
 
-    # reserves available room for a given date range.
-    def reserve_by_date(check_in, check_out)
-      room_num = self.list_vacancies(check_in, check_out).sample
-      Hotel::Reservation.new(room_num, check_in, check_out, discount_percent: 0.0)
+    # creates block with available room for a given date range.
+    def create_block_by_date(rooms_per_block, check_in, check_out, discount_percent: 0.0)
+      room_num_array = self.list_vacancies(check_in, check_out).sample(rooms_per_block).to_a
+      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, discount_percent: 0.0)
     end
   end # end class
 end # end module

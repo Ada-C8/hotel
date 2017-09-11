@@ -6,25 +6,21 @@ module Hotel
   class Reservation
     COST_PER_NIGHT = 200.00
 
-    attr_reader :room_num, :date_range_array, :discount_percent
+    attr_reader :total_cost, :room_num, :date_range_array
 
-    def initialize(room_num, check_in, check_out, discount_percent: 0.0)
+    def initialize(room_num, check_in, check_out)
 
       # @reservation_array = []
-      # @total_cost = 0
+      @total_cost = 0
       @room_num = room_num
       @date_range_array = DateRange.new(check_in, check_out).date_range_array
-      @discount_percent = discount_percent
     end
 
 
 
-    def total_cost
-      full_price = (@date_range_array.length - 1) * COST_PER_NIGHT
-      discount = full_price * discount_percent
-      return total_cost = full_price - discount
-
-    end
+    # def total_cost
+    #   (@date_ranges_array.length - 1) * COST_PER_NIGHT
+    # end
 
 
 
