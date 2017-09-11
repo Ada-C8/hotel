@@ -28,6 +28,10 @@ describe "hotel" do
       (Hotel.all_rooms).must_be_instance_of Array
       (Hotel.all_rooms).length.must_equal 20
     end
+    it "everything in array should be instance of a room" do
+      all_the_rooms = Hotel.all_rooms
+      all_the_rooms.each {|element| element.must_be_instance_of Hotel::Room}
+    end
   end
 
   describe "self.find_room(input_id)" do
