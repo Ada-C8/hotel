@@ -270,7 +270,6 @@ describe "The Hotel class" do
       @myhotel.find_unassigned_block_reservations("Mary Smith")[0].status.must_equal "unassigned"
       @myhotel.assign_block_reservation("Mary Smith")
       marysmith = @myhotel.blocks_array[0]
-      #only reservation at the 0 position has been assigned
       marysmith.reservations_array[0].status.must_equal "assigned"
         x = 1
         3.times do
@@ -288,12 +287,12 @@ describe "The Hotel class" do
 
 
     it "returns an error if there are no unassigned rooms for a given block" do
-      # @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 5, 175)
-      # 5.times do
-      #   @myhotel.assign_block_reservation("John Smith")
-      # end
-
-      #proc {@myhotel.find_unassigned_block_reservations("John Smith")}.must_raise AllBlockRoomsAssignedError
+      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 4, 175)
+      @myhotel.assign_block_reservation("John Smith")
+      @myhotel.assign_block_reservation("John Smith")
+      @myhotel.assign_block_reservation("John Smith")
+      @myhotel.assign_block_reservation("John Smith")
+      proc {@myhotel.find_unassigned_block_reservations("John Smith")}.must_raise AllBlockRoomsAssignedError
     end
 
   end #end describe

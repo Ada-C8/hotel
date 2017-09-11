@@ -162,20 +162,7 @@ module Hotel_Chain
 
     def assign_block_reservation(party_name)
       unassigned_reservations = find_unassigned_block_reservations(party_name)
-      ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[0].status}"
-      ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[1].status}"
-      ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[2].status}"
-      ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[3].status}"
-
       unassigned_reservations[0].status = "assigned"
-
-      ap "AFTER #{unassigned_reservations[0].status}"
-      ap "AFTER #{unassigned_reservations[1].status}"
-      ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[0].status}"
-      ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[1].status}"
-      ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[2].status}"
-      ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[3].status}"
-      ap "unassigned_reservations = #{unassigned_reservations}"
       return unassigned_reservations[0]
     end
 
