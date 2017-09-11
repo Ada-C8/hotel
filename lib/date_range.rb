@@ -8,6 +8,7 @@ module BookingSystem
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
     end
+    
     # A reservation is allowed start on the same day that another reservation for the same room ends
     def overlap?(existing_reservations)
       booked_rooms = []

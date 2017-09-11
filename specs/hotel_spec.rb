@@ -43,34 +43,44 @@ describe "Hotel" do
   end # Describe
 
   describe "#create_reservation" do
-    it "should raise an ArgumentError if there are no available rooms for the same requested date" do
-      create_twenty_res
-      proc { create_one_res }.must_raise ArgumentError
-    end
-
     it "should raise an ArgumentError if the name is not a String" do
       proc { hotel.create_reservation(12345, @check_in, @check_out) }.must_raise ArgumentError
     end
 
-    it "should add only one Reservation at a time to @reservations array" do
+    it "should raise an ArgumentError if the check_out is before the check_in date" do
+      proc { hotel.create_reservation("Bob", '2001-02-05', '2001-02-01') }.must_raise ArgumentError
+    end
+
+    it "should create and add only one Reservation" do
       create_one_res
 
       hotel.all_reservations.must_be_kind_of Array
       hotel.all_reservations.length.must_equal 1
-    end
-
-    it "should return one instance of Reservation" do
-      create_one_res
-
       hotel.all_reservations[0].must_be_instance_of BookingSystem::Reservation
-      hotel.all_reservations.length.must_equal 1
+      hotel.all_reservations[0].room_num.must_equal 1
     end
 
-    it "should add all instances of Reservation to the @reservations instance variable" do
+    it "should add all created of Reservations" do
       create_twenty_res
 
       hotel.all_reservations.length.must_equal 20
       hotel.all_reservations.map { |reservation| reservation.must_be_instance_of BookingSystem::Reservation }
+      hotel.all_reservations.map { |reservation| reservation.room_num }.must_equal [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    end
+
+    it "should raise an ArgumentError if there are no available rooms for the same requested date, due a max of 20 rooms" do
+      create_twenty_res
+      proc { create_one_res }.must_raise ArgumentError
+    end
+
+    it "should add Reservations with different check_in and check_out dates" do
+      hotel.create_reservation("Bob", '2001-02-01', '2001-02-05')
+      hotel.create_reservation("Pete", '2001-02-06', '2001-02-10')
+
+      hotel.all_reservations[0].name.must_equal "Bob"
+      hotel.all_reservations[0].check_in.must_be_kind_of Date
+      hotel.all_reservations[1].name.must_equal "Pete"
+      hotel.all_reservations[1].check_in.must_be_kind_of Date
     end
   end # Describe
 
@@ -92,7 +102,7 @@ describe "Hotel" do
   end
 
   describe "#reserve_block" do
-    it "should raise and ArgumentError if the number of rooms for a block is greater than 5 or less than 0" do
+    it "should raise and ArgumentError if the number of rooms for a block is greater than 5" do
       proc { hotel.reserve_block(@name, @check_in, @check_out, 10) }.must_raise ArgumentError
     end
 
@@ -120,6 +130,14 @@ describe "Hotel" do
 
       hotel.all_reservations.map { |reservation| reservation.must_be_instance_of BookingSystem::Block }
       hotel.all_reservations.length.must_equal 4
+    end
+
+    it "should return the first block of rooms if other resrvations do not overlap" do
+      hotel.reserve_block("Sam", '2001-02-03', '2001-02-05', 5)
+      create_one_res # 3, 4
+      block = hotel.reserve_block("Cindy", '2001-02-06', '2001-02-08', 5)
+
+      block.avail_block_rooms.must_equal [1,2,3,4,5]
     end
 
     it "should return 1 instance of Block if other single reservations already exist" do
@@ -171,7 +189,7 @@ describe "Hotel" do
       proc { hotel.reserve_room_in_block("Bob", 5) }.must_raise ArgumentError
     end
 
-    it "should update the rooms numbers that were reserved and available withint he block" do
+    it "should update the rooms numbers that were reserved and available within the block" do
       res_block_setup
       hotel.reserve_room_in_block("Bob", 3)
 
@@ -230,13 +248,17 @@ describe "Hotel" do
   end
 
   describe "#all_reservations(date)" do
-    it "should return an array of all Reservations instances with the requested date" do
+    it "should return an array of all Reservations with the requested date" do
       hotel.create_reservation("Sue", '2001-02-01', '2001-02-10')
       hotel.create_reservation("Bob", '2001-02-01', '2001-02-03')
       current_reservations = hotel.all_reservations_on('2001-02-02')
 
       current_reservations.length.must_equal 2
       current_reservations.must_be_kind_of Array
+    end
+
+    it "should not return any Reservations if no dates are booked" do
+      hotel.all_reservations_on('2001-02-01').must_be_empty
     end
   end # Describe
 
@@ -265,3 +287,6 @@ describe "Hotel" do
   end # Describe
 
 end # Describe
+
+# Make one more reservation after 20 before during and after that time
+# Make test case if find_reservation

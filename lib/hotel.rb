@@ -11,6 +11,7 @@ module BookingSystem
       @all_reservations = []
       @block_reservations = []
     end
+
     # I can reserve a room for a given date range
     def create_reservation(name, check_in, check_out)
       valid?(name) # Checks name input
@@ -23,17 +24,16 @@ module BookingSystem
     end
 
     def find_reservation(name)
-      found_reservation = nil
       @all_reservations.each do |reservation|
         if reservation.class == BookingSystem::Reservation
           if reservation.name == name
-            found_reservation = reservation
             return reservation
           end
         end
       end
-      no_reservation(found_reservation)
+      raise ArgumentError.new("No reservation was found")
     end
+
     # I can create a block of rooms
     def reserve_block(reserved_for, check_in, check_out, num_of_rooms)
       valid?(reserved_for)
@@ -50,15 +50,14 @@ module BookingSystem
     end
 
     def find_block(reserved_name)
-      block_found = nil
       @block_reservations.each do |block|
         if block.reserved_for == reserved_name
-          block_found = block
           return block
         end
       end
-      no_reservation(block_found)
+      raise ArgumentError.new("No block was found")
     end # def
+
     # As an administrator, I can reserve a room from within a block of rooms
     def reserve_room_in_block(reserved_name, num_to_book)
       found_block = find_block(reserved_name)
@@ -68,6 +67,7 @@ module BookingSystem
       remaining_rooms = avail_rooms - now_reserved_in_block # Remaining rooms in requested block
       found_block.update_rooms_in_block(remaining_rooms, now_reserved_in_block) # Updates available and reserved rooms in the requested block
     end
+
     # As an administrator, I can check whether a given block has any rooms available
     def avail_rooms_in_block(reserved_name)
       found_block = find_block(reserved_name)
@@ -78,6 +78,7 @@ module BookingSystem
         return found_block.avail_block_rooms
       end
     end # def
+
     # I can view a list of rooms that are not reserved for a given date range
     def check_avail_rooms_for(next_check_in, next_check_out) # WAVE 2
       next_reservation = DateRange.new(next_check_in, next_check_out)
@@ -85,6 +86,7 @@ module BookingSystem
       existing_booked_rooms = next_reservation.overlap?(@all_reservations)
       existing_booked_rooms.empty? ? @rooms : @rooms - existing_booked_rooms
     end
+
     # I can access the list of all_reservations for a specific date
     def all_reservations_on(date)
       current_reservations = []
@@ -122,10 +124,6 @@ module BookingSystem
         return true
       end
     end # def
-
-    def no_reservation(found_reservation) # Raise ArgumentError f no reservation was found
-      raise ArgumentError.new("No reservation was found") if found_reservation == nil
-    end
 
     def check_num_input(found_block, num_to_book) # Can only reserve a room less than the number rooms they set aside
       if num_to_book > found_block.avail_block_rooms.length || num_to_book < 1
