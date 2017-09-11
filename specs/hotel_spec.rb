@@ -279,22 +279,37 @@ describe "The Hotel class" do
 
     it "if 3 of 4 reservations in a block are assigned, the find_unassigned_block_reservations method returns only 1 reservation" do
       @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
-      @myhotel.assign_block_reservation("Mary Smith")
-      @myhotel.assign_block_reservation("Mary Smith")
-      @myhotel.assign_block_reservation("Mary Smith")
+      3.times do
+        @myhotel.assign_block_reservation("Mary Smith")
+      end
       @myhotel.find_unassigned_block_reservations("Mary Smith").length.must_equal 1
     end
 
 
     it "returns an error if there are no unassigned rooms for a given block" do
       @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 4, 175)
-      @myhotel.assign_block_reservation("John Smith")
-      @myhotel.assign_block_reservation("John Smith")
-      @myhotel.assign_block_reservation("John Smith")
-      @myhotel.assign_block_reservation("John Smith")
+      4.times do
+        @myhotel.assign_block_reservation("John Smith")
+      end
       proc {@myhotel.find_unassigned_block_reservations("John Smith")}.must_raise AllBlockRoomsAssignedError
     end
 
   end #end describe
+
+  describe "match_block_partyname method" do
+
+    it "prints and returns an array the names of all blocks party names that may be a match" do
+      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 4, 175)
+      @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      @myhotel.reserve_block("Smithy Dickens", "11/12/17", "11/14/17", 3, 150)
+      @myhotel.reserve_block("Harriet McDuck", "11/12/17", "11/14/17", 3, 150)
+      @myhotel.reserve_block("McDuck Wedding", "12/5/17", "12/7/17", 5, 150)
+      @myhotel.match_block_partyname("McDuck").length.must_equal 2
+      @myhotel.match_block_partyname("Smith").length.must_equal 3
+      @myhotel.match_block_partyname("smith").length.must_equal 3
+      @myhotel.match_block_partyname("wedding").length.must_equal 1
+    end
+
+  end
 
 end #end of testing

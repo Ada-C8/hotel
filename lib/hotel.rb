@@ -145,9 +145,6 @@ module Hotel_Chain
       this_block.reservations_array.each do |reservation|
         if reservation.status == "unassigned"
           unassigned_reservations << reservation
-        else
-          #It is only entering this else statement for Room #1
-          ap "ROOM #{reservation.room.room_id} is already assigned"
         end
       end
 
@@ -155,9 +152,7 @@ module Hotel_Chain
         raise AllBlockRoomsAssignedError
       end
 
-      ap "RESULT of find_unassigned_block_reservations: #{unassigned_reservations}"
       return unassigned_reservations
-
     end
 
     def assign_block_reservation(party_name)
@@ -166,7 +161,16 @@ module Hotel_Chain
       return unassigned_reservations[0]
     end
 
-    def find_block_reservations_by_partyname
+    #this can be used to find if there is a block reservation party name in the system
+    def match_block_partyname(party_name)
+      reserved_under = []
+      @blocks_array.each do |block|
+        if (block.party_name.downcase).match(party_name.downcase)
+          reserved_under << block.party_name
+          ap block.party_name
+        end
+      end
+      return reserved_under
     end
 
   end #end of class
