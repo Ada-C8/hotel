@@ -20,7 +20,7 @@ module Hotel_Chain
         @check_in_date = Date.strptime(check_in_date, "%m/%d/%Y")
         @check_out_date = Date.strptime(check_out_date, "%m/%d/%Y")
         @room = HOTEL.array_of_rooms.sample
-        @status = status
+        @status = "assigned" #all reservations default to "assigned", unless they are reservations made in a block
         @block_reserved = false #defaults to false. the reserve_block method changes this to true.
       rescue ArgumentError
         raise WrongDateFormatError

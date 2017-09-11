@@ -256,33 +256,46 @@ describe "The Hotel class" do
       proc {@myhotel.find_unassigned_block_reservations("Nancy Smith")}.must_raise NoPartyByThatNameError
     end
 
-    #TODO: I can only do this test after I wrote a method to assign block rooms
-    # it "returns an error if there are no unassigned rooms for a given block" do
-    #
-    # end
-
   end #end describe
 
   describe "assign a room within a block of rooms - assign_block_reservation method" do
 
     it "returns a reservation object" do
-    @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 5, 175)
-    @myhotel.assign_block_reservation("John Smith").must_be_instance_of Hotel_Chain::Reservation
+      @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 5, 175)
+      @myhotel.assign_block_reservation("John Smith").must_be_instance_of Hotel_Chain::Reservation
     end
 
     it "returns a reservation object with the status changed to assigned" do
-    @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
-    @myhotel.find_unassigned_block_reservations("Mary Smith")[0].status.must_equal "unassigned"
-    @myhotel.assign_block_reservation("Mary Smith")
-    marysmith = @myhotel.blocks_array[0]
-    #only reservation at the 0 position has been assigned
-    marysmith.reservations_array[0].status.must_equal "assigned"
-      x = 1
-      3.times do
-        marysmith.reservations_array[x].status.must_equal "unassigned"
-      end
+      @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      @myhotel.find_unassigned_block_reservations("Mary Smith")[0].status.must_equal "unassigned"
+      @myhotel.assign_block_reservation("Mary Smith")
+      marysmith = @myhotel.blocks_array[0]
+      #only reservation at the 0 position has been assigned
+      marysmith.reservations_array[0].status.must_equal "assigned"
+        x = 1
+        3.times do
+          marysmith.reservations_array[x].status.must_equal "unassigned"
+        end
     end
 
-  end
+    it "MONKEY: if 3 of 4 reservations in a block are assigned, the find_unassigned_block_reservations method returns only 1 reservation" do
+      @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
+      @myhotel.assign_block_reservation("Mary Smith")
+      @myhotel.assign_block_reservation("Mary Smith")
+      @myhotel.assign_block_reservation("Mary Smith")
+      @myhotel.find_unassigned_block_reservations("Mary Smith").length.must_equal 1
+    end
+
+
+    it "returns an error if there are no unassigned rooms for a given block" do
+      # @myhotel.reserve_block("John Smith", "10/25/17", "10/29/17", 5, 175)
+      # 5.times do
+      #   @myhotel.assign_block_reservation("John Smith")
+      # end
+
+      #proc {@myhotel.find_unassigned_block_reservations("John Smith")}.must_raise AllBlockRoomsAssignedError
+    end
+
+  end #end describe
 
 end #end of testing
