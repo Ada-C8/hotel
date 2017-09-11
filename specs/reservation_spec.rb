@@ -15,11 +15,21 @@ describe "Reservation" do
 
   describe "total cost" do
     it "calculates the total cost for reservation made" do
+      room_rate = 200
       checkin_date = Date.new(2001,2,3)
       checkout_date = Date.new(2001,2,14)
       num_nights = checkout_date - checkin_date
-      total_cost = num_nights * 200
+      total_cost = num_nights * room_rate
       total_cost.must_equal 2200
+    end
+
+    it "return a total_cost of 0 if there is no reservation or invalid date" do
+      room_rate = 200
+      checkin_date = Date.new()
+      checkout_date = Date.new()
+      num_nights = checkout_date - checkin_date
+      total_cost = num_nights * room_rate
+      total_cost.must_equal 0
     end
   end
 end
