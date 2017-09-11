@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'spec_helper'
 
 describe "hotel" do
@@ -119,6 +120,17 @@ describe "hotel" do
       it "should return total_cost of a reservation when given id" do
         output = Hotel.cost(99)
         output.must_equal 600
+      end
+      it "should raise error if reservation ID does not exist" do
+        proc{Hotel.cost(1000)}.must_raise ArgumentError
+        proc{Hotel.cost(868584)}.must_raise ArgumentError
+
+      end
+      it "should raise type error if reservation ID is not given as an Integer" do
+        proc{Hotel.cost("45")}.must_raise ArgumentError
+        proc{Hotel.cost("")}.must_raise ArgumentError
+        proc{Hotel.cost(:forty_five)}.must_raise ArgumentError
+        proc{Hotel.cost([45])}.must_raise ArgumentError
       end
     end
 

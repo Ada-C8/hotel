@@ -70,10 +70,12 @@ module Hotel
   end
 
   def self.cost(input_reservation_id)
+    raise ArgumentError.new "Invalid reservation ID.  Must be Integer." if !(input_reservation_id.is_a? Integer)
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|
       return (reservation.total_cost) if reservation.id == input_reservation_id
     end
+    raise ArgumentError.new "Reservation ID does not exist"
   end
 
   def self.access_reservation(input_date)
