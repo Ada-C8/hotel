@@ -98,6 +98,31 @@ describe "HotelAdmin" do
       @hotel_admin_test.rooms_available_for_date_range(range).length.must_equal(16)
     end
   end
+
+  describe "#reserve_block" do
+    before do
+      @hotel_admin_test = BookingSystem::HotelAdmin.new
+
+      @block_id = "Block1"
+      @date_range = DateRange.new(Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+      @rooms_array = [
+        BookingSystem::Room.new(1, 200.00),
+        BookingSystem::Room.new(2, 200.00),
+        BookingSystem::Room.new(3, 200.00),
+        BookingSystem::Room.new(4, 200.00),
+        BookingSystem::Room.new(5, 200.00)]
+      @discount_room_rate = 0.20
+
+
+      @hotel_admin_test.reserve_block(@block_id, @date_range, @rooms_array, @discount_room_rate)
+    end
+    #
+    # it "makes a block reservation and adds it to hotel's list of block reservations" do
+    #   @hotel_admin_test.block_reservation_list.length.must_equal 1
+    # end
+
+  end
+
 end#of_"HotelAdmin"
 
 

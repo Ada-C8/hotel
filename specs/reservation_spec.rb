@@ -13,7 +13,9 @@ describe "Reservation" do
     @start_date = Date.new(2017, 9, 1) #Date.new(YYYY, M, D)
     @end_date = Date.new(2017, 9, 5)
 
-    @reservation_test = BookingSystem::Reservation.new(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date)
+    @block_id = "Block1"
+
+    @reservation_test = BookingSystem::Reservation.new(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date, @block_id)
   end
 
   describe "#initialize" do

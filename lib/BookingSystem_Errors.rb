@@ -6,3 +6,6 @@ end
 
 class InvalidDateError <StandardError
 end
+
+class BlockError <StandardError
+end

@@ -5,6 +5,12 @@
 # [X] As an administrator, I can access the list of reservations for a specific date
 # [X] As an administrator, I can view a list of rooms that are not reserved for a given date range
 
+# [] As an administrator, I can create a block of rooms
+# [] To create a block you need a date range, collection of rooms and a discounted room rate
+# [] The collection of rooms should only include rooms that are available for the given date range
+# [] If a room is set aside in a block, it can't be reserved by the general public, nor can it be included in another block
+# [] As an administrator, I can check whether a given block (needs block_id) has any rooms available
+# [] As an administrator, I can reserve a room from within a block of rooms
 
 require 'date'
 require 'date_range'
