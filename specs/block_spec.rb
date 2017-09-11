@@ -45,12 +45,10 @@ describe "Block class" do
 
   describe "all blocks method" do
     it "returns an array of all blocks" do
-      block = Block.new(4, 2017, 9, 28, 2017, 9, 29, "Smith")
+      Block.new(4, 2017, 9, 28, 2017, 9, 29, "Smith")
       Block.all_blocks.must_be_instance_of Array
     end
-
   end
-
 
   def teardown
     Availability.set_calendar([])

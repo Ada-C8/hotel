@@ -20,5 +20,17 @@ describe "room class" do
     it "has a default rate of $200 per night" do
       @room.rate.must_equal 200
     end
+
+    it "does not accept a non-integer rate" do
+      proc { Room.new(3, rate: "200")}.must_raise ArgumentError
+    end
+
+    it "does not accept a non-integer id" do
+      proc { Room.new("Room 3")}.must_raise ArgumentError
+    end
+
+    it "does not accept an invalid status" do
+      proc { Room.new(7, status: :occupied)}.must_raise ArgumentError
+    end
   end
 end

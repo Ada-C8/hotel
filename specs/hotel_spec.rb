@@ -4,6 +4,7 @@ describe "hotel class" do
   before do
     @hotel = Hotel.new
   end
+  
   describe "initialize hotel" do
     it "creates a hotel object" do
       @hotel.must_be_instance_of Hotel
@@ -37,15 +38,11 @@ describe "hotel class" do
       @hotel.rooms[9].rate.must_equal 200
     end
   end
+
   describe "list method" do
     it "generates a list of all rooms in the hotel" do
       @hotel.list.must_be_instance_of Array
     end
-
-    # it "includes room ID and cost in the list" do
-    #   @hotel.list.include?(@id).must_equal true
-    #   @hotel.list.include?(@rate).must_equal true
-    # end
   end
 
 end

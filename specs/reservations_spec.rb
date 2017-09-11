@@ -53,13 +53,9 @@ describe "reservations class" do
       Availability.all_blocked_rooms(2018, 1, 8).count.must_equal 2
       Availability.all_reservations(2018, 1, 8).count.must_equal 1
     end
-
-
-
   end
 
   def teardown
     Availability.set_calendar([])
   end
-
 end

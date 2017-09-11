@@ -4,13 +4,13 @@ describe "availability class" do
   before do
     Availability.create_calendar
   end
+
   describe "initialize availability" do
     before do
       @all_availability = Availability.calendar
     end
 
     it "has a calendar array" do
-
       @all_availability.must_be_instance_of Array
     end
 
@@ -26,7 +26,6 @@ describe "availability class" do
       date = Date.today
       nextyear = date + 365
       @all_availability[0].keys[0].must_equal date
-      print @all_availability.count
       @all_availability[365].keys[0].must_equal nextyear
     end
   end
@@ -54,32 +53,36 @@ describe "availability class" do
     end
   end
 
-    describe "all blocked rooms method" do
-      it "returns an array of room ids" do
-        Block.new(4, 2017, 10, 18, 2017, 10, 21, "Smith")
-        blocks = Availability.all_blocked_rooms(2017, 10, 18)
-        blocks.must_be_instance_of Array
-        blocks.count.must_equal 4
-      end
-
-      it "returns an empty array if there are no blocks on that day" do
-        blocks = Availability.all_blocked_rooms(2017, 10, 28)
-        blocks.must_be_instance_of Array
-        blocks.count.must_equal 0
-      end
+  describe "all blocked rooms method" do
+    it "returns an array of room ids" do
+      Block.new(4, 2017, 10, 18, 2017, 10, 21, "Smith")
+      blocks = Availability.all_blocked_rooms(2017, 10, 18)
+      blocks.must_be_instance_of Array
+      blocks.count.must_equal 4
     end
 
-    describe "block available rooms method" do
-      it "returns the number of remaining rooms in a block" do
-
-      end
-
-      it "returns an error if a block ID is entered that doesn't exist" do
-
-      end
-
-      
+    it "returns an empty array if there are no blocks on that day" do
+      blocks = Availability.all_blocked_rooms(2017, 10, 28)
+      blocks.must_be_instance_of Array
+      blocks.count.must_equal 0
     end
+  end
+
+  describe "block available rooms method" do
+    it "returns the number of remaining rooms in a block" do
+      Block.new(3, 2018, 4, 3, 2018, 4, 5, "Martell")
+      Availability.block_available_rooms("Martell").must_equal 3
+      Reservation.reserve_from_block("Martell")
+      Availability.block_available_rooms("Martell").must_equal 2
+      Reservation.reserve_from_block("Martell")
+      Reservation.reserve_from_block("Martell")
+      Availability.block_available_rooms("Martell").must_equal 0
+    end
+
+    it "returns an error if a block ID is entered that doesn't exist" do
+      proc { Reservation.reserve_from_block("Hurley")}.must_raise ArgumentError
+    end
+  end
 
   def teardown
     Availability.set_calendar([])
