@@ -2,12 +2,12 @@ require 'date'
 
 module Hotel
   class Block # << Room do I want to do this?
-    attr_reader :id, :dates, :block_id, :available_rooms, :how_many_rooms
+    attr_reader :id, :dates, :block_id, :available_rooms, :how_many_rooms, :collection_of_rooms_blocked
 
     def initialize(checkin, checkout, collection_of_rooms_blocked, block_id)
       @dates = DateRange.new(checkin, checkout)
       @collection_of_rooms_blocked = collection_of_rooms_blocked
-      @how_many_rooms = collection_of_rooms_blocked.length
+      # @how_many_rooms = collection_of_rooms_blocked
       @block_id = block_id
       @available_rooms = collection_of_rooms_blocked
     end
@@ -21,7 +21,7 @@ module Hotel
     end
 
     def check_block_for_availability(block_id)
-      if @collection_of_rooms_blocked == []
+      if @collection_of_rooms_blocked == 0
         available = false
       else #(implicit @collection_of_rooms_blocked == @how_many_rooms)
         available = true

@@ -3,7 +3,7 @@ require 'pry'
 module Hotel
   class Reservations
 
-    attr_reader :all_reservations, :all_rooms, :all_blocks
+    attr_reader :all_reservations, :all_rooms, :all_blocks, :rez, :collection_of_rooms_blocked
 
     def initialize
       @all_rooms = []
@@ -11,6 +11,8 @@ module Hotel
       @all_reservations = []
       @all_blocks = []
       @all_rooms_in_block = []
+      @array_of_rooms = []
+       @collection_of_rooms_blocked = collection_of_rooms_blocked
     end
 
     def create_rooms(all_rooms)
@@ -54,7 +56,6 @@ module Hotel
     end
 
     def check_availability(checkin, checkout)
-      ##### need logic to check for blocks bc then it's not available?
       # this is the inverse of not_available array
       available = []
       @all_rooms.each do |room|
@@ -65,16 +66,14 @@ module Hotel
       return available
     end
 
-    def make_block(checkin, checkout, how_many_rooms, block_id)
+    def make_block(checkin, checkout, collection_of_rooms_blocked, block_id)
       available = check_availability(checkin, checkout)
-      if how_many_rooms > 5
+      if collection_of_rooms_blocked > 5
         raise BlockAvailabilityError.new "You cannot block more than 5 rooms."
-      elsif how_many_rooms > available.length
-        raise BlockAvailabilityError.new "There are only  #{available.length} available for your dates."
       else
-        collection_of_rooms_blocked = []
-        how_many_rooms.times do |i|
-          collection_of_rooms_blocked << available[i]
+        #  collection_of_rooms_blocked = []
+        collection_of_rooms_blocked.times do |i|
+          @array_of_rooms << available[i]
         end
         new_block = Hotel::Block.new(checkin, checkout, collection_of_rooms_blocked, block_id)
         @all_blocks << new_block
@@ -82,15 +81,23 @@ module Hotel
       end
     end
 
+
     def reserve_room_from_block(block_id)
+      # I think I need to try and subtract the collection_of_rooms_blocked each time a reservation is made...
+      if @collection_of_rooms_blocked == 0
+        raise BlockAvailabilityError.new "There are no blocks available for your dates."
+      end
       @all_blocks.each do  |block|
         if block.check_block_for_availability(block_id) && block.check_block_id(block_id)
-          rooms = block.available_rooms.take block.how_many_rooms
+          rooms = @array_of_rooms
+          # block.available_rooms.take
           rez = Hotel::Block.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
           @all_reservations << rez
+          #  @collection_of_rooms_blocked -= 1
           return rez
         else
           raise BlockAvailabilityError.new "Sorry, all of the rooms in the block have been booked."
+
         end
       end
     end

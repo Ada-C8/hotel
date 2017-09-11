@@ -6,9 +6,7 @@ describe "Hotel" do
   describe "Block" do
 
     before do
-      collection_of_rooms = [
-        Hotel::Room.new(2)
-      ]
+      collection_of_rooms = [Hotel::Room.new(2)]
       @room1 = Hotel::Block.new(Date.new(2017,8,5), Date.new(2017,8,8), collection_of_rooms, "wedding")
     end
 
@@ -27,8 +25,8 @@ describe "Hotel" do
     end
 
     it "will know if block doesn't have rooms" do
-      Hotel::Block.new(Date.new(2017,9,5), Date.new(2017,9,8), 2, "wedding").must_equal false
+      hotel1 = Hotel::Block.new(Date.new(2017,9,5), Date.new(2017,9,8), 0, "wedding")
+      hotel1.check_block_for_availability("wedding").must_equal false
     end
-
   end
 end
