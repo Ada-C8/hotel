@@ -82,42 +82,72 @@ describe "Testing Reservation class" do
     end
   end
 
-  describe "#self.find" do
-    it "Returns a reservation matching the given reservation_id" do
+  describe "#self.find(id)" do
+    before do
+      Hotel::Reservation.clear
 
+      @res_to_find = Hotel::Reservation.new(today, two_days_later, room)
+      Hotel::Reservation.new(today, two_days_later, Hotel::Room.new(1))
+
+    end
+
+    it "Returns a reservation matching the given reservation id" do
+      Hotel::Reservation.find(1).must_equal @res_to_find
+    end
+
+    it "Returns nil if no reservation found with given id" do
+      Hotel::Reservation.find(3).must_be_nil
     end
   end
 
-  describe "total_cost (in Reservable)" do
-    # before do
-    #   @check_in = Date.today
-    #   @check_out = Date.today + 3
-    #   @res = Hotel::Reservation.new(@check_in, @check_out, Hotel::Room.new(4))
-    # end
+  describe "#self.find_by_date" do
+    it "Returns a list of reservations for a specific date (doesn't include checkout date)" do
+      Hotel::Reservation.clear
 
-    xit "Returns the total cost of the reservation" do
+      res1 = Hotel::Reservation.new(today, two_days_later, room)
+      res2 = Hotel::Reservation.new(today, two_days_later + 1, Hotel::Room.new(1))
+
+      Hotel::Reservation.find_by_date(today).must_equal [res1, res2]
+      Hotel::Reservation.find_by_date(two_days_later).must_equal [res2]
+      Hotel::Reservation.find_by_date(today + 4).must_equal []
+    end
+
+    it "Raises an error if date isn't a Date object" do
+      invalid_dates = ["cat", [], nil, 4]
+
+      invalid_dates.each do |invalid_date|
+        proc { Hotel::Reservation.find_by_date(invalid_date) }.must_raise TypeError
+      end
+    end
+  end
+
+  describe "#total_cost" do
+
+    it "Returns the total cost of the reservation" do
 
       res = Hotel::Reservation.new(today, two_days_later, room)
-      num_nights = (two_days_later - today).to_i
-      expected_cost = num_nights * room.rate
+      expected_cost = 400 # 2 nights @ 200/night
       res.total_cost.must_equal expected_cost
 
-      new_rate = 300
-      room.rate = new_rate
-      # binding.pry
-      res.total_cost.must_equal (num_nights * new_rate)
+      room.rate = 300
+      more_expensive_res = Hotel::Reservation.new(two_days_later, two_days_later + 2, room)
+      higher_cost = 600 # 2 nights @ 300/night
+      more_expensive_res.total_cost.must_equal higher_cost
 
+    end
+
+    it "Returns the total discounted cost of the reservation if the room is in a block" do
+      block = Hotel::Block.new(today, two_days_later, 0.8, [room])
+      block_res = block.reserve(room)
+      expected_cost = 320 # 0.8 * 200/night * 2 nights
+      block_res.total_cost.must_equal expected_cost
+
+      new_block = Hotel::Block.new(two_days_later, two_days_later + 1, 0.7, [room])
+      new_block_res = new_block.reserve(room)
+      new_cost = 140 #0.7 * 200/night * 1 night
+      new_block_res.total_cost.must_equal new_cost
     end
 
   end
 
-  # describe "#self.find" do
-  #   before do
-  #     date_to_check = Date.new(2017,9,5)
-  #   end
-  #
-  #   it "Returns a list of Reservations for a given date" do
-  #
-  #   end
-  # end
 end

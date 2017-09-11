@@ -15,9 +15,9 @@ module Hotel
 
     def initialize(check_in, check_out, discount, room_block)
       # check input
-      valid_dates?(check_in, check_out)
-      valid_room_block?(room_block, check_in, check_out)
-      valid_discount?(discount)
+      check_dates(check_in, check_out)
+      check_room_block(room_block, check_in, check_out)
+      check_discount(discount)
 
       @block_id = @@all_blocks.length + 1
       @check_in = check_in
@@ -48,12 +48,8 @@ module Hotel
 
       raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.booked?(check_in, check_out)
 
-      return room.reserve(check_in, check_out)
-    end
-
-    def discounted_cost(room)
-      rate = room.rate * discount
-      return total_cost(rate)
+      discounted_rate = discount * room.rate
+      return room.reserve(check_in, check_out, discounted_rate)
     end
 
     def self.all

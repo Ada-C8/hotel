@@ -16,12 +16,12 @@ module Hotel
 
     def initialize(room_num, rate = DEFAULT_RATE)
 
-      valid_room_num?(room_num)
-      valid_rate?(rate)
+      check_room_num(room_num)
+      check_rate(rate)
 
       @room_num = room_num
-      @reservations = [] # array of res_ids
-      @blocks = []  # array of block_ids
+      @reservations = []
+      @blocks = []
       @rate = rate
 
       @@all_rooms << self
@@ -32,11 +32,11 @@ module Hotel
       room_num <=> other_room.room_num
     end
 
-    def reserve(start_date, end_date)
+    def reserve(start_date, end_date, rate_to_charge = rate)
 
       raise ArgumentError.new("Room #{room_num} isn't available for the given dates") if booked?(start_date, end_date)
 
-      new_reservation = ::Hotel::Reservation.new(start_date, end_date, self)
+      new_reservation = ::Hotel::Reservation.new(start_date, end_date, self, rate_to_charge)
       reservations << new_reservation#.reservation_id
 
       return new_reservation
@@ -53,10 +53,6 @@ module Hotel
 
       return array_include_date?(blocks, start_date, end_date)
 
-    end
-
-    def unavailable?(start_date, end_date = start_date.next_day)
-      return booked?(start_date, end_date) || blocked?(start_date, end_date)
     end
 
     def self.all
@@ -87,7 +83,7 @@ module Hotel
       s += "Reservations:\n"
 
       reservations.each do |reservation|
-        s += Hotel::Reservation.find(reservation).to_s
+        s += reservation.to_s
       end
 
       # s += "Blocks:\n"
@@ -119,9 +115,3 @@ module Hotel
   end # end of Room class
 
 end
-
-room = Hotel::Room.new(1)
-room2 = Hotel::Room.new(2)
-
-puts Hotel::Room.all
-# puts Hotel::Room.all_rooms

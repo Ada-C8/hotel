@@ -20,11 +20,11 @@ describe "Testing Room class" do
       Hotel::Room.new(4, 300).rate.must_equal expected_rate
     end
 
-    it "Creates an empty array of Reservation objects" do
+    it "Creates an empty array of Reservation ids" do
       room.reservations.must_equal []
     end
 
-    it "Creates an empty array of Block objects" do
+    it "Creates an empty array of Block ids" do
       room.blocks.must_equal []
     end
 
@@ -161,11 +161,10 @@ describe "Testing Room class" do
   describe "#blocked?" do
 
     let(:rooms) { [2, 4, 5, 9, 20].map { |num| Hotel::Room.new(num) } }
-    let(:discount) { 0.8 }
 
     it "Returns true if a room is in a block for the given date range (no reservation)" do
 
-      Hotel::Block.new(today, three_days_later, discount, rooms)
+      Hotel::Block.new(today, three_days_later, 0.8, rooms)
       blocked_room = rooms[0]
       blocked_room.blocked?(today - 1, today + 1).must_equal true
 
@@ -176,7 +175,7 @@ describe "Testing Room class" do
 
     it "Returns true if a room is in a block for the given date range (with reservation)" do
 
-      new_block = Hotel::Block.new(today, three_days_later, discount, rooms)
+      new_block = Hotel::Block.new(today, three_days_later, 0.8, rooms)
       reserved_room = rooms[0]
       new_block.reserve(reserved_room)
       reserved_room.blocked?(today, three_days_later).must_equal true
@@ -187,4 +186,5 @@ describe "Testing Room class" do
 
     end
   end
+
 end

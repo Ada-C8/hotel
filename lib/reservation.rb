@@ -12,16 +12,16 @@ module Hotel
 
     attr_accessor :check_in, :check_out, :room_num, :rate, :reservation_id
 
-    def initialize(check_in, check_out, room)
+    def initialize(check_in, check_out, room, rate = room.rate)
 
-      valid_dates?(check_in, check_out)
-      valid_room?(room)
+      check_dates(check_in, check_out)
+      check_room(room)
 
       @reservation_id = @@all_reservations.length + 1
       @check_in = check_in
       @check_out = check_out
       @room_num = room.room_num
-      @rate = room.rate
+      @rate = rate
 
       @@all_reservations << self
     end
@@ -36,7 +36,6 @@ module Hotel
 
     def total_cost
       num_nights = (check_out - check_in).to_i
-      # return num_nights * ::Hotel::Room::DEFAULT_RATE
       return num_nights * rate
     end
 
@@ -61,6 +60,12 @@ module Hotel
       @@all_reservations = []
     end
 
+    def self.find_by_date(date)
+      raise TypeError.new("#{date} must be of type Date") if date.class != Date
+
+      return @@all_reservations.select { |reservation| reservation.include?(date)}
+
+    end
 
     def to_s
       # return human readable representation
@@ -68,6 +73,7 @@ module Hotel
       s += "Room number: #{room_num}\n"
       s += "Check-in: #{check_in}\n"
       s += "Check-out: #{check_out}\n"
+      s += "Total cost: #{total_cost}\n"
 
       return s
 
