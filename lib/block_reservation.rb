@@ -1,3 +1,4 @@
+require 'pry'
 module Hotel
   #TODO: Make overlap? a mixin and add it into block_reservation and reservation
   class BlockReservation
@@ -19,9 +20,7 @@ module Hotel
     def total_cost
       cost = 0
       @reservations.each do |reservation|
-        if reservation.room.available
-          cost += reservation.room.cost
-        end
+        cost += reservation.room.cost
       end
       total_days = (check_out - check_in).to_i
       cost *= total_days
@@ -29,26 +28,16 @@ module Hotel
     end
 
     def rooms_available
-      available_rooms = []
-      @rooms.each do |room|
-        room_available =  true
-        (@check_in...@check_out).each do |date|
-          if !room.available_at?(date)
-            room_available = false
-          end
-        end
-        available_rooms << room if room_available
+      available_rooms = @rooms
+      reserved_rooms = @reservations.map{|reservation| reservation.room}
+      available_rooms.keep_if do |room|
+        !reserved_rooms.include?(room)
       end
       return available_rooms
     end
 
     # Make the reservation for each room passed into the room list
-    def make_reservation(room_number)
-      # block_reservations = []
-      # rooms.each do |room|
-      #   block_reservations << Hotel::Reservation.new(check_in, check_out, room)
-      # end
-      # return block_reservations
+    def make_reservation(room_number, admin)
       room_numbers = @rooms.map{|room| room.room_number}
       raise ArgumentError.new("Room Number not included in block") if !room_numbers.include?(room_number)
       @reservations.each do |reservation|
@@ -57,16 +46,14 @@ module Hotel
 
       @rooms.each do |room|
         if room.room_number == room_number
+          room.set_booked_dates(admin)
           @reservations << Hotel::Reservation.new(@check_in, @check_out, room)
         end
       end
     end
 
     # TODO: REFACTOR, this is redundant w/ Reservation class
-    # (check_in >= reservation.check_in || check_out < reservation.check_out) && room_num == reservation.room.room_number
     def overlap?(other_check_in, other_check_out)
-      # return (check_in >= other_check_in || check_out < other_check_out) &&
-      #        room.room_number == other_room_num
       return (other_check_in == check_in ||
              (other_check_in < check_in && (other_check_out > check_in && other_check_out < check_out)) ||
              (other_check_in > check_in && other_check_in < check_out))
