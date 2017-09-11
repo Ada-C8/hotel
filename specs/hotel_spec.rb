@@ -191,7 +191,6 @@ describe Hotels::Hotel do
       block = @conrad.book_block(1, @checkin, @checkout)
       room = block.rooms[0]
       assert_equal 1, @conrad.reservations.length
-      # assert_equal 19, @conrad.list_unreserved_rooms(@checkin).length
       @conrad.reservations.include?(room).must_equal false
     end
     it 'Cannot block Rooms when there are no rooms available' do
