@@ -55,10 +55,16 @@ module HotelManagment
 
       @reservations.each { |reservation|
         unless reservation.check_in_date >= check_in_date && reservation.check_out_date <= check_out_date
-          # used local variable for unreserved_rooms
           unreserved_rooms << reservation.room_number
         end
       }
+
+      @blocks.each { |block|
+        unless block.check_in_date >= check_in_date && block.check_out_date <= check_out_date
+          unreserved_rooms << block.rooms.map { |room| room.room_number }
+        end
+       }
+
       return unreserved_rooms
     end
 
@@ -85,11 +91,12 @@ module HotelManagment
 
       if available_rooms.length >= amount_of_rooms && amount_of_rooms <= 5
         block = HotelManagment::Block.new(check_in_date, check_out_date, amount_of_rooms)
+        block.rooms = available_rooms.pop(amount_of_rooms)
         @blocks << block
       else
         # raise error
       end
-      return @blocks
+      # return @blocks
     end
 
   end #class end

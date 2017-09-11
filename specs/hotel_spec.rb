@@ -150,7 +150,6 @@ describe "hotel class" do
       date = Date.today
 
       new_hotel = HotelManagment::Hotel.new
-
       new_hotel.create_reservation("marisa", "morris", date + 5, date + 10, 1)
       new_hotel.create_reservation("marisa", "morris", date + 30, date + 35, 2)
       new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 3)
@@ -194,10 +193,10 @@ describe "hotel class" do
 
   describe "create_block" do
 
-    it "Should respond to create_block" do
-      new_hotel = HotelManagment::Hotel.new
-      new_hotel.must_respond_to :create_block
-    end
+    # it "Should respond to create_block" do
+    #   new_hotel = HotelManagment::Hotel.new
+    #   new_hotel.must_respond_to :create_block
+    # end
 
     it "Should be able add a new block" do
       date = Date.today
@@ -207,7 +206,6 @@ describe "hotel class" do
     end
 
     it "Should be able to add a block and consider existing reservations" do
-
       date = Date.today
       new_hotel = HotelManagment::Hotel.new
 
@@ -219,7 +217,6 @@ describe "hotel class" do
       new_hotel.create_reservation("marisa", "morris", date + 50, date + 55, 6)
 
       new_hotel.create_block(date + 1, date + 3, 5).length.must_equal 1
-
     end
 
     it "Should be able to access a list of all blocks" do
