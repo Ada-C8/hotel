@@ -4,6 +4,15 @@ require 'date_range'
 describe "HotelAdmin" do
   before do
     @hotel_admin_test = BookingSystem::HotelAdmin.new
+
+    @first_name = "Jane"
+    @last_name = "Doe"
+    @room_id = 1
+    @room_rate = 200.00
+    @start_date = Date.new(2017, 9, 1)
+    @end_date = Date.new(2017, 9, 5)
+
+    @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date)
   end
 
   describe "initialize" do
@@ -21,16 +30,6 @@ describe "HotelAdmin" do
   end
 
   describe "#reserve_room" do
-    before do
-      @first_name = "Jane"
-      @last_name = "Doe"
-      @room_id = 1
-      @room_rate = 200.00
-      @start_date = Date.new(2017, 9, 1)
-      @end_date = Date.new(2017, 9, 5)
-
-      @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date)
-    end
 
     it "ensures that reservation is added to all_reservations" do
       @hotel_admin_test.reservation_list.any? { |reservation|
@@ -62,8 +61,22 @@ describe "HotelAdmin" do
       @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
       @hotel_admin_test.reservation_list.length.must_equal 2
     end
+  end
 
+  describe "#find_reservations_by_date" do
 
+    before do
+      #including initial reservation: @hotel_admin_test.reserve_room(@first_name, @last_name, 1, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 1, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 2, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 3, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
+      @hotel_admin_test.reserve_room(@first_name, @last_name, 4, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 6))
+    end
+
+    it "provides list of reservations for a specific date" do
+      @hotel_admin_test.find_reservations_by_date(Date.new(2017, 9, 5)).must_be_instance_of Array
+      @hotel_admin_test.find_reservations_by_date(Date.new(2017, 9, 5)).length.must_equal 5
+    end
   end
 end#of_"HotelAdmin"
 

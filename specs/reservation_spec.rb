@@ -46,6 +46,10 @@ describe "Reservation" do
       @reservation_test.end_date.must_be_instance_of Date
     end
 
+    it "raises an error if start_date and end_date are not date objects" do
+      proc { BookingSystem::Reservation.new("Jane", "Doe", 20, 200.00, "2017, 9, 1", 952017) }.must_raise InvalidDateError
+    end
+
     it "#date_range: must return a DateRange object" do
       @reservation_test.must_respond_to :date_range
       @reservation_test.date_range.must_be_instance_of DateRange

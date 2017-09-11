@@ -12,8 +12,12 @@ module BookingSystem
       @room_id = room_id
       @room_rate = room_rate
 
+      raise InvalidDateError.new("Start date is not a valid date object") if !start_date.is_a? Date
       @start_date = start_date
+
+      raise InvalidDateError.new("End date is not a valid date object") if !end_date.is_a? Date
       @end_date = end_date
+      
       @date_range = get_date_range
       @total_cost = get_total_cost
     end

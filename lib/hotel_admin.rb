@@ -1,7 +1,10 @@
 # [X] As an administrator, I can access the list of all of the rooms in the hotel
-# [X] As an administrator, I can reserve a room for a given date range
-# [ ] As an administrator, I can access the list of reservations for a specific date
 # [X] As an administrator, I can get the total cost for a given reservation
+# [X] As an administrator, I can reserve a room for a given date range
+# [X] As an administrator, I can reserve an available room for a given date range
+# [ ] As an administrator, I can access the list of reservations for a specific date
+# [] As an administrator, I can view a list of rooms that are not reserved for a given date range
+
 
 require 'date'
 require 'date_range'
@@ -31,13 +34,24 @@ module BookingSystem
 
     def check_availability(room_id, start_date, end_date)
 
-      raise InvalidDateRangeError.new("Date range conflicts with room requested")if end_date < start_date
+      raise InvalidDateRangeError.new("Date range conflicts with room requested")if end_date <= start_date
 
       requested_range = DateRange.new(start_date, end_date)
 
       raise UnavailableRoomError.new("Room is unavailable")if @reservation_list.any? {|reservation|
         reservation.room_id == room_id && reservation.date_range.include?(requested_range) && start_date < reservation.end_date
       }
+    end
+
+    def find_reservations_by_date(specific_date)
+      reservations_on_date = []
+      @reservation_list.each do |reservation|
+        if reservation.date_range.include?(specific_date)
+          reservations_on_date << reservation
+        end
+      end
+
+      return reservations_on_date
     end
 
 
