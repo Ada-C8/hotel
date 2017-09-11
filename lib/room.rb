@@ -28,6 +28,8 @@ module Hotel
     end # end #check_out_of_room
 
     def available?(check_in, check_out)
+      Hotel::Reservation.reservations.each do | room |
+        if
     end # end #is_available?
   end # end Room class
 end # Hotel module

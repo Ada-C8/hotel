@@ -52,4 +52,18 @@ describe 'Room' do
       Hotel::Room.rooms_available.must_equal [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     end # end test
   end # end #check_out_of_room
+
+  def 'available?' do
+    it 'compares list of reservation with list of rooms' do
+
+    end # end test
+
+    it 'returns false if a room is already on the list of reservations for a given date' do
+
+    end # end test
+
+    it 'returns true if a room is not on the list of reservations for a given date' do
+
+    end # end test
+  end # end #available?
 end # end all Room tests
