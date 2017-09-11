@@ -303,6 +303,3 @@ describe "Hotel" do
   end # Describe
 
 end # Describe
-
-# Make one more reservation after 20 before during and after that time
-# Make test case if find_reservation
