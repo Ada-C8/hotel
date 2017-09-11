@@ -21,6 +21,11 @@ describe "Block class" do
       block.block_id.must_equal "Hayward"
     end
 
+    it "raises an error if you choose a block ID that has already been taken" do
+      Block.new(4, 2017, 9, 28, 2017, 9, 29, "Brennan")
+      proc { Block.new(3, 2017, 9, 28, 2017, 9, 29, "Brennan")}.must_raise ArgumentError
+    end
+
     it "returns an array of rooms that have been blocked" do
       block = Block.new(4, 2017, 9, 28, 2017, 9, 29, "Cooper")
       block.blocked_rooms.must_be_instance_of Array
@@ -45,7 +50,7 @@ describe "Block class" do
 
   describe "all blocks method" do
     it "returns an array of all blocks" do
-      Block.new(4, 2017, 9, 28, 2017, 9, 29, "Smith")
+      Block.new(4, 2017, 9, 28, 2017, 9, 29, "Briggs")
       Block.all_blocks.must_be_instance_of Array
     end
   end

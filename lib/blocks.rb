@@ -11,6 +11,12 @@ class Block
       raise ArgumentError.new("Rooms must be blocked in quantities between 2 and 5.")
     end
 
+    Block.all_blocks.each do |block|
+      if block.block_id == block_id
+        raise ArgumentError.new("That ID is taken by another block.  Please create a unique ID.")
+      end
+    end
+
     @block_id = block_id
     @blocked_rooms = Availability.all_available_rooms(startyear, startmonth, startday, endyear, endmonth, endday)[0...room_count]
 
