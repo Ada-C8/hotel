@@ -8,7 +8,7 @@ class Availability
 
   def self.create_calendar
     current_date = Date.today
-    last_day = current_date + 365
+    last_day = current_date + 366
 
     roominfo = []
     hotel = Hotel.new
@@ -103,7 +103,7 @@ class Availability
             roominfo.each do |rooms|
               rooms.each do |id, status|
                 if status == :blocked
-                  bookedrooms << id
+                  blockedrooms << id
                 end
               end
             end
@@ -113,6 +113,25 @@ class Availability
 
     return blockedrooms
   end
+
+  def self.block_available_rooms(id)
+
+    chosen_block = ""
+
+    Block.all_blocks.each do |block|
+      if block.block_id == id
+        chosen_block = block
+      end
+    end
+
+    # Make sure the block ID exists
+    if chosen_block == ""
+      raise ArgumentError.new("That room block ID does not exist.")
+    end
+
+    return chosen_block.blocked_rooms.count 
+  end
+
 
 
 end #end of class

@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-require 'date'
 
 describe "availability class" do
   before do
@@ -15,16 +14,20 @@ describe "availability class" do
       @all_availability.must_be_instance_of Array
     end
 
-    it "the calendar contains 365 hashes representing each day of the next year" do
+    it "the calendar contains 366 hashes representing the current day and each day of the next year" do
       @all_availability[0].must_be_instance_of Hash
       @all_availability[0].keys[0].must_be_instance_of Date
+      @all_availability[125].keys[0].must_be_instance_of Date
+      @all_availability[362].keys[0].must_be_instance_of Date
+      @all_availability.count.must_equal 366
     end
 
     it "shows each day for year including and following the day the availability is called" do
       date = Date.today
-      nextyear = (date + 364)
+      nextyear = date + 365
       @all_availability[0].keys[0].must_equal date
-      # @all_availability[0].keys[1].must_equal (date + 1)
+      print @all_availability.count
+      @all_availability[365].keys[0].must_equal nextyear
     end
   end
 
@@ -34,10 +37,6 @@ describe "availability class" do
       all_availability.must_be_instance_of Array
       all_availability[0].must_be_instance_of Integer
     end
-  end
-
-  def teardown
-    Availability.set_calendar([])
   end
 
   describe "all reservations method" do
@@ -53,8 +52,34 @@ describe "availability class" do
       all_availability.must_be_instance_of Array
       all_availability.count.must_equal 0
     end
-
   end
+
+    describe "all blocked rooms method" do
+      it "returns an array of room ids" do
+        Block.new(4, 2017, 10, 18, 2017, 10, 21, "Smith")
+        blocks = Availability.all_blocked_rooms(2017, 10, 18)
+        blocks.must_be_instance_of Array
+        blocks.count.must_equal 4
+      end
+
+      it "returns an empty array if there are no blocks on that day" do
+        blocks = Availability.all_blocked_rooms(2017, 10, 28)
+        blocks.must_be_instance_of Array
+        blocks.count.must_equal 0
+      end
+    end
+
+    describe "block available rooms method" do
+      it "returns the number of remaining rooms in a block" do
+
+      end
+
+      it "returns an error if a block ID is entered that doesn't exist" do
+
+      end
+
+      
+    end
 
   def teardown
     Availability.set_calendar([])

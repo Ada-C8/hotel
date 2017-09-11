@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-# require 'date'
 
 describe "room class" do
   describe "initialize a room" do
