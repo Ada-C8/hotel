@@ -24,6 +24,7 @@ module BookingSystem
     end
 
     def find_reservation(name)
+      valid?(name)
       @all_reservations.each do |reservation|
         if reservation.class == BookingSystem::Reservation
           if reservation.name == name
@@ -50,6 +51,7 @@ module BookingSystem
     end
 
     def find_block(reserved_name)
+      valid?(reserved_name)
       @block_reservations.each do |block|
         if block.reserved_for == reserved_name
           return block
@@ -60,6 +62,7 @@ module BookingSystem
 
     # As an administrator, I can reserve a room from within a block of rooms
     def reserve_room_in_block(reserved_name, num_to_book)
+      valid?(reserved_name)
       found_block = find_block(reserved_name)
       check_num_input(found_block, num_to_book) # Raise ArgumentError to UI
       avail_rooms = avail_rooms_in_block(reserved_name) # Check which room numbers are available in the block
@@ -70,6 +73,7 @@ module BookingSystem
 
     # As an administrator, I can check whether a given block has any rooms available
     def avail_rooms_in_block(reserved_name)
+      valid?(reserved_name)
       found_block = find_block(reserved_name)
       if found_block.avail_block_rooms.empty?
         #TODO: CHANGE THIS INTO A DIFFERENT ERROR

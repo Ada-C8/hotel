@@ -86,6 +86,10 @@ describe "Hotel" do
 
 
   describe "#find_reservation" do
+    it "should raise an ArgumentError if the name is not a String" do
+      proc { hotel.find_reservation(12345, @check_in, @check_out) }.must_raise ArgumentError
+    end
+
     it "should return an instance of Reservation by name" do
       create_one_res
       found_res = hotel.find_reservation("Bob")
@@ -162,6 +166,10 @@ describe "Hotel" do
   end # Describe
 
   describe "#find_block" do
+    it "should raise an ArgumentError if the name is not a String" do
+      proc { hotel.find_block(12345) }.must_raise ArgumentError
+    end
+
     it "should return a single instance of a Block by name" do
       res_block_setup
 
@@ -182,6 +190,10 @@ describe "Hotel" do
   end # Describe
 
   describe "#reserve_room_in_block" do
+    it "should raise an ArgumentError if the name is not a String" do
+      proc { hotel.reserve_room_in_block(12345) }.must_raise ArgumentError
+    end
+
     # IN UI TEST FOR ONLY NUMBER OF AVAILABLE ROOMS
     it "should raise an ArgumentError if the number of rooms requested is greater than the number of rooms available in the block" do
       hotel.reserve_block(@name, @check_in, @check_out, 1)
@@ -215,6 +227,10 @@ describe "Hotel" do
   end # Describe
 
   describe "#avail_rooms_in_block" do
+    it "should raise an ArgumentError if the name is not a String" do
+      proc { hotel.avail_rooms_in_block(12345) }.must_raise ArgumentError
+    end
+
     it "should return an array of available room numbers for a specific block as Integers" do
       res_block_setup
       avail_rooms = hotel.avail_rooms_in_block("Bob")
