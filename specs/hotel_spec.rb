@@ -26,6 +26,7 @@ describe "HotelClass" do
       @hotel_test.reservations[0].must_be_instance_of Hotel::Reservation
     end
     it "Raises an error if asked to reserve an unavailable room " do
+      skip
       @hotel_test.reserve_room(3,"2017-9-12", "2017-9-15")
       proc {
         @hotel_test.reserve_room(3,"2017-9-13", "2017-9-15")

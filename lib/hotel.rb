@@ -16,7 +16,6 @@ module Hotel
       # if room_id is not reserved
       if !(reserved_room_nums.include?(room_id))
         reservations << new_reservation
-        ap reservations
       else
         # currently does not raise Error
         raise ArgumentError.new("That date range is unavailable.")
