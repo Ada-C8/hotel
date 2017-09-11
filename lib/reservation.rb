@@ -1,6 +1,6 @@
 module Hotel
   class Reservation
-    attr_reader :id, :date_range, :cost_per_night
+    attr_reader :date_range, :room_id, :cost_per_night
     def initialize(room_id,check_in,check_out)
       # @id = id
       @date_range = Hotel::DateRange.new(check_in,check_out)
