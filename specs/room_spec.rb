@@ -11,6 +11,7 @@ describe "Room Class" do
  it "must respond to room_number and cost" do
     @suite1.must_respond_to :room_number
     @suite1.must_respond_to :cost
+    @suite1.must_respond_to :booked
  end
   it "cost must equal 200" do
     @suite1.cost.must_equal 200
