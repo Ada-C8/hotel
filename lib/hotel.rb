@@ -21,10 +21,12 @@ module Hotel
 
 
   def self.find_reservation(input_id)
+    raise ArgumentError.new "Invalid input.  Please enter Reservation ID as an Integer" if !(input_id.is_a? Integer)
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|
       return reservation if reservation.id == input_id
     end
+    raise ArgumentError.new "Reservation ID does not exist" 
   end
 
   def self.find_reservation_by_block_id(input_id)

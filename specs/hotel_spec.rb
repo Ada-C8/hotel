@@ -47,6 +47,28 @@ describe "hotel" do
       reservation1 = Hotel.find_reservation(1785)
       reservation1.id.must_equal 1785
     end
+    it "should return instance of reservation" do
+      reservation1 = Hotel.find_reservation(1785)
+      reservation1.must_be_instance_of Hotel::Reservation
+    end
+    it "should raise error if reservation does not exist" do
+      proc {Hotel.find_reservation(100000)}.must_raise ArgumentError
+      proc {Hotel.find_reservation(8585858)}.must_raise ArgumentError
+    end
+    it "should raise error if id is given as not an Integer" do
+      proc {Hotel.find_reservation("8585858")}.must_raise ArgumentError
+      proc {Hotel.find_reservation(:eighty_five)}.must_raise ArgumentError
+      proc {Hotel.find_reservation([85, 90])}.must_raise ArgumentError
+      proc {Hotel.find_reservation({"room" => 20})}.must_raise ArgumentError
+      proc {Hotel.find_reservation("")}.must_raise ArgumentError
+      proc {Hotel.find_reservation()}.must_raise ArgumentError
+
+
+
+
+
+
+    end
   end
 
   describe "self.find_reservation_by_block_id(input_id)" do
