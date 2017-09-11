@@ -5,9 +5,9 @@ require_relative 'date_range'
 module Hotel
   class Reservation
 
-    attr_reader :id, :check_in, :check_out, :room, :nights_reserved, :total_cost, :length_of_stay, :block_code
+    attr_reader :id, :check_in, :check_out, :room, :nights_reserved, :total_cost, :length_of_stay, :block_name
 
-    def initialize(id, day_in, day_out, discount, block_code, room: 0)
+    def initialize(id, day_in, day_out, discount, block_name, room: 0)
       @id = id
       @check_in = DateRange.check_in(day_in)#day_in
       @check_out = DateRange.check_out(day_out)#day_out
@@ -15,7 +15,7 @@ module Hotel
       @nights_reserved = DateRange.create_range(@check_in, @check_out)[0..-2]
       @length_of_stay = @nights_reserved.length
       @discount = discount
-      @block_code = block_code 
+      @block_name = block_name
       @total_cost = ((200 - discount) * @length_of_stay).to_i
     end
 

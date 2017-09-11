@@ -106,23 +106,26 @@ describe "Hotel Class" do
     end #Not Found
   end #Total Cost
 
-  # describe "Blocks" do
-  #
-  #   it "Can call Block to create an array to store blocks" do
-  #     @hotel.block.must_be_kind_of Hotel::Block
-  #     @hotel.block.block_list.must_be_kind_of Array
-  #   end #access class
-  #
-  #   it "Can check if there are enough rooms available for the requested block at the requrested time: " do
-  #     @hotel.make_reservation(2222, 2, "2012/12/12", "2012/12/15")
-  #     @hotel.make_reservation(2224, 10, "2012/12/13", "2012/12/17")
-  #     @hotel.create_block(9000, 5, "2012/12/12", "2012/12/13", 150).length.must_equal 18
-  #     #@hotel.create_block(9000, 20, "2012/12/12", "2012/12/13").must_equal false
-  #     # @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
-  #     # @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
-  #   end
-  #
-  # end #blocks
+  describe "Blocks" do
+
+    it "Can call Block to create an array to store block information" do
+      @hotel.block.must_be_kind_of Hotel::Block
+      @hotel.block.block_list.must_be_kind_of Array
+    end #access class
+
+    it "Will not create a block of more than five rooms" do
+      @hotel.create_block(1545, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 7, block_name: "WEDDING").must_equal "A block cannot have more than 5 rooms"
+    end
+
+    it "Can create a block of available rooms for the requested date range: " do
+      @hotel.create_block(1545, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
+      @hotel.block.block_list.length.must_equal 5
+      #@hotel.create_block(9000, 20, "2012/12/12", "2012/12/13").must_equal false
+      # @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
+      # @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
+    end
+
+  end #blocks
 
 end #Hotel admin
 

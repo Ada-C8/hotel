@@ -3,26 +3,22 @@ require_relative 'reservation'
 
 module Hotel
 
-  class Block_list #Block of rooms booked for a give time
+  class Block #Block of rooms booked for a give time
 
     attr_reader :block_list, :block_name
 
-    def initialize(block_name)
+    def initialize
       @block_list = []
       @block_name = block_name
     end
 
-    def add(id, room, day_in, day_out)
-      @block_list << Reservation.new(id, day_in, day_out, ) #adds Reservation to group
-    end
+    def add(id, day_in, day_out, discount, block_name, room)
+      @block_list << Reservation.new(id, day_in, day_out, discount, block_name, room)
+    end #add
   end
-
-  class Block_Reservation
-    
-
-  end
-
 end
+#binding.pry
+
 #establish a block and put a hold on reservations for anyone without the code
 
 # As an administrator, I can create a block of rooms
