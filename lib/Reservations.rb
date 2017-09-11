@@ -9,12 +9,10 @@ module Hotel
     attr_accessor :blocks_collection
 
     def initialize
-      @all_reservations = []  #pass block reservations into this.
-      #@room_number = room_number
+      @all_reservations = []
       @rooms_collection = []
       all_rooms
       @blocks_collection = []
-
     end
 
     def all_rooms
@@ -44,8 +42,6 @@ module Hotel
       end
     end
 
-
-#TESTED and WORKS - need to verify with Block reservatioins but it should work
     def list_rooms_available_by_date(date)
       rooms_available = @rooms_collection
       list_reservations_by_date(date).each do |booking|
@@ -65,7 +61,6 @@ module Hotel
       return rooms_available
     end #def end
 
-#TESTED and it WORKS - need to test for Block reservations
     def check_availability?(dates, room_number)
       available = true
       dates[0...-1].each do |date|
@@ -84,8 +79,6 @@ module Hotel
       end
     end
 
-
-#MOSTLY TESTED but will need a few more tests most likely
     def new_block(check_in, check_out, block_name, number_of_rooms, block_rooms_collection = [], discounted_room_rate = 180)
       @number_of_rooms = number_of_rooms
       @dates = DateRange.new(check_in, check_out).dates
@@ -96,7 +89,7 @@ module Hotel
       return block
     end
 
-    def create_block_rooms_collection #TESTED
+    def create_block_rooms_collection
       unless @number_of_rooms <= 5 && @number_of_rooms >= 1
         raise ArgumentError.new("Blocks can only have between 1 and 5 rooms.")
       end
@@ -118,9 +111,7 @@ module Hotel
       return @block_rooms_collection
     end
 
-#Testing, not working to produce an error when room is not in the block
     def check_in_block(block_name, room_number)
-      #match_block(block_name)
       @blocks_collection.each do |block|
           if block.block_name == block_name
             block.block_rooms_collection.each do |room|
@@ -133,34 +124,18 @@ module Hotel
       raise ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
       return false
     end
-#new one, not working
-    # def in_block?(block_name, room_number)
-    #   match_block(block_name)
-    #   list_room_numbers = []
-    #     @this_block.block_rooms_collection.each do |room|
-    #       list_room_numbers << room.room_number
-    #     end
-    #     if list_room_numbers.include?(room)
-    #       return true
-    #     else
-    #     raise ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
-    #       return false
-    #     end
-    # end
 
     def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
-
-
       block_room_booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
       check_in = Date.parse(check_in)
       check_out = Date.parse(check_out)
+
       validate_block_dates(check_in, check_out, block_name)
       check_in_block(block_name, room_number)
-
       check_block_room_available(block_name, room_number)
       add_block_booking_to_block(block_name, block_room_booking)
 
-      @all_reservations << block_room_booking  # TEST that it doesn't go in if not a valid booking
+      @all_reservations << block_room_booking
       return block_room_booking
     end
 
@@ -204,7 +179,8 @@ module Hotel
       end
       return true
     end
-    def list_reservations_by_date(date) #TESTED
+
+    def list_reservations_by_date(date)
       date = Date.parse(date)
       list = []
       @all_reservations.each do |reservation|
@@ -215,7 +191,7 @@ module Hotel
       return list
     end
 
-    def list_blocked_rooms_by_date(date)  #TESTED
+    def list_blocked_rooms_by_date(date)
       date = Date.parse(date)
       blocks_list = []
       @blocks_collection.each do |block|
