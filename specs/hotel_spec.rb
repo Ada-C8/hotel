@@ -33,7 +33,7 @@ describe "Hotel Class" do
       @hotel.reservations.reservation_list.must_be_kind_of Array
     end #array
 
-    it "Can make a Reservation by calling Reservation List:" do
+    it "Can create a Reservation Instance for a specified date range:" do
       @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
       @hotel.reservations.reservation_list[0].must_be_kind_of Hotel::Reservation
     end #call class
@@ -66,17 +66,17 @@ describe "Hotel Class" do
     it "Can find and return multiple reservations for the same date" do
       @hotel.make_reservation(1203, "2017/12/12", "2017/12/15")
       @hotel.make_reservation(1204, "2017/12/14", "2017/12/16")
-      found = @boetel.find_reservations("2017/12/14", "2017/12/15")
+      found = @hotel.find_reservations("2017/12/14", "2017/12/15")
       found.length.must_equal 2
       found[0].id.must_equal 1203
       found[1].id.must_equal 1204
     end #multiple reservations
 
     it "Can return an array of open rooms for a particular date range: " do
-      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
+      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17")
       @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
-      @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
+      @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 3
     end #open rooms
 
   end #find reservations

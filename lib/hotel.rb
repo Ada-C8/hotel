@@ -13,11 +13,9 @@ module Hotel
     def initialize
       @block = Block.new
       @reservations = ReservationList.new
-      #As an administrator, I can access the list of all of the rooms in the hotel
       @all_rooms = {1 => 200, 2 => 200, 3 => 200, 4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200}
     end
 
-    # - I can reserve an available room for a given date range
     def make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
       if open_rooms(day_in, day_out).length >= 1
         first_open = open_rooms(day_in, day_out)[0]
@@ -87,16 +85,16 @@ end #module
 
 # @boetel = Hotel::Hotel.new
 
-@hotel = Hotel::Hotel.new
-@hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-@hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
-x = @hotel.open_rooms("2012/12/12", "2012/12/13")
-#@hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
-# @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
-# @boetel.make_reservation(1202, "2017/12/10", "2017/12/12")
-# @boetel.make_reservation(1203, "2017/12/12", "2017/12/15")
-# @boetel.make_reservation(1204, "2017/12/14", "2017/12/16")
-binding.pry
+# @hotel = Hotel::Hotel.new
+# @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+# @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
+# x = @hotel.open_rooms("2012/12/12", "2012/12/13")
+# #@hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
+# # @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
+# # @boetel.make_reservation(1202, "2017/12/10", "2017/12/12")
+# # @boetel.make_reservation(1203, "2017/12/12", "2017/12/15")
+# # @boetel.make_reservation(1204, "2017/12/14", "2017/12/16")
+# binding.pry
 # @boetel.find_reservations("2017/12/14", "2017/12/15")
 # open = @boetel.open_rooms("2017/12/12", "2017/12/14")
 

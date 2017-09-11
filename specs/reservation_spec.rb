@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 
 describe "Reservation class" do
   before do
-    @res_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5", room: 1)
+    @res_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5")
   end #before
 
   describe "initialize" do
@@ -42,13 +42,25 @@ describe "Reservation class" do
     it "can create a date_range given a check_in and check_out date" do
       @res_test.nights_reserved.length.must_equal 4
     end
-  end #check_in, check_out
+end #check_in, check_out
 
-  # describe "Viewing Reservations" do
-  #   it "Can return a formatted string for a specific reservation" do
-  #     @res_test.view_reservation.must_equal "ID: 1111, Room: 1, Check in: 2001-01-01, Check Out: 2001-01-05, Total Nights: 4, Total Cost: 800"
-  #   end #format
-  # end#VR
+# describe "Raise Errors for Invalid Dates" do
+#   it "will raise an error when an invalid date (check_in or check_out) range is provided" do
+#     proc {
+#       Hotel::Reservation(1000, "2001/1/32", "2001/2/4")
+#     }.must_raise ArgumentError
+#     #
+#     # proc {
+#     #   Hotel::Reservation(1000, "2001/1/30", "2001/1/33", room: 1)
+#     # }.must_raise ArgumentError
+#   end #invalid check in
+#end #invalid dates
+
+# describe "Viewing Reservations" do
+#   it "Can return a formatted string for a specific reservation" do
+#     @res_test.view_reservation.must_equal "ID: 1111, Room: 1, Check in: 2001-01-01, Check Out: 2001-01-05, Total Nights: 4, Total Cost: 800"
+#   end #format
+# end#VR
 
 
 
