@@ -133,7 +133,12 @@ module Hotel
     end
 
     def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
+
+
       block_room_booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
+      check_in = Date.parse(check_in)
+      check_out = Date.parse(check_out)
+      validate_block_dates(check_in, check_out, block_name)
       in_block?(block_name, room_number)
 
       check_block_room_available(block_name, room_number)
@@ -141,6 +146,26 @@ module Hotel
 
       @all_reservations << block_room_booking  # TEST that it doesn't go in if not a valid booking
       return block_room_booking
+    end
+
+    def match_block
+      #write a def to find out which block it is so don't have to repeat code
+    end
+
+    def validate_block_dates(check_in, check_out, block_name)
+      this_block = nil
+      @blocks_collection.each do |block|
+        if block.block_name == block_name
+          this_block = block
+        end
+      end
+
+      if check_in >= this_block.check_in && check_out <= this_block.check_out
+        return true
+      else
+        raise ArgumentError.new("Cannot reserve for those dates - dates must be the same as block dates.")
+        return false
+      end
     end
 
     def add_block_booking_to_block(block_name, block_room_booking)
