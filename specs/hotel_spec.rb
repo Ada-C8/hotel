@@ -16,6 +16,11 @@ describe "hotel" do
         (1..20).must_include room.id
       end
     end
+    it "should have instances of rooms" do
+      Hotel::HOTEL_ROOMS.each do |room|
+        room.must_be_instance_of Hotel::Room
+      end
+    end
   end
 
   describe "self.all_rooms" do
