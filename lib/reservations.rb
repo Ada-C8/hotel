@@ -23,12 +23,16 @@ module Hotel
       rooms_to_book = rooms_available.shift(num_rooms)
 
       if block_name == false
+        update_room_state(rooms_to_book,num_rooms,true)
+        # num_rooms.times do |i|
+        #   rooms_to_book[i].booked = true
+        # end
         booking = Booking.new(id,rooms_to_book,date_range, block_info: false)
       else
-        num_rooms.times do |i|
-          room = rooms_to_book[i]
-          room.booked = true
-        end
+        update_room_state(rooms_to_book,num_rooms,false)
+        # num_rooms.times do |i|
+        #   rooms_to_book[i].booked = false
+        # end
         booking = Block.new(id,rooms_to_book,date_range,block_name)
       end
 
@@ -65,16 +69,33 @@ module Hotel
     end
 
     def enough_rooms?(rooms_available, num_rooms, block_name)
-      if block_name != false && num_rooms > 5 
-        raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms to handle your request of #{num_rooms} rooms.")
+      if block_name != false && num_rooms > 5
+        raise InvalidRoomQuantity.new("You cannot book more than 5 rooms in a block.")
       end
       if rooms_available.length < num_rooms || num_rooms > 20
         raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms to handle your request of #{num_rooms} rooms.")
       end
     end
 
-    def reserve_from_block
+    def reserve_from_block(block, num_rooms)
+      rooms_to_book = block.rooms_available_block
+      enough_rooms?(rooms_to_book,num_rooms,false)
+      rooms_to_book = update_room_state(rooms_to_book,num_rooms,false)
 
+      # num_rooms.times do |i|
+      #   rooms_to_book[i].booked = false
+      # end
+
+      id = all_reservations.length + 1
+      booking = Booking.new(id,rooms_to_book,block.date_range, block_info:block.block_name)
+      return booking
+    end
+
+    def update_room_state(rooms_to_book,num_rooms,state)
+      num_rooms.times do |i|
+        rooms_to_book[i].booked = state
+      end
+      return rooms_to_book
     end
   end
 end
