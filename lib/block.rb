@@ -17,6 +17,10 @@ module Hotel
       @discount = discount
       @reservation_array << @discount
 
+      if num_of_rooms > 5
+        return raise ArgumentError.new("You cannot reserve a block with more than 5 rooms")
+      end
+      
       @num_of_rooms = num_of_rooms
       @reservation_array << @num_of_rooms
 

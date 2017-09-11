@@ -22,6 +22,8 @@ describe "Hotel class" do
 
     it "can call on collection of reservations array - will be empty" do
       Hotel::Hotel.new(20, 200).reservation_collection.must_be_instance_of Array
+      Hotel::Hotel.new(20, 200).block_reservation_collection.must_be_instance_of Array
+
     end
   end #describe instantiate
 
@@ -77,11 +79,20 @@ describe "Hotel class" do
       @hotel.room_availability('sept 1 2017', 'sept 3 2017').must_equal [1 ,4]
       @hotel.room_availability('sept 5 2017', 'sept 6 2017').must_equal [2,3,4]
       @hotel.room_availability('sept 7 2017', 'sept 8 2017').must_equal [1,3,4]
+      @hotel.make_block_reservation('sept 5 2017', 'sept 6 2017', 3)
+      @hotel.room_availability('sept 5 2017', 'sept 6 2017').must_equal []
     end
 
     it "Returns an ArgumentError if wrong date range entered" do
       proc {@hotel.room_availability('sept 4 2017', 'sept 3 2017')}.must_raise ArgumentError
     end
+
+    it "Does not let general public reserve rooms that are in a block" do
+    end
+
+    it "does not let you overbook a room in a block if that room is being saved in another block" do
+    end
+
   end
 
   describe "make block reservation method" do
@@ -125,6 +136,10 @@ describe "Hotel class" do
 
     it "Can determine if a block has available rooms and move them to booked " do
       @hotel.reserve_room_in_block('sept 1 2017', 'sept 4 2017', 2).must_equal [6,5]
+    end
+
+    it "Does not let general public book a room in a block" do
+      @hotel.room_availability('sept 1 2017', 'sept 4 2017').must_equal []
     end
 
   end #describe #block room reservation

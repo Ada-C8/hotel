@@ -35,11 +35,10 @@ module Hotel
     def make_block_reservation(check_in, check_out, num_of_rooms)
       available_rooms = room_availability(check_in, check_out)
       if available_rooms.length >= num_of_rooms
-        puts "we can create a block reservation"
-        @block_reservation = BlockRoom.new(check_in, check_out, num_of_rooms)
-        @block_reservation.block_of_rooms << available_rooms.pop(num_of_rooms)
-        @block_reservation_collection << @block_reservation
-        return @block_reservation.block_of_rooms
+        block_reservation = BlockRoom.new(check_in, check_out, num_of_rooms)
+        block_reservation.block_of_rooms << available_rooms.pop(num_of_rooms)
+        @block_reservation_collection << block_reservation
+        return block_reservation.block_of_rooms
       else
         return raise ArgumentError.new("We do not have enough rooms to reserve a block")
       end
@@ -120,27 +119,27 @@ module Hotel
 
       @block_reservation_collection.each do |entry|
         if check_in < entry.check_in && check_in < entry.check_out && check_out < entry.check_out && check_out > entry.check_in
-          entry.block_of_rooms.each do |room|
+          entry.block_of_rooms[0].each do |room|
             rooms_available.delete(room)
           end
         elsif check_in > entry.check_in && check_in < entry.check_out && check_out < entry.check_out && check_out > entry.check_in
-          entry.block_of_rooms.each do |room|
+          entry.block_of_rooms[0].each do |room|
             rooms_available.delete(room)
           end
         elsif check_in > entry.check_in && check_in < entry.check_out && check_out == entry.check_out && check_out > entry.check_in
-          entry.block_of_rooms.each do |room|
+          entry.block_of_rooms[0].each do |room|
             rooms_available.delete(room)
           end
         elsif check_in < entry.check_in && check_in < entry.check_out && check_out > entry.check_in && check_out == entry.check_out
-          entry.block_of_rooms.each do |room|
+          entry.block_of_rooms[0].each do |room|
             rooms_available.delete(room)
           end
         elsif check_in > entry.check_in && check_in < entry.check_out && check_out > entry.check_out
-          entry.block_of_rooms.each do |room|
+          entry.block_of_rooms[0].each do |room|
             rooms_available.delete(room)
           end
         elsif check_in == entry.check_in && check_in < entry.check_out && check_out > entry.check_in && check_out > entry.check_in
-          entry.block_of_rooms.each do |room|
+          entry.block_of_rooms[0].each do |room|
             rooms_available.delete(room)
           end
         end
@@ -152,15 +151,8 @@ module Hotel
 end #module
 
 
-# hotel = Hotel::Hotel.new(6, 200)
-# hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
-# hotel.make_reservation('sept 5 2017', 'sept 7 2017', 1)
-# hotel.make_reservation('sept 2 2017', 'sept 4 2017', 2)
-# hotel.make_reservation('sept 6 2017', 'sept 8 2017', 2)
-# hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
-# hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
-#
-# hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3)
+
+
 
 
 

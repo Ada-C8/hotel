@@ -23,6 +23,10 @@ describe "Block child class" do
       @block.available_rooms.must_be_instance_of Array
     end
 
+    it "Will return error message if try to book more than 5 rooms in a block" do
+      proc {Hotel::BlockRoom.new('today', 'tomorrow', 6)}.must_raise ArgumentError
+    end
+
   end
 
   describe "check if block has rooms available" do
