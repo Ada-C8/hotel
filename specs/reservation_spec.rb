@@ -3,12 +3,12 @@ require_relative 'spec_helper'
 
 describe "Reservation class" do
   before do
-    @res_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5")
+    @res_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5", 0, nil)
   end #before
 
   describe "initialize" do
     before do
-      @init_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5", room: 1)
+      @init_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5", 0, nil, room: 1)
     end #before
 
     it "can create an instance of the reservation class" do

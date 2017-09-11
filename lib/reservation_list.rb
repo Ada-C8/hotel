@@ -3,7 +3,7 @@ require_relative 'reservation'
 
 module Hotel
 
-  class ReservationList #Collection of Reservations
+  class ReservationList
 
       attr_reader :reservation_list
 
@@ -11,8 +11,8 @@ module Hotel
         @reservation_list = []
       end
 
-      def add(id, day_in, day_out, discount, room)
-        @reservation_list << Reservation.new(id, day_in, day_out, discount, room)
+      def add(id, day_in, day_out, discount, block_code, room)
+        @reservation_list << Reservation.new(id, day_in, day_out, discount, block_code, room)
       end #add
   end #class
 end #module
