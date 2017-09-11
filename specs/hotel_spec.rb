@@ -11,22 +11,17 @@ describe Hotels::Hotel do
     it 'Can be initialized' do
       @conrad.must_be_instance_of Hotels::Hotel
     end
-    it 'Has a collection of Rooms' do
+    it 'Has a collection of 20 Rooms' do
       @conrad.rooms.must_be_kind_of Array
-    end
-    it 'Should have 20 Rooms' do
+      @conrad.rooms[0].must_be_kind_of Hotels::Room
       assert_equal 20, @conrad.rooms.length
     end
-    it 'Has a collection of Reservations' do
+    it 'Has collections of Reservations and Blocks' do
       @conrad.reservations.must_be_kind_of Array
-    end
-    it 'Should initialize with no Reservations' do
-      @conrad.reservations.must_be_empty
-    end
-    it 'Has a collection of Blocks' do
       @conrad.blocks.must_be_kind_of Array
     end
-    it 'Should initialize with no Blocks' do
+    it 'Initializes without any Reservations or Blocks' do
+      @conrad.reservations.must_be_empty
       @conrad.reservations.must_be_empty
     end
   end # ------------------------- describe #initialize block
@@ -41,19 +36,16 @@ describe Hotels::Hotel do
     it 'Should contain room names (String)' do
       @conrad.list_all_rooms[0].must_be_kind_of String
     end
-    it 'Should contain a legitimate room name' do
+    it 'Should contain legitimate room names' do
       name = 'Room 1'
       @conrad.list_all_rooms.include?(name).must_equal true
     end
   end # ------------------------- describe #list_all_rooms block
 
   describe '#reserve_room(checkin, checkout = nil)' do
-    it 'Returns a new Reservation' do
+    it 'Adds a new Reservation' do
       reservation = @conrad.reserve_room(@checkin, @checkout)
       reservation.must_be_instance_of Hotels::Reservation
-    end
-    it 'Adds a new Reservation to the @reservations Array' do
-      @conrad.reserve_room(@checkin, @checkout)
       assert_equal 1, @conrad.reservations.length
     end
     it 'Reserves a Room for the correct number of nights' do
@@ -65,7 +57,7 @@ describe Hotels::Hotel do
       rooms = @conrad.reservations.map(&:rooms).flatten
       assert_equal 20, rooms.uniq.length
     end
-    it 'Allows users to check-in on the check-out night of 20 reservations' do
+    it 'Allows users to check-in on the check-out date of 20 reservations' do
       20.times { @conrad.reserve_room(@checkin, @checkout) }
       @conrad.reserve_room(@checkout)
       assert_equal 21, @conrad.reservations.length
@@ -84,20 +76,47 @@ describe Hotels::Hotel do
     end
   end # ------------------------- describe #reserve_room block
 
-  describe '#list_reservations(date)' do
-    it 'Returns an Array' do
-      @conrad.list_reservations(@checkin).must_be_kind_of Array
+  describe '#reserve_by_room(checkin, checkout, room_no)' do
+    it 'Adds a new Reservation' do
+      reservation = @conrad.reserve_by_room(@checkin, @checkout, 1)
+      reservation.must_be_instance_of Hotels::Reservation
+      assert_equal 1, @conrad.reservations.length
     end
-    it 'Returns no Reservations initially' do
+    it 'Reserves a Room for the correct number of nights' do
+      nights = @conrad.reserve_by_room(@checkin, @checkout, 1).dates.length
+      assert_equal 4, nights
+    end
+    it 'Will not allow users to book a duplicate Room' do
+      @conrad.reserve_by_room(@checkin, @checkout, 1)
+      proc {
+        @conrad.reserve_by_room(@checkin, @checkout, 1)
+      }.must_raise ArgumentError
+      proc {
+        @conrad.reserve_by_room(@checkin + 1, 1)
+      }.must_raise ArgumentError
+    end
+    it 'Will not allow users to book a Room outside of rooms 1-20' do
+      proc {
+        @conrad.reserve_by_room(@checkin, @checkout, 21)
+      }.must_raise ArgumentError
+      proc {
+        @conrad.reserve_by_room(@checkin, @checkout, 0)
+      }.must_raise ArgumentError
+    end
+  end # ------------------------- describe #reserve_by_room block
+
+  describe '#list_reservations(date)' do
+    it 'Starts as an empty Array that returns no Reservations initially' do
       @conrad.list_reservations(@checkin)
+      @conrad.list_reservations(@checkin).must_be_kind_of Array
       assert_nil @conrad.list_reservations(@checkin)[0]
     end
-    it 'Returns Reservations inside the Array' do
+    it 'Returns an Array of Reservations' do
       @conrad.reserve_room(@checkin, @checkout)
       first_reservation = @conrad.list_reservations(@checkin)[0]
       first_reservation.must_be_instance_of Hotels::Reservation
     end
-    it 'Returns the correct number of Reservations in Array' do
+    it 'Returns the correct number of Reservations in an Array' do
       @conrad.reserve_room(@checkin, @checkout)
       @conrad.reserve_room(@checkin)
       @conrad.reserve_room(@checkout)
@@ -108,7 +127,7 @@ describe Hotels::Hotel do
   end # ------------------------- describe #list_reservations block
 
   describe '#unreserved?(checkin, checkout)' do
-    it 'Returns a full Array without reservations' do
+    it 'Returns Array of all Rooms if no Reservations are made' do
       @conrad.book_block(5, @checkin, @checkout)
       free_rooms = @conrad.unreserved?(@checkin, @checkout)
       free_rooms = free_rooms[0].values.flatten
@@ -172,16 +191,16 @@ describe Hotels::Hotel do
       block = @conrad.book_block(1, @checkin, @checkout)
       room = block.rooms[0]
       assert_equal 1, @conrad.reservations.length
-      assert_equal 19, @conrad.list_unreserved_rooms(@checkin).length
+      # assert_equal 19, @conrad.list_unreserved_rooms(@checkin).length
       @conrad.reservations.include?(room).must_equal false
     end
-    it 'Cannot block rooms when there are no rooms available' do
+    it 'Cannot block Rooms when there are no rooms available' do
       proc {
         20.times { @conrad.reserve_room(@checkin, @checkout) }
         @conrad.book_block(1, @checkin, @checkout)
       }.must_raise ArgumentError
     end
-    it 'Will have a discounted total price compared to reservations' do
+    it 'Will have a discounted total price compared to Reservations' do
       reservation = @conrad.reserve_room(@checkin, @checkout)
       block = @conrad.book_block(1, @checkin, @checkout)
       assert reservation.total_cost != block.total_cost
@@ -190,15 +209,15 @@ describe Hotels::Hotel do
   end # ------------------------- describe #book_block block
 
   describe '#check_block(_block_id)' do
-    it 'Returns true if there are rooms remaining' do
+    it 'Returns nil if there are rooms remaining' do
       @conrad.book_block(5, @checkin, @checkout)
       check = @conrad.check_block(@conrad.blocks[0].block_id)
-      assert_equal true, check
+      assert_nil check
       @conrad.reserve_block(@conrad.blocks[0].block_id, 3)
       check = @conrad.check_block(@conrad.blocks[0].block_id)
-      assert_equal true, check
+      assert_nil check
     end
-    it 'Raises an ArgumentError if there are no rooms remaining' do
+    it 'Raises an error if there are no Rooms remaining' do
       @conrad.book_block(5, @checkin, @checkout)
       @conrad.reserve_block(@conrad.blocks[0].block_id, 5)
       proc {

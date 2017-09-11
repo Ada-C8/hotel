@@ -20,11 +20,9 @@ module Hotels
       nights_charged = @dates.length * @room_count
       block_rate = Hotels::Room::BLOCK_RATE
       regular_rate = Hotels::Room::REGULAR_RATE
-      if @block_id.to_i > 0
-        @total_cost = block_rate * nights_charged
-      else
-        @total_cost = regular_rate * nights_charged
-      end
+      @total_cost = regular_rate * nights_charged
+      @total_cost = block_rate * nights_charged if @block_id.to_i > 0
+      return @total_cost
     end # changes the value of total cost depending on nightly rate
   end # Reservation class
 end # Hotels module
