@@ -60,16 +60,39 @@ describe "Date Range" do
       @date = Hotel::DateRange.new(@checkin_date, @checkout_date)
     end
 
-    # describe "date include" do
-    #   it "checks if a date is included in the date range" do
-    #
-    #     @date.date_include?(Date.new(2001,2,5)).must_equal true
-    #   end
-    #
-    #   # it "raises an error for an invalid date" do
-    #   #   proc{@date.date_include?(Date.new(2007,15,5))}.must_raise ArgumentError
-    #   # end
-    # end
+    describe "date include" do
+      it "checks if a date is included in the date range" do
+        start_date = Date.new(2001,2,3)
+        end_date = Date.new(2001,2,6)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_include?(date_range).must_equal true
+
+        start_date = Date.new(2001,2,5)
+        end_date = Date.new(2001,2,14)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_include?(date_range).must_equal true
+
+        start_date = Date.new(2001,1,28)
+        end_date = Date.new(2001,2,3)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_include?(date_range).must_equal false
+
+        start_date = Date.new(2001,2,14)
+        end_date = Date.new(2001,2,18)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_include?(date_range).must_equal false
+
+        start_date = Date.new(2001,2,15)
+        end_date = Date.new(2001,2,17)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_include?(date_range).must_equal false
+
+        start_date = Date.new(2001,1,21)
+        end_date = Date.new(2001,1,28)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_include?(date_range).must_equal false
+      end
+    end
 
     describe "date overlap" do
       it "checks if the dates are within the checkin/checkout date range" do
