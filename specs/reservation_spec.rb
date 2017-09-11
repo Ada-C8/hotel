@@ -22,8 +22,7 @@ describe "Reservation class" do
       @init_test.check_out.must_be_kind_of Date
     end #first set of attributes
 
-    it "can access date_range, nights_reserved, length_of_stay, and total_cost: " do
-      @init_test.date_range.must_be_kind_of Array
+    it "can access nights_reserved, length_of_stay, and total_cost: " do
       @init_test.nights_reserved.must_be_kind_of Array
       @init_test.nights_reserved.length.must_equal 4
       @init_test.length_of_stay.must_equal 4
@@ -41,7 +40,7 @@ describe "Reservation class" do
     end
 
     it "can create a date_range given a check_in and check_out date" do
-      @res_test.date_range.length.must_equal 5
+      @res_test.nights_reserved.length.must_equal 4
     end
   end #check_in, check_out
 

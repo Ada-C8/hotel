@@ -38,25 +38,39 @@ describe "Hotel Class" do
       @hotel.reservations.reservation_list[0].must_be_kind_of Hotel::Reservation
     end #call class
 
-    it "Can check if a room is available before making a reservation for that room " do
-      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
-      @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 4).must_equal true
-    end
+    it "Will add a reservation to the Reservation List:" do
+      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
+      @hotel.reservations.reservation_list.length.must_equal 1
+    end #call class
 
-    it "Will tell you if a room is not available " do
-      @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-      @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
-      @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 2).must_equal false
-    end
+    # it "Can check if a room is available before making a reservation for that room " do
+    #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+    #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
+    #   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 4).must_equal true
+    # end
+    #
+    # it "Can tell you if a room is not available " do
+    #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+    #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
+    #   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 2).must_equal false
+    # end
   end #make reservations
 
   describe "Find Reservations" do
     it "Can find and return a single reservation for a specific date: " do
       @hotel.make_reservation(2222, "2012/12/12", "2012/12/15")
-      found = @hotel.find_reservation("2012/12/12", "2012/12/13")
-      found[0].view_reservation.must_equal "ID: 2222, Room: 2, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3, Total Cost: 600"
+      found = @hotel.find_reservations("2012/12/12", "2012/12/13")
+      found[0].view_reservation.must_equal "ID: 2222, Room: 1, Check in: 2012-12-12, Check Out: 2012-12-15, Total Nights: 3, Total Cost: 600"
     end #find a single reservation for a specific date
+
+    it "Can find and return multiple reservations for the same date" do
+      @hotel.make_reservation(1203, "2017/12/12", "2017/12/15")
+      @hotel.make_reservation(1204, "2017/12/14", "2017/12/16")
+      found = @boetel.find_reservations("2017/12/14", "2017/12/15")
+      found.length.must_equal 2
+      found[0].id.must_equal 1203
+      found[1].id.must_equal 1204
+    end #multiple reservations
 
     it "Can return an array of open rooms for a particular date range: " do
       @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
