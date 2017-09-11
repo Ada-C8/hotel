@@ -6,17 +6,10 @@ module Hotel
     attr_reader :available, :cost, :room_number, :booked_dates
 
     def initialize(room_number)
-      @available = true
       # @blocked_off = false #for Wave 3
       @cost = 200
       @room_number = room_number
       @booked_dates = []
-    end
-
-
-    def change_availability(state) # T or F
-      # @available ? @available = false : @available = true
-      @available = state
     end
 
     # Returns 20 room objects as an array
