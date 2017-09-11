@@ -1,10 +1,7 @@
 require_relative 'spec_helper'
 
-describe 'Room' do
+xdescribe 'Room' do
   before do
-    ############################
-    Hotel::Room.initialize_rooms
-    ############################
     @puppy_room = Hotel::Room.new
     @kitten_room = Hotel::Room.new
     @bat_room = Hotel::Room.new
@@ -53,9 +50,9 @@ describe 'Room' do
     end # end test
   end # end #check_out_of_room
 
-  def 'available?' do
+  describe 'available?' do
     it 'compares list of reservation with list of rooms' do
-
+      Hotel::Reservation.reservations.room.wont_equal Hotel::Reservation.rooms_available
     end # end test
 
     it 'returns false if a room is already on the list of reservations for a given date' do
