@@ -51,6 +51,18 @@ describe "Reservation" do
       @reservation_test.date_range.must_be_instance_of DateRange
     end
 
+    it "raises an error if date range is invalid" do
+      first_name = "Jane"
+      last_name = "Doe"
+
+      room_id = 1
+      room_rate = 200.00
+
+      start_date = Date.new(2017, 9, 1)
+      end_date = Date.new(2015, 9, 5)
+
+      proc {BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)}.must_raise ArgumentError
+    end
   end
 
   describe "#get_total_cost" do
