@@ -89,11 +89,42 @@ describe "Reservations class" do
       # can book rooms on the following day AKA checkout day
       @hotel.make_reservation(@check_in + 2, @check_out + 2,20)
     end
-    it "will create a block, " do
-      @block.must_be_kind_of Hotel::Booking
+    describe "make a block " do
+      it "will create a block, " do
+        @block.must_be_kind_of Hotel::Booking
+      end
+      it "will raise an exception if user tried to block off more than 5 rooms." do
+        proc{@hotel.make_reservation(@check_in - 10,@check_out - 10,7, block_name: "pool party")}.must_raise InvalidRoomQuantity
+      end
+      it "block 5 rooms and none are reserved" do
+        @block.rooms.length.must_equal 5
+        @block.rooms.each do |room|
+          room.booked.must_equal false
+        end
+      end
+      it "return an array of availbe rooms within the block" do
+        @block.rooms_available_block.must_be_kind_of Array
+        @block.rooms_available_block.each do |room|
+          room.booked.must_equal false
+        end
+      end
     end
-    it "will raise an exception if user tried to block off more than 5 rooms." do
-      proc{@hotel.make_reservation(@check_in - 10,@check_out - 10,7, block_name: "pool party")}.must_raise InvalidRoomQuantity
+  end
+  describe "reserve_from_block" do
+    it "returns a booking" do
+      @hotel.reserve_from_block(@block,1).must_be_kind_of Hotel::Booking
+    end
+    it "raises an error if user tries to reserve more rooms than are available" do
+      proc{@hotel.reserve_from_block(@block,7)}.must_raise InvalidRoomQuantity
+    end
+    it "changes the status of rooms booked from nil to true" do
+      @hotel.reserve_from_block(@block,1)
+      @block.rooms.each do |room|
+        room.booked.must_equal false
+      end
+    end
+    it "booked room has same date range as block" do
+      @hotel.reserve_from_block(@block,1).date_range.must_equal @block.date_range
     end
   end
 end
