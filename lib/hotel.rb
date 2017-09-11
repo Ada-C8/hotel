@@ -166,36 +166,17 @@ module Hotel_Chain
       ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[1].status}"
       ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[2].status}"
       ap "BEFORE IN BLOCK ARRAY: #{blocks_array[0].reservations_array[3].status}"
-      this_block = nil
-      @blocks_array.each do |block|
-        if block.party_name == party_name
-          this_block = block
-          ap "WOOHOO- OVER HERE: #{this_block}"
-        end
-      end
-      assigned_reservation = Object.new
-      unassigned_reservations.each do |reservation|
-        ap "THIS GUY??! #{reservation}"
-        x = 0
-        if this_block.reservations_array[x] == reservation
-          assigned_reservation = reservation
-          ap "INSIDE! #{assigned_reservation.status}"
-          ap "INSIDE! #{assigned_reservation.room.room_id}"
-          assigned_reservation.status = "assigned"
-          ap assigned_reservation
-          ap "INSIDE2! #{assigned_reservation.status}"
-          ap "INSIDE2! #{assigned_reservation.room.room_id}"
-        end
-        x = x+1 
-      end
+
+      unassigned_reservations[0].status = "assigned"
+
       ap "AFTER #{unassigned_reservations[0].status}"
       ap "AFTER #{unassigned_reservations[1].status}"
       ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[0].status}"
       ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[1].status}"
       ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[2].status}"
       ap "AFTER IN BLOCK ARRAY: #{blocks_array[0].reservations_array[3].status}"
-      ap "assigned_reservation = #{assigned_reservation}"
-      return assigned_reservation
+      ap "unassigned_reservations = #{unassigned_reservations}"
+      return unassigned_reservations[0]
     end
 
     def find_block_reservations_by_partyname

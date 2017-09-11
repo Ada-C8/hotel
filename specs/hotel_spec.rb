@@ -278,7 +278,7 @@ describe "The Hotel class" do
         end
     end
 
-    it "MONKEY: if 3 of 4 reservations in a block are assigned, the find_unassigned_block_reservations method returns only 1 reservation" do
+    it "if 3 of 4 reservations in a block are assigned, the find_unassigned_block_reservations method returns only 1 reservation" do
       @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
       @myhotel.assign_block_reservation("Mary Smith")
       @myhotel.assign_block_reservation("Mary Smith")
