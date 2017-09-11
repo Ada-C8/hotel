@@ -43,17 +43,24 @@ describe "Hotel Class" do
       @hotel.reservations.reservation_list.length.must_equal 1
     end #call class
 
-    # it "Can check if a room is available before making a reservation for that room " do
-    #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-    #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
-    #   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 4).must_equal true
-    # end
-    #
-    # it "Can tell you if a room is not available " do
-    #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-    #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
-    #   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 2).must_equal false
-    # end
+    describe "Raise Errors for Invalid Dates" do
+      it "will raise an error when an invalid date (check_in or check_out) range is provided" do
+        proc {
+          @hotel.make_reservation(1000, "2001/1/32", "2001/2/4", room: 1)
+        }.must_raise ArgumentError
+
+        proc {
+          @hotel.make_reservation(1000, "2001/1/30", "2001/1/33", room: 1)
+        }.must_raise ArgumentError
+      end #invalid check in
+
+      it "will raise an error if the Check Out Date is earlier than the Check In date" do
+        proc {
+          @hotel.make_reservation(1000, "2001/1/10", "2001/1/5", room: 1)
+        }.must_raise ArgumentError
+      end
+    end #invalid dates
+
   end #make reservations
 
   describe "Find Reservations" do
@@ -78,7 +85,6 @@ describe "Hotel Class" do
       @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
       @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 3
     end #open rooms
-
   end #find reservations
 
   describe "Total Cost" do
@@ -112,3 +118,16 @@ describe "Hotel Class" do
   # end #blocks
 
 end #Hotel admin
+
+
+    # it "Can check if a room is available before making a reservation for that room " do
+    #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+    #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
+    #   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 4).must_equal true
+    # end
+    #
+    # it "Can tell you if a room is not available " do
+    #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+    #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
+    #   @hotel.is_available?(1000, "2012/12/13", "2012/12/19", room: 2).must_equal false
+    # end

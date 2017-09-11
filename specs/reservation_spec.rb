@@ -44,17 +44,7 @@ describe "Reservation class" do
     end
 end #check_in, check_out
 
-# describe "Raise Errors for Invalid Dates" do
-#   it "will raise an error when an invalid date (check_in or check_out) range is provided" do
-#     proc {
-#       Hotel::Reservation(1000, "2001/1/32", "2001/2/4")
-#     }.must_raise ArgumentError
-#     #
-#     # proc {
-#     #   Hotel::Reservation(1000, "2001/1/30", "2001/1/33", room: 1)
-#     # }.must_raise ArgumentError
-#   end #invalid check in
-#end #invalid dates
+
 
 # describe "Viewing Reservations" do
 #   it "Can return a formatted string for a specific reservation" do

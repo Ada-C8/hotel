@@ -28,6 +28,7 @@ module Hotel
     #I can access the list of reservations for a specific date
     def find_reservations(day_in, day_out)
       found_reservations = Array.new
+      DateRange.check_dates(day_in, day_out)
       DateRange.create_range(day_in, day_out).each do |date|
         found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
       end #each date
@@ -46,14 +47,14 @@ module Hotel
     end #end total cost
 
     #I can reserve an available room for a given date range
-    def is_available?(id, number_of_rooms, day_in, day_out)
-      if open_rooms(day_in, day_out) <= number_of_rooms
-        #first_available =
-        return true
-      else
-        return false
-      end  #if/else
-    end# is_available
+    # def is_available?(id, number_of_rooms, day_in, day_out)
+    #   if open_rooms(day_in, day_out) <= number_of_rooms
+    #     #first_available =
+    #     return true
+    #   else
+    #     return false
+    #   end  #if/else
+    # end# is_available
 
     #I can view a list of rooms that are not reserved for a given date range
     def open_rooms(day_in, day_out)

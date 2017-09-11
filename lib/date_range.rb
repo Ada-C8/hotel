@@ -11,13 +11,18 @@ module Hotel
     end
 
     #Your code should raise an error when an invalid date range is provided
+    def self.check_dates(first, last)
+      if Date.parse(first) > Date.parse(last)
+        raise ArgumentError, "Check Out Date is earlier than Check in Date"
+      else
+        return "YAY"
+      end
+    end
+
     def self.check_in(date)
       @check_in = Date.parse(date)
       # if Date.valid_date?(@check_in.year, @check_in.mon, @check_in.wday)
         return @check_in
-      # else
-      #   raise Arguement Error
-      #end
     end
 
     def self.check_out(date)
