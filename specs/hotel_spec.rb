@@ -374,6 +374,12 @@ describe 'Hotel' do
         end
       end
 
+      it 'can begin a block the day another block ends' do
+        block2 = @hotel.make_block('2017-08-07', '2017-08-10', 10, 20)
+
+        @block.rooms.must_equal block2.rooms
+      end
+
       it 'raises NoRoomError when there are not enough rooms to fill a block' do
         proc {
           @hotel.make_block('2017-08-03', '2017-08-07', 11, 20)
