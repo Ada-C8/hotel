@@ -5,8 +5,8 @@ require_relative 'hotel'
 
 module Hotel
   class Block < Reservation
-    attr_reader :block_id, :discount_rate, :num_of_rooms, :rooms
     attr_accessor :reservations
+    attr_reader :block_id, :discount_rate, :num_of_rooms, :rooms
     def initialize(input_id, input_room_number, check_in_date, check_out_date, input_block_id = 0 )
       super
       @block_id = input_block_id.to_i
@@ -20,12 +20,12 @@ module Hotel
       @reservations = []
     end
 
-    
+
     def add_rooms(begin_date, end_date)
       block_rooms = []
       available_rooms = Hotel.available_rooms(begin_date, end_date)
       i = 0
-      @num_of_rooms.times do
+      num_of_rooms.times do
        block_rooms << available_rooms[i]
        i+= 1
      end
@@ -33,7 +33,7 @@ module Hotel
     end
 
     def add_reservations
-      @reservations.replace(Hotel.find_reservation_by_block_id(@block_id))
+      reservations.replace(Hotel.find_reservation_by_block_id(block_id))
     end
 
   end # => end of Block

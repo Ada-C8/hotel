@@ -26,15 +26,17 @@ module Hotel
     all_reservations.each do |reservation|
       return reservation if reservation.id == input_id
     end
-    raise ArgumentError.new "Reservation ID does not exist" 
+    raise ArgumentError.new "Reservation ID does not exist"
   end
 
   def self.find_reservation_by_block_id(input_id)
+    raise ArgumentError.new "Invalid input.  Please enter Block ID as an Integer" if !(input_id.is_a? Integer)
     blocked_reservations = []
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|
       blocked_reservations << reservation if reservation.block_id == input_id
     end
+    raise ArgumentError.new "No Reservations found under that Block ID" if blocked_reservations.length == 0
     return blocked_reservations
   end
 
@@ -150,11 +152,17 @@ module Hotel
   end
 
   def self.reserve_block_room(block_id)
+    raise ArgumentError.new "Invalid input. Please enter Block ID as an Integer" if !(block_id.is_a? Integer)
     block = self.find_block(block_id)
+    raise ArgumentError.new "Block ID is not found" if !(block.is_a? Hotel::Block)
+    # block.add_rooms
+    availability = block_available(block_id)
+    raise ArgumentError.new "No rooms available in Block #{block_id}" if availability == 0
     array_check_in = [block.check_in.year, block.check_in.month, block.check_in.day]
     array_check_out =[block.check_out.year, block.check_out.month, block.check_out.day]
     new_reservation = Hotel::Reservation.new(5, block.rooms[0].id, array_check_in, array_check_out, block.block_id)
-    block.add_reservations
+    # block.add_reservations # => does nothing currently, would work if I was writing new reservations to CSV...)-':'
+    block.reservations << (new_reservation)
     return new_reservation
   end
 end

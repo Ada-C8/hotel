@@ -77,20 +77,21 @@ describe "hotel" do
 
   describe "self.find_reservation_by_block_id(input_id)" do
     it "should return an array" do
-      output = Hotel.find_reservation_by_block_id(30)
+      output = Hotel.find_reservation_by_block_id(75)
       output.must_be_instance_of Array
     end
     it "should return an array of reservations" do
-      output = Hotel.find_reservation_by_block_id(30)
+      output = Hotel.find_reservation_by_block_id(75)
       output.each do |element|
         element.must_be_instance_of Hotel::Reservation
       end
     end
     it "should return an array of reservations with correct block_id" do
-      output = Hotel.find_reservation_by_block_id(30)
+      output = Hotel.find_reservation_by_block_id(75)
       output.each do |element|
-        element.block_id.must_equal 30
+        element.block_id.must_equal 75
       end
+      output.length.must_equal 2
     end
   end
 
@@ -209,7 +210,7 @@ describe "hotel" do
       end
       it "should check blocks to see if room is available" do
         output = Hotel.truly_available([2017,9,20],[2017,9,22])
-        output[0].id.must_equal 3
+        output[0].id.must_equal 5
       end
     end
     describe "Hotel.reserve_room(begin_date, end_date)" do
@@ -231,7 +232,7 @@ describe "hotel" do
       end
       it "should return 1" do
         output = Hotel.block_available(75)
-        output.must_equal 0
+        output.must_equal 2
       end
     end
 
@@ -256,6 +257,24 @@ describe "hotel" do
         block_check_out = Date.new(2017, 9, 22)
         output.check_in.must_equal block_check_in
         output.check_out.must_equal block_check_out
+      end
+      it "should raise return an error if block does not exist" do
+        proc {Hotel.reserve_block_room(85858)}.must_raise ArgumentError
+
+      end
+      # it "should raise an error if no rooms are available in the block" do
+      #   Hotel.reserve_block_room(75)
+      #   Hotel.reserve_block_room(75)
+      #   # binding.pry
+      #   proc {Hotel.reserve_block_room(75)}.must_raise ArgumentError
+      #   # binding.pry
+      # end
+      it "should raise an error if input id is not Integer" do
+        proc {Hotel.reserve_block_room("")}.must_raise ArgumentError
+        proc {Hotel.reserve_block_room("hey")}.must_raise ArgumentError
+        proc {Hotel.reserve_block_room("545")}.must_raise ArgumentError
+        proc {Hotel.reserve_block_room(:block)}.must_raise ArgumentError
+        proc {Hotel.reserve_block_room(["why"])}.must_raise ArgumentError
       end
     end
   end
