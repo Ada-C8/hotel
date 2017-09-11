@@ -34,7 +34,7 @@ describe "Blocks class" do
       # @blocks_test.block_rooms.length.must_equal 5
     end
     it "Contains 5 rooms" do
-      @blocks_test.create_block(2,"2017-9-15", "2017-9-17")
+      @blocks_test.create_block([4,5,6,7,8],"2017-9-15", "2017-9-17")
       @blocks_test.block_rooms.length.must_equal 5
     end
   end

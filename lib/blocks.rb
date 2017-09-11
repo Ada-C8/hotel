@@ -8,17 +8,21 @@ module Hotel
     end
 
     # currently broken/incomplete
-    def create_block(room,check_in,check_out)
+    def create_block(rooms,check_in,check_out)
+      rooms = []
       # check what rooms are available
       available_for_block = hotel.view_available_rooms(check_in,check_out)
       # push 5 available room onto block_rooms
-      ap "printing available:#{available_for_block}"
-      available_for_block.each do |n|
-        if block_rooms.length < 5
-          block_rooms << n
+      # ap "printing available:#{available_for_block}"
+      available_for_block.each do |room|
+        if rooms.length < 5
+          rooms << room
         end
       end
-      ap "printing block_rooms :#{block_rooms}"
+      # rooms.each do |room|
+      #   hotel.reserve_room(room_id, check_in, check_out)
+      # end
+      # ap "printing rooms :#{rooms}"
     end
 
   end
