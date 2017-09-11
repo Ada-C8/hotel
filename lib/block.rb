@@ -19,7 +19,6 @@ module Hotel
           rooms_available << room
         end
       end
-      # count = @rooms.length - @reserved_rooms.length
       return rooms_available
     end
 

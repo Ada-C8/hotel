@@ -28,15 +28,4 @@ describe "Block Class" do
       @wedding.rooms_available_block[0].must_be_kind_of Hotel::Room
     end
   end
-  # describe "book_room_in_block" do
-  #   it "will raise exception if user tries book more rooms than are available" do
-  #     proc{@wedding.book_room_in_block(4)}.must_raise InvalidRoomQuantity
-  #   end
-  #   it "will return a booking object" do
-  #     @wedding.book_room_in_block(2).must_be_kind_of Hotel::Booking
-  #   end
-  #   it "booking will have correct total_cost" do
-  #
-  #   end
-  # # end
 end
