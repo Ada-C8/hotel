@@ -24,8 +24,12 @@ describe "HotelAdmin" do
       @hotel_admin_test.room_list.must_be_instance_of Array
     end
 
-    it "can access list of all reservations in hotel" do
+    it "can access list of all (non-block) reservations in hotel" do
       @hotel_admin_test.reservation_list.must_be_instance_of Array
+    end
+
+    it "can access list of block reservations in hotel" do
+      @hotel_admin_test.block_reservation_list.must_be_instance_of Array
     end
   end
 
@@ -116,7 +120,7 @@ describe "HotelAdmin" do
 
       @hotel_admin_test.reserve_block(@block_id, @date_range, @rooms_array, @discount_room_rate)
     end
-    #
+
     # it "makes a block reservation and adds it to hotel's list of block reservations" do
     #   @hotel_admin_test.block_reservation_list.length.must_equal 1
     # end

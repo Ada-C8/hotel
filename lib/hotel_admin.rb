@@ -21,33 +21,40 @@ require_relative 'BookingSystem_Errors'
 module BookingSystem
   class HotelAdmin
 
-    attr_reader :room_list, :reservation_list
+    attr_reader :room_list, :reservation_list, :block_reservation_list
 
     def initialize
-      #hotel admin knows all collection of reservations
+      #hotel admin knows all reservations (non-block and block)
       @reservation_list = []
+      @block_reservation_list = []
       #hotel admin knows all rooms in hotel
       @room_list = BookingSystem::Room.all
     end
 
-    def reserve_room(first_name, last_name, room_id, room_rate, start_date, end_date)
+    def reserve_room(first_name, last_name, room_id, room_rate, start_date, end_date, block_id = nil)
 
-      check_availability(room_id, start_date, end_date)
+      check_availability(room_id, start_date, end_date, block_id)
 
-      reservation = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)
+      reservation = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date, block_id)
       @reservation_list << reservation
     end
 
-    def check_availability(room_id, start_date, end_date)
+    def check_availability(room_id, start_date, end_date, block_id)
 
       raise InvalidDateRangeError.new("Date range conflicts with room requested")if end_date <= start_date
-
       requested_range = DateRange.new(start_date, end_date)
+
+      # if block_id == nil
+      #
+      #
+      # end
 
       raise UnavailableRoomError.new("Room is unavailable")if @reservation_list.any? {|reservation|
         reservation.room_id == room_id && reservation.date_range.include?(requested_range) && start_date < reservation.end_date
       }
     end
+
+
 
     def find_reservations_by_date(specific_date)
       reservations_on_date = []
