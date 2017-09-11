@@ -60,6 +60,18 @@ module Hotel
       return avaliable_rooms
     end
 
+    def can_create_block?(checkin, checkout, number_of_rooms)
+      if number_of_rooms > 5
+        raise ArgumentError.new("There is no possible to create a block qith more of 5 rooms")
+      else
+        if avaliable_rooms_daterange(checkin, checkout).length >= number_of_rooms
+          return true
+        else
+          return false
+        end
+      end
+    end
+
 
 
 

@@ -129,4 +129,25 @@ describe 'Admin class' do
     end
   end
 
+  describe 'can create block?' do
+    before do
+      @checkin = Date.new(2017,11,5)
+      @checkout = Date.new(2017,11,9)
+    end
+    it 'raises an error if there is the number of rooms to reserve is bigger than 5'  do
+      proc{@administrator.can_create_block?(@checkin, @checkout, 7)}.must_raise ArgumentError
+    end
+
+    it 'returns true if it is possible to create the block' do
+      @administrator.can_create_block?(@checkin, @checkout, 4).must_equal true
+    end
+
+    it 'returns fakse if it is not possible to create block' do
+      17.times do
+        @administrator.add_reservation(@checkin, @checkout)
+      end
+      @administrator.can_create_block?(@checkin, @checkout,4).must_equal false
+    end
+  end
+
 end#describe class
