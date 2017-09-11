@@ -79,10 +79,13 @@ module Hotel
   end #class
 end #module
 
-@boetel = Hotel::Hotel.new
-@boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
-@boetel.create_block(1545, "2017/12/12", "2017/12/14", discount: 50, number_of_rooms: 2, block_name: "HELD")
-binding.pry
+# @boetel = Hotel::Hotel.new
+# @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
+# @boetel.create_block(1545, "2017/12/12", "2017/12/14", discount: 50, number_of_rooms: 2, block_name: "HELD")
+# @boetel.reserve_in_block("HELD")
+#
+#
+# binding.pry
 
 
 # @hotel = Hotel::Hotel.new
@@ -100,15 +103,3 @@ binding.pry
 # open = @boetel.open_rooms("2017/12/12", "2017/12/14")
 
         # found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
-
-# @boetel.make_reservation(1205, 5, "2017/12/1", "2017/12/15")
-# @boetel.make_reservation(1206, 6, "2017/12/1", "2017/12/15")
-# @boetel.make_reservation(1207, 7, "2017/12/1", "2017/12/15")
-# @boetel.make_reservation(2308, 8, "2017/12/13", "2017/12/17")
-# @boetel.make_reservation(1230, 1, "2017/12/5", "2017/12/10")
-# @boetel.make_reservation(1201, 1, "2017/12/10", "2017/12/15")
-# def is_available?()
-
-
-
-#binding.pry

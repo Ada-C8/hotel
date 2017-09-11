@@ -122,7 +122,7 @@ describe "Hotel Class" do
       @hotel.block.block_list.length.must_equal 5
     end
 
-    it "Will not allow reservations for rooms that are in the block: " do
+    it "Will not allow general reservations for rooms that are in the block: " do
       @hotel.create_block(1545, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
       proc {
         @hotel.make_reservation(1000, "2017/12/12", "2017/12/15", room: 1)
@@ -135,7 +135,23 @@ describe "Hotel Class" do
       @hotel.create_block(1216, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "CONVENTION")
       @hotel.create_block(1218, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "SCRABBLE TOURNAMENT")
       proc {
-        @hotel.create_block(1218, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "DISCO PARTY") }.must_raise ArgumentError
+        @hotel.create_block(1218, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "DISCO PARTY")
+      }.must_raise ArgumentError
+    end
+
+    it "Can check whether there are rooms remaining with a specific block " do
+    end
+
+    it "Can reserve a room from the block " do
+      @hotel.create_block(1212, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
+      @hotel.reserve_in_block("WEDDING")
+      @hotel.reservations.reservation_list.length.must_equal 1
+      @hotel.block.block_list.length.must_equal 4
+      @hotel.reservations.reservation_list[0].id.must_equal 1212
+      #should lessen block count by one
+    end
+
+    it "Can apply discounted room rate " do
     end
 
   end #blocks
