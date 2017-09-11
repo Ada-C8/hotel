@@ -55,7 +55,7 @@ describe "HotelClass" do
       hotel_test2.reserve_room(1,"2017-9-15", "2017-9-18")
 
       hotel_test2.view_available_rooms("2017-9-15", "2017-9-18").must_be_kind_of Array
-      hotel_test2.view_available_rooms("2017-9-15", "2017-9-18").must_include 4
+      hotel_test2.view_available_rooms("2017-9-15", "2017-9-18").must_include 5
     end
   end
 end
