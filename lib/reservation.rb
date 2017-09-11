@@ -16,6 +16,12 @@ module Hotel
       @dates = Hotel::DateRange.new(check_in, check_out)
       @room = room
       @cost = (COST * @dates.length_of_stay).to_i
+      available_room_numbers = Hotel::Reservation.available_rooms(@dates).map do |room|
+        room.room_number
+      end
+      if !available_room_numbers.include?(@room.room_number)
+        raise InvalidRoomError.new('This room has already been booked')
+      end # tests if room has already been booked, raises error if so
       @@reservations << self # each new instance put into the list of total reservations
     end # end initialize
 

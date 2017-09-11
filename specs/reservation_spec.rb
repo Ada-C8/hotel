@@ -9,6 +9,20 @@ describe 'Reservation' do
       puppy_expo.dates.check_in.to_s.must_equal '2017-10-13'
       puppy_expo.dates.check_out.to_s.must_equal '2017-10-31'
     end # end test
+
+    it 'raises an InvalidRoomError if room has already been booked' do
+      proc{Hotel::Reservation.new('Suge', Date.new(2017, 10, 15), Date.new(2017, 10, 20), Hotel::Room.find(13))}.must_raise Hotel::InvalidRoomError
+    end # end test
+
+    it 'will not add invalid reservation to @@reservations' do
+      number_of_reservations = Hotel::Reservation.reservations.length
+      begin
+        Hotel::Reservation.new('Suge', Date.new(2017, 10, 15), Date.new(2017, 10, 20), Hotel::Room.find(13))
+      rescue
+      end
+
+      Hotel::Reservation.reservations.length.must_equal number_of_reservations # makes sure number did not change!
+    end # end test
   end # end #initialize
 
   describe 'self.reservations' do
