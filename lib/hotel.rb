@@ -25,14 +25,16 @@ module Hotel
       else
         raise ArgumentError, "Requested Room is Not Available during Date Range"
       end
-        @reservations.add(id, day_in, day_out, discount, block_name, room: first_open)
+      @reservations.add(id, day_in, day_out, discount, block_name, room: first_open)
     end
 
     def find_reservations(day_in, day_out)
+      all_reservations = @reservations.reservation_list + @block.block_list
       found_reservations = Array.new
       DateRange.check_dates(day_in, day_out)
       DateRange.create_range(day_in, day_out).each do |date|
-        found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
+        found_reservations << all_reservations.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
+        # found_reservations << @reservations.reservation_list.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
       end #each date
       return found_reservations.flatten.uniq
     end #find_reservations
@@ -60,24 +62,21 @@ module Hotel
       if number_of_rooms > 5
         return "A block cannot have more than 5 rooms"
       end
-
       available = open_rooms(day_in, day_out)
-
       if available.length >= number_of_rooms
         available.take(number_of_rooms).each do |room_number|
-          #@reservations.add(id, day_in, day_out, discount, block_name, room: room_number)
           @block.add(id, day_in, day_out, discount, block_name, room: room_number)
         end#each
       else
-        return "There are only #{available.length} rooms available during the requested dates."
-      end #if statment
+        raise ArgumentError, "Not Enough Rooms Available to Form Block"
+      end
     end
   end #class
 end #module
 
 # @boetel = Hotel::Hotel.new
 # @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
-# @boetel.create_block(1545, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "HELD")
+# @boetel.create_block(1545, "2017/12/12", "2017/12/14", discount: 50, number_of_rooms: 5, block_name: "HELD")
 # binding.pry
 
 
@@ -104,36 +103,7 @@ end #module
 # @boetel.make_reservation(1230, 1, "2017/12/5", "2017/12/10")
 # @boetel.make_reservation(1201, 1, "2017/12/10", "2017/12/15")
 # def is_available?()
-#   if open_rooms(day_in, day_out) <= number_of_rooms
-#     return true
-#   else
-#     return false
-#   end  #if/else
-# end# is_available
-# def make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_name: nil)
-#   available = open_rooms(day_in, day_out)
-#   if available.length >= number_of_rooms
-#     if room == 0
-#       first_open = open_rooms(day_in, day_out)[0]
-#     elsif room != 0 && available.include?(room)
-#       first_open = room
-#     else
-#       raise ArgumentError, "Requested Room is Not Available during Date Range"
-#     end
-#     @reservations.add(id, day_in, day_out, room: first_open)
-#   else
-#     return "No Available Rooms for this date range"
-#   end #outer if else
-# end #make_reservation
+
 
 
 #binding.pry
-
-# find if rooms is open for a given date range
-# reserve room for that date range
-#what will my reservation object look like
-#in my fictional interface
-#check whether a room is available on desired dates using reservation list
-#if available, should instantiate a new instance of reservation using the reservation class
-#if not available, go to next room and check.
-#if you reach the end of the list, report that no reservation is possible during that time

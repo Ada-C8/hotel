@@ -120,16 +120,31 @@ describe "Hotel Class" do
     it "Can create a block of available rooms for the requested date range: " do
       @hotel.create_block(1545, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
       @hotel.block.block_list.length.must_equal 5
-      #@hotel.create_block(9000, 20, "2012/12/12", "2012/12/13").must_equal false
-      # @hotel.open_rooms("2012/12/12", "2012/12/13").must_be_kind_of Array
-      # @hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
+    end
+
+    it "Will not allow reservations for rooms that are in the block: " do
+      @hotel.create_block(1545, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
+      proc {
+        @hotel.make_reservation(1000, "2017/12/12", "2017/12/15", room: 1)
+      }.must_raise ArgumentError
+    end
+
+    it "Will not permit a block to contain rooms already assigned to another block " do
+      @hotel.create_block(1212, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "WEDDING")
+      @hotel.create_block(1214, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "PROM")
+      @hotel.create_block(1216, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "CONVENTION")
+      @hotel.create_block(1218, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "SCRABBLE TOURNAMENT")
+      proc {
+        @hotel.create_block(1218, "2017/12/12", "2017/12/15", discount: 50, number_of_rooms: 5, block_name: "DISCO PARTY") }.must_raise ArgumentError
     end
 
   end #blocks
 
 end #Hotel admin
 
-
+# proc {
+#   @hotel.make_reservation(1000, "2001/1/10", "2001/1/5", room: 1)
+# }.must_raise ArgumentError
 # it "Can check if a room is available before making a reservation for that room " do
 #   @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
 #   @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 6)
