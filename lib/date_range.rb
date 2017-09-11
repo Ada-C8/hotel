@@ -23,7 +23,7 @@ module Hotel
       # if date >= @checkin_date && date <= @checkout_date
       start_date = date_range.checkin_date
       end_date = date_range.checkout_date
-      
+
       if start_date >= @checkin_date && end_date <= @checkout_date
         return true
       else
