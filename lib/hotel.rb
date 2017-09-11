@@ -1,5 +1,8 @@
 require_relative 'reservation'
 require_relative 'block'
+require_relative 'range'
+require 'date'
+
 module Property
 
   class Hotel
@@ -43,26 +46,24 @@ module Property
       return room_rez
     end
 
-    def reserve_block(room_qty, check_in, check_out, price)
-      rooms = availability(check_in, check_out)
+    def hotel_block(room_qty, check_in, check_out, price)
+      rooms = available(check_in, check_out)
 
-      raise ArgumentError "Insufficient room availability" if @rooms.length < room_qty
+      raise ArgumentError "Insufficient room availability" if rooms.length < room_qty
 
-      block_rez = Property::Block.new(room_qty.first(rooms), check_in, check_out, price)
-      rooms.each do |room|
-        @availability.pop(room)
-      end
-      @reserved_blocks << block_rez
-      return block_rez
+      block = Property::Block.new(rooms.first(room_qty), check_in, check_out, price)
+      #This is how to pull out first n elements
+      #a = [ "q", "r", "s", "t" ]
+      #a.first     #=> "q"
+      # a.first(2)  #=> ["q", "r"]
+        @reserved_blocks << block
+      return block
     end
 
-    def list_rez(date)
-      return @reservations.select { |rez| rez.contains(date) }
+    def reserve_from_block(block)
+      room = block.reserve_room
+      room_rez = Reservation.new(room, block.check_in, block.check_out, block.price)
     end
 
-    def reserve_from_block(block_rez)
-      room = block_rez.reserve_individual_room
-      room_rez = Reservation.new(room, block_rez.check_in, block_rez.check_out, block_rez.price)
-    end
   end
 end

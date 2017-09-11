@@ -13,7 +13,7 @@ module Property
         @rooms = []
         @available = rooms.clone
         @reservations = []
-        @price = price  #discounted
+        @price = 150  #discounted
       end
 
       def reserve_block(room)
@@ -22,10 +22,5 @@ module Property
         @reservations << reservation
         return reservation
       end
-
-      def block_price
-        return @rooms.length * num_nights * @price
-      end
-
     end
   end
