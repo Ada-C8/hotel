@@ -105,7 +105,7 @@ describe "Hotel class" do
 
   end
 
-  describe "making room reservation in a block" do
+  describe "checking room availability and making room reservation in a block" do
     before do
       @hotel = Hotel::Hotel.new(6, 200)
       @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 1)
@@ -115,6 +115,11 @@ describe "Hotel class" do
       @hotel.make_reservation('sept 3 2017', 'sept 5 2017', 3)
       @hotel.make_reservation('sept 2 2017', 'sept 3 2017', 3)
       @hotel.make_block_reservation('sept 1 2017', 'sept 4 2017', 3)
+
+    end
+
+    it "can let you know if a block has rooms available" do
+      @hotel.blocked_rooms_availability('sept 1 2017', 'sept 4 2017').must_equal true
 
     end
 

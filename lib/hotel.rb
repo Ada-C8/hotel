@@ -63,14 +63,20 @@ module Hotel
         end
       end
     end
-    # end
 
-    # end
-    # return entry.booked_rooms
+    def blocked_rooms_availability(check_in, check_out)
+      check_in = Date.parse(check_in)
+      check_out = Date.parse(check_out)
 
-    # end
-    #   end
-    # end
+      @block_reservation_collection.each do |entry|
+        if check_in == entry.check_in && check_out == entry.check_out
+          if entry.available_rooms[0].length >= 0
+            return true
+          else false
+          end
+        end
+      end
+    end
 
     def date_list_of_reservations(date)
       date_list = []
