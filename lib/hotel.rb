@@ -22,7 +22,7 @@ module My_Hotel
     19 => 200,
     20 => 200
   }
-  class Hotel #keeps track of all the reservations and blocks.
+  class Hotel #keeps track of all the reservations and all the blocks.
     attr_reader :rooms, :all_reservations, :all_blocks
 
     def initialize
@@ -113,10 +113,10 @@ module My_Hotel
     #These can be used for "As an administrator, I can view a list
     # of rooms that are not reserved for a given date range" --
 
-    # Given a range of nights, it will return an array of arrays.
-    # Each of the inner arrays contains all the room numbers that
-    # are not reserved for one night.
-    #There is one inner array per night.
+    # Given a range of nights, it will return an array of hashes.
+    # Each of the inner hashes contains all the room numbers ==>
+    # and cost that are not reserved for one night.
+    #There is one inner hash per night.
     def find_all_unreserved_rooms(nights)
       if nights.class == Date
         nights = [nights]
@@ -133,10 +133,10 @@ module My_Hotel
       return array_of_rooms
     end
 
-    # Given a range of nights, it will return an array of arrays.
-    # Each of the inner arrays contains all the roomnumbers that
-    # are not blocked for one night.
-    # There is one inner array per night.
+    # Given a range of nights, it will return an array of hashes.
+    # Each of the inner hashes contains all the room numbers ==>
+    # and cost that are not blocked for one night.
+    # There is one inner hahs per night.
     def find_all_unblocked_rooms(nights)
       if nights.class == Date
         nights = [nights]
@@ -152,15 +152,15 @@ module My_Hotel
         end
         array_of_rooms << free_rooms
       end
-      return array_of_rooms
+      return puts array_of_rooms
     end
 
     # Given a range of nights, it calls the methods to find the
     # unblocked and unreserved rooms. It uses that information find
     # rooms that are available (unreserved and unblocked).
-    #Returns an array of arrays.The inner array has all the rooms
+    # Returns an array of hashes.The inner hash has all the rooms
     # that are available on one night.
-    # Their is one inner array per night.
+    # Their is one inner hash per night.
     def unreserved_and_unblocked(nights)
       if nights.class == Date
         nights = [nights]
@@ -183,10 +183,13 @@ module My_Hotel
       return available_over_range
     end
 
-    #Given a range of nights it calls the method unreserved_and_unblocked,
+    #Given a range of nights it calls the method
+    # unreserved_and_unblocked,
     #to find all the rooms that are free over the date range.
-    #It returns a hash of the rooms that are open over the entire range,
-    #and their price.
+    #It returns a hash of the rooms that are open over the entire
+    # range, and their price.
+    # This could be used to let the user select which of several
+    # room options they desire.
     def find_continious_open_room(nights)
       if nights.class == Date
         nights = [nights]
@@ -210,6 +213,7 @@ module My_Hotel
       block = find_by_block_id(block_id)
       block.room_numbers
     end
+
 
     def find_rooms_in_use_by_block_id(block_id)
       rooms_in_use = []
