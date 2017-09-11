@@ -46,28 +46,30 @@ module HotelManagment
       return @found_reservations
     end
 
-
+    # ------------------------------------------------------------------
 
     # returns an array or rooms not reserved for a given date range
     def rooms_not_reserved(check_in_date, check_out_date)
       # guard clause: if the reservations array is empty, return a rooms array of room numbers. If no reservations, all rooms can be reserved for a block.
       return @rooms.map { |room| room.room_number } if @reservations.empty?
 
+      unreserved_rooms = @rooms.map { |room| room.room_number }
+
       @reservations.each { |reservation|
-        unless reservation.check_in_date >= check_in_date && reservation.check_out_date <= check_out_date
-          unreserved_rooms << reservation.room_number
+        if (reservation.check_in_date >= check_in_date && reservation.check_in_date <= check_out_date) || (reservation.check_out_date >= check_in_date && reservation.check_out_date <= check_out_date)
+          unreserved_rooms.delete(reservation.room_number)
         end
       }
-
+      
       @blocks.each { |block|
-        unless block.check_in_date >= check_in_date && block.check_out_date <= check_out_date
-          unreserved_rooms << block.rooms.map { |room| room.room_number }
+        if (block.check_in_date >= check_in_date &&  block.check) || (block.check_out_date <= check_out_date && block.check_out_date <= check_out_date)
+          unreserved_rooms - block.rooms
         end
-       }
-
+      }
       return unreserved_rooms
     end
 
+    # ------------------------------------------------------------------
 
     # reserves the first available room for a given date range. Uses the rooms_not reserved method.
     def reserve_room_for_date_range(first_name, last_name, check_in_date, check_out_date)
