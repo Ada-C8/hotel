@@ -39,7 +39,6 @@ module Hotel
       return num_nights * @rate
     end
 
-
     def find_by_date(date)
       valid_date = Date.parse(date)
       by_date = []
@@ -67,19 +66,19 @@ module Hotel
 
     def create_block(start_date, end_date, num_rooms)
       if num_rooms > 5
-        raise ArguementError.new("You cannot reserve more then 5 rooms.")
+        raise ArgumentError.new("You cannot block reserve more then 5 rooms.")
       end
 
       start_date = Date.parse(start_date)
       end_date = Date.parse(end_date)
       dates = (start_date..end_date).map(&:to_s)
-
+      
       available_rooms = []
       dates.each {|date| available_rooms << find_available(date)}
       available_rooms = available_rooms.inject(:&).first(num_rooms)
 
       if available_rooms.length < num_rooms
-        raise ArguementError.new("There are not enough rooms available for those dates.")
+        raise ArgumentError.new("There are not enough rooms available for those dates.")
       end
 
       available_rooms.each do |id|
@@ -88,10 +87,13 @@ module Hotel
     end
 
     def reserve_block
+      # currently only for all blocks not specific blocks
+      reserved = false
       @all_rooms.each do |id, room|
         room.reservations.each_index do |resId|
-          if room.reservations[resId].class == Hotel::Block && room.reservations[resId].status == :available
+          if reserved == false && room.reservations[resId].class == Hotel::Block && room.reservations[resId].status == :available
             room.reservations[resId].status = :occupied
+            reserved = true
           end
         end
       end
@@ -99,11 +101,3 @@ module Hotel
 
   end #end of California
 end #end of Hotel
-
-# new = Hotel::California.new
-# new.all_rooms[1].create_reservation("2017-04-03", "2017-04-08")
-# new.all_rooms[2].create_reservation("2017-04-03", "2017-04-09")
-# new.all_rooms[3].create_reservation("2017-04-06", "2017-04-09")
-# new.all_rooms[4].create_reservation("2017-04-06", "2017-04-09")
-# new.create_block("2017-04-03", "2017-04-10", 5)
-# p new.reserve_block

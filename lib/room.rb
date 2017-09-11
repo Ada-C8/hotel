@@ -1,5 +1,4 @@
 require_relative 'reservation'
-require_relative 'block'
 
 module Hotel
 
@@ -25,7 +24,7 @@ module Hotel
         @reservations.each do |item|
           compare = dates & item.dates[0...-1]
           if compare.length != 0
-            raise ArguementError("This room is already booked.")
+            raise ArgumentError.new("This room is already booked.")
           end
         end
         @reservations << reservation

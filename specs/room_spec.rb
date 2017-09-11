@@ -19,18 +19,19 @@ describe "Room class" do
 
   describe "create_reservation method" do
     it "Creates reservation objects" do
+      @room.reservations.length.must_equal 0
       @room.create_reservation("2017-03-13", "2017-03-16")
       @room.create_reservation("2017-03-18", "2017-03-20")
       @room.reservations.length.must_equal 2
     end
 
     it "Raises an error if an invalid date is given" do
-      proc { @room.create_reservation("2017-33-13", "2017-03-16").must_raise ArgumentError }
+      proc { @room.create_reservation("2017-33-13", "2017-03-16")}.must_raise ArgumentError
     end
 
     it "Raises an error if the room is already booked" do
       @room.create_reservation("2017-03-13", "2017-03-16")
-      proc { @room.create_reservation("2017-03-13", "2017-03-16").must_raise ArgumentError }
+      proc { @room.create_reservation("2017-03-13", "2017-03-16")}.must_raise ArgumentError
     end
 
     it "Adds reservation if checking in when another reservation is checking out" do

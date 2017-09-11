@@ -9,5 +9,5 @@ module Hotel
       @dates = (@start_date..@end_date).map(&:to_s)
     end
 
-  end #end of Reservation
-end #end of Hotel
+  end
+end
