@@ -119,7 +119,8 @@ module Hotel
     end
 
 #Testing, not working to produce an error when room is not in the block
-    def in_block?(block_name, room_number)
+    def check_in_block(block_name, room_number)
+      #match_block(block_name)
       @blocks_collection.each do |block|
           if block.block_name == block_name
             block.block_rooms_collection.each do |room|
@@ -129,8 +130,23 @@ module Hotel
             end
           end
       end
-      return ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
+      raise ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
+      return false
     end
+#new one, not working
+    # def in_block?(block_name, room_number)
+    #   match_block(block_name)
+    #   list_room_numbers = []
+    #     @this_block.block_rooms_collection.each do |room|
+    #       list_room_numbers << room.room_number
+    #     end
+    #     if list_room_numbers.include?(room)
+    #       return true
+    #     else
+    #     raise ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
+    #       return false
+    #     end
+    # end
 
     def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
 
@@ -139,7 +155,7 @@ module Hotel
       check_in = Date.parse(check_in)
       check_out = Date.parse(check_out)
       validate_block_dates(check_in, check_out, block_name)
-      in_block?(block_name, room_number)
+      check_in_block(block_name, room_number)
 
       check_block_room_available(block_name, room_number)
       add_block_booking_to_block(block_name, block_room_booking)
@@ -148,19 +164,19 @@ module Hotel
       return block_room_booking
     end
 
-    def match_block
-      #write a def to find out which block it is so don't have to repeat code
+    def match_block(block_name)
+      @this_block = nil
+      @blocks_collection.each do |block|
+        if block.block_name == block_name
+          @this_block = block
+        end
+      end
+      return @this_block
     end
 
     def validate_block_dates(check_in, check_out, block_name)
-      this_block = nil
-      @blocks_collection.each do |block|
-        if block.block_name == block_name
-          this_block = block
-        end
-      end
-
-      if check_in >= this_block.check_in && check_out <= this_block.check_out
+      match_block(block_name)
+      if check_in >= @this_block.check_in && check_out <= @this_block.check_out
         return true
       else
         raise ArgumentError.new("Cannot reserve for those dates - dates must be the same as block dates.")

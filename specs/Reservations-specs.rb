@@ -216,9 +216,17 @@ describe 'Reservations' do
     it 'must return false if there are NOT any rooms available in block to be booked' do
       @new_block_reservation3 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 8)
       @new_block_reservation4 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 9)
-      @new_block_reservation5 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 10)
-      
+      @new_block_reservation5 = @new_hotel_with_blocks1.new_reservation_in_block("2018-01-01", "2018-01-05", "Heritage", 5)
+
       @new_block.has_rooms_available?.must_equal false
+    end
+  end
+
+  describe 'block room reservation will match with block date range' do
+    it 'must raise an arugment error if the dates are outside of the range' do
+      new_hotel = Hotel::Reservations.new
+      new_block = new_hotel.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
+      proc {new_block_reservation = new_hotel.new_reservation_in_block("2018-01-01", "2018-01-15", "Heritage", 5)}.must_raise ArgumentError
     end
   end
 end
