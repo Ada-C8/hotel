@@ -73,12 +73,13 @@ describe "Administration#Reservation" do
       reservation.reserved?(Date.new(2017, 9, 20)).must_equal false
     end
 
-    it "not consider the check out date as reserved" do
+    it "not consider the check out date as a day to charge" do
       check_in = Date.new(2017, 9, 1)
       check_out = Date.new(2017, 9, 5)
       reservation = Administration::Reservation.new(check_in, check_out)
       reservation.reserved?(Date.new(2017, 9, 5)).must_equal false
     end
   end
+
 
 end #end of module

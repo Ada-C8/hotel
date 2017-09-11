@@ -11,6 +11,7 @@ module Administration
       @check_in = check_in
       @check_out = check_out
 
+
       raise ArgumentError.new("Enter a valid date range") if @check_in == @check_out
     end
 
@@ -26,8 +27,11 @@ module Administration
 
     def reserved?(target_date)
       return target_date >= @check_in && target_date < @check_out
-
     end
+
+
+
+
 
   end #reservation
 end #module

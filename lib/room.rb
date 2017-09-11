@@ -7,7 +7,6 @@ module Administration
 
     def initialize(room_num)
       @room_num = room_num
-      @dates_reserved = []
 
       raise ArgumentError.new("Invalid room number") if !(@room_num.is_a? Integer)
     end
