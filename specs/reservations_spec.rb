@@ -7,7 +7,7 @@ describe "reservations class" do
 
   describe "initiates a new reservation" do
     it "creates a reservation object" do
-      reservation = Reservation.new(2, 2017, 9, 10, 2017, 9, 11)
+      reservation = Reservation.new(2, 2017, 11, 10, 2017, 11, 11)
       reservation.must_be_instance_of Reservation
     end
 
