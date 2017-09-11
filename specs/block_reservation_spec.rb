@@ -33,9 +33,9 @@ describe "BlockReservation" do
     it "Can return the total cost of reserved rooms in the block with the rate applied" do
       #initialized block has...
       # Rooms 1-3,Base Cost: 3000 (5 days * $600 for room), apply 15% off
-      @block_reservation.make_reservation(1)
-      @block_reservation.make_reservation(2)
-      @block_reservation.make_reservation(3)
+      @block_reservation.make_reservation(1, @admin)
+      @block_reservation.make_reservation(2, @admin)
+      @block_reservation.make_reservation(3, @admin)
       @block_reservation.total_cost.must_equal 2550
     end
   end
@@ -54,22 +54,23 @@ describe "BlockReservation" do
       @block_reservation2.rooms_available.each do |room|
         (1..20).include?(room.room_number).must_equal true
       end
-      @block_reservation2.make_reservation(3)
+      @block_reservation2.make_reservation(3, @admin)
       @block_reservation2.reservations.length.must_equal 1
       @block_reservation2.reservations[0].room.room_number.must_equal 3
+      @block_reservation2.rooms_available.length.must_equal 2
     end
   end
 
   describe "make_reservation(room_number)" do
     it "Creates a reservation that contains the room with the room number passed" do
-      @block_reservation.make_reservation(2)
-      @block_reservation.make_reservation(1)
+      @block_reservation.make_reservation(2, @admin)
+      @block_reservation.make_reservation(1, @admin)
       @block_reservation.reservations.length.must_equal 2
       @block_reservation.reservations[0].room.room_number.must_equal 2
     end
 
     it "Returns an error if the entered room number isn't included in the block" do
-      proc {@block_reservation.make_reservation(5)}.must_raise ArgumentError
+      proc {@block_reservation.make_reservation(5, @admin)}.must_raise ArgumentError
     end
   end
 

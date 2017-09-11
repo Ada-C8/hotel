@@ -49,15 +49,15 @@ describe "Admin" do
 
     it "Returns an ArgumentError if the reservation can't be made" do
       # check_in_date is later than check_out_date
-      proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise ArgumentError
+      proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise DateRangeInvalidError
 
       # room_num given is already reserved for a portion of date a prior reservation has
       @admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1).must_be_instance_of Hotel::Reservation
-      proc {@admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1)}.must_raise ArgumentError
-      proc {@admin.reserve(Date.new(2017,10,4), Date.new(2017,10,6), 1)}.must_raise ArgumentError
+      proc {@admin.reserve(Date.new(2017,10,3), Date.new(2017,10,7), 1)}.must_raise DateOverlapError
+      proc {@admin.reserve(Date.new(2017,10,4), Date.new(2017,10,6), 1)}.must_raise DateOverlapError
 
       # Non-Date object passed into parameters
-      proc{@admin.reserve("I am not a Date!", 123)}.must_raise ArgumentError
+      proc{@admin.reserve("I am not a Date!", 123, 101)}.must_raise InvalidObjectPassedError
 
     end
 
@@ -109,7 +109,7 @@ describe "Admin" do
     end
 
     it "Returns nil if a Reservation object isn't passed" do
-      proc {@admin.total_cost("I am not a Reservation! >:D")}.must_raise ArgumentError
+      proc {@admin.total_cost("I am not a Reservation! >:D")}.must_raise InvalidObjectPassedError
     end
   end
 
@@ -117,7 +117,6 @@ describe "Admin" do
     it "Returns the Room object with the specific room" do
       local_room = @admin.find_room(1)
       local_room.must_be_instance_of Hotel::Room
-      local_room.available.must_equal true
     end
   end
 
@@ -138,11 +137,11 @@ describe "Admin" do
     end
 
     it "Returns an error if date objects aren't passed" do
-      proc{@admin.available_rooms_in_date_range("I am not a date!", "I'm not one too! haha")}.must_raise ArgumentError
+      proc{@admin.available_rooms_in_date_range("I am not a date!", "I'm not one too! haha")}.must_raise InvalidObjectPassedError
     end
 
     it "Returns an error if dates are passed in descending order" do
-      proc{@admin.available_rooms_in_date_range(Date.new(2017, 10, 3), Date.new(2017, 10, 1))}.must_raise ArgumentError
+      proc{@admin.available_rooms_in_date_range(Date.new(2017, 10, 3), Date.new(2017, 10, 1))}.must_raise DateOverlapError
     end
 
     it "Can return a room that's been previously reserved as available" do
@@ -182,17 +181,17 @@ describe "Admin" do
       date1 = Date.new(2017, 8, 11)
       date2 = Date.new(2017, 8, 14)
       room_numbers2 = [6, 7]
-      proc { @admin.create_block(date1, date2, room_numbers2) }.must_raise ArgumentError
+      proc { @admin.create_block(date1, date2, room_numbers2) }.must_raise DateOverlapError
     end
 
     it "Shouldn't create a block if there's an existing reservation that overlaps in date and room number" do
       @admin.reserve(Date.new(2017, 4, 20), Date.new(2017, 4, 25), 13)
       #check in and check out overlaps
-      proc{@admin.create_block(Date.new(2017, 4, 21), Date.new(2017, 4, 24), [13, 14, 15])}.must_raise ArgumentError
+      proc{@admin.create_block(Date.new(2017, 4, 21), Date.new(2017, 4, 24), [13, 14, 15])}.must_raise DateOverlapError
       #check in overlaps
-      proc{@admin.create_block(Date.new(2017, 4, 21), Date.new(2017, 4, 26), [13, 14, 15])}.must_raise ArgumentError
+      proc{@admin.create_block(Date.new(2017, 4, 21), Date.new(2017, 4, 26), [13, 14, 15])}.must_raise DateOverlapError
       #check out overlaps
-      proc{@admin.create_block(Date.new(2017, 4, 19), Date.new(2017, 4, 24), [13, 14, 15])}.must_raise ArgumentError
+      proc{@admin.create_block(Date.new(2017, 4, 19), Date.new(2017, 4, 24), [13, 14, 15])}.must_raise DateOverlapError
     end
 
     it "Can create multiple block reservations at the same date range but different rooms" do

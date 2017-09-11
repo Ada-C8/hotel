@@ -12,5 +12,4 @@ require 'minitest/skip_dsl'
 # ex require_relative 'lib/foo.rb'
 require_relative '../lib/hotel.rb'
 
-
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
