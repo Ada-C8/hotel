@@ -14,28 +14,19 @@ module Hotel
     end
 
     def make_reservation(check_in,check_out,num_rooms, block_name:false)
-
       date_range = DateRange.new(check_in,check_out)
       id = (@all_reservations.length + 1)
       rooms_available = check_availability(check_in,check_out)
-
       enough_rooms?(rooms_available, num_rooms, block_name)
       rooms_to_book = rooms_available.shift(num_rooms)
 
       if block_name == false
         update_room_state(rooms_to_book,num_rooms,true)
-        # num_rooms.times do |i|
-        #   rooms_to_book[i].booked = true
-        # end
         booking = Booking.new(id,rooms_to_book,date_range, block_info: false)
       else
         update_room_state(rooms_to_book,num_rooms,false)
-        # num_rooms.times do |i|
-        #   rooms_to_book[i].booked = false
-        # end
         booking = Block.new(id,rooms_to_book,date_range,block_name)
       end
-
       @all_reservations << booking
       return booking
     end
@@ -81,11 +72,6 @@ module Hotel
       rooms_to_book = block.rooms_available_block
       enough_rooms?(rooms_to_book,num_rooms,false)
       rooms_to_book = update_room_state(rooms_to_book,num_rooms,false)
-
-      # num_rooms.times do |i|
-      #   rooms_to_book[i].booked = false
-      # end
-
       id = all_reservations.length + 1
       booking = Booking.new(id,rooms_to_book,block.date_range, block_info:block.block_name)
       return booking
