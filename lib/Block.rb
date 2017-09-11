@@ -1,6 +1,6 @@
 
 module My_Hotel
-  class Block
+  class Block# Makes blocks.
 
     attr_reader :first_night, :last_night, :room_numbers, :nights_held, :discount, :block_id
 
@@ -9,7 +9,7 @@ module My_Hotel
       @room_numbers = array_of_rooms
       @nights_held = nights
       @block_id = nil
-      #@contact_info #could add contact_info
+      #@contact_info or payment info could be added as instance variables
     end
 
     def create_booking(all_blocks)

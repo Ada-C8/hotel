@@ -129,7 +129,7 @@ describe "My_Hotel::Hotel" do
       new_block.must_be_kind_of My_Hotel::Block
     end
 
-    it "updates all_blocks" do
+    it "updates @all_blocks" do
       new_block = @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       @ritz.all_blocks.length.must_equal 1
       new_block = @ritz.make_block(@feb6, @may6, [1, 2, 3, 4], 0.75)
