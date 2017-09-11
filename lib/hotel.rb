@@ -1,34 +1,35 @@
 # All buisiness logic here (changed mind from reservations)
+#
+# require_relative 'rooms'
+# require_relative 'hotel'
+#
+# module HotelHedwig
+#   class Reservations
+#     attr_reader :rooms
+#     def initialize
+#
+#     end
 
-require_relative 'rooms'
-require_relative 'hotel'
+# # Start pseudocode
+#     def method to access all of the rooms
+#
+#     end
+#
+#     def method to reserve a room in a date range.
+#
+#     end
+#
+#     def method to access list of reservations for a specific date.
+#
+#     end
+#
+#     def method to get total cost for a given reservation.
+#
+#     end
+#   end
+# end
 
-module HotelHedwig
-  class Reservations
-    attr_reader :rooms
-    def initialize
-
-    end
-# Start pseudocode to build Wave 1
-    def method to access all of the rooms
-
-    end
-
-    def method to reserve a room in a date range.
-
-    end
-
-    def method to access list of reservations for a specific date.
-
-    end
-
-    def method to get total cost for a given reservation.
-
-    end
-  end
-end
-
-# User Stories Wave 1;
+# User Stories Wave 1 (methods);
 
 # As an administrator, I can access the list of all of the rooms in the hotel
 # As an administrator, I can reserve a room for a given date range

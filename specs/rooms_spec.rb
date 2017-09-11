@@ -2,20 +2,18 @@ require_relative 'spec_helper'
 
 describe "Rooms" do
   describe "#initialize" do
-    it "must " do
-      HotelHedwig::Rooms.new()
+    before do
+      @room_1 = HotelHedwig::Rooms.new(1)
     end
+    it "Can instantiate"
+    @room_1.must_be_kind_of HotelHedwig::Rooms.new
+  end
+
+  it "Can access a room number." do
+    @room_1.room_num.must_equal 1
+  end
+
+  it "Can access the cost of a room per night." do
+    @room_1.room_cost.must_equal 200
   end
 end
-
-# Test pseudoode
-
-describe "" do
-    it "" do
-    end
-  end
-
-  describe "" do
-    it "" do
-    end
-  end
