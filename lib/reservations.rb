@@ -16,18 +16,12 @@ module HotelHedwig
       @check_in = check_in
       @check_out = check_out
 
-      # Raise an argument error IF the check-in date is after the check-out date!
+      # Raise an argument error IF the check-in date is after the check-out date! Method?
 
-      # Argument error conditional? How to do this 'before'.
-      # Pseudocode;
-      # if @check_in before @check_out
-      #   raise ArgumentError "Invalid date selection, please check and change your check-in and check-out dates."
-      # end
-
-      # Calculating costs take 3, not sure how to best calculate this or if it belongs here.  The idea is using the base amount aka room_cost (200) multiplied by the number of days customer stays.  Check out day minus check in day provides that number.  I hope. This should also allow for a one day stay ex. 200 * (day 2 - day 1) = 200 * 1 = 200.
-
-      def charges
-        @room_rate = room_rate * (@check_out - @check_in).to_i
+      def invalid_date
+        if @check_in < @check_out
+          raise ArgumentError.new "Invalid date selection, please check and change your check-in and check-out dates."
+        end
       end
     end
   end
