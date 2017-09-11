@@ -5,19 +5,20 @@ module Hotel
 
   class Block #Block of rooms booked for a give time
 
-      attr_reader :block_list
+    attr_reader :block_list, :block_name
 
-      def initialize
-        @block_list = []
-      end
-
-      # def add(id, room, day_in, day_out)
-      #   @reservation_list << Reservation.new(id, room, day_in, day_out) #adds Reservation to group
-      # end
+    def initialize(block_name)
+      @block_list = []
+      @block_name = block_name
+    end
+    # [(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)]
+    #       def add(id, room, day_in, day_out)
+    #         @block_list << Reservation.new(id, day_in, day_out, ) #adds Reservation to group
+    #       end
   end
 end
 
-
+#establish a block and put a hold on reservations for anyone without the code
 
 # As an administrator, I can create a block of rooms
 

@@ -11,25 +11,21 @@ module Hotel
     attr_reader :all_rooms, :reservations, :block
 
     def initialize
-      @block = Block.new
+      #@block = Block.new
       @reservations = ReservationList.new
       @all_rooms = {1 => 200, 2 => 200, 3 => 200, 4 => 200, 5 => 200, 6 => 200, 7 => 200, 8 => 200, 9 => 200, 10 => 200, 11 => 200, 12 => 200, 13 => 200, 14 => 200, 15 => 200, 16 => 200, 17 => 200, 18 => 200, 19 => 200, 20 => 200}
     end
 
-    def make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
+    def make_reservation(id, day_in, day_out, discount: 0, room: 0)
       available = open_rooms(day_in, day_out)
-      if available.length >= number_of_rooms
-        if room == 0
-          first_open = open_rooms(day_in, day_out)[0]
-        elsif room != 0 && available.include?(room)
-          first_open = room
-        else
-          raise ArgumentError, "Requested Room is Not Available during Date Range"
-        end
-        @reservations.add(id, day_in, day_out, room: first_open)
+      if room == 0
+        first_open = available[0]
+      elsif room != 0 && available.include?(room)
+        first_open = room
       else
-        return "No Available Rooms for this date range"
-      end #outer if else
+        raise ArgumentError, "Requested Room is Not Available during Date Range"
+      end
+        @reservations.add(id, day_in, day_out, discount, room: first_open)
     end #make_reservation
 
     def find_reservations(day_in, day_out)
@@ -51,14 +47,6 @@ module Hotel
       end #end each
     end #end total cost
 
-    # def is_available?()
-    #   if open_rooms(day_in, day_out) <= number_of_rooms
-    #     return true
-    #   else
-    #     return false
-    #   end  #if/else
-    # end# is_available
-
     def open_rooms(day_in, day_out)
       occupied_rooms = Array.new
       find_reservations(day_in, day_out).each do |reservation|
@@ -68,35 +56,38 @@ module Hotel
       return open_rooms
     end
 
-
-    #As an administrator, I can create a block of rooms
-    #you should just be blocking off the rooms so it's only available to actually make the reservation if they have the code -- but it needs to remove the room from the list of open rooms?
-    #maybe a reservation status like confirmed or just held for block? than it can change to confirmed if they have the code?
-    def create_block(block_id, number_of_rooms, day_in, day_out, discounted_rate)
-      available = open_rooms(day_in, day_out)
-      if available.length >= number_of_rooms
-        available.take(number_of_rooms).each do |room|
-          make_reservation(block_id, room, day_in, day_out, discount: discounted_rate, block_status: held)
-          #have a status like held for reservation? Then they can only reserve it with the code?
-        end#each
-      else
-        return "There are only #{available.length} rooms available during the requested dates."
-      end #if statment
-    end
+    # def create_block(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
+    #   if number_of_rooms > 5
+    #     return "A block cannot have more than 5 rooms"
+    #   end
+    #
+    #   available = open_rooms(day_in, day_out)
+    #
+    #   if available.length >= number_of_rooms
+    #     @block = Block.new(name)
+    #     available.take(number_of_rooms).each do |room_number|
+    #       @reservation.add((id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil))
+    #       @block_list.add(room, day_in, day_out, discount: discounted_rate, block_code: held)
+    #     end#each
+    #   else
+    #     return "There are only #{available.length} rooms available during the requested dates."
+    #   end #if statment
+    # end
   end #class
 end #module
 
-# @boetel = Hotel::Hotel.new
+@boetel = Hotel::Hotel.new
 
-@hotel = Hotel::Hotel.new
-@hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
-@hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
+# @hotel = Hotel::Hotel.new
+#make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
+# @hotel.make_reservation(2222, "2012/12/12", "2012/12/15", room: 2)
+# @hotel.make_reservation(2224, "2012/12/13", "2012/12/17", room: 10)
 # x = @hotel.open_rooms("2012/12/12", "2012/12/13")
 # #@hotel.open_rooms("2012/12/12", "2012/12/13")[0].must_equal 1
-# # @boetel.make_reservation(1201, "2017/12/12", "2017/12/14")
-# # @boetel.make_reservation(1202, "2017/12/10", "2017/12/12")
-# # @boetel.make_reservation(1203, "2017/12/12", "2017/12/15")
-# # @boetel.make_reservation(1204, "2017/12/14", "2017/12/16")
+@boetel.make_reservation(1201, "2017/12/12", "2017/12/14", discount: 100)
+# @boetel.make_reservation(1202, "2017/12/10", "2017/12/12", room: 10)
+# @boetel.make_reservation(1203, "2017/12/12", "2017/12/15", block_code: 1289)
+# @boetel.make_reservation(1204, "2017/12/14", "2017/12/16")
 binding.pry
 # @boetel.find_reservations("2017/12/14", "2017/12/15")
 # open = @boetel.open_rooms("2017/12/12", "2017/12/14")
@@ -109,8 +100,28 @@ binding.pry
 # @boetel.make_reservation(2308, 8, "2017/12/13", "2017/12/17")
 # @boetel.make_reservation(1230, 1, "2017/12/5", "2017/12/10")
 # @boetel.make_reservation(1201, 1, "2017/12/10", "2017/12/15")
-
-
+# def is_available?()
+#   if open_rooms(day_in, day_out) <= number_of_rooms
+#     return true
+#   else
+#     return false
+#   end  #if/else
+# end# is_available
+# def make_reservation(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
+#   available = open_rooms(day_in, day_out)
+#   if available.length >= number_of_rooms
+#     if room == 0
+#       first_open = open_rooms(day_in, day_out)[0]
+#     elsif room != 0 && available.include?(room)
+#       first_open = room
+#     else
+#       raise ArgumentError, "Requested Room is Not Available during Date Range"
+#     end
+#     @reservations.add(id, day_in, day_out, room: first_open)
+#   else
+#     return "No Available Rooms for this date range"
+#   end #outer if else
+# end #make_reservation
 
 
 #binding.pry

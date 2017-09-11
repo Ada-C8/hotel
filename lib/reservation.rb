@@ -5,17 +5,17 @@ require_relative 'date_range'
 module Hotel
   class Reservation
 
-    attr_reader :id, :check_in, :check_out, :number_of_rooms, :room, :nights_reserved, :total_cost, :length_of_stay, :block_code
+    attr_reader :id, :check_in, :check_out, :room, :nights_reserved, :total_cost, :length_of_stay
 
-    def initialize(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: 0, block_code: nil)
+    def initialize(id, day_in, day_out, discount, room: 0)
       @id = id
       @check_in = DateRange.check_in(day_in)#day_in
       @check_out = DateRange.check_out(day_out)#day_out
       @room = room
       @nights_reserved = DateRange.create_range(@check_in, @check_out)[0..-2]
       @length_of_stay = @nights_reserved.length
+      @discount = discount
       @total_cost = ((200 - discount) * @length_of_stay).to_i
-      @block_code = block_code
     end
 
     def view_reservation
@@ -27,4 +27,6 @@ end #module
 
 #binding.pry
 #maybe checkin and checkout are entered from daterange
-#@reservations.add(id, day_in, day_out, discount: 0, number_of_rooms: 1, room: first_open)
+# a = Hotel::Reservation.new(1890, "2017/1/1", "2017/1/3", discount: 100, room: 2)
+# puts a.inspect
+# binding.pry

@@ -11,29 +11,9 @@ module Hotel
         @reservation_list = []
       end
 
-      def add(id, room, day_in, day_out)
-        @reservation_list << Reservation.new(id, room, day_in, day_out) #
-      end
-  end
-end
+      def add(id, day_in, day_out, discount, room)
+        @reservation_list << Reservation.new(id, day_in, day_out, discount, room)
+      end #add
+  end #class
+end #module
 #binding.pry
-
-      #@@reservations << Reservation.new(id, room, day_in, day_out)
-      #@@reservations = Array.new
-      # attr_reader :reservations
-      #
-      # def initialize
-      #   @reservations = Array.new
-      # end
-
-      # def self.reservations
-      #   return @@reservations
-      # end
-
-      # def self.add(id, room, day_in, day_out)
-      #   #reservations = Array.new
-      #
-      #   Hotel.reservations << Reservation.new(id, room, day_in, day_out)
-      #   # @reservations <<  #adds Reservation to group
-      #   return Hotel.reservations
-      # end
