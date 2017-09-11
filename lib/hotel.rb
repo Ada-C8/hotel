@@ -1,16 +1,26 @@
-# All buisiness logic here (changed mind from reservations)
-#
+# All buisiness logic here (changed mind from reservations because this makes most sense).
+
+# I need for this to access all of the rooms in the room class.
+
+# I need for this to access all of the reservations, the reservations class holds my dates for the reservations.
+
+# I need for this to provide a total charge amount for the days reserved.
+
+# Somehow I need this to provide reservation list that is DATE specific.  This will be tricky (IMO).
+
 # require_relative 'rooms'
-# require_relative 'hotel'
+# require_relative 'reservations'
 #
 # module HotelHedwig
 #   class Reservations
-#     attr_reader :rooms
+#     attr_reader
 #     def initialize
 #
 #     end
 
 # # Start pseudocode
+# Remember to not duplicate methods!
+
 #     def method to access all of the rooms
 #
 #     end
