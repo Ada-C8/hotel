@@ -44,19 +44,33 @@ describe "BlockReservation" do
     before do
       date1 = Date.new(2017, 8, 10)
       date2 = Date.new(2017, 8, 15)
-      rooms = [@admin.rooms[0], @admin.rooms[1], @admin.rooms[2]]#room 1
+      rooms = [@admin.rooms[0], @admin.rooms[1], @admin.rooms[2]]
       @block_reservation2 = Hotel::BlockReservation.new(date1, date2, rooms)
     end
 
     it "Returns an array of Rooms available inside a block" do
-      # binding.pry
       @block_reservation2.rooms_available.must_be_instance_of Array
       @block_reservation2.rooms_available.length.must_equal 3
       @block_reservation2.rooms_available.each do |room|
-        (1..19).include?(room.room_number).must_equal true
+        (1..20).include?(room.room_number).must_equal true
       end
+      @block_reservation2.make_reservation(3)
+      @block_reservation2.reservations.length.must_equal 1
+      @block_reservation2.reservations[0].room.room_number.must_equal 3
+    end
+  end
+
+  describe "make_reservation(room_number)" do
+    it "Creates a reservation that contains the room with the room number passed" do
+      @block_reservation.make_reservation(2)
+      @block_reservation.make_reservation(1)
+      @block_reservation.reservations.length.must_equal 2
+      @block_reservation.reservations[0].room.room_number.must_equal 2
     end
 
+    it "Returns an error if the entered room number isn't included in the block" do
+      proc {@block_reservation.make_reservation(5)}.must_raise ArgumentError
+    end
   end
 
 end
