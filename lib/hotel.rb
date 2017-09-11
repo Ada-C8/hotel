@@ -22,12 +22,17 @@ module Hotel
       end
     end
 
-    def access_reservations
+    def access_reservations(date)
       # access the list of reservations for a specific date
       # loop over @reservations.date_range
       # if date_range includes passed in date
       # return reservations
-      return reservations
+      reservations.each do |reservation|
+        if (reservation.date_range.check_in..reservation.date_range.check_out).include?(date)
+          reservations << reservation
+        end
+        return reservations
+      end
     end
 
     def view_available_rooms(check_in, check_out)

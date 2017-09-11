@@ -39,11 +39,12 @@ describe "HotelClass" do
     end
     it "Is an Array" do
       @hotel_test.reserve_room(3,"2017-9-12", "2017-9-15")
-      @hotel_test.access_reservations.must_be_kind_of Array
+      @hotel_test.access_reservations("2017-9-12").must_be_kind_of Array
     end
     it "Has one element" do
       @hotel_test.reserve_room(3,"2017-9-12", "2017-9-15")
-      @hotel_test.access_reservations.length.must_equal 1
+      @hotel_test.reserve_room(3,"2017-9-16", "2017-9-20")
+      @hotel_test.access_reservations("2017-9-12").length.must_equal 2
     end
   end
   describe "View_available_rooms method" do
