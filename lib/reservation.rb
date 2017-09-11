@@ -19,6 +19,7 @@ module BookingSystem
 
     end #end of initialize
 
+    #method seems to be working fine, but don't have any tests for loading data back
     def add_reservation(file)
       CSV.open(file, "a") do |line|
         line << ["#{self.id}","#{self.room}","#{self.date_range.check_in.strftime("%m/%d/%Y")}","#{self.date_range.check_out.strftime("%m/%d/%Y")}","#{self.total_cost}"]

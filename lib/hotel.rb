@@ -13,23 +13,27 @@ module BookingSystem
 
     DEFAULT_RESERVATIONS = "support/reservations.csv"
 
+    DEFAULT_RATES = "support/rates.csv"
+
     attr_reader :rooms, :all_reservations, :block_discount, :all_blocks
 
-    def initialize(rooms=DEFAULT_ROOMS, block_discount=DEFAULT_DISCOUNT)
-      @all_reservations = [] #array of instances of class Reservation
-      @all_blocks = [] #array of instances of class Block
-      @rooms = rooms
-      @block_discount = block_discount
-
-    end #end of initialize
-
-    def get_rates(file)
+    #didn't finish this part, method get_rates is unused
+    def get_rates(file=DEFAULT_RATES)
       rates = {}
       CSV.open(file, "r").each do |line|
         rates[line[0]] = line[1]
       end
       return rates
     end #end of method
+
+    def initialize(rooms=DEFAULT_ROOMS, block_discount=DEFAULT_DISCOUNT)
+
+      @all_reservations = [] #array of instances of class Reservation
+      @all_blocks = [] #array of instances of class Block
+      @rooms = rooms
+      @block_discount = block_discount
+
+    end #end of initialize
 
     def room_unavailable(room)
       dates = []
@@ -50,7 +54,7 @@ module BookingSystem
         end
       end
       return dates #array of dates on which this room is unavailable
-      end #end of method
+    end #end of method
 
     def list_of_available_rooms(date_range)
       available_rooms = {}
@@ -98,9 +102,9 @@ module BookingSystem
       if list_of_available_rooms(date_range).length < number_of_rooms
         raise NoRoomAvailableError.new("Not enough available rooms on given dates")
       end
-        block_rooms = Hash[list_of_available_rooms(date_range).sort_by { |k, v| k }[0..number_of_rooms-1]]
-        new_block = Block.new(date_range, block_rooms)
-        @all_blocks << new_block
+      block_rooms = Hash[list_of_available_rooms(date_range).sort_by { |k, v| k }[0..number_of_rooms-1]]
+      new_block = Block.new(date_range, block_rooms)
+      @all_blocks << new_block
 
       return new_block #has hash of rooms and prices
     end #end of method
