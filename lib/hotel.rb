@@ -173,5 +173,12 @@ module Hotel_Chain
       return reserved_under
     end
 
+    #Allow a user to set different rates for different rooms
+    def create_custom_rate(check_in_date, check_out_date, rate)
+      new_reservation = store_reservation(check_in_date, check_out_date)
+      new_reservation.room.rate = rate
+      return new_reservation
+    end
+
   end #end of class
 end #end of module

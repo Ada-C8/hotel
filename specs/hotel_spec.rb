@@ -309,7 +309,13 @@ describe "The Hotel class" do
       @myhotel.match_block_partyname("smith").length.must_equal 3
       @myhotel.match_block_partyname("wedding").length.must_equal 1
     end
+  end
 
+  describe "Allow a user to set different rates for different rooms" do
+    it "makes a reservation and sets a custom date" do
+      new_reservation = @myhotel.create_custom_rate("11/12/17", "11/14/17", 160)
+      new_reservation.room.rate.must_equal 160
+    end
   end
 
 end #end of testing
