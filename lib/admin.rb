@@ -72,6 +72,19 @@ module Hotel
       end
     end
 
+    def create_block (checkin, checkout, number_of_rooms, price)
+      rooms_in_block = []
+      if can_create_block?(checkin, checkout, number_of_rooms)
+        number_of_rooms.times do
+          reserve = add_reservation(checkin, checkout)
+          rooms_in_block << reserve.room_number
+        end
+      end
+
+      Hotel::Block.new(checkin, checkout, rooms_in_block, price)
+
+    end
+
 
 
 

@@ -1,6 +1,6 @@
 module Hotel
   class Reservation
-    attr_reader :checkin, :checkout, :days_range
+    attr_reader :checkin, :checkout, :days_range, :room_number
     def initialize(checkin, checkout, room_number)
       @price_per_night = 200
       @days_range = Hotel::DateRange.new(checkin, checkout)

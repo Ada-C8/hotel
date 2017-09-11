@@ -150,4 +150,20 @@ describe 'Admin class' do
     end
   end
 
+  describe "create_block" do
+    before do
+      @checkin = Date.new(2017,11,5)
+      @checkout = Date.new(2017,11,9)
+    end
+    it "if it is rooms avalibles creates the  block" do
+      @administrator.create_block(@checkin, @checkout, 4, 150).must_be_instance_of Hotel::Block
+    end
+
+    it "change the rooms" do
+      @administrator.create_block(@checkin, @checkout, 4, 150)
+      @administrator.list_reservations.length.must_equal 4
+    end
+
+  end
+
 end#describe class
