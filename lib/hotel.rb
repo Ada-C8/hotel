@@ -244,24 +244,38 @@ module Hotel
 
         return false
       end
-#add back in comments if adding a discounted rate
+
       def reserve_room_from_block(block_id)
         if @block_rooms == []
           raise ArgumentError, "No current room blocks available"
-        # else
-        #   @block_rooms.each do |current_block|
-        #     if current_block.id == block_id
-        #       if check_block_for_availablity(block_id)
-                #room = get_open_room_from_block(current_block)
-                #new_reservation = Hotel::Reservation.new(room, current_block.date, 180)
+        else
+          @block_rooms.each do |current_block|
+            if current_block.id == block_id
+              if check_block_for_availablity(block_id)
+                room = get_open_room_from_block(current_block)
+                new_reservation = Hotel::Reservation.new(room, current_block.date, 180)
               else
-                return "No availability"
+                puts "No availability due to #{new_reservation}"
 
-              # end
-            # end
-          # end
+              end
+            end
+          end
         end
       end
+
+      attr_writer :get_open_room_from_block
+
+      def get_open_room_from_block(block)
+      rooms = block.room_booked
+      rooms.each_with_index do |value, index|
+        if value == false
+          block.room_booked[index] = true
+          return block.available_rooms[index]
+        end
+      end
+      end
+
+
 
 
     # end

@@ -265,12 +265,10 @@ describe "ReservationSystem" do
 
         @hotel.check_block_for_availablity(1).must_equal true
         @hotel.reserve_room_from_block(1)
-             # Make 16 reservations
-            #  20.times do |i|
-            #    @hotel.reserve_room_from_block(i + 1)
-            #  end
+        @hotel.reserve_room_from_block(1)
+             # Could also have looped res
 
-        #@hotel.check_block_for_availablity(1).must_equal false
+        @hotel.check_block_for_availablity(1).must_equal false
       end
     end
 
