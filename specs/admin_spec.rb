@@ -133,7 +133,6 @@ describe "Admin" do
     end
 
     it "Can return a room that's been previously reserved as available" do
-      puts "NOT DONE"
       @admin.reserve(Date.new(2017, 1,1), Date.new(2017, 1,3), 1)
       available_rooms = @admin.available_rooms_in_date_range(Date.new(2017, 1, 4), Date.new(2017, 1, 6))
       available_rooms.length.must_equal 20 #none are booked for a later date

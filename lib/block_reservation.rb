@@ -7,7 +7,7 @@ module Hotel
     #initialize would now take in check_in, check_out, and an Array of Room objects
     def initialize(check_in, check_out, rooms)
       raise ArgumentError.new("There's only one room in the rooms parameter. Try creating a regular reservation instead") if rooms.length <= 1
-      raise ArgumentError.new("You can only have a maximum of 5 rooms in a block.") if rooms.length > 6
+      raise ArgumentError.new("You can only have a maximum of 5 rooms in a block.") if rooms.length >= 6
       @check_in = check_in
       @check_out = check_out
       @reservations = make_reservations(rooms)
@@ -15,6 +15,7 @@ module Hotel
       @rate = (0.05 * rooms.length).round(2)
     end
 
+    # Make the reservation for each room passed into the room list
     def make_reservations(rooms)
       block_reservations = []
       rooms.each do |room|
@@ -35,8 +36,18 @@ module Hotel
       return (cost - (cost * @rate)).to_i
     end
 
-    def rooms_available_in_block
-      
+    def rooms_available
+      available_rooms = []
+      @reservations.each do |reservation|
+        room_available =  true
+        (@check_in...@check_out).each do |date|
+          if !reservation.room.available_at?(date)
+            room_available = false
+          end
+        end
+        available_rooms << reservation.room if room_available
+      end
+      return available_rooms
     end
 
     # TODO: REFACTOR, this is redundant w/ Reservation class

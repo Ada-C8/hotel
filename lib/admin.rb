@@ -70,7 +70,6 @@ module Hotel
 
 
     # As an administrator, I can view a list of rooms that are not reserved for a given date range
-    #TODO: has to include block reservations as well
     def available_rooms_in_date_range(date1, date2)
       if date1.class != Date || date2.class != Date
         raise ArgumentError.new("Date objects were not passed into the method")
@@ -120,9 +119,10 @@ module Hotel
       generated_rooms = room_numbers.map do |room_number|
         find_room(room_number)
       end
-      generated_rooms.each do |room|
-        room.set_booked_dates(self)
-      end
+      # TODO: Move this to when you're booking a room within a block
+      # generated_rooms.each do |room|
+      #   room.set_booked_dates(self)
+      # end
       new_block = Hotel::BlockReservation.new(check_in, check_out, generated_rooms)
       @block_reservations << new_block
       return new_block

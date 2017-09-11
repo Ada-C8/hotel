@@ -15,10 +15,6 @@ module Hotel
     #   puts "  Room: ##{room.room_number}"
     # end
 
-    def change_availability(status)
-      @room.change_availability(status)
-    end
-
     # (check_in >= reservation.check_in || check_out < reservation.check_out) && room_num == reservation.room.room_number
     def overlap?(other_check_in, other_check_out)
       # return (check_in >= other_check_in || check_out < other_check_out) &&
