@@ -1,5 +1,5 @@
 # Testing for date_range
-# Edited 9/5/17
+# Edited 9/10/17
 require_relative 'spec_helper'
 
 describe "Date Range" do
@@ -95,9 +95,9 @@ describe "Date Range" do
     end
 
     describe "date overlap" do
-      it "checks if the dates are within the checkin/checkout date range" do
-        start_date = Date.new(2001,2,4)
-        end_date = Date.new(2001,2,10)
+      it "checks if the dates overlap" do
+        start_date = Date.new(2001,2,2)
+        end_date = Date.new(2001,2,15)
         date_range = Hotel::DateRange.new(start_date, end_date)
         @date.date_overlap?(date_range).must_equal true
       end
@@ -123,6 +123,26 @@ describe "Date Range" do
         @date.date_overlap?(date_range).must_equal false
       end
 
+      it "checks if the start and end dates are not included in the date range" do
+        start_date = Date.new(2001,1,30)
+        end_date = Date.new(2001,2,3)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_overlap?(date_range).must_equal false
+      end
+
+      it "checks if the start and end dates are not included in the date range" do
+        start_date = Date.new(2001,2,3)
+        end_date = Date.new(2001,2,14)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_overlap?(date_range).must_equal true
+      end
+
+      it "checks if the start and end dates are not included in the date range" do
+        start_date = Date.new(2001,2,4)
+        end_date = Date.new(2001,2,7)
+        date_range = Hotel::DateRange.new(start_date, end_date)
+        @date.date_overlap?(date_range).must_equal true
+      end
       # it "should return false if start date is equal to the check_out date" do
       #   start_date = Date.new(2001,2,14)
       #   end_date = Date.new(2001,2,25)
