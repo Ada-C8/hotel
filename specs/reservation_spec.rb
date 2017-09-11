@@ -3,10 +3,13 @@ require_relative 'spec_helper'
 describe "Reservation" do
   describe "initialize" do
     it "creates an instance of Reservation" do
+      name = "bob"
+      reserved_rooms = [1,2,3]
       checkin_date = Date.new(2001,2,3)
       checkout_date = Date.new(2001,2,14)
-      date = Hotel::Reservation.new(checkin_date, checkout_date)
-      date.must_be_instance_of Hotel::Reservation
+      date_range = Hotel::DateRange.new(checkin_date, checkout_date)
+      reservation = Hotel::Reservation.new(name, reserved_rooms[0],date_range)
+      reservation.must_be_instance_of Hotel::Reservation
     end
   end
 
@@ -14,15 +17,9 @@ describe "Reservation" do
     it "calculates the total cost for reservation made" do
       checkin_date = Date.new(2001,2,3)
       checkout_date = Date.new(2001,2,14)
-      date = Hotel::Reservation.new(checkin_date, checkout_date)
       num_nights = checkout_date - checkin_date
-      total_cost = (num_nights - 1) * 200
-      # puts total_cost
-      # puts date.price_night
-      date.price_night.must_equal total_cost
+      total_cost = num_nights * 200
+      total_cost.must_equal 2200
     end
   end
-  #   it "returns list of all the rooms in the hotel" do
-  #
-  #
-end # end of describe block
+end
