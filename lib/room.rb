@@ -1,5 +1,3 @@
-require 'date'
-
 module Hotel
 
   NUM_OF_ROOMS = 20

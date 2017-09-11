@@ -1,4 +1,3 @@
-require 'pry'
 module Hotel
   class Admin
     #Wave 1
