@@ -17,6 +17,7 @@ describe Hotel::Reservation do
       check_in = [2017, 11, 14]
       check_out = [2017, 11, 16]
       proc{Hotel::Reservation.new(@guest, check_in, check_out, Hotel::Room.new(5))}.must_raise ArgumentError
+      proc{Hotel::Reservation.new(@guest, Date.new(2017, 11, 14), check_out, Hotel::Room.new(5))}.must_raise ArgumentError
     end
 
     it "accurately calculates the length of a stay of 1 night" do
@@ -34,9 +35,15 @@ describe Hotel::Reservation do
     end
 
     it "accurately calculates the length of stay of 7 days" do
-          reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 19), Hotel::Room.new(12))
+        reservation = Hotel::Reservation.new("guest", Date.new(2018, 11, 12), Date.new(2018, 11, 19), Hotel::Room.new(12))
 
-          reservation.total_nights.must_equal 7
+        reservation.total_nights.must_equal 7
+    end
+
+    it "raises an ArgumentError if the check in or check out date is too early" do
+      proc{Hotel::Reservation.new(@guest, Date.today - 1, Date.new(2017, 12, 25), Hotel::Room.new(5))}.must_raise ArgumentError
+
+          proc{Hotel::Reservation.new(@guest, Date.new(2017, 12, 26), Date.new(2017, 12, 25), Hotel::Room.new(5))}.must_raise ArgumentError
     end
   end
 
@@ -94,7 +101,6 @@ describe Hotel::Reservation do
     end
 
   end #end of method include_date?
-
 
 
 

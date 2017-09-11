@@ -2,7 +2,6 @@ require_relative 'reservations'
 require_relative 'rooms'
 require_relative 'block'
 
-
 module Hotel
   class Hotel
 
@@ -43,16 +42,11 @@ module Hotel
 
     num_rooms.times do
       room = assign_room(check_in, check_out)
-      @blocks.each do |block_in_array|
-        if block.id == id
-          block.add_room(room)
-        end
-      end
+      block.add_room(room)
     end
 
     return block
   end
-
 
   #THERE HAS TO BE A BETTER WAY TO DO THIS.
   def assign_room(check_in, check_out, room_requested = nil)
@@ -131,14 +125,14 @@ module Hotel
     raise StandardError.new "this id doesn't exit"
   end
 
-  def find_room_by_number(room_number)
-    rooms.each do |room|
-      if room.number == room_number
-        return room
-      end
-    end
-    raise StandardError.new "this room doesn't exist"
-  end
+  # def find_room_by_number(room_number)
+  #   rooms.each do |room|
+  #     if room.number == room_number
+  #       return room
+  #     end
+  #   end
+  #   raise StandardError.new "this room doesn't exist"
+  # end
 
   def assign_id
     id = 111111

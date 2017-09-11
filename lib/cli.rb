@@ -1,4 +1,5 @@
 require_relative 'hotel'
+require_relative 'pricing'
 require 'terminal-table'
 require 'chronic'
 require 'pry'
@@ -58,7 +59,7 @@ module Hotel
       A. Book a room
       B. Book a room from a block
       C. Reserve a block of rooms
-      D. View reservations by date
+      D. View reservations (and costs) by date
       E. View all reservations
       F. View available rooms
       G. View available rooms in a block
@@ -84,9 +85,9 @@ module Hotel
     ### Write in option of no room preference
     # choice A
     def reserve_room
-      check_in= get_date_for("check in", Date.today)
+      check_in = get_date_for("check in", Date.today)
 
-      check_out = get_date_for("check out", check_in)
+      check_out = get_date_for("check out", check_in + 1)
 
       print "Guest Name: "
       guest = get_input
@@ -106,7 +107,9 @@ module Hotel
       print "Guest Name: "
       guest = get_input
 
-      hotel.make_reservation_from_block(guest, block.id)
+      res = hotel.make_reservation_from_block(guest, block.id)
+
+      show_table_of_reservations([res.last])
     end
 
     # choice C
@@ -144,7 +147,7 @@ module Hotel
 
       end_date = get_date_for("end", begin_date + 1)
 
-      available_rooms = hotel.get_available_rooms(beginning_date, end_date)
+      available_rooms = hotel.get_available_rooms(begin_date, end_date)
 
       show_table_of_rooms(available_rooms)
     end
@@ -155,7 +158,7 @@ module Hotel
 
       puts "Rooms still available for block ID:#{block.id} :"
 
-      rooms_available_in_block = hotel.get_available_rooms_from_block(bblock)
+      rooms_available_in_block = hotel.get_available_rooms_from_block(block)
 
       show_table_of_rooms(rooms_available_in_block)
 
@@ -164,6 +167,7 @@ module Hotel
     # choice H
     def change_room_cost
       room = get_room
+      print "New Cost: "
       new_cost = get_value
 
       room.cost_per_night = new_cost
@@ -183,7 +187,7 @@ module Hotel
     def get_num_rooms
       num_rooms = nil
       until num_rooms =~ (/[1-5]/)
-        print "How many rooms would you like to reserve? "
+        print "How many rooms would you like to reserve? (max 5)"
         num_rooms = get_input
       end
       return num_rooms.to_i
@@ -219,23 +223,21 @@ module Hotel
     def get_block
       while true
         print "Block ID: "
-        block_id = get_input
+        block_id = get_value
 
         hotel.blocks.each do |block|
-          if block.id = block_id
+          if block.id == block_id.to_i
             return block
           end
         end
-        puts "I'm sorry, that ID doesn't exit."
+        puts "I'm sorry, that ID doesn't exist."
       end
     end
 
     def get_value
-      print "\n\tNew Cost: "
       value = gets.chomp
       until value =~ (/\d/)
-        puts "Invalid Cost."
-        print "New Cost: "
+        puts "Invalid. Please enter a number."
         value = get_input
       end
       return value.to_i
@@ -256,7 +258,7 @@ module Hotel
 
       hotel.rooms.each do |room|
         if room.number == room_number.to_i
-          return room.number
+          return room
         end
       end
       raise StandardError.new "No room found"
@@ -276,12 +278,12 @@ module Hotel
 
     def show_table_of_reservations(reservations)
       table = Terminal::Table.new do |t|
-        t << ["Guest Name", "Check_in", "Check_out", "Room", "Block ID" ]
+        t << ["Guest Name", "Check_in", "Check_out", "Room", "Total Cost", "Block ID" ]
         reservations.each do |res|
-          res.block_id ? block_id = res.block_id : block_id = ""
+          res.block_id ? block_id = res.block_id : block_id = nil
 
           t << :separator
-          t << [res.guest, res.check_in, res.check_out, res.room.number, block_id]
+          t << [res.guest, res.check_in, res.check_out, res.room.number, Pricing.calc_cost(res), block_id]
         end
       end
       puts table
@@ -291,6 +293,6 @@ module Hotel
 end # end of hotel module
 
 
-
+#
 interface = Hotel::Cli.new
 interface.begin

@@ -297,6 +297,27 @@ describe Hotel::Hotel do
 
   end # end get_res_by_date
 
+  # describe "find block by id" do
+  #   it "returns an error if id doesn't exist" do
+  #     hotel = Hotel::Hotel.new
+  #
+  #     hotel.make_block(Date.new(2017, 12, 12), Date.new(2017, 12, 20), 4)
+  #
+  #     proc{hotel.find_block_by_id(123456)}.must_raise StandardError
+  #   end
+  #
+  #   it "returns the block if the id exists" do
+  #     hotel = Hotel::Hotel.new
+  #
+  #     block = hotel.make_block(Date.new(2017, 12, 12), Date.new(2017, 12, 20), 4)
+  #
+  #     hotel.make_block(Date.new(2018, 1, 12), Date.new(2017, 1, 20), 4)
+  #
+  #     hotel.make_block(Date.new(2018, 12, 12), Date.new(2017, 12, 20), 4)
+  #
+  #     hotel.find_block_by_id(111111).must_equal block
+  #   end
+  # end
   ########### HOW TO TEST THIS METHOD?? #########
   ## CURRENTLY TESTING FOR LENGTH  ##
   describe "get_available_rooms method" do
