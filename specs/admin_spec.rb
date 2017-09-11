@@ -114,7 +114,7 @@ describe "Admin" do
       not_available2 = @admin.reserve(Date.new(2017, 10, 5), Date.new(2017, 10, 10), 3)
       not_available_rooms = [not_available1, not_available2]
       date1 = Date.new(2017, 10, 3)
-      date2 = date1 = Date.new(2017, 10, 9)
+      date2 = Date.new(2017, 10, 9)
 
       available_rooms = @admin.available_rooms_in_date_range(date1, date2)
       available_rooms.must_be_instance_of Array
@@ -130,6 +130,13 @@ describe "Admin" do
 
     it "Returns an error if dates are passed in descending order" do
       proc{@admin.available_rooms_in_date_range(Date.new(2017, 10, 3), Date.new(2017, 10, 1))}.must_raise ArgumentError
+    end
+
+    it "Can return a room that's been previously reserved as available" do
+      puts "NOT DONE"
+      @admin.reserve(Date.new(2017, 1,1), Date.new(2017, 1,3), 1)
+      available_rooms = @admin.available_rooms_in_date_range(Date.new(2017, 1, 4), Date.new(2017, 1, 6))
+      available_rooms.length.must_equal 20 #none are booked for a later date
     end
 
   end
@@ -151,17 +158,28 @@ describe "Admin" do
       end
     end
 
-    it "Shouldn't create a block if there's a block that overlaps" do
+    it "Can create a block reservation at the check out date of another (block) reservation" do
+      @admin.create_block(Date.new(2017, 8, 15), Date.new(2017, 8, 17), [6, 7, 8])
+      @admin.block_reservations.length.must_equal 2 # includes the old block reservation and new block reservation
+      [6, 7, 8].include?(@admin.block_reservations[1].reservations[rand(3)].room.room_number).must_equal true
+    end
+
+    it "Shouldn't create a block if there's a block that overlaps in date and room number" do
       #within check_in and check_out range and room number overlaps w/ existing block
       date1 = Date.new(2017, 8, 11)
       date2 = Date.new(2017, 8, 14)
       room_numbers2 = [6, 7]
-      # binding.pry
       proc { @admin.create_block(date1, date2, room_numbers2) }.must_raise ArgumentError
     end
 
-    it "Shouldn't create a block if there's a reservation that overlaps" do
-      proc{ @admin.reserve(Date.new(2017, 8, 9), Date.new(2017, 8, 11), 6) }.must_raise ArgumentError
+    it "Shouldn't create a block if there's a reservation that overlaps in date and room number" do
+      # both check in and check out overlap
+      proc{@admin.reserve(Date.new(2017, 8, 11), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
+      # check-in overlaps
+      proc{@admin.reserve(Date.new(2017, 8, 12), Date.new(2017, 8, 20), 6)}.must_raise ArgumentError
+      # check-out overlaps
+      proc{@admin.reserve(Date.new(2017, 8, 9), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
+
     end
 
     it "Can create multiple block reservations at the same date range but different rooms" do
@@ -173,10 +191,10 @@ describe "Admin" do
     end
   end
 
-  describe "avaialble_in_block(block_reservation, room_num)" do
-    it "Can create an instance of a BlockReservation" do
-      puts "WORK ON THIS TEST, NOT DONE"
-    end
-  end
+  # describe "avaialble_in_block(block_reservation, room_num)" do
+  #   it "Returns true if a room in the block reservation is unreserved" do
+  #
+  #   end
+  # end
 
 end
