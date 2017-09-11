@@ -12,8 +12,13 @@ module Hotel
     end
 
     def total_cost
+      room_rate = 200
+
+      checkin_date = date_range.checkin_date
+      checkout_date = date_range.checkout_date
+
       num_nights = checkout_date - checkin_date
-      total_cost  = num_nights * room_rate
+      total_cost = num_nights * room_rate
       return total_cost
     end
 
