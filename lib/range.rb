@@ -4,7 +4,7 @@ module Property
 
   class Range
 
-    class InvalidDateRange < StandardError ; end 
+    class InvalidDateRange < StandardError ; end
 
     attr_reader :check_in, :check_out
 
