@@ -47,12 +47,22 @@ describe "HotelAdmin" do
       @hotel_admin_test.reservation_list.length.must_equal 1
     end
 
-    it "raises an error if another reservation requests an unavailable room and date range" do
-      proc {@hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date)}.must_raise UnavailableRoomError
+    it "raises an error for an invalid date range" do
+      proc { @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 1), Date.new(2015, 9, 5)) }.must_raise InvalidDateRangeError
     end
 
-    it do 
+    it "raises an error if another reservation requests an unavailable room because of dates overlapping" do
+      #this should raise an error because the same reservation was booked in the before block
+      proc { @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, @start_date, @end_date) }.must_raise UnavailableRoomError
+
+      proc { @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 2)) }.must_raise UnavailableRoomError
     end
+
+    it "will allow booking for a room if requested start_date is on the end_date of a previous booking" do
+      @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
+      @hotel_admin_test.reservation_list.length.must_equal 2
+    end
+
 
   end
 end#of_"HotelAdmin"

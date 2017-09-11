@@ -1,5 +1,5 @@
 # [X] As an administrator, I can access the list of all of the rooms in the hotel
-# [ ] As an administrator, I can reserve a room for a given date range
+# [X] As an administrator, I can reserve a room for a given date range
 # [ ] As an administrator, I can access the list of reservations for a specific date
 # [X] As an administrator, I can get the total cost for a given reservation
 
@@ -22,6 +22,7 @@ module BookingSystem
     end
 
     def reserve_room(first_name, last_name, room_id, room_rate, start_date, end_date)
+
       check_availability(room_id, start_date, end_date)
 
       reservation = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date)
@@ -29,29 +30,15 @@ module BookingSystem
     end
 
     def check_availability(room_id, start_date, end_date)
+
+      raise InvalidDateRangeError.new("Date range conflicts with room requested")if end_date < start_date
+
       requested_range = DateRange.new(start_date, end_date)
 
-      raise UnavailableRoomError.new("Date range conflicts with room requested")if @reservation_list.any? {|reservation|
+      raise UnavailableRoomError.new("Room is unavailable")if @reservation_list.any? {|reservation|
         reservation.room_id == room_id && reservation.date_range.include?(requested_range) && start_date < reservation.end_date
       }
     end
-
-
-    # If the new reservation's start date exists in between the existing reservation's start and end dates, and does not land on its end date, then we reject the reservation.
-
-    # private
-
-    # def check_availability
-    #
-    #   # checks all_reservations for a room id, start, and end date
-    #   # see if room id is in reservation list
-    #   # if room is in reservation, check to see the dates of the reservation
-    #   # if the range of dates overlap (using the Date gem) (not including the final date of the existing reservation)
-    #   #   then return false
-    #   # Otherwise, return true
-    # end
-
-
 
 
   end#of_HotelAdmin_class
