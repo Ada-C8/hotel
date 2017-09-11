@@ -12,27 +12,3 @@ module Hotel
   end # end of class
 
 end # end of module
-
-    # # Get all the room objects
-    # def self.all
-    #   rooms = []
-    #   20.times do |i|
-    #     rooms << Hotel::Room.new(i + 1)
-    #   end
-    #   return rooms
-    # end
-    #
-    # def room_availability(date_range)
-    #
-    # end
-
-
-
-
-
-
-
-
-#####TESTING#######
-# puts room = Hotel::Room.all
-# puts room[0]
