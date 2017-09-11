@@ -17,6 +17,12 @@ describe 'Reservation' do
     end # end test
   end # end #initialize
 
+  describe 'self.reservations' do
+    it 'calls the class variable @@reservations, which holds all instances of Reservation in an array' do
+      Hotel::Reservation.reservations.must_equal [puppy_expo, kitten_expo]
+    end # end test
+  end # end #self.reservations
+
   describe 'self.print_list' do
     it 'returns list of all reservations' do
       Hotel::Reservation.print_list.must_equal ["Name: Finn\nCheck In: 2017-10-13\nCheck Out: 2017-10-31\nRoom Number: 1\nTotal Cost: $3600", "Name: Girlie\nCheck In: 2018-01-17\nCheck Out: 2018-01-31\nRoom Number: 2\nTotal Cost: $2800"]

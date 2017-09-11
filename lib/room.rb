@@ -27,7 +27,7 @@ module Hotel
       return @@rooms_available.sort! # sort the rooms back into numerical order as they are returned to the array
     end # end #check_out_of_room
 
-    def available?(checkin, check_out)
+    def available?(check_in, check_out)
     end # end #is_available?
   end # end Room class
 end # Hotel module
