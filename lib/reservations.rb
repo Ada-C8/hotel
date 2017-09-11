@@ -19,8 +19,7 @@ module Hotel
       id = (@all_reservations.length + 1)
       rooms_available = check_availability(check_in,check_out)
 
-      # make this in to separate method
-      enough_rooms?(rooms_available, num_rooms)
+      enough_rooms?(rooms_available, num_rooms, block_name)
       rooms_to_book = rooms_available.shift(num_rooms)
 
       if block_name == false
@@ -65,7 +64,10 @@ module Hotel
       return available_rooms
     end
 
-    def enough_rooms?(rooms_available, num_rooms)
+    def enough_rooms?(rooms_available, num_rooms, block_name)
+      if block_name != false && num_rooms > 5 
+        raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms to handle your request of #{num_rooms} rooms.")
+      end
       if rooms_available.length < num_rooms || num_rooms > 20
         raise InvalidRoomQuantity.new("Unfortunately the hotel does not have enough available rooms to handle your request of #{num_rooms} rooms.")
       end
@@ -73,16 +75,6 @@ module Hotel
 
     def reserve_from_block
 
-    end
-
-    def prime_room_for_block(rooms_to_book)
-      updated_rooms = []
-      rooms_to_book.times do |i|
-        room = rooms_to_book[i]
-        room.booked = true
-        updated_rooms << room
-      end
-      return updated_rooms
     end
   end
 end
