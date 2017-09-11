@@ -1,4 +1,3 @@
-require 'pry'
 module Hotel
   #TODO: Make overlap? a mixin and add it into block_reservation and reservation
   class BlockReservation
