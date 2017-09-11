@@ -13,13 +13,44 @@ Each room should have a room number.
 
 test_ob = Hotel::Admin.new
 
-puts "This is a block #{test_ob.add_block([1,2,3,4], Date.new(2017,2,3), Date.new(2017, 2,7))}"
+puts "
 
-puts "List of available rooms #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}"
+This is a block #{test_ob.add_block([1,2,3,4], Date.new(2017,2,3), Date.new(2017, 2,7), 1)}
 
-puts test_ob.create_block_by_date(4, Date.new(2017,2,3), Date.new(2017, 2,7))
+"
 
-puts "List of available rooms #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}"
+
+
+puts "List of available rooms #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
+
+"
+
+#second block
+puts test_ob.create_block_by_date(4, Date.new(2017,2,3), Date.new(2017, 2,7), 2)
+
+puts "List of available rooms after second block is created. #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
+
+"
+
+
+puts "list_available_blocked_rooms #{test_ob.list_available_blocked_rooms(1)}
+
+"
+puts "finding rooms from block #{test_ob.find_rooms_from_block(1, 2)}
+
+"
+
+
+puts "Adding #{test_ob.add_reservation_to_block(1, 2, Date.new(2017,2,3), Date.new(2017, 2,7))} reservation to block
+
+"
+puts "list of reservations #{test_ob.list_reservations(Date.new(2017,2,3))}
+
+"
+
+puts test_ob.reservations_array
+
+
 
 xdescribe "Admin Class" do
 

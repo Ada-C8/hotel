@@ -4,7 +4,7 @@ require_relative 'block'
 module Hotel
   class Admin
 
-    attr_reader :room_nums, :blocks
+    attr_reader :blocks, :room_nums, :reservations_array
 
     def initialize
       @blocks = []
@@ -12,7 +12,9 @@ module Hotel
       20.times do |i|
         @room_nums << (i + 1)
       end
-    end
+
+      @reservations_array = []
+    end # end initialize
 
 
 
@@ -22,9 +24,39 @@ module Hotel
 
 
 
-    def add_block(room_num_array, check_in, check_out, discount_percent: 0.0)
-      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, discount_percent: 0.0)
+    def add_block(room_num_array, check_in, check_out, block_id, discount_percent: 0)
+      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0)
     end
+
+    # Wave 2 requirement. Add reservation only no block
+    # def add_reservation(room_selection, check_in, check_out)
+    #   @reservations << Hotel::Reservation.new(room_selection, check_in, check_out)
+    # end
+
+
+    def list_reservations(date)
+      rez_by_date = []
+
+      @blocks.each do |block|
+        block.reservations_array.each do |reservation|
+          rez_by_date << reservation
+        end
+      end
+      return rez_by_date
+    end
+
+    # def list_reservations(date)
+    #   rez_by_date = []
+    #
+    #   @reservations_array.each do |reservation|
+    #     if reservation.date_range_array.include?(date)
+    #       rez_by_date << reservation
+    #     end
+    #   end
+    #
+    #   return rez_by_date
+    # end
+
 
     #TODO
     #TODO:
@@ -60,9 +92,42 @@ module Hotel
 
 
     # creates block with available room for a given date range.
-    def create_block_by_date(rooms_per_block, check_in, check_out, discount_percent: 0.0)
+    def create_block_by_date(rooms_per_block, check_in, check_out, block_id, discount_percent: 0.0)
       room_num_array = self.list_vacancies(check_in, check_out).sample(rooms_per_block).to_a
-      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, discount_percent: 0.0)
+      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0.0)
     end
+
+    def find_block(id)
+      @blocks.each do |block|
+        if block.block_id == id
+          return block
+        end
+      end
+    end
+
+    def list_available_blocked_rooms(id)
+      block = self.find_block(id)
+      return block.room_num_array
+    end
+
+
+    def find_rooms_from_block(id, num_rooms_to_reserve)
+      return self.list_available_blocked_rooms(id).sample(num_rooms_to_reserve)
+    end
+
+
+
+    def add_reservation_to_block(id, num_rooms_to_reserve, check_in, check_out)
+      block = self.find_block(id)
+      num_rooms_to_reserve = self.find_rooms_from_block(id, num_rooms_to_reserve)
+
+      num_rooms_to_reserve.length.times do |room_num|
+        block.reservations_array << Hotel::Reservation.new(room_num, check_in, check_out)
+      end
+    end
+
+
+
+
   end # end class
 end # end module
