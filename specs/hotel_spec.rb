@@ -303,7 +303,7 @@ describe "The Hotel class" do
       @myhotel.reserve_block("Mary Smith", "9/25/17", "9/29/17", 4, 150)
       @myhotel.reserve_block("Smithy Dickens", "11/12/17", "11/14/17", 3, 150)
       @myhotel.reserve_block("Harriet McDuck", "11/12/17", "11/14/17", 3, 150)
-      @myhotel.reserve_block("McDuck Wedding", "12/5/17", "12/7/17", 5, 150)
+      @myhotel.reserve_block("McDuck and McMary Wedding", "12/5/17", "12/7/17", 5, 150)
       @myhotel.match_block_partyname("McDuck").length.must_equal 2
       @myhotel.match_block_partyname("Smith").length.must_equal 3
       @myhotel.match_block_partyname("smith").length.must_equal 3

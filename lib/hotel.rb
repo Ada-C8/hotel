@@ -69,7 +69,6 @@ module Hotel_Chain
     end
 
     def find_rooms_available(check_in_date, check_out_date)
-      available_rooms = []
       unavailable_rooms = []
 
       check_in = Date.strptime(check_in_date, "%m/%d/%Y")
@@ -116,7 +115,6 @@ module Hotel_Chain
           new_reservation.room.rate = room_rate
           new_reservation.block_reserved = true
           new_reservation.status = "unassigned"
-          ap "New reservation: #{new_reservation}"
           @reservations_array << new_reservation
           local_reservation_array << new_reservation
         end
@@ -129,7 +127,7 @@ module Hotel_Chain
     end
 
     def find_unassigned_block_reservations(party_name)
-      #if the block has the desired party name, then return that block
+      #if the block has the party name, then return that block
       this_block = nil
       @blocks_array.each do |block|
         if block.party_name == party_name
