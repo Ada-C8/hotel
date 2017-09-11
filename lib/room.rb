@@ -3,7 +3,7 @@ require 'date'
 
 module Hotel
   class Room
-    attr_reader :room_number, :cost
+    attr_reader :room_number, :cost, :booked
 
     def initialize(room_number, booked: nil)
       @room_number = room_number
