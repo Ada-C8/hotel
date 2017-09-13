@@ -11,7 +11,9 @@ module Administration
       @check_in = check_in
       @check_out = check_out
 
-
+      raise ArgumentError.new("Check in must be a date") unless @check_in.is_a? Date
+      raise ArgumentError.new("Check out must be a date") unless @check_out.is_a? Date
+      raise ArgumentError.new("Check in date must be before check out date") if @check_out < @check_in
       raise ArgumentError.new("Enter a valid date range") if @check_in == @check_out
     end
 

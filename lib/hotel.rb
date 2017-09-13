@@ -17,12 +17,12 @@ module Administration
 
     def all_reservations
       @all_reservations = []
-      reservation = Administration::Reservation.new(:check_in, :check_out)
+      reservation = Administration::Reservation.new(@check_in, @check_out)
       @all_reservations << reservation
       return @all_reservations
     end
 
-    def book_reservation(check_in, check_out, room_num)
+    def book_reservation(check_in, check_out)
       room_num = @all_rooms.sample
       reservation = Reservation.new(check_in, check_out)
       return reservation

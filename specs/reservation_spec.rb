@@ -21,6 +21,33 @@ describe "Administration#Reservation" do
         Administration::Reservation.new(check_in, check_out)
       }.must_raise ArgumentError
     end
+
+    it "raise ArgumentError if check_in is not a date" do
+      check_in = "string"
+      check_out = Date.new(2017, 9, 1)
+
+      proc {
+        Administration::Reservation.new(check_in, check_out)
+      }.must_raise ArgumentError
+    end
+
+    it "raise ArgumentError if check_out is not a date" do
+      check_in = Date.new(2017, 9 , 1)
+      check_out = 5
+
+      proc {
+        Administration::Reservation.new(check_in, check_out)
+      }.must_raise ArgumentError
+    end
+
+    it "raise ArgumentError if check out date comes before the check in date" do
+      check_in = Date.new(2017, 9, 30)
+      check_out = Date.new(2017, 9, 1)
+
+      proc {
+        Administration::Reservation.new(check_in, check_out)
+      }.must_raise ArgumentError
+    end
   end
 
   describe "#total_nights" do
