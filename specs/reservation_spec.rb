@@ -108,5 +108,4 @@ describe "Administration#Reservation" do
     end
   end
 
-
 end #end of module
