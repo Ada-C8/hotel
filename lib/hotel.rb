@@ -15,12 +15,21 @@ module Administration
       return @all_reservations
     end
 
-    # def listing_rooms
-    #   return @all_rooms
-    # end
-    # def make_reservation(date_range)
-    #
-    # end
+    def listing_rooms
+      return @all_rooms
+    end
+
+    def make_reservation(check_in, check_out, room)
+      reservation = Reservation.new(check_in, check_out, room)
+      @all_reservations.each do |existing|
+        if reservation.overlap?(existing)
+          return false
+        end
+      end
+      @all_reservations << reservation
+      return true
+    end
+
 
 
 

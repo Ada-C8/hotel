@@ -5,11 +5,12 @@ module Administration
 
     RATE = 200
 
-    attr_accessor :check_in, :check_out
+    attr_reader :check_in, :check_out, :room
 
-    def initialize(check_in, check_out)
+    def initialize(check_in, check_out, room)
       @check_in = check_in
       @check_out = check_out
+      @room = room
 
       raise ArgumentError.new("Check in must be a date") unless @check_in.is_a? Date
       raise ArgumentError.new("Check out must be a date") unless @check_out.is_a? Date
@@ -29,6 +30,12 @@ module Administration
 
     def reserved?(target_date)
       return target_date >= @check_in && target_date < @check_out
+    end
+
+    def overlap?(other)
+      #if the start date for other falls within the self date range, then reservations overlap
+      #if the start date for self falls within the other date range, then reservations overlap
+      self.reserved?(other.check_in) || other.reserved?(self.check_in)
     end
 
 
