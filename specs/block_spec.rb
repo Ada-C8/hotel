@@ -21,12 +21,12 @@ describe "Hotel" do
     end
 
     it "will know if the block has availability" do
-      @room1.check_block_for_availability("wedding").must_equal true
+      @room1.check_block_for_availability("wedding").must_equal false
     end
 
     it "will know if block doesn't have rooms" do
       hotel1 = Hotel::Block.new(Date.new(2017,9,5), Date.new(2017,9,8), 0, "wedding")
-      hotel1.check_block_for_availability("wedding").must_equal false
+      hotel1.check_block_for_availability("wedding").must_equal true 
     end
   end
 end

@@ -3,14 +3,14 @@ require 'pry'
 module Hotel
   class DateRange
     # GOAL OF CLASS: to return an array of each of the days for the date_range given
-    attr_reader :checkin, :checkout, :total_nights, :night_array
+    attr_reader :checkin, :checkout, :total_nights, :nights
 
     def initialize(checkin, checkout)
       @checkin = checkin
       @checkout = checkout
       @total_nights = (@checkout - @checkin).to_i
-      @night_array = []
-      make_nights_array
+      @nights = []
+      make_nights
     end
 
     def check_valid
@@ -20,19 +20,19 @@ module Hotel
       end
     end
 
-    def make_nights_array
+    def make_nights
       if check_valid
         counter = 0
         @total_nights.times do
-          @night_array << (@checkin + counter)
+          @nights << (@checkin + counter)
           counter += 1
         end
       end
-      return @night_array
+      return @nights
     end
 
     def include?(date)
-      return @night_array.include?(date)
+      return @nights.include?(date)
     end
   end
 end

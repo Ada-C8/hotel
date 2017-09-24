@@ -11,8 +11,8 @@ module Hotel
       @all_reservations = []
       @all_blocks = []
       @all_rooms_in_block = []
-      @array_of_rooms = []
-       @collection_of_rooms_blocked = collection_of_rooms_blocked
+      @list_of_rooms = []
+      @collection_of_rooms_blocked = collection_of_rooms_blocked
     end
 
     def create_rooms(all_rooms)
@@ -41,7 +41,7 @@ module Hotel
     end
 
     def check_reservations(checkin, checkout)
-      check_against = DateRange.new(checkin, checkout).night_array
+      check_against = DateRange.new(checkin, checkout).nights
       not_available = []
       check_against.each do |date|
         @all_reservations.each do |booking|
@@ -57,9 +57,13 @@ module Hotel
 
     def check_availability(checkin, checkout)
       # this is the inverse of not_available array
+      # Jamie's note: Instead of calling check_reservations within the loop, call it once before and store the collection in a local variable to call .include? on.
+
+      list_of_not_available = check_reservations(checkin, checkout)
+
       available = []
       @all_rooms.each do |room|
-        unless check_reservations(checkin, checkout).include?(room)
+        unless list_of_not_available.include?(room)
           available << room
         end
       end
@@ -73,7 +77,7 @@ module Hotel
       else
         #  collection_of_rooms_blocked = []
         collection_of_rooms_blocked.times do |i|
-          @array_of_rooms << available[i]
+          @list_of_rooms << available[i]
         end
         new_block = Hotel::Block.new(checkin, checkout, collection_of_rooms_blocked, block_id)
         @all_blocks << new_block
@@ -84,14 +88,17 @@ module Hotel
 
     def reserve_room_from_block(block_id)
       # I think I need to try and subtract the collection_of_rooms_blocked each time a reservation is made...
+
+      # Jamie's comment: This method is creating a new block in order to make the reservation, However, the method should work with an existing block of the @all_blocks collection. A reservation should only be made from an existing instance, otherwise the state won't persist to the next time reserve_room_from_block is called. It is also saving an instance of block to @all_reservations. @all_reservation should only hold instances of the Booking class. Otherwise other methods that depend on @all_reservations, like check_reservations, aren't going to run as expected. The idea isn't to reserve a whole block, but to reserve a room that happens to part of a block.
+
       if @collection_of_rooms_blocked == 0
         raise BlockAvailabilityError.new "There are no blocks available for your dates."
       end
       @all_blocks.each do  |block|
-        if block.check_block_for_availability(block_id) && block.check_block_id(block_id)
-          rooms = @array_of_rooms
+        unless block.check_block_for_availability(block_id) && block.check_block_id(block_id)
+          rooms = @list_of_rooms
           # block.available_rooms.take
-          rez = Hotel::Block.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
+          rez = Booking.new(block.dates.checkin, block.dates.checkout, rooms, block.block_id)
           @all_reservations << rez
           #  @collection_of_rooms_blocked -= 1
           return rez

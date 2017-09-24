@@ -31,8 +31,8 @@ describe "Hotel" do
     end
 
     it "array of nights will be created" do
-      @trip.night_array.must_be_kind_of Array
-      @trip.make_nights_array.must_be_kind_of Array
+      @trip.nights.must_be_kind_of Array
+      @trip.make_nights.must_be_kind_of Array
     end
 
     it "knows if date is included" do

@@ -132,7 +132,7 @@ describe "Hotel" do
         checkout7 = Date.new(2018,9,7)
         hotel7 = Hotel::Reservations.new
         block7 = hotel7.make_block(checkin7, checkout7, 4, "bat_mitzvah")
-        block7.check_block_for_availability("bat_mitzvah").must_equal true
+        block7.check_block_for_availability("bat_mitzvah").must_equal false
       end
 
       describe "reserve_room_from_block" do
@@ -142,8 +142,7 @@ describe "Hotel" do
           hotel8 = Hotel::Reservations.new
           hotel8.make_block(checkin8, checkout8, 1, "wedding")
           h = hotel8.reserve_room_from_block("wedding")
-          h.must_be_kind_of Hotel::Block
-          h.block_total_cost.must_equal 320
+          h.must_be_kind_of Hotel::Booking
         end
       end
     end

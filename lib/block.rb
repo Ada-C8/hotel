@@ -14,17 +14,19 @@ module Hotel
 
     def block_total_cost
       block_total_cost = 0
-      @collection_of_rooms_blocked.each do |room|
-        block_total_cost += room.cost * @dates.total_nights * 0.80
+      unless @collection_of_rooms_blocked == 0
+        @collection_of_rooms_blocked.each do |room|
+          block_total_cost += room.cost * @dates.total_nights * 0.80
+        end
       end
       return block_total_cost
     end
 
     def check_block_for_availability(block_id)
       if @collection_of_rooms_blocked == 0
-        available = false
-      else #(implicit @collection_of_rooms_blocked == @how_many_rooms)
         available = true
+      else #(implicit @collection_of_rooms_blocked == @how_many_rooms)
+        available = false
       end
     end
     ##### later, what if it's not empty or not full?
