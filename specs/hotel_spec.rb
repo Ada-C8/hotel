@@ -201,6 +201,29 @@ describe "Hotel class" do
 
       @test_ob.reservations_for_specific_date(Date.new(2017,9,11)).length.must_equal 3
     end
+
+    it "Returns an empty array if no reservations" do
+      @test_ob.reservations_for_specific_date(Date.new(2017,9,10)).must_equal []
+    end
+
+    it "Returns an empty array if no reservations match the requested date" do
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
+
+      @test_ob.make_single_reservation(2, Date.new(2017,9,11), Date.new(2017,9,15))
+
+      @test_ob.reservations_for_specific_date(Date.new(2017,9,20)).must_equal []
+    end
+
+    it "Does not return a reservation that ends on the same date as the requested date" do
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
+      @test_ob.reservations_for_specific_date(Date.new(2017,9,12)).must_equal []
+    end
+
+    it "Does return a reservation that starts on the same date as the requested date" do
+      @test_ob.make_single_reservation(@room, @check_in, @check_out)
+      @test_ob.reservations_for_specific_date(Date.new(2017,9,9)).length.must_equal 1
+    end
+
   end
 
   describe "available_rooms method" do

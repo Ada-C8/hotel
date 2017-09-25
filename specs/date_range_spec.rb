@@ -72,10 +72,11 @@ describe "DateRange class" do
       @test_ob.number_of_nights.must_be_instance_of Rational
     end
 
-    #TODO
-    # it "Returns the correct number of nights; the number of days minus 1" do
-    #
-    # end
+    it "Returns the correct number of nights (the number of days minus 1)" do
+      days = 4 #=> 9, 10, 11, 12
+      nights = days - 1
+      @test_ob.number_of_nights.must_equal nights
+    end
 
   end
 
@@ -86,26 +87,66 @@ describe "DateRange class" do
     end
 
     it "Returns true if dates overlap" do
+      #completely overlaps
       check_in = Date.new(2017,9,9)
       check_out = Date.new(2017,9,12)
       @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
 
       @test_ob.overlap?(@test_ob_2).must_equal true
 
+      #overlaps in the front
       check_in = Date.new(2017,9,7)
       check_out = Date.new(2017,9,10)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal true
+
+      #overlaps in the back
+      check_in = Date.new(2017,9,11)
+      check_out = Date.new(2017,9,13)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal true
+
+      #completely contained
+      check_in = Date.new(2017,9,10)
+      check_out = Date.new(2017,9,11)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal true
+
+      #completely containing
+      check_in = Date.new(2017,9,8)
+      check_out = Date.new(2017,9,13)
       @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
 
       @test_ob.overlap?(@test_ob_2).must_equal true
     end
 
     it "Returns false if dates do not overlap" do
+
+      #completely before
+      check_in = Date.new(2017,9,1)
+      check_out = Date.new(2017,9,8)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal false
+
+      #completely after
+      check_in = Date.new(2017,9,13)
+      check_out = Date.new(2017,9,16)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal false
+
+      #starts on checkout date
       check_in = Date.new(2017,9,12)
       check_out = Date.new(2017,9,15)
       @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
 
       @test_ob.overlap?(@test_ob_2).must_equal false
 
+      #ends on checkin date
       check_in = Date.new(2017,9,7)
       check_out = Date.new(2017,9,9)
       @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
@@ -113,5 +154,5 @@ describe "DateRange class" do
       @test_ob.overlap?(@test_ob_2).must_equal false
     end
   end
-  
+
 end
