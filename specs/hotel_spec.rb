@@ -46,10 +46,11 @@ describe "Hotel class" do
       @test_ob.all_single_reservations[0].must_be_instance_of BookingSystem::Reservation
     end
 
-    it "Has an instance variable @all_block_reservations that holds objects (instances of BlockReservation class) in an Array" do
-      @test_ob.block_off_a_block(3, @check_in, @check_out)
-      @test_ob.block_reservation(1, @check_in, @check_out)
-      @test_ob.all_block_reservations[0].must_be_instance_of BookingSystem::BlockReservation
+    it "Has an instance variable @all_block_reservations that holds objects (instances of Reservation class) in an Array" do
+      new_block = @test_ob.block_off_a_block(3, @check_in, @check_out)
+      block_id = new_block.block_id
+      @test_ob.block_reservation(block_id, 1, @check_in, @check_out)
+      @test_ob.all_block_reservations[0].must_be_instance_of BookingSystem::Reservation
       @test_ob.all_block_reservations.must_be_instance_of Array
     end
 
@@ -102,45 +103,59 @@ describe "Hotel class" do
   end
 
   describe "block_reservation" do
+
+    before do
+      @test_ob = BookingSystem::Hotel.new
+      @room = 1
+      @check_in = Date.new(2017,9,9)
+      @check_out = Date.new(2017,9,12)
+    end
+
     it "Can be called" do
       @test_ob.must_respond_to :block_reservation
     end
 
     it "Will assign price to DEFAULT_ROOM_PRICE 200, if given no price argument" do
-      @test_ob.block_off_a_block(3, @check_in, @check_out)
-      @test_ob.block_reservation(@room, @check_in, @check_out)
+      new_block = @test_ob.block_off_a_block(3, @check_in, @check_out)
+      block_id = new_block.block_id
+      @test_ob.block_reservation(block_id, @room, @check_in, @check_out)
       @test_ob.all_block_reservations[0].price.must_equal 200
     end
 
     it "Can accept a price argument" do
-      @test_ob.block_off_a_block(3, @check_in, @check_out)
-      @test_ob.block_reservation(@room, @check_in, @check_out, 150)
+      new_block = @test_ob.block_off_a_block(3, @check_in, @check_out)
+      block_id = new_block.block_id
+      @test_ob.block_reservation(block_id, @room, @check_in, @check_out, 150)
       @test_ob.all_block_reservations[0].price.must_equal 150
     end
 
     it "Raises UnavailableBlockError if there are no blocks available" do
-      proc { @test_ob.block_reservation(@room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
+      proc { @test_ob.block_reservation(1, @room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
     end
 
-    it "Raises UnavailableBlockError if there are no blocks that match date range" do
-      @test_ob.block_off_a_block(3, @check_in, @check_out)
-      proc { @test_ob.block_reservation(@room, Date.new(2017,10,9), Date.new(2017,10,10)) }.must_raise BookingSystem::Hotel::UnavailableBlockError
+    it "Raises UnavailableBlockError if there are no blocks that match block_id" do
+      new_block = @test_ob.block_off_a_block(3, @check_in, @check_out)
+      block_id = new_block.block_id
+      not_block_id = block_id + 10
+      proc { @test_ob.block_reservation(not_block_id, @room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
     end
 
-    it "Raises UnavailableRoomError if the room requested is not available" do
-      @test_ob.block_off_a_block(3, @check_in, @check_out)
-      proc { @test_ob.block_reservation(20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
-    end
+    # it "Raises UnavailableRoomError if the room requested is not available" do
+    #   @test_ob.block_off_a_block(3, @check_in, @check_out)
+    #   proc { @test_ob.block_reservation(1, 20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+    # end
 
     it "Adds a new block reservation to @all_block_reservations" do
-      @test_ob.block_off_a_block(4, @check_in, @check_out)
-      @test_ob.block_reservation(2, @check_in, @check_out)
+      new_block = @test_ob.block_off_a_block(4, @check_in, @check_out)
+      block_id = new_block.block_id
+      @test_ob.block_reservation(block_id, 2, @check_in, @check_out)
       @test_ob.all_block_reservations.length.must_equal 1
     end
 
-    it "Returns an instance of BlockReservation" do
-      @test_ob.block_off_a_block(4, @check_in, @check_out)
-      @test_ob.block_reservation(2, @check_in, @check_out).must_be_instance_of BookingSystem::BlockReservation
+    it "Returns an instance of Reservation" do
+      new_block = @test_ob.block_off_a_block(4, @check_in, @check_out)
+      block_id = new_block.block_id
+      @test_ob.block_reservation(block_id, 2, @check_in, @check_out).must_be_instance_of BookingSystem::Reservation
     end
   end
 
@@ -176,8 +191,9 @@ describe "Hotel class" do
       @test_ob.make_single_reservation(@room, @check_in, @check_out)
 
       @test_ob.make_single_reservation(2, Date.new(2017,9,11), Date.new(2017,9,15))
-      @test_ob.block_off_a_block(4, @check_in, @check_out)
-      @test_ob.block_reservation(3, @check_in, @check_out)
+      new_block = @test_ob.block_off_a_block(4, @check_in, @check_out)
+      block_id = new_block.block_id
+      @test_ob.block_reservation(block_id, 3, @check_in, @check_out)
 
       @test_ob.reservations_for_specific_date(Date.new(2017,9,10)).must_be_instance_of Array
 

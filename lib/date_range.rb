@@ -23,5 +23,13 @@ module BookingSystem
       return all_reservation_dates
     end
 
+    def number_of_nights
+      return @check_out - @check_in
+    end
+
+    def overlap?(other_date_range_ob)
+      return !(other_date_range_ob.check_in >= @check_out || other_date_range_ob.check_out <= @check_in)
+    end
+
   end
 end

@@ -10,6 +10,7 @@ module BookingSystem
     end
 
     DEFAULT_ROOM_PRICE = 200
+    DISCOUNT_RATE_BLOCK_ROOM = 0.15
 
     attr_reader :rooms, :all_single_reservations, :all_block_reservations, :all_blocks
 
@@ -25,7 +26,7 @@ module BookingSystem
 
       CheckUserInput.price(price)
 
-      if room_available == true
+      if room_available
         reservation = BookingSystem::Reservation.new(room, check_in, check_out, price)
         @all_single_reservations << reservation
 
@@ -35,31 +36,37 @@ module BookingSystem
       end
     end
 
-    def block_reservation(room, check_in, check_out, price = DEFAULT_ROOM_PRICE)
+    def block_reservation(block_id, room, check_in, check_out, price = DEFAULT_ROOM_PRICE, discount_rate = DISCOUNT_RATE_BLOCK_ROOM)
       CheckUserInput.integer(room)
       CheckUserInput.between_1_20(room)
       CheckUserInput.price(price)
-
-      requested_date_range = DateRange.new(check_in, check_out).all_reservation_dates
 
       #check that there are any blocks
       if @all_blocks.empty?
         raise UnavailableBlockError.new("There are no blocks currently in the system")
       end
 
-      #check that there is a matching block for the date range requested
-      blocks_dates_match = @all_blocks.select {|block| block.date_range == requested_date_range}
-      if blocks_dates_match.empty?
-        raise UnavailableBlockError.new("There is no block matching this date range: #{check_in} - #{check_out}")
+      #check that there is a matching block_id
+      block_id_match = @all_blocks.select {|block| block.block_id == block_id}
+
+      if block_id_match.empty?
+        raise UnavailableBlockError.new("There is no block with this ID: #{block_id}")
       end
+
+      #previous solution
+        #check that there is a matching block for the date range requested
+        # blocks_dates_match = @all_blocks.select {|block| block.date_range == requested_date_range}
+        # if blocks_dates_match.empty?
+        #   raise UnavailableBlockError.new("There is no block matching this date range: #{check_in} - #{check_out}")
+        # end
 
       #check that room requested is available in block
       new_block_reservation = nil
-      blocks_dates_match.each do |block|
+      block_id_match.each do |block|
         #if a match make block reservation
         #remove room from availablity in block
         if block.rooms_available.include?(room)
-          new_block_reservation = BookingSystem::BlockReservation.new(room, check_in, check_out, price)
+          new_block_reservation = BookingSystem::Reservation.new(room, check_in, check_out, price, discount_rate)
           block.remove_reserved_room_from_availability(room)
           @all_block_reservations << new_block_reservation
           return new_block_reservation
@@ -92,9 +99,9 @@ module BookingSystem
     end
 
     def reservations_for_specific_date(date)
-      single_reservations = @all_single_reservations.select {|res| res.reservation_dates.include?(date)}
+      single_reservations = @all_single_reservations.select {|res| res.all_reservation_dates.include?(date)}
 
-      block_reservations = @all_block_reservations.select {|res| res.reservation_dates.include?(date)}
+      block_reservations = @all_block_reservations.select {|res| res.all_reservation_dates.include?(date)}
 
       all_reservations = single_reservations + block_reservations
 
@@ -106,14 +113,14 @@ module BookingSystem
       requested_date_range = DateRange.new(check_in, check_out).all_reservation_dates
 
       @all_single_reservations.each do |res|
-        same_dates = requested_date_range & res.reservation_dates
+        same_dates = requested_date_range & res.all_reservation_dates
         if same_dates.any?
           available_rooms.delete(res.room)
         end
       end
 
       @all_blocks.each do |block|
-        same_dates = requested_date_range & block.date_range
+        same_dates = requested_date_range & block.all_reservation_dates
         if same_dates.any?
           block.rooms_in_block.each do |room|
             available_rooms.delete(room)
@@ -129,34 +136,47 @@ module BookingSystem
     def room_available?(room, check_in, check_out)
       CheckUserInput.integer(room)
       CheckUserInput.between_1_20(room)
-      requested_date_range = DateRange.new(check_in, check_out).all_reservation_dates
+      new_date_range_ob = DateRange.new(check_in, check_out)
 
       #check all single reservations
-      all_res_for_room = @all_single_reservations.select {|res| res.room == room}
-
-      all_dates_for_room = []
-      all_res_for_room.each do |res|
-        all_dates_for_room += res.reservation_dates
-      end
-
-      #check for overlap in all reservation dates for the room and the requested date range
-      same_dates = requested_date_range & all_dates_for_room
-
-      #check booked blocks
-      #find booked blocks that include room number
-      all_blocks_with_room = @all_blocks.select {|block| block.rooms_in_block.include?(room)}
-
-      #check for overlapping dates
-      all_blocks_with_room.each do |block|
-        overlap = block.date_range & requested_date_range
-        if overlap.length > 0
-          return false
+      @all_single_reservations.each do |reservation|
+        if reservation.room == room && reservation.overlap?(new_date_range_ob)
+          return false #=> room not available
         end
       end
 
-      if same_dates.length > 0
-        return false
+      #previous solution
+        # all_res_for_room = @all_single_reservations.select {|res| res.room == room}
+        #
+        # all_dates_for_room = []
+        # all_res_for_room.each do |res|
+        #   all_dates_for_room += res.reservation_dates
+        # end
+
+        #check for overlap in all reservation dates for the room and the requested date range
+        # same_dates = requested_date_range & all_dates_for_room
+
+      #check booked blocks
+      #find booked blocks that include room number
+
+      @all_blocks.each do |block|
+        if block.rooms_in_block.include?(room) && block.overlap?(new_date_range_ob)
+          return false #=> room not available
+        end
       end
+      # all_blocks_with_room = @all_blocks.select {|block| block.rooms_in_block.include?(room)}
+      #
+      # #check for overlapping dates
+      # all_blocks_with_room.each do |block|
+      #   overlap = block.date_range & requested_date_range
+      #   if overlap.length > 0
+      #     return false
+      #   end
+      # end
+      #
+      # if same_dates.length > 0
+      #   return false
+      # end
 
       return true
     end

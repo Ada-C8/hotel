@@ -62,5 +62,56 @@ describe "DateRange class" do
 
   end
 
+  describe "number_of_nights method" do
 
+    it "Can be called" do
+      @test_ob.must_respond_to :number_of_nights
+    end
+
+    it "Returns an Integer" do
+      @test_ob.number_of_nights.must_be_instance_of Rational
+    end
+
+    #TODO
+    # it "Returns the correct number of nights; the number of days minus 1" do
+    #
+    # end
+
+  end
+
+  describe "overlap? method" do
+
+    it "Can be called" do
+      @test_ob.must_respond_to :overlap?
+    end
+
+    it "Returns true if dates overlap" do
+      check_in = Date.new(2017,9,9)
+      check_out = Date.new(2017,9,12)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal true
+
+      check_in = Date.new(2017,9,7)
+      check_out = Date.new(2017,9,10)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal true
+    end
+
+    it "Returns false if dates do not overlap" do
+      check_in = Date.new(2017,9,12)
+      check_out = Date.new(2017,9,15)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal false
+
+      check_in = Date.new(2017,9,7)
+      check_out = Date.new(2017,9,9)
+      @test_ob_2 = BookingSystem::DateRange.new(check_in, check_out)
+
+      @test_ob.overlap?(@test_ob_2).must_equal false
+    end
+  end
+  
 end
