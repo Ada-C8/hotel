@@ -1,7 +1,7 @@
 ## Prompts   
 
-1. **What classes does each implementation include? Are the lists the same?
-Both implementations use the same three classes: CartEntry, ShoppingCart and Order.**
+1. **What classes does each implementation include? Are the lists the same?**  
+Both implementations use the same three classes: CartEntry, ShoppingCart and Order.
 
 2.**Write down a sentence to describe each class.**
 
@@ -38,6 +38,7 @@ Has an initialize method that initializes one instance variable, @cart, which is
 
 
 4. **What data does each class store? How (if at all) does this differ between the two implementations?**  
+
 The same data is stored in each class in the two implementations. The CartEntry class stores data for the quantity and unit_price of each instance of CartEntry in the ShoppingCart. The ShoppingCart contains an array of all of these CartEntry instances. The Order class contains a constant variable set equal to the sales tax, as well as an instance of ShoppingCart.  
 
 5. **What methods does each class have? How (if at all) does this differ between the two implementations?**  
@@ -58,10 +59,12 @@ In A, the logic is entirely within the Order class, with the Order class's total
 
 In B, logic to compute the price is delegated to the lower level classes. The logic of the total_price method that needs access to the CartEntry and ShoppingCart instance variables is directly in those classes. Higher level classes access the data for calculating the total price by calling methods on the instances of the lower level classes instead of reading their instance variables directly.  
 
-7. **If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?**       
+7. **If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?**
+
 Implementation B is easier to modify, because you could directly change the logic of it's price method to give a price reduction if the quantity is large enough.  
 
 8. **Which implementation better adheres to the single responsibility principle?**    
+  
 Implementation B better adheres to the single responsibility principle. The classes in B have both state and behavior, and method of higher level classes don't directly rely on the state of lower level classes.  
 
 9. **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**  
