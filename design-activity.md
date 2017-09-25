@@ -1,9 +1,10 @@
 ## Prompts   
 
 1. **What classes does each implementation include? Are the lists the same?**  
+
 Both implementations use the same three classes: CartEntry, ShoppingCart and Order.
 
-2.**Write down a sentence to describe each class.**
+2.**Write down a sentence to describe each class.**  
 
 *Implementation A*:
 
@@ -64,7 +65,7 @@ In B, logic to compute the price is delegated to the lower level classes. The lo
 Implementation B is easier to modify, because you could directly change the logic of it's price method to give a price reduction if the quantity is large enough.  
 
 8. **Which implementation better adheres to the single responsibility principle?**    
-  
+
 Implementation B better adheres to the single responsibility principle. The classes in B have both state and behavior, and method of higher level classes don't directly rely on the state of lower level classes.  
 
 9. **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**  
