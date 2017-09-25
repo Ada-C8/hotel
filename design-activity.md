@@ -1,3 +1,5 @@
+## Prompts   
+
 1. **What classes does each implementation include? Are the lists the same?
 Both implementations use the same three classes: CartEntry, ShoppingCart and Order.**
 
@@ -63,3 +65,7 @@ Implementation B is easier to modify, because you could directly change the logi
 Implementation B better adheres to the single responsibility principle. The classes in B have both state and behavior, and method of higher level classes don't directly rely on the state of lower level classes.  
 
 9. **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**  
+
+## Activity  
+
+The valid_dates method in my booking class raises an argument error if the checkout day is before or equal the checkin day. Since this method deals specifically with dates, so it would make more sense to have this validation in my DateRange class when I initialize a new instance of DateRange.  

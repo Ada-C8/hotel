@@ -8,12 +8,18 @@ module Hotel
   class DateRange
     attr_reader :start_date, :end_date, :num_nights
     def initialize(start_date, end_date)
+
+      # I moved this validation here from the valid_dates method in Booking 
+      if end_date <= start_date
+        raise BookingError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
+      end
+
       @start_date = start_date
       @end_date = end_date
       @num_nights = (end_date - start_date).to_i
     end # initialize
 
-#creates an array (nights_occupied) that containts all the days where the room is occupied for that night
+    #creates an array (nights_occupied) that containts all the days where the room is occupied for that night
     def nights_booked
       nights_occupied = []
       counter = 0
@@ -24,7 +30,5 @@ module Hotel
       return nights_occupied
     end # nights_booked
 
-    # TODO: do I need to make a method to print out the date range in string format for the user?
-
-  end # DateRange
-end # Hotel
+    end # DateRange
+  end # Hotel

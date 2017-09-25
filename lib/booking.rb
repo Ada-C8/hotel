@@ -30,13 +30,14 @@ module Hotel
       end
     end # initialize
 
-    def valid_dates(start_date, end_date)
-      if end_date < start_date
-        raise BookingError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
-      elsif end_date == start_date
-        raise BookingError.new("You must book at least one night. You entered: checkin day = #{start_date} and checkout date = #{end_date} ")
-      end # if
-    end # valid_dates
+# Moved this into the DateRange class initialize method!!
+    # def valid_dates(start_date, end_date)
+    #   if end_date < start_date
+    #     raise BookingError.new("Your checkout day must be after your checkin date! You entered: checkin day = #{start_date} and checkout date = #{end_date}")
+    #   elsif end_date == start_date
+    #     raise BookingError.new("You must book at least one night. You entered: checkin day = #{start_date} and checkout date = #{end_date} ")
+    #   end # if
+    # end # valid_dates
 
     def get_date_array(start_date, end_date)
       dates = Hotel::DateRange.new(start_date, end_date).nights_booked
@@ -54,7 +55,8 @@ module Hotel
     end # get_rooms
 
     def make_reservation(start_date, end_date, num_rooms )
-      valid_dates(start_date, end_date)
+      # valid_dates(start_date, end_date)
+      dates_booked = get_date_array(start_date, end_date)
       if start_date < end_date
         availible = availible_rooms(start_date, end_date)
         if num_rooms > 20
@@ -62,7 +64,6 @@ module Hotel
         elsif num_rooms > availible.length
           raise BookingError.new("We don't have that many rooms availible for those dates. We only have #{availible.length} rooms availible for those dates. ")
         end # if/elsif
-        dates_booked = get_date_array(start_date, end_date)
         reservation_id = @all_reservations.length + 1
         rooms = get_rooms(start_date, end_date, num_rooms)
         cost = (num_rooms * dates_booked.length * 200.0)
@@ -86,6 +87,9 @@ module Hotel
         end # .each
       end #.each
       return date_reservations
+
+
+
     end # check_date_for_reservations
 
     def print_reservations(start_date, end_date)
@@ -138,7 +142,7 @@ module Hotel
       availible = availible_rooms(start_date, end_date)
       all_block_id = return_all_block_ids
       block_id = block_id.upcase
-      valid_dates(start_date, end_date)
+      # valid_dates(start_date, end_date)
       if num_of_rooms > 5
         raise BookingError.new("You can only request a maximum of five rooms per block.")
       elsif num_of_rooms > availible.length
