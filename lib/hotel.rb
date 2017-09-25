@@ -53,13 +53,6 @@ module BookingSystem
         raise UnavailableBlockError.new("There is no block with this ID: #{block_id}")
       end
 
-      #previous solution
-        #check that there is a matching block for the date range requested
-        # blocks_dates_match = @all_blocks.select {|block| block.date_range == requested_date_range}
-        # if blocks_dates_match.empty?
-        #   raise UnavailableBlockError.new("There is no block matching this date range: #{check_in} - #{check_out}")
-        # end
-
       #check that room requested is available in block
       new_block_reservation = nil
       block_id_match.each do |block|
@@ -145,38 +138,13 @@ module BookingSystem
         end
       end
 
-      #previous solution
-        # all_res_for_room = @all_single_reservations.select {|res| res.room == room}
-        #
-        # all_dates_for_room = []
-        # all_res_for_room.each do |res|
-        #   all_dates_for_room += res.reservation_dates
-        # end
-
-        #check for overlap in all reservation dates for the room and the requested date range
-        # same_dates = requested_date_range & all_dates_for_room
-
       #check booked blocks
       #find booked blocks that include room number
-
       @all_blocks.each do |block|
         if block.rooms_in_block.include?(room) && block.overlap?(new_date_range_ob)
           return false #=> room not available
         end
       end
-      # all_blocks_with_room = @all_blocks.select {|block| block.rooms_in_block.include?(room)}
-      #
-      # #check for overlapping dates
-      # all_blocks_with_room.each do |block|
-      #   overlap = block.date_range & requested_date_range
-      #   if overlap.length > 0
-      #     return false
-      #   end
-      # end
-      #
-      # if same_dates.length > 0
-      #   return false
-      # end
 
       return true
     end

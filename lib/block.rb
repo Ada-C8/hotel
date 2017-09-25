@@ -26,7 +26,3 @@ module BookingSystem
 
   end
 end
-
-    # def self.block_count
-    #   return @@block_count
-    # end

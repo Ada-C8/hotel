@@ -140,10 +140,11 @@ describe "Hotel class" do
       proc { @test_ob.block_reservation(not_block_id, @room, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableBlockError
     end
 
-    # it "Raises UnavailableRoomError if the room requested is not available" do
-    #   @test_ob.block_off_a_block(3, @check_in, @check_out)
-    #   proc { @test_ob.block_reservation(1, 20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
-    # end
+    it "Raises UnavailableRoomError if the room requested is not available" do
+      new_block = @test_ob.block_off_a_block(3, @check_in, @check_out)
+      block_id = new_block.block_id
+      proc { @test_ob.block_reservation(block_id, 20, @check_in, @check_out) }.must_raise BookingSystem::Hotel::UnavailableRoomError
+    end
 
     it "Adds a new block reservation to @all_block_reservations" do
       new_block = @test_ob.block_off_a_block(4, @check_in, @check_out)

@@ -53,10 +53,6 @@ describe "Block class" do
       @test_ob.rooms_available.must_be_instance_of Array
     end
 
-    # it "Has an instance variable @date_range that is an Array" do
-    #   @test_ob.date_range.must_be_instance_of Array
-    # end
-
   end
 
   describe "remove_reserved_room_from_availability method" do

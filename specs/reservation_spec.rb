@@ -25,11 +25,7 @@ describe "Reservation class" do
     it "Can be instantiated" do
       @test_ob.must_be_instance_of BookingSystem::Reservation
     end
-    #
-    # it "Has an instance variable @reservation_dates which is an Array of Date objects" do
-    #   @test_ob.reservation_dates.must_be_instance_of Array
-    #   @test_ob.reservation_dates[0].must_be_instance_of Date
-    # end
+
     it "Inherits from DateRange class" do
       @test_ob.must_be_kind_of BookingSystem::DateRange
     end
