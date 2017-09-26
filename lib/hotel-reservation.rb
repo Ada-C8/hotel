@@ -8,22 +8,18 @@ module Hotel
     @@all_reservations = []
     @@block_rooms = {}
 
-    attr_reader :start_date, :end_date, :room, :rate, :total_cost
+    attr_reader :start_date, :end_date, :room, :rate
 
     def initialize(start_date, end_date, room, rate: 200, block: false, add: true)
-      if end_date > start_date
+      if date_check(start_date,end_date)
         @start_date = start_date
         @end_date = end_date
-      else
-        raise DateError.new "End date is before start date"
       end
       if room.available?(start_date, end_date)
         @room = room
       else
         raise InvalidRoomError.new "Room is not available"
       end
-      @number_of_nights = (@end_date - @start_date).to_i
-      @total_cost = (rate * @number_of_nights)
       @rate = rate
       if !block
         @@all_reservations << self
@@ -34,6 +30,18 @@ module Hotel
       end
     end
 
+    def date_check(start_date, end_date)
+      if end_date < start_date
+        raise DateError.new "End date is before start date"
+      else
+        return true
+      end
+    end
+
+    def total_cost
+      number_of_nights = (@end_date - @start_date).to_i
+      return (@rate * number_of_nights)
+    end
 
     def self.list_for_date(date)
       list_of_reservations = []
