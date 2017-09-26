@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe "DateRange Class" do
   before do
-    @date_range_test = Hotel::DateRange.new("2017-9-12", "2017-9-15")
+    @date_range_test = Hotel::DateRange.new("2017-11-12", "2017-11-15")
   end
   describe "Initialize DateRange Class" do
     it "DateRange.new is an instance of Hotel module" do
@@ -27,15 +27,15 @@ describe "DateRange Class" do
     end
     it "raises an ArgumentError if check_out date is before check_in date" do
       proc {
-        Hotel::DateRange.new("2017-9-15", "2017-9-12")
+        Hotel::DateRange.new("2017-11-15", "2017-11-12")
       }.must_raise ArgumentError
     end
   end # end of describe Initialize DateRange Class
   describe "Overlap? method" do
     it "Checks for overlapping dates" do
-      @date_range_test = Hotel::DateRange.new("2017-9-12", "2017-9-15")
-      @date_range_test.overlap?("2017-9-13", "2017-9-14").must_equal true
-      @date_range_test.overlap?("2017-9-16", "2017-9-17").must_equal false
+      @date_range_test = Hotel::DateRange.new("2017-11-12", "2017-11-15")
+      @date_range_test.overlap?("2017-11-13", "2017-11-14").must_equal true
+      @date_range_test.overlap?("2017-11-16", "2017-11-17").must_equal false
     end
   end
   describe "Return_date_range method" do
