@@ -1,5 +1,7 @@
+require_relative 'reservation'
+
 module Hotel
-  class HotelClass
+  class Hotel
     attr_reader :rooms, :reservations, :date_range, :available_room_nums, :reserved, :reserved_room_nums
     def initialize
       # access the list of all of the rooms in the hotel
@@ -27,12 +29,17 @@ module Hotel
       # loop over @reservations.date_range
       # if date_range includes passed in date
       # return reservations
+
+
       reservations.each do |reservation|
+        # I am not requiring a new instance of DateRange class anywhere in this document
+        # this is returning false and what is being returned from reservations are
+        # the new reservations being pushed on by reserve room
         if (reservation.date_range.check_in..reservation.date_range.check_out).include?(date)
           reservations << reservation
         end
-        return reservations
       end
+      return reservations
     end
 
     def view_available_rooms(check_in, check_out)

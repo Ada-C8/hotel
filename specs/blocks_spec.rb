@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe "Blocks class" do
   before do
     @blocks_test = Hotel::Blocks.new#("2017-11-13", "2017-11-15")
-    @hotel_test = Hotel::HotelClass.new
+    @hotel_test = Hotel::Hotel.new
   end
   describe "Initialize Blocks Class" do
     it "Blocks.new is an instance of Hotel module" do
@@ -25,7 +25,7 @@ describe "Blocks class" do
   end
   describe "Create Block method" do
     it "Returns an array" do
-      hotel_test2 = Hotel::HotelClass.new
+      hotel_test2 = Hotel::Hotel.new
       hotel_test2.reserve_room(2,"2017-11-15", "2017-11-18")
       hotel_test2.reserve_room(3,"2017-11-15", "2017-11-18")
       hotel_test2.reserve_room(1,"2017-11-15", "2017-11-18")
