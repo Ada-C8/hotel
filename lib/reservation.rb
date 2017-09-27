@@ -3,7 +3,7 @@ module Hotel
     attr_reader :date_range, :room_id, :cost_per_night
     def initialize(room_id,check_in,check_out)
       # @id = id
-      @date_range = Hotel::DateRange.new(check_in,check_out)
+      @date_range = DateRange.new(check_in,check_out)
       @room_id = room_id
       @cost_per_night = 200
     end

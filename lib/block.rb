@@ -1,8 +1,8 @@
 module Hotel
-  class Blocks
+  class Block
     attr_reader :date_range, :block_rooms, :discount, :hotel
     def initialize
-      @hotel = Hotel::HotelClass.new
+      @hotel = Hotel.new
       @block_rooms = []
       @discount = 0.2
     end

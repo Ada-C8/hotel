@@ -14,7 +14,7 @@ module Hotel
 
     def reserve_room(room_id, check_in, check_out)
       # reserve an available room for a given date range
-      new_reservation = Hotel::Reservation.new(room_id, check_in, check_out)
+      new_reservation = Reservation.new(room_id, check_in, check_out)
       # if room_id is not reserved
       if !(reserved_room_nums.include?(room_id))
         reservations << new_reservation
