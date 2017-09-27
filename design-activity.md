@@ -35,10 +35,12 @@ In Implementation A, the Order#total_price method does all the work. In Implemen
 
 ### Does total_price directly manipulate the instance variables of other classes?
 
-In Implementation A, Order#total_price loops through its carts entries using their instance variables to produce a sum- so, yes. In Implementation B, 
+In Implementation A, Order#total_price loops through its carts entries using their instance variables to produce a sum- so, yes. In Implementation B, a local variable 'subtotal' is used to hold the price of a ShoppingCart instance to calculate the total with sales tax instead.
 
 ### If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
+Implementation B would be easier to modify because you could alter or create another price method within the CartEntry class to adjust for that.
 
 ### Which implementation better adheres to the single responsibility principle?
+Implementation B.
 
 ### Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
