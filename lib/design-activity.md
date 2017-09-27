@@ -64,7 +64,7 @@
 
     **CHANGES TO HOTEL**
 
-    I had valid_date_range? methods in both reservation and block classes but they were used in the hotel class inside methods to make reservations and block reservations. It seemed like it would be better if those methods were called during initialize for their respective classes (i.e. if as part of the initialize process reservation checked that the arguments passed in for check in and check out date were valid at that time).
+    I had valid_date_range? methods in both reservation and block classes but they were used in the hotel class inside methods to make reservations and block reservations. It seemed like it would be better if those methods were called during initialize for their respective classes (i.e. if as part of the initialization process reservation checked that the arguments passed in for check in and check out date were valid at that time).
 
     Otherwise, if something about the valid date range changed, you would have to track the code from the two uses in the hotel class back to the source in the block and reservation classes.
 

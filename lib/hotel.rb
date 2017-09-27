@@ -28,7 +28,6 @@ module Hotel_System
     def make_reservation(room_number, check_in, check_out)
       room = return_room_object_by_num(room_number)
       @reservation = Reservations.new(room, check_in, check_out)
-      # if @reservation.valid_date_range? == true
       if @reservation
         @all_reservations << @reservation
       end
@@ -37,7 +36,6 @@ module Hotel_System
 
     def make_block(num_of_rooms, check_in, check_out, discount)
       @block = Block.new(num_of_rooms, check_in, check_out, discount)
-      # if @block.valid_date_range? == true
       if @block
         @all_reservations << @block
       end
