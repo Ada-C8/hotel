@@ -109,6 +109,13 @@ describe "Hotel" do
         block_res
         proc {ada_inn.reserve_block(d1+1,3,[room_4, room_5, room_6, room_7], 120)}.must_raise Reservable::UnavailableError
       end # "Raises an error if a room is already reserved or blocked"
+
+      it "Can reserve more than one block for a given room on differing dates" do
+        block_res
+        
+        ada_inn.reserve_block(d6, 2, [room_4, room_5], 150).must_be_instance_of ReservationSystem::Block
+
+      end # "Can reserve more than one block for a given room on differing dates"
     end # reserve_block
 
     describe "search_available_rooms" do

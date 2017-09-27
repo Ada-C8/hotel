@@ -65,7 +65,7 @@ module ReservationSystem
       end
 
       rooms_list.each do |room|
-        raise UnavailableError.new("One or more rooms are unavailable on one of the dates given") if (!room.not_reserved?(start_date, nights) || !room.not_blocked?(start_date, nights))
+        raise UnavailableError.new("One or more rooms are unavailable on one of the dates given") unless room.not_reserved?(start_date, nights) && room.not_blocked?(start_date, nights)
       end
 
       @new_block = ReservationSystem::Block.new(start_date, nights, rooms_list, block_rate)
