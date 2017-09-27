@@ -44,3 +44,8 @@ Implementation B would be easier to modify because you could alter or create ano
 Implementation B.
 
 ### Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+
+
+# Activity
+
+### Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
