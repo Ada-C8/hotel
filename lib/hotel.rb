@@ -60,7 +60,7 @@ module ReservationSystem
       positive_integer?(nights)
 
       if rooms_list.length > BLOCK_ROOM_LIMIT
-        rooms_list = rooms_list[0,5]
+        rooms_list = rooms_list[0,BLOCK_ROOM_LIMIT]
         raise RoomLimitError.new("Blocks may only contain #{BLOCK_ROOM_LIMIT} rooms. Your block will include the first #{BLOCK_ROOM_LIMIT} rooms only.")
       end
 
