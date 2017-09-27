@@ -18,13 +18,13 @@ module Hotel_System
       @check_out = Date.parse(check_out)
       @today = Date.today
       @array_of_room_objects = []
+      if self.valid_date_range?
+      end
     end
 
     def add_room_to_block(room_number)
       @array_of_room_objects << room_number
     end
-
-
 
     def valid_date_range?
       if @check_in < today

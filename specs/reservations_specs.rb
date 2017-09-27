@@ -27,40 +27,36 @@ describe "Hotel_System::Reservations" do
 
   it "valid date ranges will pass valid_date_range?" do
     reservation = Hotel_System::Reservations.new(5, "1-1-2018", "1-5-2018")
-    reservation.valid_date_range?.must_equal true
+    reservation.wont_equal ArgumentError
   end
 
   it "checks that the check in date is not in the past" do
-    reservation = Hotel_System::Reservations.new(11, "1-1-2015", "1-1-2018")
-    proc {reservation.valid_date_range?}.must_raise ArgumentError
-    begin reservation.valid_date_range?
+    proc { Hotel_System::Reservations.new(11, "1-1-2015", "1-1-2018")}.must_raise ArgumentError
+    begin Hotel_System::Reservations.new(11, "1-1-2015", "1-1-2018")
     rescue ArgumentError => e
       e.message.must_equal("Invalid check in date")
     end
   end
 
   it "checks the check out date is not in the past" do
-    reservation = Hotel_System::Reservations.new(1, "1-1-2018", "1-1-2015")
-    proc {reservation.valid_date_range?}.must_raise ArgumentError
-    begin reservation.valid_date_range?
+    proc {Hotel_System::Reservations.new(1, "1-1-2018", "1-1-2015")}.must_raise ArgumentError
+    begin Hotel_System::Reservations.new(1, "1-1-2018", "1-1-2015")
     rescue ArgumentError => e
       e.message.must_equal("Invalid check out date")
     end
   end
 
   it "checks the check out date is after the check in date" do
-    reservation = Hotel_System::Reservations.new(20, "10-10-2017", "10-9-2017")
-    proc {reservation.valid_date_range?}.must_raise ArgumentError
-    begin reservation.valid_date_range?
+    proc {Hotel_System::Reservations.new(20, "10-10-2018", "10-9-2018")}.must_raise ArgumentError
+    begin Hotel_System::Reservations.new(20, "10-10-2018", "10-9-2018")
     rescue ArgumentError => e
       e.message.must_equal("Invalid date range")
     end
   end
 
   it "checks the check in date is not the same as the check out date" do
-    reservation = Hotel_System::Reservations.new(13, "10-10-2017", "10-10-2017")
-    proc {reservation.valid_date_range?}.must_raise ArgumentError
-    begin reservation.valid_date_range?
+    proc {Hotel_System::Reservations.new(13, "10-10-2017", "10-10-2017")}.must_raise ArgumentError
+    begin Hotel_System::Reservations.new(13, "10-10-2017", "10-10-2017")
     rescue ArgumentError => e
       e.message.must_equal("Check out must be after check in")
     end

@@ -59,4 +59,13 @@
 
     **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**
 
-    Implementation B 
+    Implementation B
+
+
+    **CHANGES TO HOTEL**
+
+    I had valid_date_range? methods in both reservation and block classes but they were used in the hotel class inside methods to make reservations and block reservations. It seemed like it would be better if those methods were called during initialize for their respective classes (i.e. if as part of the initialize process reservation checked that the arguments passed in for check in and check out date were valid at that time).
+
+    Otherwise, if something about the valid date range changed, you would have to track the code from the two uses in the hotel class back to the source in the block and reservation classes.
+
+    Additionally, I took this opportunity to make additional changes to make more of the methods in the hotel class private, per feedback from Chris on the original assignment. I had to change a number of my tests as a result. I think this is an indication I'm writing my tests based too much on implementation details and need to try to write them just using public methods (per feedback on Scrabble), but sometimes that is easier said than done.

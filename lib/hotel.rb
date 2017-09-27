@@ -17,10 +17,6 @@ module Hotel_System
       @all_reservations = []
     end
 
-    def return_room_object_by_num(room_number)
-      room_object = @all_rooms[room_number - 1]
-    end
-
     def list_of_rooms
       room_list = []
       @all_rooms.each do |room|
@@ -32,7 +28,8 @@ module Hotel_System
     def make_reservation(room_number, check_in, check_out)
       room = return_room_object_by_num(room_number)
       @reservation = Reservations.new(room, check_in, check_out)
-      if @reservation.valid_date_range? == true
+      # if @reservation.valid_date_range? == true
+      if @reservation
         @all_reservations << @reservation
       end
       return @reservation
@@ -40,7 +37,8 @@ module Hotel_System
 
     def make_block(num_of_rooms, check_in, check_out, discount)
       @block = Block.new(num_of_rooms, check_in, check_out, discount)
-      if @block.valid_date_range? == true
+      # if @block.valid_date_range? == true
+      if @block
         @all_reservations << @block
       end
       list_of_rooms = find_rooms_for_block(num_of_rooms, check_in, check_out)
@@ -106,18 +104,6 @@ module Hotel_System
       end
       @master_list = @master_list.inject(:&)
       return @master_list
-    end
-
-    def inquiry_date_range_generator(check_in, check_out)
-      check_in = date_object_checker(check_in)
-      check_out = date_object_checker(check_out)
-      @inquiry_date_range = [check_in]
-      date = check_in
-      until date.next == check_out
-        date = date.next
-        @inquiry_date_range << date
-      end
-      return @inquiry_date_range
     end
 
     def make_res_if_avail(room_number, check_in, check_out)
@@ -190,6 +176,22 @@ module Hotel_System
         date = Date.parse(date)
       end
       return date
+    end
+
+    def return_room_object_by_num(room_number)
+      room_object = @all_rooms[room_number - 1]
+    end
+
+    def inquiry_date_range_generator(check_in, check_out)
+      check_in = date_object_checker(check_in)
+      check_out = date_object_checker(check_out)
+      @inquiry_date_range = [check_in]
+      date = check_in
+      until date.next == check_out
+        date = date.next
+        @inquiry_date_range << date
+      end
+      return @inquiry_date_range
     end
 
   end #class end

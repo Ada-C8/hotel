@@ -13,6 +13,9 @@ module Hotel_System
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
       @today = Date.today
+      if self.valid_date_range?
+      end
+
     end
 
     def valid_date_range?
