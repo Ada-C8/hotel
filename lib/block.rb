@@ -14,8 +14,8 @@ module ReservationSystem
 
 #TODO: create method for blocked_nights
       @rooms.each do |room|
-        room.blocked_nights += @dates_blocked
-        room.rate = block_rate
+        room.add_blocked_nights(@dates_blocked)
+        room.change_rate(block_rate)
       end
     end # initialize
 

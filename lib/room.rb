@@ -17,13 +17,16 @@ module ReservationSystem
       @blocked_nights = Array.new
     end
 
-    def change_rate(rate)
+    def change_rate(rate) #TODO: separate rate changes to be dependant on dates/reservations/blocks
       @rate = rate
     end
 
     def add_nights_reserved(check_in_date, nights)
       @nights_reserved += date_range(check_in_date, nights)
+    end
 
+    def add_blocked_nights(dates_blocked)
+      @blocked_nights += dates_blocked
     end
 
     def not_reserved?(start, nights = 1)
