@@ -49,3 +49,7 @@ Implementation B.
 # Activity
 
 ### Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
+
+Looking through my code again, I see three distinct places where a class is directly modifying an instance variable of another class: Hotel#change_room_rate, Reservation#initialize and Block#initialize.
+
+I would/will refactor the Room class to create methods to adjust these variables, then allow the Hotel/Reservation and Block classes to call these methods instead. This will be a design improvement, because it will be more granular and flexible. I would be able to call upon and adjust these methods independently if changes are required, perhaps adding better validations etc, if necessary.
