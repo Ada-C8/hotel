@@ -45,6 +45,7 @@ Implementation B.
 
 ### Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
+Implementation B is more loosely coupled because the dependencies are more isolated. 
 
 # Activity
 
