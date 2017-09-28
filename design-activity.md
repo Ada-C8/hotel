@@ -94,10 +94,52 @@ Implementation B better adheres to this principle, as each class manages and enc
 ##### Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?  
 
 ### Revisiting Hotel
-
-#### Class
-##### What is this class's responsibility?
-##### You should be able to describe it in a single sentence.
+#### Block
+##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
+Contains & manages necessary information for a block reservation
 ##### Is this class responsible for exactly one thing?
+Yes
 ##### Does this class take on any responsibility that should be delegated to "lower level" classes?
+No
 ##### Is there code in other classes that directly manipulates this class's instance variables?
+No - Reservation reads the #discount_rate variable but does not manipulate it
+
+#### Hotel
+##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
+Contains and manages all types of reservations
+##### Is this class responsible for exactly one thing?
+Yes
+##### Does this class take on any responsibility that should be delegated to "lower level" classes?
+No? Room rates are currently set by the ROOM_COST constant (as room cost is always 200/night) within the Hotel class, while theoretically if these were to change they would have to come from somewhere else, but would probably still be accessed/assigned within the Hotel#initialize method.
+##### Is there code in other classes that directly manipulates this class's instance variables?
+No
+
+#### Reservation
+##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
+Contains & manages necessary information for a room reservation
+##### Is this class responsible for exactly one thing?
+Yes
+##### Does this class take on any responsibility that should be delegated to "lower level" classes?
+No
+##### Is there code in other classes that directly manipulates this class's instance variables?
+No
+
+#### Room
+##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
+Contain basic data on a given room
+##### Is this class responsible for exactly one thing?
+Yes
+##### Does this class take on any responsibility that should be delegated to "lower level" classes?
+No
+##### Is there code in other classes that directly manipulates this class's instance variables?
+No
+
+#### DateRange (module)
+##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
+Provide necessary methods for working with ranges of dates
+##### Is this class responsible for exactly one thing?
+Yes
+##### Does this class take on any responsibility that should be delegated to "lower level" classes?
+No? One method (#validate) might be better off being added to the Date class
+##### Is there code in other classes that directly manipulates this class's instance variables?
+No (n/a)
