@@ -14,10 +14,6 @@ module Hotel
     def initialize(num_rooms)
       @rooms = []
 
-      unless num_rooms.class == Integer
-        raise(ArgumentError, "Number of rooms parameter must be Integer: #{num_rooms}")
-      end
-
       num_rooms.times do |i|
         @rooms << Room.new(i + 1, ROOM_COST)
       end
