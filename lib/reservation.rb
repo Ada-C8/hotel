@@ -33,9 +33,9 @@ module Administration
     end
 
     def overlap?(other)
-      #if the start date for other falls within the self date range, then reservations overlap
+      #if the start date for other reservation falls within the self date range, then reservations overlap
       #if the start date for self falls within the other date range, then reservations overlap
-      self.reserved?(other.check_in) || other.reserved?(self.check_in)
+      (self.reserved?(other.check_in) && @room == other.room) || (other.reserved?(self.check_in) && @room == other.room)
     end
 
 

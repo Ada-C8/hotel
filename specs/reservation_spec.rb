@@ -142,6 +142,16 @@ describe "Administration#Reservation" do
       check_out = Date.new(2017, 8, 30)
       reservation2 = Administration::Reservation.new(check_in, check_out, room)
       reservation.overlap?(reservation2).must_equal false
+
+      room = 5
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      reservation = Administration::Reservation.new(check_in, check_out, room)
+      room = 1
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      reservation2 = Administration::Reservation.new(check_in, check_out, room)
+      reservation.overlap?(reservation2).must_equal false
     end
 
     it "returns true if the reservations overlap" do

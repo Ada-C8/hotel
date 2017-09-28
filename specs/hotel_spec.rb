@@ -60,10 +60,22 @@ describe "Administration#Hotel" do
     end
 
     it "ignores existing reservations for other rooms" do
-      #return true
+      rooms = 12
+      room = 1
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      hotel = Administration::Hotel.new(rooms)
+      hotel.make_reservation(check_in, check_out, room)
+
+      rooms = 12
+      room = 5
+      check_in = Date.new(2017, 9, 1)
+      check_out = Date.new(2017, 9, 5)
+      hotel.make_reservation(check_in, check_out, room).must_equal true
     end
 
     it "when we look at all_reservations, then added the new reservation" do
+
       #not changed if returned false #could just add a new line in the it do blocks to test if make reservations changes the all res array
     end
   end
