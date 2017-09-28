@@ -17,6 +17,8 @@ module ReservationSystem
       @blocked_nights = Array.new
     end
 
+    #Major refactoring needed: Rates for a given date? or rate change to happen during blocked nights? Meaning, check dates and status and return rate held by Reservation or block? This would be similar refactoring to checking dates via Reservation and Blocks...
+
     def change_rate(rate) #TODO: separate rate changes to be dependant on dates/reservations/blocks
       @rate = rate
     end

@@ -12,7 +12,6 @@ module ReservationSystem
       @dates_blocked = date_range(start_date, nights)
       @block_rate = block_rate
 
-#TODO: create method for blocked_nights
       @rooms.each do |room|
         room.add_blocked_nights(@dates_blocked)
         room.change_rate(block_rate)
