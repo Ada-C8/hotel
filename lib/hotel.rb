@@ -30,6 +30,16 @@ module Administration
       return true
     end
 
+  def find_by_date(date)
+    res_by_date = []
+
+    @all_reservations.each do |reservation|
+      if date >= reservation.check_in && date < reservation.check_out
+        res_by_date << reservation
+      end
+    end
+    return res_by_date
+  end
 
 
 
