@@ -92,8 +92,8 @@ module ReservationSystem
       end
     end # "reserve_within"
 
-    def change_room_rate(room, rate)
-      room.rate = rate
+    def change_room_rate(room, rate) #TODO create room method for changing rate
+      room.change_rate(rate)
     end
 
   end #Hotel class

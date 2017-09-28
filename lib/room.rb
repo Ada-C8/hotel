@@ -17,6 +17,10 @@ module ReservationSystem
       @blocked_nights = Array.new
     end
 
+    def change_rate(rate)
+      @rate = rate
+    end
+
     def not_reserved?(start, nights = 1)
       date_array = date_range(start, nights)
       availability = true
