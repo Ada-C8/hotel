@@ -13,8 +13,8 @@ module ReservationSystem
       @nights = nights
       @room = room
       @dates_reserved = date_range(check_in_date, nights)
-#TODO create room method for addind nights_reserved
-      @room.nights_reserved += date_range(check_in_date, nights)
+
+      @room.add_nights_reserved(check_in_date, nights)
     end # initialize
 
     def cost

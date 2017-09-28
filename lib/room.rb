@@ -21,6 +21,11 @@ module ReservationSystem
       @rate = rate
     end
 
+    def add_nights_reserved(check_in_date, nights)
+      @nights_reserved += date_range(check_in_date, nights)
+
+    end
+
     def not_reserved?(start, nights = 1)
       date_array = date_range(start, nights)
       availability = true
