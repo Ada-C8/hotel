@@ -43,10 +43,10 @@ I would say that B has been "decoupled" to the best of its ability in that, yes 
 ## HOTEL ACTIVITY:
 1. Identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class.
 
-My Block class definitely needs to be reworked. I was not happy with it when I submitted it so I am ready to revisit it and try to tackle it's flaws. The logic for Block might live in too many places. Right now, the Reservations class contains methods that pertain to the Block class because the block reservation would be modifying the reservations list and thus I thought it should go with the rest of the reservations. But I am still a bit unsure what the best route is. I want 
+My Block class definitely needs to be reworked. I was not happy with it when I submitted it so I am ready to revisit it and try to tackle it's flaws. The logic for Block might live in too many places. Right now, the Reservations class contains methods that pertain to the Block class because the block reservation would be modifying the reservations list and thus I thought it should go with the rest of the reservations. But I am still a bit unsure what the best route is.
 
 Also, I tried my best to fix my naming conventions (taking the word array out of the variable names) and also tried to fix my check_availability method based on Jamie's feedback. **** Q for Jamie: Does that method look better now?
 
 2. Describe what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
 
-So I am trying my best to clean up my Block class to make single responsibility happen. I am trying to organize my methods and rewrite them so that the attributes are not modifying the attributes of another class, as it was doing previously. If anything, I will want them to just call on the other class' methods.
+My goal is to clean up my Block class to make single responsibility happen. I am trying to organize my methods and rewrite them so that the attributes are not modifying the attributes of another class, as it was doing previously. If anything, I will want them to just call on the other class' methods. 
