@@ -70,4 +70,20 @@ describe "Block class" do
     end
   end
 
+  describe "block_id_match? method" do
+    it "Can be called" do
+      @test_ob.must_respond_to :block_id_match?
+    end
+
+    it "Returns true if there is a match" do
+      block_id = @test_ob.block_id
+      @test_ob.block_id_match?(block_id).must_equal true
+    end
+
+    it "Returns false if there is no match" do
+      block_id = @test_ob.block_id
+      @test_ob.block_id_match?(block_id + 1).must_equal false
+    end
+  end
+
 end

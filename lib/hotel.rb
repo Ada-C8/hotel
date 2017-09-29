@@ -52,13 +52,8 @@ module BookingSystem
       if block_id_match == false
         raise UnavailableBlockError.new("There is no block with this ID: #{block_id}")
       end
-      #
-      # block_id_match = @all_blocks.all? {|block| block.block_id_match?(block_id)}
-      #
-      # if block_id_match == false
-      #   raise UnavailableBlockError.new("There is no block with this ID: #{block_id}")
-      # end
 
+      #previous solution:
       # block_id_match = @all_blocks.select {|block| block.block_id == block_id}
 
       if block_id_match.empty?
