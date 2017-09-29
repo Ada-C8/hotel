@@ -1,4 +1,3 @@
-
 module My_Hotel
   class Block# Makes blocks.
 
@@ -10,6 +9,10 @@ module My_Hotel
       @nights_held = nights
       @block_id = nil
       #@contact_info or payment info could be added as instance variables
+    end
+
+    def contain?(date)
+        @nights_held.include?(date)
     end
 
     def create_booking(all_blocks)
