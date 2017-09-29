@@ -1,3 +1,5 @@
+# Activity: Evaluating Responsibility
+
 * **What classes does each implementation include? Are the lists the same?**
 
 Each implementation includes the following classes (They are the same):
@@ -60,3 +62,27 @@ Implementation B better adheres to the single responsibility principle.
 * **Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?**
 
 Implementation B is more loosely coupled.
+-------------------
+
+# Revisiting Hotel Activity:
+
+- Block needs to do it's own testing for invalid dates (date range class?)
+
+- Price should be calculated by the reservation (Not right now since price of room is dictated by the room)
+
+- Find by can be done in all method of block and reservation
+
+-- create a date range class that is a superclass to reservation and block
+-- take overlap from hotel class and put it into date range class.
+
+
+
+
+
+Nicely done! In your testing for Block you should include testing for things such as invalid dates at the Block class level because the class might be reused elsewhere.
+
+Also in your testing, what about when you try to reserve a room with an invalid room #? Good edge case testing to see if you can reserve a room on the day someone is checking out.
+
+For testing the uniqueness of the block booking you can make a hash of all the booking IDs and loop through counting how often they occur as the value. Then if all the values are 1, they're unique. Because they're random there's no way to verify it 100%, but you could run the test several times.
+
+For returns 17 rooms when there are three room conflicts you can also just verify that the available rooms don't include the rooms in the specific reservations. Overall you did really really well. The design was good, although as you noted, not perfect. You also did a very through job testing.

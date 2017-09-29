@@ -108,6 +108,7 @@ describe Hotel::Hotel do
       @block = @hotel.blocks[0]
       @id = @hotel.blocks[0].id
       @hotel.make_reservation_from_block("guest", @id)
+
     end
 
     it "returns an Array of Rooms" do
@@ -152,8 +153,6 @@ describe Hotel::Hotel do
       3.times do
         hotel.make_reservation_from_block("guest", block.id)
       end
-
-
 
       hotel.get_available_rooms_from_block(hotel.blocks[0]).length.must_equal 0
 

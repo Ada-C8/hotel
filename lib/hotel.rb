@@ -1,6 +1,9 @@
 require_relative 'reservations'
 require_relative 'rooms'
 require_relative 'block'
+require_relative 'date_range'
+
+require 'pry'
 
 module Hotel
   class Hotel
@@ -37,8 +40,6 @@ module Hotel
     if num_rooms.between?(1, 5) == false
       raise StandardError.new "only possible to book 5 rooms in a block"
     end
-
-    ### Does this work to just say block.add_room?
 
     num_rooms.times do
       room = assign_room(check_in, check_out)
@@ -77,26 +78,42 @@ module Hotel
     return res_by_date
   end
 
-  def get_available_rooms(date_begin, date_end)
+  def get_available_rooms(check_in, check_out)
     available_rooms = @rooms.clone
 
-    @reservations.each do |res|
-      overlap = (res.check_in...res.check_out).to_a & (date_begin...date_end).to_a
+    res_date = DateRange.new(check_in, check_out)
 
-      if overlap[0] != nil
+    @reservations.each do |res|
+      unless res_date.overlap(res).empty?
         available_rooms.delete(res.room)
       end
     end
 
     @blocks.each do |block|
-      overlap = (block.check_in...block.check_out).to_a & (date_begin...date_end).to_a
-
-      if overlap[0] != nil
+      unless res_date.overlap(block).empty?
         block.rooms_in_block.each do |room|
           available_rooms.delete(room)
         end
       end
     end
+
+    # @reservations.each do |res|
+    #   overlap = (res.check_in...res.check_out).to_a & (date_begin...date_end).to_a
+    #
+    #   if overlap[0] != nil
+    #     available_rooms.delete(res.room)
+    #   end
+    # end
+    #
+    # @blocks.each do |block|
+    #   overlap = (block.check_in...block.check_out).to_a & (date_begin...date_end).to_a
+    #
+    #   if overlap[0] != nil
+    #     block.rooms_in_block.each do |room|
+    #       available_rooms.delete(room)
+    #     end
+    #   end
+    # end
 
     return available_rooms
   end

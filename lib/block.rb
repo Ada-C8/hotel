@@ -1,11 +1,12 @@
+require_relative 'date_range.rb'
+
 module Hotel
-  class Block
+  class Block < DateRange
 
     attr_reader :check_in, :check_out, :id, :rooms_in_block, :discount
 
     def initialize(check_in, check_out, id)
-      @check_in = check_in
-      @check_out = check_out
+      super(check_in, check_out)
       @id = id
       @rooms_in_block = []
     end
