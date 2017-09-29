@@ -110,9 +110,9 @@ describe "HotelAdmin" do
         proc { @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 2)) }.must_raise UnavailableRoomError
       end
 
-      # it "cannot reserve a room that's in a block with same date range and room id" do
-      #   proc { @hotel_admin_test.reserve_room(@first_name, @last_name, 10, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5)) }.must_raise UnavailableRoomError
-      # end
+      it "cannot reserve a room that's in a block with same date range and room id" do
+        proc { @hotel_admin_test.reserve_room(@first_name, @last_name, 10, @room_rate, Date.new(2017, 9, 1), Date.new(2017, 9, 5)) }.must_raise UnavailableRoomError
+      end
 
       it "will allow booking for a room if requested start_date is on the end_date of a previous booking" do
         @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
