@@ -75,7 +75,7 @@ Implementation B, as each class only relies on it's own instance methods to read
 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
-Implementation B, as the classes are connected without knowing the details of the other classes implementation.
+Implementation B, as the classes are connected without knowing the details of the other classes' implementation.
 
 ---
 
