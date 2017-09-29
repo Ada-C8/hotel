@@ -1,4 +1,3 @@
-
 module My_Hotel
 
   class Reservation # Makes reservations.
@@ -14,6 +13,11 @@ module My_Hotel
       @block_id = nil
       #@contact_info or payment info could be added as instance variables
     end
+
+    def contain?(date)
+        @nights_booked.include?(date)
+    end
+
 
     def create_booking(all_reservations, rooms_avail, discount=1, block_id=nil)
       assign_room(rooms_avail)
@@ -45,6 +49,7 @@ module My_Hotel
       end
       @reservation_id = new_reservation_id
     end
+
 
     def unique_reservation_id?(all_reservations)
       if all_reservations.length != 0
