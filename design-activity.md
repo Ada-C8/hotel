@@ -46,3 +46,7 @@ Implementation B better adheres to the single responsibility principle because i
 11. Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
 Implementation B is more loosely coupled. It better isolates external messages to other classes. For example, in implementation A, Order#total_price relies on .entries in ShoppingCart and .unit_price and .quantity in CartEntry. However, in implementation B, Order#total_price only relies on one external message to ShoppingCart's price method.
+
+12. Identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and why the resulting design would be an improvement.
+
+My hotel class is responsible for managing a set of reservations, while my Block class is responsible for managing the rooms within a block. However, in my previous implementation of the Hotel project, I checked whether rooms were available within a block by creating a check_block_availability method in the Hotel class. I updated my design by removing this from the Hotel class and implementing two methods in the Block class that check whether rooms are available in a block and manage the group of reserved and available rooms in a block.
