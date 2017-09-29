@@ -20,6 +20,14 @@ module BookingSystem
       return @rooms_available
     end
 
+    def block_id_match?(other_block_id)
+      if @block_id == other_block_id
+        return true
+      else
+        return false
+      end
+    end
+
     def self.block_count
       @@block_count
     end
