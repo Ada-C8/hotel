@@ -43,12 +43,16 @@ module My_Hotel
     end
 
     def date_range(first_night, last_night)
-      if first_night != last_night
-        @nights = (first_night..last_night)
-      else
-        @nights = []
-        @nights << first_night
+      if first_night > last_night
+        raise ArgumentError.new("The first night of this booking occurs after the last night date. First night:#{first_night} Last night:#{last_night}")
       end
+      if first_night != last_night
+        nights = (first_night..last_night)
+      else
+        nights = []
+        nights << first_night
+      end
+      return nights
     end
 
     #can be used for "As an administrator, I can reserve an available room for a given date range"
@@ -110,7 +114,7 @@ module My_Hotel
 
 
     #These can be used for "As an administrator, I can view a list
-    # of rooms that are not reserved for a given date range" 
+    # of rooms that are not reserved for a given date range"
     # Given a range of nights, returns a hash with all the
     # rooms available over the entire stay
     def unreserved_and_unblocked(nights)
@@ -160,12 +164,7 @@ module My_Hotel
 
     ####Methods to find reservations####
     def find_by_reservation_id(reservation_id)
-      @all_reservations.each do |reservation|
-        if reservation.reservation_id == reservation_id
-          return reservation
-        end
-      end
-      return nil
+      return @all_reservations.select { |reservation| reservation.reservation_id  == reservation_id }[0]
     end
 
     #can be used for "As an administrator, I can access the list of
@@ -176,12 +175,7 @@ module My_Hotel
 
     ####Methods to find blocks ####
     def find_by_block_id(block_id)
-      @all_blocks.each do |block|
-        if block.block_id == block_id
-          return block
-        end
-      end
-      return nil
+      return @all_blocks.select { |block| block.block_id  == block_id }[0]
     end
 
     def find_blocks_by_date(date)

@@ -44,13 +44,39 @@ describe "My_Hotel::Hotel" do
       holiday.must_be_kind_of My_Hotel::Reservation
     end
 
+    it "lets you make reservations on the ends of completely booked dates" do
+      20.times do
+        @ritz.make_reservation(@feb3, @feb5)
+      end
+      #Completely before
+      @ritz.make_reservation(@feb1).must_be_kind_of My_Hotel::Reservation
+      #Completely after
+      @ritz.make_reservation(@may6).must_be_kind_of My_Hotel::Reservation
+      feb2 = Date.civil(2017,2,2)
+      #Ends on the checkin date
+      @ritz.make_reservation(@feb1, feb2).must_be_kind_of My_Hotel::Reservation
+      #Starts on the checkout date
+      @ritz.make_reservation(@feb6).must_be_kind_of My_Hotel::Reservation
+     end
+
     it "raises an argument if you try to reserve a room and none is available" do
+      #same dates
       20.times do
         @ritz.make_reservation(@feb1, @feb5)
-        @ritz.unreserved_and_unblocked(@feb1..@feb5)
       end
       proc{@ritz.make_reservation(@feb1, @feb5).must_raise ArgumentError}
+      #overlaps in the front
+      jan27 = Date.civil(2017,1,27)
+      proc{@ritz.make_reservation(jan27, @feb3).must_raise ArgumentError}
+      #overlaps in the end
+      proc{@ritz.make_reservation(@feb3, @apr3).must_raise ArgumentError}
+      #completely contained
+      proc{@ritz.make_reservation(@feb3).must_raise ArgumentError}
+      #completely containing
+      proc{@ritz.make_reservation(jan27, @apr3).must_raise ArgumentError}
     end
+
+
 
     it "updates the list_of_reservations" do
       @ritz.make_reservation(@feb1, @feb5)
@@ -228,9 +254,9 @@ describe "My_Hotel::Hotel" do
 
     it "returns an er
     ror if block does not exist" do
-      proc{@ritz.find_rooms_in_use_by_block_id(0000)}.must_raise ArgumentError
-    end
+    proc{@ritz.find_rooms_in_use_by_block_id(0000)}.must_raise ArgumentError
   end
+
 
   describe "make_reservation_in_block" do
     it "can make a reservation" do
@@ -255,6 +281,19 @@ describe "My_Hotel::Hotel" do
       @ritz.check_block_array([1, 2, 3, 4], @feb1..@feb5)
     end
   end
-#
-#
+
+  describe "date_range" do
+    it "turns a single date into an array" do
+      @ritz.date_range(@feb1, @feb1).must_be_kind_of Array
+    end
+
+    it "raises an error if the last_night comes before the first_night" do
+      proc{@ritz.date_range(@feb5, @feb1)}.must_raise ArgumentError
+    end
+
+    it "makes a date range if the the first_night comes before the last_night" do
+      @ritz.date_range(@feb1, @feb5).must_be_kind_of Range
+    end
+  end
+end
 end
