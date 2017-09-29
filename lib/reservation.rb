@@ -1,7 +1,4 @@
-
-require 'date'
-require_relative 'date_range'
-require_relative 'room'
+require 'spec_helper'
 
 module Hotel
   class Reservation # various ways to list reservations

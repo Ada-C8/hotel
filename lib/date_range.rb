@@ -1,4 +1,4 @@
-require 'date'
+require 'spec_helper'
 
 module Hotel
   class DateRange

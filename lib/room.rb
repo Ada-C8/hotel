@@ -1,5 +1,4 @@
-require 'date'
-require 'csv'
+require 'spec_helper'
 
 module Hotel
   class Room
