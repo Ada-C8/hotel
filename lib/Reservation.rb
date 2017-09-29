@@ -24,7 +24,7 @@ module Hotel
     end
 
     def self.available(start_date, end_date)
-      all_rooms = Room.all.map { |room| room.room_num }
+      all_rooms = Room.room_numbers
       overlapping_rooms = Reservation.all.map do |reservation|
         reservation.room_num if self.overlapping?(start_date, end_date, reservation.start_date, reservation.end_date) == true
       end
@@ -34,7 +34,7 @@ module Hotel
     def total
       rate = Room.all.find { |room| room.room_num == room_num }.rate
       discount = 0
-      discount = Block.all.find { |block| block.block_id == block_id }.discount if block_id != nil
+      discount = Block.find(block_id).discount if block_id != nil
       return ((end_date- start_date) * rate * (1 - discount)).to_i
     end
 
@@ -56,7 +56,7 @@ module Hotel
 
     def prevent_booking_blocked(room_num, block_id)
       if block_id == nil
-        room_numbers = Room.all.map { |room| room.room_num }
+        room_numbers = Room.room_numbers
         blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
         raise BlockedRoomError if blocked_room_numbers.include?(room_num)
       end
@@ -72,17 +72,17 @@ module Hotel
     end
 
     def set_block_dates(block_id)
-      block = Block.all.find { |a_block| a_block.block_id == block_id }
+      block = Block.find(block_id)
       @start_date = block.start_date
       @end_date = block.end_date
     end
 
     def self.sample_available_rooms(start_date, end_date, block_id, number_of_rooms = 1)
       if block_id == nil
-        room_numbers = Room.all.map { |room| room.room_num }
+        room_numbers = Room.room_numbers
         blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
       else
-        room_numbers = Block.all.find { |block| block.block_id == block_id }.rooms
+        room_numbers = Block.find(block_id).rooms
         blocked_room_numbers = []
       end
       reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)

@@ -34,3 +34,12 @@ Implementation B - it separates the responsibilities for knowing about the insta
 
 9) Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 Implementation B.
+
+
+
+*******************************************************************************
+Modifying my Hotel Project
+
+Modified methods in both the Block and Reservation classes to call a new method, Room.room_numbers, to reduce dependencies from Block and Reservation on Room. They originally called Room.all.find and were required to know the Room class expected a room_num to find an instance.
+
+Modified methods in both the Block and Reservation classes to call a new method, Block.find, to reduce dependencies from Reservation and within Block on knowing that a Block can be found with the .block_id reader method.

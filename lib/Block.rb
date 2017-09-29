@@ -18,7 +18,7 @@ module Hotel
     end
 
     def self.rooms_left(block_id)
-      block = Block.all.find { |a_block| a_block.block_id == block_id }
+      block = Block.find(block_id)
       return Reservation.sample_available_rooms(block.start_date, block.end_date, block_id, block.rooms.length)
     end
 
@@ -43,8 +43,12 @@ module Hotel
       return @@blocks
     end
 
+    def self.find(block_id)
+      return Block.all.find { |a_block| a_block.block_id == block_id }
+    end
+
     def sample_available_rooms(start_date, end_date, number_of_rooms)
-      room_numbers = Room.all.map { |room| room.room_num }
+      room_numbers = Room.room_numbers
       blocked_room_numbers = room_numbers - Block.available(start_date, end_date)
       reserved_room_numbers = room_numbers - Reservation.available(start_date, end_date)
       available_room_numbers = room_numbers - blocked_room_numbers - reserved_room_numbers
@@ -53,7 +57,7 @@ module Hotel
     end
 
     def self.available(start_date, end_date)
-      all_rooms = Room.all.map { |room| room.room_num }
+      all_rooms = Room.room_numbers
       overlapping_rooms = []
       Block.all.each do |block|
         overlapping_rooms += block.rooms if self.overlapping?(start_date, end_date, block.start_date, block.end_date) == true
