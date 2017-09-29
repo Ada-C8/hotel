@@ -2,6 +2,7 @@ require 'date'
 
 module Hotel
   class DateRange
+    class InvalidDateRange < StandardError ; end
     attr_reader :check_in, :check_out
 
     def initialize(checkin, checkout)
@@ -20,6 +21,6 @@ module Hotel
     def overlap?(other)
       @checkout < other.checkin || @checkin > other.checkout
     end # end overlap?
-  
+
   end # end of class
 end # end of module

@@ -1,9 +1,9 @@
 require 'date'
 require 'csv'
-require_relative 'invalid_room_error'
 
 module Hotel
   class Room
+    class InvalidRoomNumber < StandardError ; end
     attr_reader :room_number, :rooms_available
 
     def initialize(room_number)
@@ -25,7 +25,7 @@ module Hotel
           return room
         end
       end
-      raise InvalidRoomError.new ('Invalid Room Number')
+      raise InvalidRoomNumber.new ('Invalid Room Number')
     end # end self.find
   end # end Room class
 end # Hotel module
