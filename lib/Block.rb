@@ -40,5 +40,6 @@ module My_Hotel
       end
       return true
     end
+    
   end
 end

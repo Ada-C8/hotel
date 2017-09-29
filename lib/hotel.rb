@@ -75,7 +75,7 @@ module My_Hotel
       new_block = My_Hotel::Block.new(nights, array_of_rooms, discount)
       new_block.create_booking(@all_blocks)
       @all_blocks << new_block
-      new_block
+      return new_block
     end
 
     #can be used for "As an administrator, I can reserve a room from
@@ -137,8 +137,8 @@ module My_Hotel
             end
           end
         end
-        return free_rooms
       end
+      return free_rooms
     end
 
 
