@@ -1,0 +1,53 @@
+require_relative 'reservable'
+require_relative 'hotel'
+
+module ReservationSystem
+
+  class Room
+    include Reservable
+
+    attr_reader :number
+    attr_accessor :nights_reserved, :blocked_nights, :rate
+
+    def initialize(number)
+      positive_integer?(number)
+      @number = number
+      @rate = ReservationSystem::Hotel::BASE_ROOM_RATE
+      @nights_reserved = Array.new
+      @blocked_nights = Array.new
+    end
+
+    #Major refactoring needed: Rates for a given date? or rate change to happen during blocked nights? Meaning, check dates and status and return rate held by Reservation or block? This would be similar refactoring to checking dates via Reservation and Blocks...
+
+    def change_rate(rate) #TODO: separate rate changes to be dependant on dates/reservations/blocks
+      @rate = rate
+    end
+
+    def add_nights_reserved(check_in_date, nights)
+      @nights_reserved += date_range(check_in_date, nights)
+    end
+
+    def add_blocked_nights(dates_blocked)
+      @blocked_nights += dates_blocked
+    end
+
+    def not_reserved?(start, nights = 1)
+      date_array = date_range(start, nights)
+      availability = true
+
+      date_array.each { |date| availability = false if self.nights_reserved.include?(date)}
+
+      return availability
+    end # not_reserved?
+
+    def not_blocked?(start, nights = 1)
+      date_array = date_range(start, nights)
+      availability = true
+
+      date_array.each { |date| availability = false if  self.blocked_nights.include?(date)}
+
+      return availability
+    end #not_blocked?
+
+  end #class Room
+end #ReservationSystem module
