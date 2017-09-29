@@ -47,7 +47,7 @@ describe "My_Hotel::Hotel" do
     it "raises an argument if you try to reserve a room and none is available" do
       20.times do
         @ritz.make_reservation(@feb1, @feb5)
-        @ritz.find_all_unreserved_rooms(@feb1..@feb5)
+        @ritz.unreserved_and_unblocked(@feb1..@feb5)
       end
       proc{@ritz.make_reservation(@feb1, @feb5).must_raise ArgumentError}
     end
@@ -150,73 +150,6 @@ describe "My_Hotel::Hotel" do
     end
   end
 
-  describe "find_all_unreserved_rooms " do
-    it "returns an array" do
-      nights = (@feb1 .. @feb5)
-      free_rooms = @ritz.find_all_unreserved_rooms(nights)
-      free_rooms.must_be_kind_of Array
-      free_rooms.length.must_equal 5
-      free_rooms[0].must_be_kind_of Hash
-      free_rooms[0].length.must_equal 20
-    end
-
-    it "works for a one night stay" do
-      free_rooms = @ritz.find_all_unreserved_rooms(@feb1)
-      free_rooms.must_be_kind_of Array
-      free_rooms.length.must_equal 1
-    end
-
-    it "returns a hash of the available rooms" do
-      19.times do |i|
-        @ritz.make_reservation(@feb1, @feb5)
-        free_rooms = @ritz.find_all_unreserved_rooms(@feb1..@feb5)
-        free_rooms[-1].length.must_equal 19 - i
-      end
-      @ritz.make_reservation(@feb1, @feb5)
-      free_rooms = @ritz.find_all_unreserved_rooms(@feb1..@feb5)
-      free_rooms[-1].length.must_equal 0
-    end
-  end
-
-  describe "find_all_unblocked_rooms " do
-    it "returns an array" do
-      nights = (@feb1 .. @feb5)
-      free_rooms = @ritz.find_all_unblocked_rooms(nights)
-      free_rooms.must_be_kind_of Array
-      free_rooms.length.must_equal 5
-      free_rooms[0].must_be_kind_of Hash
-      free_rooms[0].length.must_equal 20
-    end
-
-    it "works for a one night block" do
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb1)
-      free_rooms.must_be_kind_of Array
-      free_rooms.length.must_equal 1
-    end
-    #
-    it "returns a hash of the available rooms" do
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb1)
-      @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb1)
-      free_rooms = free_rooms[0].length.must_equal 16
-
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb1..@feb5)
-      free_rooms[0].length.must_equal 16
-      #
-      @ritz.make_block(@feb1, @feb3, [5, 6], 0.75)
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb1)
-      free_rooms = free_rooms[0].length.must_equal 14
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb1..@feb5)
-      free_rooms[0].length.must_equal 14
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb5)
-      free_rooms = free_rooms[0].length.must_equal 16
-
-      @ritz.make_reservation(@feb1, @feb5)
-      free_rooms = @ritz.find_all_unblocked_rooms(@feb5)
-      free_rooms = free_rooms[0].length.must_equal 16
-    end
-  end
-
   describe "get_cost" do
     it "returns the cost of a reservation" do
       holiday = @ritz.make_reservation(@feb1, @feb5)
@@ -227,18 +160,14 @@ describe "My_Hotel::Hotel" do
   describe "unreserved_and_unblocked" do
     it "returns an array of hashes representing open rooms for a range of dates" do
       all_available = @ritz.unreserved_and_unblocked(@feb1..@feb5)
-      all_available.must_be_kind_of Array
-      all_available.length.must_equal 5
-      all_available[0].must_be_kind_of Hash
-      all_available[0].length.must_equal 20
+      all_available.must_be_kind_of Hash
+      all_available.length.must_equal 20
     end
 
     it "returns an array of hashes representing open rooms for one date" do
       all_available = @ritz.unreserved_and_unblocked(@feb1)
-      all_available.must_be_kind_of Array
-      all_available.length.must_equal 1
-      all_available[0].must_be_kind_of Hash
-      all_available[0].length.must_equal 20
+      all_available.must_be_kind_of Hash
+      all_available.length.must_equal 20
     end
 
     it "if no rooms are available, returns empty array" do
@@ -246,57 +175,26 @@ describe "My_Hotel::Hotel" do
         @ritz.make_reservation(@feb1, @feb1)
       end
       none_available = @ritz.unreserved_and_unblocked(@feb1)
-      none_available[0].length.must_equal 0
+      none_available.length.must_equal 0
     end
 
     it "if you reserve a room, it is not available" do
       @ritz.make_reservation(@feb1, @feb5)
       one_reserved = @ritz.unreserved_and_unblocked(@feb1..@feb5)
-      one_reserved[0].length.must_equal 19
+      one_reserved.length.must_equal 19
     end
     it "if you make a block, they are not available" do
       @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       one_reserved = @ritz.unreserved_and_unblocked(@feb1..@feb5)
-      one_reserved[0].length.must_equal 16
+      one_reserved.length.must_equal 16
     end
 
     it "if you make a block and a reservation, all those rooms are not available" do
       @ritz.make_block(@feb1, @feb5, [1, 2, 3, 4], 0.75)
       @ritz.make_reservation(@feb1, @feb3)
       reservation_and_block = @ritz.unreserved_and_unblocked(@feb1)
-      reservation_and_block[0].length.must_equal 15
+      reservation_and_block.length.must_equal 15
       reservation_and_block = @ritz.unreserved_and_unblocked(@feb5)
-    end
-  end
-
-  describe "find_continious_open_room" do
-    it "must return an hash of room =>prices" do
-      nights = (@feb1 .. @feb5)
-      free_rooms = @ritz.find_continious_open_room(nights)
-      free_rooms.must_be_kind_of Hash
-      free_rooms.keys.must_equal @ritz.display_rooms
-    end
-
-    it "works for a one night stay" do
-      free_rooms = @ritz.find_continious_open_room(@feb1)
-      free_rooms.must_be_kind_of Hash
-      free_rooms.length.must_equal 20
-    end
-
-    it "must return available room =>prices" do
-      20.times do |i|
-        holiday = @ritz.make_reservation(@feb1, @feb5)
-        free_rooms = @ritz.find_continious_open_room(@feb1.. @feb5)
-        free_rooms.length.must_equal 19 - i
-        free_rooms.wont_include holiday.room_number
-      end
-    end
-
-    it "if no rooms are available, it must return an empty hash" do
-      20.times do |i|
-        @ritz.make_reservation(@feb1, @feb5)
-      end
-      @ritz.find_continious_open_room(@feb1.. @feb5).must_be_empty
     end
   end
 
@@ -332,7 +230,6 @@ describe "My_Hotel::Hotel" do
     ror if block does not exist" do
       proc{@ritz.find_rooms_in_use_by_block_id(0000)}.must_raise ArgumentError
     end
-
   end
 
   describe "make_reservation_in_block" do
@@ -358,6 +255,6 @@ describe "My_Hotel::Hotel" do
       @ritz.check_block_array([1, 2, 3, 4], @feb1..@feb5)
     end
   end
-
-
+#
+#
 end
