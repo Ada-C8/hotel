@@ -56,7 +56,11 @@ describe "Administration#Hotel" do
       check_out = Date.new(2017, 9, 5)
       hotel = Administration::Hotel.new(rooms)
       hotel.make_reservation(check_in, check_out, room)
-      hotel.make_reservation(check_in, check_out, room).must_equal false
+
+      proc {
+      hotel.make_reservation(check_in, check_out, room)
+    }.must_raise RoomNotAvailableError
+
       hotel.all_reservations.length.must_equal 1
     end
 
@@ -113,13 +117,13 @@ describe "Administration#Hotel" do
     end
   end
 
-  describe "#available_by_date" do
+  describe "#find_available_rooms" do
     it "return an array of rooms available by date" do
       hotel = Administration::Hotel.new(12)
       hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 1)
       hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 2)
 
-      rooms_by_date = hotel.find_rooms(Date.new(2017, 9, 3))
+      rooms_by_date = hotel.find_available_rooms(Date.new(2017, 9, 3))
       rooms_by_date.length.must_equal 10
 
       rooms_by_date.must_be_kind_of Array
@@ -131,15 +135,15 @@ describe "Administration#Hotel" do
       hotel.make_reservation(Date.new(2017, 9, 4), Date.new(2017, 9, 7), 2)
       hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 6)
 
-      rooms_by_date = hotel.find_rooms(Date.new(2017, 9, 3))
+      rooms_by_date = hotel.find_available_rooms(Date.new(2017, 9, 3))
       rooms_by_date.length.must_equal 10
-  
+
       hotel = Administration::Hotel.new(12)
       hotel.make_reservation(Date.new(2018, 8, 31), Date.new(2018, 9, 4), 1)
       hotel.make_reservation(Date.new(2018, 9, 4), Date.new(2018, 9, 7), 2)
       hotel.make_reservation(Date.new(2018, 8, 31), Date.new(2018, 9, 4), 6)
 
-      rooms_by_date = hotel.find_rooms(Date.new(2017, 9, 3))
+      rooms_by_date = hotel.find_available_rooms(Date.new(2017, 9, 3))
       rooms_by_date.length.must_equal 12
     end
   end

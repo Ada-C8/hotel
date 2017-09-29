@@ -22,9 +22,7 @@ module Administration
     def make_reservation(check_in, check_out, room)
       reservation = Reservation.new(check_in, check_out, room)
       @all_reservations.each do |existing|
-        if reservation.overlap?(existing)
-          return false
-        end
+        raise RoomNotAvailableError.new("Room #{room} is not available to reserve for this date.") if reservation.overlap?(existing)
       end
       @all_reservations << reservation
       return true
@@ -41,17 +39,12 @@ module Administration
     return res_by_date
   end
 
-  def find_rooms(date)
+  def find_available_rooms(date)
     reservations = find_by_date(date)
     reserved_rooms = reservations.map { |reservation| reservation.room }
     available_rooms = @all_rooms - reserved_rooms
     return available_rooms
   end
-
-
-
-
-
 
   end #end of class
 end #end of hotel
