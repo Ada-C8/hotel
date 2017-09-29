@@ -67,7 +67,21 @@ describe "My_Hotel::Reservation" do
       end
       another.unique_reservation_id?([@holiday]).must_equal false
     end
+  end
 
+  describe "contain?" do
+    it "must return true if the reservation contains that date" do
+      #first night
+      @holiday.contain?(@feb1).must_equal true
+      #last night
+      @holiday.contain?(@feb6).must_equal true
+      #middle night
+      feb3=Date.civil(2017,2,3)
+      @holiday.contain?(feb3).must_equal true
+    end
+    it "must return false if the reservation contains that date" do
+      @holiday.contain?(@may6).must_equal false
+    end
   end
 
 end

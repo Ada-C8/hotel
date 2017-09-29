@@ -48,4 +48,21 @@ describe "My_Hotel::Block" do
       @new_block.unique_block_id?([@old_block]).must_equal false
     end
   end
+
+  describe "contain?" do
+    it "must return true if the reservation contains that date" do
+      #first night
+      @old_block.contain?(@feb1).must_equal true
+      #last night
+      @old_block.contain?(@feb6).must_equal true
+      #middle night
+      feb3=Date.civil(2017,2,3)
+      @old_block.contain?(feb3).must_equal true
+    end
+    it "must return false if the reservation contains that date" do
+      may6=Date.civil(2017,5,6)
+      @old_block.contain?(may6).must_equal false
+    end
+  end
+
 end
