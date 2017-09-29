@@ -8,7 +8,7 @@ module Hotel
 
     def initialize(room_number)
       @room_number = room_number
-    end # end #initialize
+    end # end initialize
 
     def self.all
       all_rooms = []
@@ -17,7 +17,7 @@ module Hotel
         all_rooms << self.new(room_number)
       end
       return all_rooms
-    end # end #self.all
+    end # end self.all
 
     def self.find(room_number)
       self.all.each do |room|
@@ -26,6 +26,6 @@ module Hotel
         end
       end
       raise InvalidRoomError.new ('Invalid Room Number')
-    end # end #self.find
+    end # end self.find
   end # end Room class
 end # Hotel module
