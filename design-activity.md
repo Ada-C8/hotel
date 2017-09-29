@@ -49,7 +49,7 @@ A: computing the price is all retained in Order
 B: delegated to "lower level" classes
 
 * **Does total_price directly manipulate the instance variables of other classes?**
-
+I struggle with this question in terms of what it means to manipulate an instance variable. total_price does not change the value of any of the instance variables from other classes, but it does make calculations using the instance variables.
 
 * **If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?**
 
@@ -66,23 +66,8 @@ Implementation B is more loosely coupled.
 
 # Revisiting Hotel Activity:
 
-- Block needs to do it's own testing for invalid dates (date range class?)
+A change that I decided to make to my Hotel project included changes within several classes. I created a DateRange class that was a superclass for Reservations and Blocks. Since Blocks and Reservations need to utilize the same features such as a check_in date, a check_out date, and a way to check for room availability, this allowed for one class to take care of all those features as well as check for date validity.  This creates for code  that is more DRY as well as classes that are easier to re-use and change. Within the Hotel class I changed to responsibility for checking for an overlap between the dates requested to check in and the rooms in the hotel to the Date Range class.  My tests proved useful when I ran rake and found a few failures that were due to my change in code and they pointed me in the right direction. I found myself extremely grateful for the existence of tests!
 
-- Price should be calculated by the reservation (Not right now since price of room is dictated by the room)
-
-- Find by can be done in all method of block and reservation
 
 -- create a date range class that is a superclass to reservation and block
 -- take overlap from hotel class and put it into date range class.
-
-
-
-
-
-Nicely done! In your testing for Block you should include testing for things such as invalid dates at the Block class level because the class might be reused elsewhere.
-
-Also in your testing, what about when you try to reserve a room with an invalid room #? Good edge case testing to see if you can reserve a room on the day someone is checking out.
-
-For testing the uniqueness of the block booking you can make a hash of all the booking IDs and loop through counting how often they occur as the value. Then if all the values are 1, they're unique. Because they're random there's no way to verify it 100%, but you could run the test several times.
-
-For returns 17 rooms when there are three room conflicts you can also just verify that the available rooms don't include the rooms in the specific reservations. Overall you did really really well. The design was good, although as you noted, not perfect. You also did a very through job testing.
