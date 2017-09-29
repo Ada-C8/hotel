@@ -62,13 +62,13 @@ describe "Administration#Hotel" do
 
     it "ignores existing reservations for other rooms" do
       rooms = 12
+      hotel = Administration::Hotel.new(rooms)
+
       room = 1
       check_in = Date.new(2017, 9, 1)
       check_out = Date.new(2017, 9, 5)
-      hotel = Administration::Hotel.new(rooms)
       hotel.make_reservation(check_in, check_out, room)
 
-      rooms = 12
       room = 5
       check_in = Date.new(2017, 9, 1)
       check_out = Date.new(2017, 9, 5)
@@ -82,6 +82,7 @@ describe "Administration#Hotel" do
       check_in = Date.new(2017, 9, 1)
       check_out = Date.new(2017, 9, 5)
       hotel = Administration::Hotel.new(rooms)
+      hotel.all_reservations.length.must_equal 0
       hotel.make_reservation(check_in, check_out, room)
       hotel.all_reservations.length.must_equal 1
       #not changed if returned false #could just add a new line in the it do blocks to test if make reservations changes the all res array
@@ -91,10 +92,10 @@ describe "Administration#Hotel" do
   describe "#find_by_date" do
     it "return an array of reservations by date" do
       hotel = Administration::Hotel.new(12)
-      reservation1 = hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 5)
-      reservation2 = hotel.make_reservation(Date.new(2017, 9, 4), Date.new(2017, 9, 7), 5)
-      reservation3 = hotel.make_reservation(Date.new(2017, 9, 2), Date.new(2017, 9, 6), 3)
-      reservation4 = hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 2)
+      hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 5)
+      hotel.make_reservation(Date.new(2017, 9, 4), Date.new(2017, 9, 7), 5)
+      hotel.make_reservation(Date.new(2017, 9, 2), Date.new(2017, 9, 6), 3)
+      hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 2)
 
       reservations_by_date = hotel.find_by_date(Date.new(2017, 8, 31))
       reservations_by_date.length.must_equal 1
@@ -105,9 +106,44 @@ describe "Administration#Hotel" do
       reservations_by_date = hotel.find_by_date(Date.new(2017, 9, 3))
       reservations_by_date.length.must_equal 3
 
+      reservations_by_date = hotel.find_by_date(Date.new(2017, 9, 7))
+      reservations_by_date.length.must_equal 0
+
       reservations_by_date.must_be_kind_of Array
     end
   end
+
+  describe "#available_by_date" do
+    it "return an array of rooms available by date" do
+      hotel = Administration::Hotel.new(12)
+      hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 1)
+      hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 2)
+
+      rooms_by_date = hotel.find_rooms(Date.new(2017, 9, 3))
+      rooms_by_date.length.must_equal 10
+
+      rooms_by_date.must_be_kind_of Array
+    end
+
+    it "ignores rooms that are not reserved" do
+      hotel = Administration::Hotel.new(12)
+      hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 1)
+      hotel.make_reservation(Date.new(2017, 9, 4), Date.new(2017, 9, 7), 2)
+      hotel.make_reservation(Date.new(2017, 8, 31), Date.new(2017, 9, 4), 6)
+
+      rooms_by_date = hotel.find_rooms(Date.new(2017, 9, 3))
+      rooms_by_date.length.must_equal 10
+  
+      hotel = Administration::Hotel.new(12)
+      hotel.make_reservation(Date.new(2018, 8, 31), Date.new(2018, 9, 4), 1)
+      hotel.make_reservation(Date.new(2018, 9, 4), Date.new(2018, 9, 7), 2)
+      hotel.make_reservation(Date.new(2018, 8, 31), Date.new(2018, 9, 4), 6)
+
+      rooms_by_date = hotel.find_rooms(Date.new(2017, 9, 3))
+      rooms_by_date.length.must_equal 12
+    end
+  end
+
 
 
 end #end of hotel

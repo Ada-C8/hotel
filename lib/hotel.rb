@@ -34,11 +34,18 @@ module Administration
     res_by_date = []
 
     @all_reservations.each do |reservation|
-      if date >= reservation.check_in && date < reservation.check_out
+      if reservation.reserved?(date) #asking the reservation if it's reserved without the reservation. would look in this class for the reserved method and not find it
         res_by_date << reservation
       end
     end
     return res_by_date
+  end
+
+  def find_rooms(date)
+    reservations = find_by_date(date)
+    reserved_rooms = reservations.map { |reservation| reservation.room }
+    available_rooms = @all_rooms - reserved_rooms
+    return available_rooms
   end
 
 
