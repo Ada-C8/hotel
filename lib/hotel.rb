@@ -11,6 +11,8 @@ module HotelManagment
       @found_reservations = []
       @unreserved_rooms = []
       @blocks = []
+
+      # add_20_rooms
     end
 
     def add_20_rooms
@@ -25,10 +27,6 @@ module HotelManagment
 
     # creates a reservation
     def create_reservation(first_name, last_name, check_in_date, check_out_date, room_number)
-
-      if check_in_date < DateTime.now || check_out_date < check_in_date
-        raise ArgumentError, 'Invalid dates'
-      end
 
       reservation = Reservation.new(first_name, last_name, check_in_date, check_out_date, room_number)
 
@@ -58,7 +56,7 @@ module HotelManagment
         if (reservation.check_in_date >= check_in_date && reservation.check_in_date <= check_out_date) || (reservation.check_out_date >= check_in_date && reservation.check_out_date <= check_out_date)
           unreserved_rooms.delete(reservation.room_number)
         end
-        }
+      }
       # end
 
       @blocks.each { |block|
@@ -90,16 +88,12 @@ module HotelManagment
     def create_block(check_in_date, check_out_date, amount_of_rooms)
       available_rooms = rooms_not_reserved(check_in_date, check_out_date)
 
-      if amount_of_rooms > 5
-        raise ArgumentError, '5 rooms is the Maximum a block allows'
-      else
-        available_rooms.length >= amount_of_rooms && amount_of_rooms <= 5
-        block = HotelManagment::Block.new(check_in_date, check_out_date, amount_of_rooms)
-        block.rooms = available_rooms.pop(amount_of_rooms)
-        @blocks << block
-        return block
-      end
+      block = HotelManagment::Block.new(check_in_date, check_out_date, amount_of_rooms)
+      block.rooms = available_rooms.pop(amount_of_rooms)
+      @blocks << block
+      return block
     end
+    # end
 
 
     def reserve_room_in_block(first_name, last_name, block_id)
@@ -112,8 +106,18 @@ module HotelManagment
         room_number = block.rooms.pop
         HotelManagment::BlockReservation.new(first_name, last_name, block.check_in_date, block.check_out_date, room_number)
       end
-
     end
+
+    # private
+    # def add_20_rooms
+    #   room_number = 1
+    #   20.times do
+    #     room = HotelManagment::Room.new(room_number)
+    #     @rooms << room
+    #     room_number += 1
+    #   end
+    # end
+
 
   end #class end
 end #module end

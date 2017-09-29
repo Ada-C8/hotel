@@ -17,5 +17,11 @@ module HotelManagment
       @id = SecureRandom.uuid
     end
 
+    def validate
+      if amount_of_rooms > 5
+        raise ArgumentError, '5 rooms is the Maximum a block allows'
+      end
+    end
+
   end #class end
 end #module end

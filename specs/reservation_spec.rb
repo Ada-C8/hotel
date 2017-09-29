@@ -45,20 +45,22 @@ describe "Reservaton Class" do
     end
 
 
-
     it "should return the total cost based on the number of nights reserved" do
 
       new_reservation = HotelManagment::Reservation.new("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,10), 1)
       new_reservation.rate.must_equal 1000
+    end
 
+  end
+
+  describe "validate_dates" do
+
+    it "Raises ArgumentError if dates are Invalid" do
+      date = Date.today
+      new_reservation = HotelManagment::Reservation.new("marisa", "morris", date + 5, date +1, 1)
+
+      proc { new_reservation.validate_dates("marisa", "morris", date + 5, date +1, 1) }.must_raise ArgumentError
     end
   end
+
 end
-
-
-
-
-# tests
-
-# - can add a check in date
-# - can add a check out date

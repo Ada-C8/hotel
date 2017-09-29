@@ -21,5 +21,11 @@ module HotelManagment
       @cost = nights.to_i * Room::RATE
     end
 
+    def validate_dates
+      if check_in_date < DateTime.now || check_out_date < check_in_date
+        raise ArgumentError, 'Invalid dates'
+      end
+    end
+
   end #class end
 end #module end

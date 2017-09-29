@@ -58,4 +58,13 @@ describe "Reservaton Class" do
       new_block_reservation.block_rate.must_equal 200
     end
   end
+
+  # describe "validate" do
+  #   it "should raise error if block room amount is greater than 5" do
+  #     date = Date.today
+  #     new_block_reservation = HotelManagment::BlockReservation.new("marisa", "morris", date + 1, date + 6, 6)
+  #
+  #     proc {new_block_reservation.validate("marisa", "morris", date + 1, date + 4, 6) }.must_raise ArgumentError
+  #   end
+  # end
 end

@@ -64,3 +64,7 @@
     Implementation B better adheres to the single reason principle.
 
 <!-- - Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled? -->
+
+ACTIVITY
+
+  An area in my code that needed to be updated was the hotel class, specifically the create_reservation method. The method was checking for valid date ranges in addition to creating and instance of the reservation class id the dates were valid. I fixed this by moving the date validation portion to the reservation class and creating a new method that checks for date validity. This is an improvement because it allows the hotel class to focus on creating reservations (regular and block) and return bits of information having to due with reservations and designating other functions such as checking dates to lower level classes.

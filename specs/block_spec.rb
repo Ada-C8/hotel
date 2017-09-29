@@ -3,7 +3,6 @@ require 'date'
 
 describe "Block Class" do
 
-
   it "Can instantiate a block" do
     date = Date.today
     new_block = HotelManagment::Block.new(date + 1, date + 3, 5)
@@ -31,6 +30,17 @@ describe "Block Class" do
 
   it "Rate should be an instance of a Constant" do
     HotelManagment::Block::BLOCKRATE.must_equal 100
+  end
+
+end
+
+describe "validate" do
+  it "should raise error if block room amount is greater than 5" do
+    date = Date.today
+
+    new_block = HotelManagment::Block.new(date + 1, date + 6, 6)
+
+    proc {new_block.validate}.must_raise ArgumentError
   end
 
 end
