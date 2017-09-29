@@ -47,3 +47,6 @@ Implementation B
 
 10.Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 Implementation B
+
+Note:  Foolishly, I didn't read the instructions for this homework and just assumed I was supposed to make the changes Dan suggested in my hotel code review ... so I also did that.  
+While doing that, I made changes to the Hotel#find_reservations_by_date, Hotel#find_block_by_date so that it used new methods Reservation#contain? and Block#contain?.  This change made it so I no longer was directly reading the instance variables of Reservation or Block, but instead using a method within those classes to do the logic that I needed.  This is an example of making my hotel more loosely coupled. 
