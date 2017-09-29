@@ -23,13 +23,9 @@ describe "#RESERVATIONS" do
 
     it "Raises an Argument error for invalid input" do
       proc {Reservation.new("yesterday", "tomorrow", @room)}.must_raise ArgumentError
-
       proc {Reservation.new("tomorrow", "today", @room)}.must_raise ArgumentError
-
       proc {Reservation.new("January 4, 2018", "hey", @room)}.must_raise ArgumentError
-
       proc{Reservation.new("today", "tomorrow", @room)}.must_raise ArgumentError
-
       proc{Reservation.new("01-18-2018", "01-18-2018", @room)}.must_raise ArgumentError
     end
 
