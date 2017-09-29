@@ -123,12 +123,6 @@ describe "hotel class" do
       new_hotel.reservations_by_date(input).must_equal [new_hotel.reservations[0]]
 
     end
-
-    # it "Raises ArgumentError if dates are Invalid" do
-    #   new_hotel = HotelManagment::Hotel.new
-    #
-    #   proc { new_hotel.create_reservation("marisa", "morris", Date.new(2017,9,5), Date.new(2017,9,1), 1) }.must_raise ArgumentError
-    # end
   end
 
   describe "rooms_not_reserved" do
@@ -247,8 +241,8 @@ describe "hotel class" do
       new_hotel = HotelManagment::Hotel.new
       new_hotel.must_respond_to :reserve_room_in_block
     end
-    
-# TODO
+
+
     it "Must be instance of BlockReservation" do
       date = Date.today
       new_hotel = HotelManagment::Hotel.new
