@@ -19,7 +19,6 @@ module BookingSystem
 
     def reserve_room(first_name, last_name, room_id, room_rate, start_date, end_date, block_id = nil)
 
-      raise InvalidDateRangeError.new("Date range conflicts with room requested") if end_date <= start_date
       requested_range = DateRange.new(start_date, end_date)
 
       if block_id.nil? #if a room doesn't have a block_id, blacklist all rooms that are blocked
@@ -30,14 +29,16 @@ module BookingSystem
 
       raise UnavailableRoomError.new("Room is unavailable") if @reservation_list.any? {|reservation|
         reservation.room_id == room_id && reservation.date_range.overlaps?(requested_range) && start_date < reservation.end_date
+        # reservation.room_id == room_id &&
+        # !(reservation.start_date >= end_date || reservation.end_date <= start_date)
       }
 
       reservation = BookingSystem::Reservation.new(first_name, last_name, room_id, room_rate, start_date, end_date, block_id)
       @reservation_list << reservation
     end
 
-
-    def reserve_block(block_id, date_range, rooms_array, discount_room_rate)
+    # Hotel Revisted Changes
+    def reserve_block(block_id, date_range, rooms_array, discount_room_rate, reservation_list)
 
       if @block_list.any? { |block| block.date_range.overlaps?(date_range) }
         @block_list.each do |block|
@@ -49,7 +50,7 @@ module BookingSystem
         end
       end
 
-      block = BookingSystem::Block.new(block_id, date_range, rooms_array, discount_room_rate)
+      block = BookingSystem::Block.new(block_id, date_range, rooms_array, discount_room_rate, @reservation_list)
       @block_list << block
     end
 

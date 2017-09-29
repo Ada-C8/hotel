@@ -8,7 +8,13 @@ module BookingSystem
 
     attr_reader :block_id, :date_range, :rooms_array, :discount_room_rate
 
-    def initialize(block_id, date_range, rooms_array, discount_room_rate)
+    def initialize(block_id, date_range, rooms_array, discount_room_rate, reservation_list)
+      raise UnavailableRoomError.new("Room is unavailable") if reservation_list.any? {|reservation|
+        rooms_array.include?(reservation.room_id) &&
+        # !(reservation.start_date >= date_range.last || reservation.end_date <= date_range.first)
+        reservation.date_range.overlaps?(date_range) && date_range.first < reservation.end_date
+      }
+
       raise ArgumentError.new("Block ID must be a string") if !block_id.is_a? String
       @block_id = block_id
 
