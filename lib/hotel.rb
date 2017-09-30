@@ -19,7 +19,7 @@ module Booking
         reserve =  Reservation.new(date_range, room_number)
         list_of_reservations << reserve
       else
-        throw ArgumentError.new ""
+        throw ArgumentError.new " No room is available for the given dates"
       end
 
       return reserve
@@ -94,8 +94,7 @@ module Booking
     def reserve_room_from_block(room_number, block_name)
       block = find_block(block_name)
       if block.available_rooms.include?(room_number)
-        block.already_reserved_rooms  << room_number
-        block.available_rooms.delete(room_number)
+        block.reserve_a_room(room_number)
         reserve =  Reservation.new(block.date_range, room_number, block.discounted_room_rate)
         list_of_reservations << reserve
       else

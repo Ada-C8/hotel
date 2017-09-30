@@ -57,3 +57,11 @@ It's easier to add on the second implementation, because all the information nee
 Which implementation better adheres to the single responsibility principle? Implementation B is better, because each class has one and only one responsibility
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled? Implementation B, because Order class doesn't access (depend on/envy) instance variables of other classes.
 Once you've responded to the prompts, git add design-activity.md and git commit!
+
+
+
+Revisiting Hotel
+In Hotel#reserve_room_from_block method I was modifying instance variables of the Block object. I refactored these modifications into a new method (Block#reserve_a_room) and calling this method from Hotel class. This design is better for multiple reasons:
+1. Block class is more cohesive now.
+2. Coupling between Hotel and Block classes is reduced.
+3. If I need to rename instance properties of the block class I have to modify less places

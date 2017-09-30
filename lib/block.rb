@@ -16,6 +16,11 @@ module Booking
       return (@available_rooms.include?(room_number) || @already_reserved_rooms.include?(room_number))
     end
 
+    def reserve_a_room(room_number)
+      already_reserved_rooms  << room_number
+      available_rooms.delete(room_number)
+    end
+
     def is_room_blocked_for_date_range?(requested_date_range, room_number)
       return requested_date_range.overlaps?(@date_range) && has_room_number?(room_number)
     end
