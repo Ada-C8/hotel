@@ -10,12 +10,16 @@ module Hotel_System
       @rate_adjustor = rate_adjustor
     end
 
+    def reservation_covers(date)
+      self.reservations.select do |reservation|
+        reservation.covers?(date)
+      end
+    end
+
     def available?(check_in, check_out)
       overlap = []
       (check_in...check_out).each do |date|
-        overlap += self.reservations.select do |reservation|
-          (reservation.check_in...reservation.check_out).cover?(date)
-        end
+        overlap += reservation_covers(date)
       end
       overlap == [] ? true : false
     end

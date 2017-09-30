@@ -4,8 +4,7 @@ module Hotel_System
     attr_accessor :check_in, :check_out, :rooms, :rate_adjustor, :rooms_reserved_in_block
 
     def initialize(check_in, check_out, rooms, rate_adjustor)
-      @check_in = check_in
-      @check_out = check_out
+      super(check_in, check_out)
       @rooms = rooms
       @rate_adjustor = rate_adjustor
       @rooms_reserved_in_block = []

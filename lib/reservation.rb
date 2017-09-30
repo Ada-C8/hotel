@@ -12,8 +12,14 @@ module Hotel_System
       @room = nil
       @rate_adjustor = 1
     end
+
     def cost
       ((@check_out - @check_in) * 200 * rate_adjustor).to_int
     end
+
+    def covers?(date)
+      (@check_in...@check_out).cover?(date) ? true : false
+    end
+
   end
 end

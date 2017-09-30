@@ -3,8 +3,7 @@ require_relative 'block'
 
 module Hotel_System
   class Hotel
-    attr_reader :number_of_rooms, :rooms
-    attr_accessor :blocks
+    attr_reader :number_of_rooms, :rooms, :blocks
     def initialize(number_of_rooms)
       @number_of_rooms = number_of_rooms
       @rooms = []
