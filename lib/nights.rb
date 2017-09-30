@@ -7,9 +7,7 @@ class Nights
 
     @check_in = Date.parse(check_in)
     @check_out = Date.parse(check_out)
-    #@check_out = Date.parse(check_out)
     @nights_reserved = populate_nights(@check_in, @check_out)
-    @num_nights = @nights_reserved.length
   end
 
   def populate_nights(check_in, check_out)
@@ -39,3 +37,6 @@ class Nights
     end
   end
 end
+
+
+#Nights class is responsible for creating a date range. Data it holds: Checkin, checkout, number of nights, and the nights that a room is reserved

@@ -19,3 +19,6 @@ class Room
   #   end
   # end
 end
+
+
+#Rooms class creates an instance of room; holds room number and room rate.
