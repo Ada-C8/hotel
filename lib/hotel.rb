@@ -46,5 +46,6 @@ module Administration
     return available_rooms
   end
 
+
   end #end of class
 end #end of hotel

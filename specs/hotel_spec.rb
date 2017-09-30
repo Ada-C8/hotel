@@ -58,8 +58,8 @@ describe "Administration#Hotel" do
       hotel.make_reservation(check_in, check_out, room)
 
       proc {
-      hotel.make_reservation(check_in, check_out, room)
-    }.must_raise RoomNotAvailableError
+        hotel.make_reservation(check_in, check_out, room)
+      }.must_raise RoomNotAvailableError
 
       hotel.all_reservations.length.must_equal 1
     end
@@ -147,6 +147,7 @@ describe "Administration#Hotel" do
       rooms_by_date.length.must_equal 12
     end
   end
+
 
 
 
