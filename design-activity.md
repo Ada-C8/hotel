@@ -42,4 +42,4 @@ Revisiting Hotel
 
 Activity
 
-Refactoring Opportunity: I am happy with each class' responsibilities, but Hotel has a lot of dependencies. I don't think I can eliminate these dependencies, but I CAN isolate them. I'm going to go through my code and try to encapsulate references to other class' methods and variables in wrapper methods.
+Refactoring Opportunity: I am happy with each class' responsibilities, but Hotel has a lot of dependencies and Room has a few. I don't think I can eliminate these dependencies, but I can isolate them. Room initially depended on Reservation responding to .check_in and .check_out. This dependency was buried inside two loops. I refactored so that Reservation knows how to determine whether it includes a given date. Then I was able to pull out some of the .available? logic in Room, so that Room's new dependency on Reservation responding to .includes? is more isolated in the .overlapping_reservation method. 

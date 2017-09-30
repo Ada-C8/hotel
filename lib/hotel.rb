@@ -24,11 +24,9 @@ module Hotel_System
     end
 
     def find_res_by_date(date)
-      all_reservations = self.reservations
-      date_reservations = all_reservations.select do |reservation|
-        (reservation.check_in...reservation.check_out).cover?(date)
+      self.reservations.select do |reservation|
+        reservation.includes?(date)
       end
-      return date_reservations
     end
 
     def find_avail_rooms(date)
