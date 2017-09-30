@@ -25,9 +25,6 @@ module Hotel_System
     end
 
     def reserve(check_in, check_out)
-      raise ArgumentError.new("Must pass Date object as check_in day and check_out day") unless check_in.class == Date && check_out.class == Date
-      raise ArgumentError.new("Cannot check in and out on same day") if check_in == check_out
-      raise ArgumentError.new("Time Warp") if (check_out <=> check_in) == -1
       raise ArgumentError.new("Room not available for given date range") unless self.available?(check_in, check_out)
 
       reservation = Hotel_System::Reservation.new(check_in, check_out)

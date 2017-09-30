@@ -8,15 +8,6 @@ describe 'Room' do
     let (:check_out) {Date.new(2017,9,7)}
     let (:later_date) {Date.new(2017,9,8)}
 
-    it "raises an Argument Error unless passed 2 Date objects" do
-      proc {my_room.reserve("today", "tomorrow")}.must_raise ArgumentError
-    end
-
-    it "raises an Argument Error if check_out is earlier than or same day as check_in" do
-      proc {my_room.reserve(check_in, check_in)}.must_raise ArgumentError
-      proc {my_room.reserve(check_out, check_in)}.must_raise ArgumentError
-    end
-
     it "raises an Argument Error if the rate_adjustor argument is non-numeric" do
       proc {Hotel_System::Room.new(1, "five")}.must_raise ArgumentError
     end
