@@ -52,30 +52,31 @@ describe "#RESERVATIONS" do
 
     it 'Can reserve a room from a block' do
       @my_hotel.reserve_from_block(@my_hotel.blocks.first.id, [1, 20]).must_be_instance_of Reservation
-    end
-
-    it 'Can add a room reserved from a block to reservations' do
       @my_hotel.reservations.length.must_equal 1
     end
 
-    it '' do
+    it 'Cannot make a block if a room in the block is unavailable' do
+
+    end
+
+    it 'Cannot make a reservation for a room set aside in a block for that date range' do
 
     end
 
     it "Can make a reservation containing more than one room" do
       @block_reserve = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [Room.new(25, 200), Room.new(26, 150), Room.new(27, 250)]}
 
-      @my_block = Reservation.new(@block_reserve[:check_in], @block_reserve[:check_out], @block_reserve[:rooms])
+      @my_block_reserve = Reservation.new(@block_reserve[:check_in], @block_reserve[:check_out], @block_reserve[:rooms])
 
-      @my_block.must_be_instance_of Reservation
+      @my_block_reserve.must_be_instance_of Reservation
     end
 
     it "Will accept a discount argument" do
       @block_reserve = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [Room.new(25, 200), Room.new(26, 150), Room.new(27, 250)]}
 
-      @my_block = Reservation.new(@block_reserve[:check_in], @block_reserve[:check_out], @block_reserve[:rooms], 0.8)
+      @my_block_reserve = Reservation.new(@block_reserve[:check_in], @block_reserve[:check_out], @block_reserve[:rooms], 0.8)
 
-      @my_block.bill.must_equal 3000*0.8
+      @my_block_reserve.bill.must_equal 3000*0.8
     end
 
     it "Will not reserve a block with more than 5 rooms." do
@@ -84,7 +85,7 @@ describe "#RESERVATIONS" do
       proc{Reservation.new(@block2[:check_in], @block2[:check_out], @block2[:rooms])}.must_raise ArgumentError
     end
 
-    it "will not double-book a room in a block" do
+    it "will not double-book a room in a block reservation" do
       block_reserve = {check_in: "January 20, 2018", check_out: "January 25, 2018", rooms: [Room.new(25, 200), Room.new(25, 200), Room.new(27, 250)]}
 
 
