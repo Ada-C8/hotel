@@ -5,11 +5,15 @@ require "pry"
 
 module Hotel
   class Reservation
-    attr_accessor :date_range, :room_number
+    attr_accessor :dates, :room_number
 
-    def initialize(date_range, room_number)
-      @date_range = date_range
+    def initialize(dates, room_number)
       @room_number = room_number
+      @dates = dates
+    end
+
+    def total
+      return "$#{(dates.check_out - dates.check_in).floor * 200}.00"
     end
 
   end

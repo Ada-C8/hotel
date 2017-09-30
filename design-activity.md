@@ -46,3 +46,7 @@ Which implementation better adheres to the single responsibility principle?
 Implementation B adheres to the single responsibility principle because its responsibility has both a state and behavior. Logic isn't all in one class, it's  delegated to the classes who have that behavior.
 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+
+Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
+
+My Hotel class takes on a lot of roles. It has the total method, which should be in Reservation because it is directly related to those instance variables. I decided that Hotel's job would be to manage rooms, but it does a lot of date verification, so I should make that into its own class.
