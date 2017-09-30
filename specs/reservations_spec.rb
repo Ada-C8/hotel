@@ -56,10 +56,12 @@ describe "#RESERVATIONS" do
     end
 
     it 'Cannot make a block if a room in the block is unavailable' do
+      proc {@my_hotel.make_block("January 13, 2018", "January 18, 2018", [@my_hotel.rooms.first, @my_hotel.rooms[1]], 0.8)}.must_raise ArgumentError
 
     end
 
     it 'Cannot make a reservation for a room set aside in a block for that date range' do
+      proc {@my_hotel.make_reservation("January 10, 2018", "January 11, 2018", [@my_hotel.rooms.first])}.must_raise ArgumentError
 
     end
 

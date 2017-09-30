@@ -28,6 +28,7 @@ class Hotel
 
 
 
+
   def reservation_by_date(date)
     my_date = Date.parse(date)
     raise ArgumentError.new("Invalid date") if my_date.nil?
@@ -64,6 +65,9 @@ class Hotel
     nights.nights_reserved.each do |night_reserved|
       remove_rooms_from_available(night_reserved, available_rooms)
     end
+
+    #now includes blocks because remove_rooms_from_available includes blocks
+
     return available_rooms
   end
 
@@ -72,9 +76,16 @@ class Hotel
   #BLOCKS
 
   def make_block(check_in, check_out, rooms, discount=1)
-  block = Block.new(check_in, check_out, rooms, discount)
-  @blocks.push(block)
-    return block.id
+
+    unavailable_rooms = []
+
+    if room_flagged_available?(check_in, check_out, rooms, unavailable_rooms)
+      block = Block.new(check_in, check_out, rooms, discount)
+      @blocks.push(block)
+        return block.id
+    else
+      raise ArgumentError.new("Room: #{unavailable_rooms} not available")
+    end
   end
 
   def find_block(id)
@@ -91,13 +102,18 @@ class Hotel
     @reservations.push(block_reserved)
     return block_reserved
   end
-  #still left to do: make sure a room can't be reserved if it's set aside in a block; within block: make sure a room cannot be added to the same block twice.
 
   private
 
   def remove_rooms_from_available(search_date, available_rooms)
     reservation_by_date(search_date.to_s).each do |reservation|
       reservation.rooms.each do |room|
+        available_rooms.delete(room)
+      end
+    end
+
+    block_by_date(search_date.to_s).each do |block|
+      block.rooms.each do |room|
         available_rooms.delete(room)
       end
     end
@@ -113,6 +129,20 @@ class Hotel
     end
     return flag
   end
+end
+
+#blocks double-booking logic
+def block_by_date(date)
+  my_date = Date.parse(date)
+  raise ArgumentError.new("Invalid date") if my_date.nil?
+
+  blocks_today = []
+  @blocks.each do |block|
+    if block.nights_reserved.include?(my_date.to_s)
+      blocks_today.push(block)
+    end
+  end
+  return blocks_today
 end
 
 #stores and accesses rooms and blocks.

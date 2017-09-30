@@ -4,7 +4,7 @@
 
 class Block
   MAX_ROOMS = 5
-  attr_reader :rooms, :discount, :nights, :reservations, :id
+  attr_reader :rooms, :discount, :nights, :reservations, :id, :nights_reserved
   def initialize(check_in, check_out, rooms, discount=1)
     if rooms.length > MAX_ROOMS
       raise ArgumentError.new("Cannot set aside more than 5 rooms in a block")
@@ -13,6 +13,7 @@ class Block
     @rooms = rooms
     @discount = discount
     @nights = Nights.new(check_in, check_out)
+    @nights_reserved = @nights.nights_reserved
     @reservations = []
   end
 
