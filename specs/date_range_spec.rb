@@ -13,8 +13,8 @@ describe "DateRange" do
     end
 
     it " checkin and checkout should be an instance of a Date class" do
-      @range.checkout.must_be_kind_of Date
-      @range.checkin.must_be_kind_of Date
+      @range.end_date.must_be_kind_of Date
+      @range.start_date.must_be_kind_of Date
     end
 
     it " should raise an error if checkin date is greater than checkout" do

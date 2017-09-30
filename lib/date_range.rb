@@ -1,22 +1,22 @@
 
 require 'date'
-# require 'Array'
+
 module Booking
   class DateRange
-    attr_reader :checkin, :checkout
+    attr_reader :start_date, :end_date
 
-    def initialize(checkin, checkout)
-      @checkin = checkin
-      @checkout = checkout
-      if !@checkout.is_a?(Date) || !@checkin.is_a?(Date)
-        raise ArgumentError.new ("Both checkin and checkout must be valid Date objects")
-      elsif @checkout <= @checkin
-        raise ArgumentError.new ("Entered invalid date_range")
+    def initialize(start_date, end_date)
+      @start_date = start_date
+      @end_date = end_date
+      if !@end_date.is_a?(Date) || !@start_date.is_a?(Date)
+        raise ArgumentError.new("Both start_date and end_date must be valid Date objects")
+      elsif @end_date <= @start_date
+        raise ArgumentError.new("Entered invalid date_range")
       end
     end
 
     def is_included?(date)
-      if date >= @checkin && date < @checkout
+      if date >= @start_date && date < @end_date
         return true
       else
         return false
@@ -24,12 +24,12 @@ module Booking
     end
 
     def number_of_nights
-      return (@checkout - @checkin)
+      return (@end_date - @start_date)
     end
 
 
-    def overlaps?(other)
-      self.is_included?(other.checkin) || other.is_included?(self.checkin)
+    def overlaps?(other_date_range)
+      self.is_included?(other_date_range.start_date) || other_date_range.is_included?(self.start_date)
     end
   end
 end

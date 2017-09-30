@@ -7,8 +7,9 @@ describe "reservations" do
     @number_of_nights = 3
     checkout = checkin + @number_of_nights
     @room_number = 12
+    date_range = Booking::DateRange.new(checkin, checkout)
 
-    @reservation = Booking::Reservation.new(checkin, checkout, @room_number)
+    @reservation = Booking::Reservation.new(date_range, @room_number)
   end
 
   describe "initialize" do

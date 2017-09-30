@@ -26,8 +26,8 @@ describe "Hotel" do
       checkout = Date.new(2017,01,04)
       reserve = @my_hotel.make_reservation(checkin, checkout, 3)
 
-      reserve.date_range.checkin.must_equal checkin
-      reserve.date_range.checkout.must_equal checkout
+      reserve.date_range.start_date.must_equal checkin
+      reserve.date_range.end_date.must_equal checkout
 
       reserve.room_number.must_equal 3
     end

@@ -16,9 +16,12 @@ module Booking
       date_range = DateRange.new(checkin, checkout)
       all_available_rooms = available_rooms(date_range)
       if all_available_rooms.include?(room_number)
-        reserve =  Reservation.new(checkin, checkout, room_number)
+        reserve =  Reservation.new(date_range, room_number)
         list_of_reservations << reserve
+      else
+        throw ArgumentError.new ""
       end
+
       return reserve
     end
 
@@ -26,7 +29,7 @@ module Booking
     def list_of_reservations_for_a_date(date)
       found_reservations = []
       @list_of_reservations.each do |reserve|
-        if reserve.date_range.is_included?(date)
+        if reserve.is_date_included?(date)
           found_reservations << reserve
         end
       end
@@ -37,7 +40,7 @@ module Booking
     def available_rooms(date_range)
       available_rooms = Array.new(21, true) # Setting all rooms to available
       @list_of_reservations.each do |r|
-        if (date_range.overlaps?(r.date_range)) # if date_ranges intersects
+        if (r.does_reservation_overlap?(date_range)) # if date_ranges intersects
           available_rooms[r.room_number] = false # the room at that index becomes unavailable
         end
       end
@@ -51,10 +54,10 @@ module Booking
       return result
     end
 
-    #checks if room number is inside of any block
+    # checks if room number is inside of any block
     def reserved_by_any_block?(date_range, room_number)
       @list_of_blocks.each do |block|
-        if (date_range.overlaps?(block.date_range) && block.has_room_number?(room_number))
+        if block.is_room_blocked_for_date_range?(date_range, room_number)
           return true
         end
       end
@@ -93,6 +96,8 @@ module Booking
       if block.available_rooms.include?(room_number)
         block.already_reserved_rooms  << room_number
         block.available_rooms.delete(room_number)
+        reserve =  Reservation.new(block.date_range, room_number, block.discounted_room_rate)
+        list_of_reservations << reserve
       else
         raise ArgumentError.new("The room is not available in this block")
       end

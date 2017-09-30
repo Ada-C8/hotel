@@ -3,9 +3,9 @@
 What classes does each implementation include?
 
 Implementation A:
-CartEntry - for storing information about cart entry
-ShoppingCart - represents a shopping cart and keeps list of entries
-Order - represents a sales order and contains shopping card. This class calculates the total class of the order
+CartEntry
+ShoppingCart
+Order
 
 Implementation B:
 CartEntry,
