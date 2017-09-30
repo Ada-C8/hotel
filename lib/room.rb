@@ -1,19 +1,16 @@
 require_relative 'reservation'
+require_relative 'helpers'
 
 module Hotel_System
   class Room
+    include Helpers
+
     attr_reader :room_number, :reservations, :rate_adjustor
     def initialize(room_number, rate_adjustor = 1)
       raise ArgumentError.new("Rate_adjustor must be numberic.") unless (rate_adjustor * 1.0).is_a? Float
       @room_number = room_number
       @reservations = []
       @rate_adjustor = rate_adjustor
-    end
-
-    def find_res_by_date(date)
-      self.reservations.select do |reservation|
-        reservation.includes?(date)
-      end
     end
 
     def available?(check_in, check_out)

@@ -3,6 +3,7 @@ require_relative 'block'
 
 module Hotel_System
   class Hotel
+    include Helpers
     attr_reader :number_of_rooms, :rooms, :blocks
     def initialize(number_of_rooms)
       @number_of_rooms = number_of_rooms
@@ -21,12 +22,6 @@ module Hotel_System
         end
       end
       return reservations
-    end
-
-    def find_res_by_date(date)
-      self.reservations.select do |reservation|
-        reservation.includes?(date)
-      end
     end
 
     def find_avail_rooms(date)
