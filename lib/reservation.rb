@@ -17,7 +17,7 @@ module Hotel_System
       ((@check_out - @check_in) * 200 * rate_adjustor).to_int
     end
 
-    def covers?(date)
+    def includes?(date)
       (@check_in...@check_out).cover?(date) ? true : false
     end
 

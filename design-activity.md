@@ -36,7 +36,7 @@ Revisiting Hotel
 
     Room: knows its own availability and creates reservations. To me, this is a single responsibility. Hotel depends on room being initialized with a room number argument and responding to .reservations and .reserve. I don't think creating reservations should be delegated to Reservation: the class would need knowledge of room.reservations, which isn't intuitive to me, and doesn't solve any problems.
 
-    Reservation: stores pertinent information (check_in, check_out, room_number, rate_adjustor) and can calculate its own cost. This class definitely has a single responsibility. Knowing reservation info is 100% necessary for calculating cost, which is the only thing Reservation does. Room relies on Reservation being initialized with check_in and check_out as arguments. Room also relies on Reservation responding to .room and .rate_adjustor.
+    Reservation: stores pertinent information (check_in, check_out, room_number, rate_adjustor) and can calculate its own cost. This class definitely has a single responsibility. Knowing reservation info is 100% necessary for calculating cost, which is the only thing Reservation does. Room relies on Reservation being initialized with check_in and check_out as arguments. Room also relies on Reservation responding to .room.
 
     Block: knows all the same things reservation knows, in addition to which rooms are in it. Knows which rooms have been reserved and can reserve available rooms. This class also definitely has a single responsibility: the block being able to reserve rooms can't be separated from its knowing which of its rooms are already reserved. Hotel depends on Block being initialized with check_in, check_out, rooms, and rate_adjustor.
 
