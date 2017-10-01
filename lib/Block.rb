@@ -6,7 +6,7 @@ module Hotel
   class Block
     COST_PER_NIGHT = 200.00
 
-    attr_reader  :room_num_array, :block_date_range_array, :discount_percent, :block_id, :reservations_array2
+    attr_reader  :room_num_array, :block_date_range_array, :discount_percent, :block_id, :reservations_array
 
     def initialize(room_num_array, check_in, check_out, block_id, discount_percent: 0)
 
@@ -18,7 +18,7 @@ module Hotel
       @discount_percent = discount_percent
 
 
-      @reservations_array2 = []
+      @reservations_array = []
     end
 
 
@@ -30,7 +30,9 @@ module Hotel
     end
 
 
-
+    def make_reservation(room_num, check_in, check_out, discount_percent: 0)
+        reservations_array << Hotel::Reservation.new(room_num, check_in, check_out, discount_percent: 0)
+    end
 
 
 

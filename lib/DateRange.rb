@@ -15,9 +15,15 @@ module Hotel
     end
 
 
-    # def include?(date)
-    #   reserevation.include?(Date.new(2017,2,2))
+    # def include(date)
+    #   if date >= @check_in && date <= @check_out
+    #     return true
+    #   end
     # end
+
+    def overlap?(other)
+      return !(other.checkout <= @checkin || other.checkin >= @checkout)
+    end
 
 
 
