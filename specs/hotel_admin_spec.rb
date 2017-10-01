@@ -79,10 +79,13 @@ describe "HotelAdmin" do
         BookingSystem::Room.new(12, 200.00),
         BookingSystem::Room.new(13, 200.00),
         BookingSystem::Room.new(14, 200.00)]
-        @discount_room_rate = 0.20
+      @discount_room_rate = 0.20
 
-        @block = BookingSystem::Block.new(@block_id, @date_range, @rooms_array, @discount_room_rate)
-      end
+      #Hotel Revisted Changes
+      @hotel_admin_test.reservation_list << BookingSystem::Reservation.new("Jane", "Doe", 10, 200.00, Date.new(2017, 9, 1), Date.new(2017, 9, 5), "Block1")
+
+      @block = BookingSystem::Block.new(@block_id, @date_range, @rooms_array, @discount_room_rate, @hotel_admin_test.reservation_list)
+    end
 
       it "ensures that reservation is added to all_reservations" do
         @hotel_admin_test.reservation_list.any? { |reservation|
@@ -96,7 +99,7 @@ describe "HotelAdmin" do
       end
 
       it "makes a reservation and adds it to hotel's list of reservations" do
-        @hotel_admin_test.reservation_list.length.must_equal 1
+        @hotel_admin_test.reservation_list.length.must_equal 2
       end
 
       it "raises an error for an invalid date range" do
@@ -116,7 +119,7 @@ describe "HotelAdmin" do
 
       it "will allow booking for a room if requested start_date is on the end_date of a previous booking" do
         @hotel_admin_test.reserve_room(@first_name, @last_name, @room_id, @room_rate, Date.new(2017, 9, 5), Date.new(2017, 9, 6))
-        @hotel_admin_test.reservation_list.length.must_equal 2
+        @hotel_admin_test.reservation_list.length.must_equal 3
       end
 
     end
@@ -135,7 +138,7 @@ describe "HotelAdmin" do
           BookingSystem::Room.new(5, 200.00)]
           @discount_room_rate = 0.20
 
-          @hotel_admin_test.reserve_block(@block_id, @date_range, @rooms_array, @discount_room_rate)
+          @hotel_admin_test.reserve_block(@block_id, @date_range, @rooms_array, @discount_room_rate, @hotel_admin_test.reservation_list)
         end
 
       it "makes a block reservation and adds it to hotel's list of block reservations" do

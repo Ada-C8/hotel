@@ -9,9 +9,11 @@ module BookingSystem
     attr_reader :block_id, :date_range, :rooms_array, :discount_room_rate
 
     def initialize(block_id, date_range, rooms_array, discount_room_rate, reservation_list)
+
+      #Hotel Revisted Changes: Checks the reservation for any date range that would overlap with the block_id's date_range and throws an error if it detects an overlap
       raise UnavailableRoomError.new("Room is unavailable") if reservation_list.any? {|reservation|
         rooms_array.include?(reservation.room_id) &&
-        # !(reservation.start_date >= date_range.last || reservation.end_date <= date_range.first)
+        #overlaps? same as: !(reservation.start_date >= date_range.last || reservation.end_date <= date_range.first)
         reservation.date_range.overlaps?(date_range) && date_range.first < reservation.end_date
       }
 

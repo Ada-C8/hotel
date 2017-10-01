@@ -6,6 +6,7 @@ module BookingSystem
     attr_reader :first_name, :last_name, :room_id, :room_rate, :start_date, :end_date, :total_cost, :date_range
 
     def initialize(first_name, last_name, room_id, room_rate, start_date, end_date, block_id = nil)
+      
       @first_name = first_name
       @last_name = last_name
 

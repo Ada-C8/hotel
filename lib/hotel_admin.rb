@@ -29,6 +29,7 @@ module BookingSystem
 
       raise UnavailableRoomError.new("Room is unavailable") if @reservation_list.any? {|reservation|
         reservation.room_id == room_id && reservation.date_range.overlaps?(requested_range) && start_date < reservation.end_date
+        #overlaps? same as:
         # reservation.room_id == room_id &&
         # !(reservation.start_date >= end_date || reservation.end_date <= start_date)
       }
@@ -50,7 +51,7 @@ module BookingSystem
         end
       end
 
-      block = BookingSystem::Block.new(block_id, date_range, rooms_array, discount_room_rate, @reservation_list)
+      block = BookingSystem::Block.new(block_id, date_range, rooms_array, discount_room_rate, reservation_list)
       @block_list << block
     end
 
@@ -81,9 +82,6 @@ module BookingSystem
 
       return available_rooms
     end
-
-
-
 
   end#of_HotelAdmin_class
 end#of_module_BookingSystem

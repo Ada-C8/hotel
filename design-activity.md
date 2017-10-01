@@ -50,9 +50,12 @@ Implementation B appears to better adhere to the single responsibility principle
 Furthermore, before considering how we'd modify the code to consider bulk items, I thought A good in that it appeared DRY because it was consolidating and delegating all price calculations in Order (so you could just update price calculations all in one place), but now that I've had to also consider buying items in bulk and potential areas of price changes, it makes sense to break up the price calculation responsibilities.
 
 * Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
-Implementation B is more loosely coupled because its Order class does not reference and knows less about the other classes (e.g. it doesn't reference any CartEntry objects like A). 
+Implementation B is more loosely coupled because its Order class does not reference and knows less about the other classes (e.g. it doesn't reference any CartEntry objects like A).
 
 
+## Revisiting Hotel Activity:
+
+HotelAdmin is currently tightly coupled with my block and reservation classes. For example, I had date validation for reservations made in both my HotelAdmin and Reservation. I've changed it so now only my Reservation class handles date validation. Previously, I'd also planned for the HotelAdmin class to check if a block would conflict with an existing reservation before attempting to create the block. To decouple this area of logic, now the HotelAdmin class just creates a block while the block class performs the validation to decide if there is a conflict with an existing reservation.
 
 
 
