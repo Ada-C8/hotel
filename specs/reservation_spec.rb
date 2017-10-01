@@ -2,8 +2,8 @@ require_relative 'spec_helper'
 
 describe "Reservation" do
   before do
-    @check_in = Date.new(2017,9,15)
-    @check_out = Date.new(2017,9,17)
+    @check_in = Date.new(2017,10,15)
+    @check_out = Date.new(2017,10,17)
     @room = 5
     @cost = 200
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)

@@ -17,6 +17,18 @@ module BookingSystem
      return @rooms.length > 0
    end #end of method
 
+   def reserve_room(room)
+     if !has_available_rooms?
+       raise NoRoomAvailableError.new("No available rooms in block")
+     end
+     if !rooms.keys.include?(room)
+       raise NoRoomAvailableError.new("Requested room is unavailable")
+     end
+
+     @rooms.delete(room)
+
+   end #end of method
+
 
  end #end of class
 end #end of module

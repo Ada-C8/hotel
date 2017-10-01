@@ -6,8 +6,8 @@ describe "Hotel" do
     @five_rooms = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 170}
     @eight_rooms = {1 => 150, 2 => 200, 3 => 350, 4 => 120, 5 => 150, 6 => 170, 7 => 180, 8 => 150}
     @two_room_hotel = BookingSystem::Hotel.new(@two_rooms)
-    @check_in = Date.new(2017,9,15)
-    @check_out = Date.new(2017,9,17)
+    @check_in = Date.new(2017,10,15)
+    @check_out = Date.new(2017,10,17)
     @date_range = BookingSystem::DateRange.new(@check_in, @check_out)
     @five_room_hotel = BookingSystem::Hotel.new(@five_rooms)
     @eight_room_hotel = BookingSystem::Hotel.new(@eight_rooms)
@@ -73,7 +73,7 @@ describe "Hotel" do
     before do
       @reservation = @two_room_hotel.make_reservation(@date_range, 1)
       @second_reservation = @two_room_hotel.make_reservation(@date_range, 2)
-      @date = Date.new(2017,9,15)
+      @date = Date.new(2017,10,15)
     end
     it "Returns an instance of array class " do
       @two_room_hotel.list_of_reservations(@date).must_be_kind_of Array
@@ -125,18 +125,7 @@ describe "Hotel" do
     it "Returns an instance of class Reservation" do
       @reservation_from_block.must_be_kind_of BookingSystem::Reservation
     end
-    it "Booked room should be removed from rooms in block" do
-      @new_block.rooms.length.must_equal 2
-    end
-    it "Raise an error if no available rooms for reservation from block" do
-      2.times do |i|
-        @five_room_hotel.make_reservation_from_block(@new_block, i+2)
-      end
-      proc { @five_room_hotel.make_reservation_from_block(@new_block, 1) }.must_raise BookingSystem::NoRoomAvailableError
-    end
-    it "Raise an error if requested room is unavailable" do
-      proc { @five_room_hotel.make_reservation_from_block(@new_block, 1) }.must_raise BookingSystem::NoRoomAvailableError
-    end
+    
   end
 
   describe "Check total cost for two types of reservations" do

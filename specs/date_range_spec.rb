@@ -2,8 +2,8 @@ require_relative 'spec_helper'
 
 describe "DateRange" do
   before do
-    @check_in = Date.new(2017,9,15)
-    @check_out = Date.new(2017,9,17)
+    @check_in = Date.new(2017,10,15)
+    @check_out = Date.new(2017,10,17)
     @new_date_range = BookingSystem::DateRange.new(@check_in, @check_out)
     @past_date = Date.new(2015,5,3)
   end
@@ -32,9 +32,9 @@ describe "DateRange" do
       @new_date_range.dates_within_range.length.must_equal 2
     end
     it "Returns the array of right length for long ranges" do
-      check_in = Date.new(2017,9,15)
-      check_out = Date.new(2017,10,15)
-      BookingSystem::DateRange.new(check_in, check_out).dates_within_range.length.must_equal 30
+      check_in = Date.new(2017,10,15)
+      check_out = Date.new(2017,11,15)
+      BookingSystem::DateRange.new(check_in, check_out).dates_within_range.length.must_equal 31
     end
   end
 
