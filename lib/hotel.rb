@@ -1,7 +1,7 @@
 require 'date'
 
 class Hotel
-  attr_accessor :rooms
+  attr_accessor :rooms, :roominfo
 
   def initialize
     @rooms = []
@@ -10,6 +10,13 @@ class Hotel
     20.times do
       @rooms << Room.new(id)
       id += 1
+    end
+
+    @roominfo = []
+    @rooms.each do |room|
+      id = room.id
+      status = room.status
+      @roominfo << {id => status}
     end
   end
 

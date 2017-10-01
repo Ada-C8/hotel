@@ -32,5 +32,5 @@ There would need to be an addition of a conditional that states if quantity is a
 Which implementation better adheres to the single responsibility principle?
 Implementation B better adheres to single-responsibility, because the logic is delegated to each class, rather than all happening at the highest Order level.
 
-
-Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+My own design for Hotel:
+Thinking particularly about the Reservation, Availability, and Block classes in my Hotel project, I think I have a lot of logic packed into each method, and I need to separate that logic out to "lower-level" classes (like assigning room status etc in the Hotel classes rather than Availability), as well as making separate methods within the Reservation class that ensure that single-responsibility principle is met.

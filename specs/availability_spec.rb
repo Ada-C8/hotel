@@ -32,7 +32,7 @@ describe "availability class" do
 
   describe "all available rooms method" do
     it "returns an array of room ids" do
-      all_availability = Availability.all_available_rooms(2017, 9, 28, 2017, 9, 29)
+      all_availability = Availability.all_available_rooms(2018, 9, 28, 2018, 9, 29)
       all_availability.must_be_instance_of Array
       all_availability[0].must_be_instance_of Integer
     end
@@ -47,7 +47,7 @@ describe "availability class" do
     end
 
     it "returns an empty array if there are no reservations on that day" do
-      all_availability = Availability.all_reservations(2017, 9, 28)
+      all_availability = Availability.all_reservations(2018, 9, 28)
       all_availability.must_be_instance_of Array
       all_availability.count.must_equal 0
     end
@@ -62,7 +62,7 @@ describe "availability class" do
     end
 
     it "returns an empty array if there are no blocks on that day" do
-      blocks = Availability.all_blocked_rooms(2017, 10, 28)
+      blocks = Availability.all_blocked_rooms(2018, 10, 28)
       blocks.must_be_instance_of Array
       blocks.count.must_equal 0
     end

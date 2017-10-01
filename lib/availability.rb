@@ -1,5 +1,6 @@
 require_relative 'rooms'
 require 'date'
+require 'pry'
 
 class Availability
   @@calendar = []
@@ -9,17 +10,10 @@ class Availability
     current_date = Date.today
     last_day = current_date + 366
 
-    roominfo = []
     hotel = Hotel.new
-    hotel.rooms.each do |room|
-      id = room.id
-      status = room.status
-      roominfo << {id => status}
-    end
-
     until current_date == last_day
-      roominfo = Marshal.load(Marshal.dump(roominfo))
-      @@calendar << {current_date => roominfo}
+      hotel.roominfo = Marshal.load(Marshal.dump(hotel.roominfo))
+      @@calendar << {current_date => hotel.roominfo}
       current_date += 1
     end
   end
@@ -33,22 +27,17 @@ class Availability
     @@calendar = new_cal
   end
 
-  # Iterate through the calendar to find specific date ranges and return the available rooms for all days in the given range
-  def self.all_available_rooms(startyear, startmonth, startday, endyear, endmonth, endday)
-    checkin_date = Date.new(startyear,startmonth,startday)
-    checkout_date = Date.new(endyear,endmonth,endday)
-    openrooms = []
-
-    wanteddate = checkin_date
-
+  # Created method in redesign to call logic for status checking in multiple other methods
+  def self.check_status_range(wanteddate, checkout_date, wanted_status)
+    rooms = []
     until wanteddate == checkout_date
       self.calendar.each do |days|
         days.each do |date, roominfo|
           if wanteddate == date
-            roominfo.each do |rooms|
-              rooms.each do |id, status|
-                if status == :available
-                  openrooms << id
+            roominfo.each do |allrooms|
+              allrooms.each do |id, status|
+                if status == wanted_status
+                  rooms << id
                 end
               end
             end
@@ -57,6 +46,35 @@ class Availability
       end
       wanteddate += 1
     end
+    return rooms
+  end
+
+  def self.check_status_single(check_date, wanted_status)
+    rooms = []
+    self.calendar.each do |days|
+      days.each do |date, roominfo|
+        if check_date == date
+          roominfo.each do |allrooms|
+            allrooms.each do |id, status|
+              if status == wanted_status
+                rooms << id
+              end
+            end
+          end
+        end
+      end
+    end
+
+    return rooms
+  end
+
+  # Iterate through the calendar to find specific date ranges and return the available rooms for all days in the given range
+  def self.all_available_rooms(startyear, startmonth, startday, endyear, endmonth, endday)
+    checkin_date = Date.new(startyear,startmonth,startday)
+    checkout_date = Date.new(endyear,endmonth,endday)
+
+    wanteddate = checkin_date
+    openrooms = self.check_status_range(wanteddate, checkout_date, :available)
 
     total_stay = (checkout_date - checkin_date).to_i
     finalrooms = []
@@ -71,44 +89,12 @@ class Availability
 
   # Iterate through calendar to find all reserved rooms on a given date
   def self.all_reservations(year, month, day)
-    check_date = Date.new(year,month,day)
-    bookedrooms = []
-    self.calendar.each do |days|
-      days.each do |date, roominfo|
-        if check_date == date
-          roominfo.each do |rooms|
-            rooms.each do |id, status|
-              if status == :booked
-                bookedrooms << id
-              end
-            end
-          end
-        end
-      end
-    end
-
-    return bookedrooms
+    self.check_status_single(Date.new(year,month,day), :booked)
   end
 
   # Iterate through calendar to find all rooms blocked off for a specific day (not attached to a specific block)
   def self.all_blocked_rooms(year, month, day)
-    check_date = Date.new(year,month,day)
-    blockedrooms = []
-    self.calendar.each do |days|
-      days.each do |date, roominfo|
-        if check_date == date
-          roominfo.each do |rooms|
-            rooms.each do |id, status|
-              if status == :blocked
-                blockedrooms << id
-              end
-            end
-          end
-        end
-      end
-    end
-
-    return blockedrooms
+    self.check_status_single(Date.new(year,month,day), :blocked)
   end
 
   # Find the still-available rooms in one specific block

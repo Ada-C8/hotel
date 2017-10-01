@@ -53,4 +53,20 @@ class Block
     return @@every_block
   end
 
+  # Find block
+  def self.find_block(id)
+    chosen_block = ""
+    Block.all_blocks.each do |block|
+      if block.block_id == id
+        chosen_block = block
+      end
+    end
+
+    if chosen_block == ""
+      raise ArgumentError.new("That room block ID does not exist.")
+    end
+
+    return chosen_block
+  end
+
 end # end of class
