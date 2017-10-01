@@ -36,4 +36,8 @@ Implementation B would be easier to modify. The code in CartEntry#initialize cou
 
 Which implementation better adheres to the single responsibility principle?
 
-Implementation B, because the logic is delegated to the lower level classes by using the price method. The total_price method in Implementation A seems like it would be considered to be responsible for all the behavior surrounding calculating price, where in Implementation B, the responsibility is placed throughout the lower level classes. 
+Implementation B, because the logic is delegated to the lower level classes by using the price method. The total_price method in Implementation A seems like it would be considered to be responsible for all the behavior surrounding calculating price, where in Implementation B, the responsibility is placed throughout the lower level classes.
+
+Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
+
+I initially wanted to have a method that completed the logic for total_nights, reserved?, and total_cost within the same method because I thought it would be more "efficient." After working with Charles in my tutoring sessions, he had me start to break down the logic into smaller methods that did one thing, such as find the number of night, find the total cost and check if the room is already reserved. I then used the lower level Reservation class methods in other methods in the Hotel class to create reservations and find available rooms. 

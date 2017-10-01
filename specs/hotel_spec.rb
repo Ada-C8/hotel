@@ -148,6 +148,25 @@ describe "Administration#Hotel" do
     end
   end
 
+  # describe "rooms_for_block" do
+  #   it "create an array of rooms available for a block when no reservations exist" do
+  #     hotel = Administration::Hotel.new(12)
+  #
+  #     rooms_by_date = hotel.rooms_for_block(Date.new(2017, 9, 3), [ 2,5,7,8,3 ])
+  #     rooms_by_date.length.must_equal 4
+  #   end
+
+    # it "creates an array of rooms available for a block when a reservation for the room exists" do
+    #   hotel = Administration::Hotel.new(6)
+    #   hotel.make_reservation(Date.new(2017, 9, 4), Date.new(2017, 9, 7), 1)
+    #   hotel.make_reservation(Date.new(2017, 9, 2), Date.new(2017, 9, 6), 2)
+    #   hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 3)
+    #   hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 4)
+    #   hotel.make_reservation(Date.new(2017, 9, 1), Date.new(2017, 9, 4), 5)
+    #
+    #   rooms_by_date.block_reserved?
+    #   end
+  # end
 
 
 

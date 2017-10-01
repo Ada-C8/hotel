@@ -46,6 +46,8 @@ module Administration
     return available_rooms
   end
 
+  # def reserve_block_room(date)
+  # end
 
   end #end of class
 end #end of hotel

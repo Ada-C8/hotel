@@ -24,7 +24,7 @@ describe "Administration#Block" do
     end
 
     it "raise an error if more than 5 rooms in a block" do
-      rooms = [ 3, 4, 2, 7, 8, 1]
+      rooms = [ 3, 4, 2, 7, 8, 1 ]
       check_in = Date.new(2017, 9, 1)
       check_out = Date.new(2017, 9, 5)
 
@@ -33,18 +33,4 @@ describe "Administration#Block" do
       }.must_raise MaxNumRoomsError
     end
   end
-
-  # describe "#rooms_in_block" do
-  #   it "create an array of available rooms" do
-  #     rooms = 4
-  #     check_in = Date.new(2017, 9, 1)
-  #     check_out = Date.new(2017, 9, 5)
-  #
-  #     block_res = Administration::Block.new(check_in, check_out, rooms)
-  #     block_res.rooms_in_block.length.must_equal 4
-  #     block_res.rooms_in_block.must_be_kind_of Array
-  #   end
-  # end
-
-
 end # end of Block
