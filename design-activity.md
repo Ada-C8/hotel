@@ -50,3 +50,12 @@ Imp A
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
 Imp A
+
+
+
+Hotel Updates:
+what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
+
+The Hotel class currently has a method to check if given dates are valid, which is really only needed when a reservation is being made. It would make more sense for Reservation class to have this functionality rather than Hotel, as it would make the classes more loosely coupled and easier to reuse.
+
+I can move the method check_dates and date_range from Hotel to Reservation, make them class methods, and update testing for Reservation to include appropriate tests.

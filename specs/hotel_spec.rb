@@ -15,7 +15,7 @@ describe "Hotel" do
   describe "check_dates" do
     it "can check if date is in the future" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
       dates.must_be_instance_of Array
       dates[0].must_be_instance_of Date
 
@@ -24,29 +24,29 @@ describe "Hotel" do
     end
     it "throws an error if date is in the past" do
       new_hotel = Hotels::Hotel.new
-      proc {new_hotel.check_dates([1970, 9, 10], [2020, 9, 12])}.must_raise ArgumentError
+      proc {Hotels::Reservations.check_dates([1970, 9, 10], [2020, 9, 12])}.must_raise ArgumentError
     end
 
     it "throws error if end date is before start date" do
       new_hotel = Hotels::Hotel.new
-      proc {new_hotel.check_dates([2020, 9, 10], [2000, 9, 12])}.must_raise ArgumentError
+      proc {Hotels::Reservations.check_dates([2020, 9, 10], [2000, 9, 12])}.must_raise ArgumentError
     end
     it "throws an error if dates are not in correct format" do
       new_hotel = Hotels::Hotel.new
-      proc {new_hotel.check_dates(["a",10,2020], ["b",3,2000])}.must_raise ArgumentError
-      proc {new_hotel.check_dates([1,30,2020], [100,3,2000])}.must_raise ArgumentError
+      proc {Hotels::Reservations.check_dates(["a",10,2020], ["b",3,2000])}.must_raise ArgumentError
+      proc {Hotels::Reservations.check_dates([1,30,2020], [100,3,2000])}.must_raise ArgumentError
     end
     it "thows an error if start and end date are the same" do
       new_hotel = Hotels::Hotel.new
-      proc {new_hotel.check_dates([2020, 9, 10], [2020, 9, 10])}.must_raise ArgumentError
+      proc {Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 10])}.must_raise ArgumentError
     end
   end
 
   describe "date_range" do
     it "can create a date range" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
 
       date_range.must_be_instance_of Array
       date_range.length.must_equal 2
@@ -59,8 +59,8 @@ describe "Hotel" do
   describe "list_booked_rooms" do
     it "can list booked rooms" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       list_booked = new_hotel.list_booked_rooms(date_range)
       unbooked = new_hotel.list_unbooked_rooms(list_booked)
       find_room = new_hotel.find_room(unbooked)
@@ -75,8 +75,8 @@ describe "Hotel" do
   describe "list_unbooked_rooms" do
     it "can list booked rooms" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       list_booked = new_hotel.list_booked_rooms(date_range)
       unbooked = new_hotel.list_unbooked_rooms(list_booked)
       find_room = new_hotel.find_room(unbooked)
@@ -95,14 +95,14 @@ describe "Hotel" do
   describe "find_room" do
     it "can find a room" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       list_booked = new_hotel.list_booked_rooms(date_range)
       unbooked = new_hotel.list_unbooked_rooms(list_booked)
       find_room = new_hotel.find_room(unbooked)
       new_res = new_hotel.make_reservation(find_room, date_range)
-      dates2 = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range2 = new_hotel.date_range(dates2)
+      dates2 = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range2 = Hotels::Reservations.date_range(dates2)
       list_booked2 = new_hotel.list_booked_rooms(date_range2)
       unbooked2 = new_hotel.list_unbooked_rooms(list_booked2)
       find_room2 = new_hotel.find_room(unbooked2)
@@ -122,8 +122,8 @@ describe "Hotel" do
   describe "make_reservation" do
     it "can make a reservation" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       find_room = Hotels::Rooms.new(1)
       new_res = new_hotel.make_reservation(find_room, date_range)
 
@@ -134,8 +134,8 @@ describe "Hotel" do
   describe "make_blocks" do
     it "can make blocks of rooms" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       number_of_rooms = 5
       blocks = new_hotel.make_blocks(date_range, number_of_rooms)
 
@@ -145,12 +145,12 @@ describe "Hotel" do
 
     it "throws argument error when room number is too high" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       number_of_rooms = 6
 
       proc {new_hotel.make_blocks(date_range, number_of_rooms)}.must_raise ArgumentError
-     
+
     end
   end
 

@@ -5,8 +5,8 @@ describe "Wave 3: Blocks" do
 
     it "can initialize a block" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       number_of_rooms = 5
       blocks = new_hotel.make_blocks(date_range, number_of_rooms)
       new_block = Hotels::Block.new(date_range, blocks)
@@ -20,8 +20,8 @@ describe "Wave 3: Blocks" do
 
     it "can reserve a room from a block" do
       new_hotel = Hotels::Hotel.new
-      dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-      date_range = new_hotel.date_range(dates)
+      dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+      date_range = Hotels::Reservations.date_range(dates)
       number_of_rooms = 5
       blocks = new_hotel.make_blocks(date_range, number_of_rooms)
       new_block = Hotels::Block.new(date_range, blocks)
@@ -49,8 +49,8 @@ describe "Wave 3: Blocks" do
     describe "list_unbooked_rooms" do
       it "can list booked rooms within a block" do
         new_hotel = Hotels::Hotel.new
-        dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-        date_range = new_hotel.date_range(dates)
+        dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+        date_range = Hotels::Reservations.date_range(dates)
         number_of_rooms = 5
         blocks = new_hotel.make_blocks(date_range, number_of_rooms)
         new_block = Hotels::Block.new(date_range, blocks)
@@ -66,8 +66,8 @@ describe "Wave 3: Blocks" do
     describe "cost_of_reservation" do
       it "can calculate cost of reservation" do
         new_hotel = Hotels::Hotel.new
-        dates = new_hotel.check_dates([2020, 9, 10], [2020, 9, 12])
-        date_range = new_hotel.date_range(dates)
+        dates = Hotels::Reservations.check_dates([2020, 9, 10], [2020, 9, 12])
+        date_range = Hotels::Reservations.date_range(dates)
         number_of_rooms = 5
         blocks = new_hotel.make_blocks(date_range, number_of_rooms)
         new_block = Hotels::Block.new(date_range, blocks)
