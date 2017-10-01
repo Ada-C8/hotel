@@ -28,4 +28,7 @@ If we decide items are cheaper if bought in bulk, how would this change the code
 
 Which implementation better adheres to the single responsibility principle?
 
-Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?_
+
+Identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class.
+My Reservation class should only be responsible for a single reservation. Instead of Reservation creating AND storing every instance, I should have a Hotel class to store all reservations in. That would make it much easier to create a Blocks class, which I was unable to do when the project was originally assigned.
