@@ -24,7 +24,7 @@ Class Order in both implementations has two methods: initialize and total_price.
 In implementation A #total_price method is completely retained in Order. In implementation B it delegated to "lower level" classes by having #price methods in them.
 
 ##Does total_price directly manipulate the instance variables of other classes?
-In implementation A #total_price method directly manipulate the instance variables of "lower level" classes such as entries, unit_price and quantity.
+In implementation A #total_price method directly manipulates the instance variables of "lower level" classes such as entries, unit_price and quantity.
 
 ##If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
 The implementation B is easier to modify because each class has a single responsibility. To add a discount for items in bulk I would add it to #price method of CartEntry class.
@@ -34,3 +34,7 @@ The implementation B is better adheres to the single responsibility principle. E
 
 ##Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 The implementation B is more loosely coupled. The private data of classes is encapsulated and classes do not know much about each other.
+
+##My improvements:
+
+To improve design in Hotel project I added new method #reserve_room to class Block and changed method #make_reservation_from_block in class Hotel. It made my classes Hotel and Block more loosely coupled. In my new implementation the Hotel class knows less information about the Block class. This change did not break any of my tests but I still refactored them a little to check some new functionality. 
