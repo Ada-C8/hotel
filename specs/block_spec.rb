@@ -7,7 +7,7 @@ require 'pry'
 describe "The Block class" do
 
   before do
-    @myhotel = Hotel_Chain::MyHotel.new
+    @hotel = Hotel_Chain::Hotel.new
   end
 
   describe "Initializing the Block" do

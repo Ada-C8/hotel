@@ -8,7 +8,7 @@ module Hotel_Chain
 
     attr_accessor :check_in_date, :check_out_date, :room, :HOTEL, :cost, :status, :block_reserved
 
-    HOTEL = Hotel_Chain::MyHotel.new
+    HOTEL = Hotel_Chain::Hotel.new
 
     #A new reservation object can be initialized by providing the check_in_date and check_out_date
     #Initialization converts the admin's date inputs to convert to Ruby Date objects, and stores them in instance variables.
@@ -19,14 +19,13 @@ module Hotel_Chain
       begin
         @check_in_date = Date.strptime(check_in_date, "%m/%d/%Y")
         @check_out_date = Date.strptime(check_out_date, "%m/%d/%Y")
-        @room = HOTEL.array_of_rooms.sample
+        @room = HOTEL.rooms.sample
         @status = "assigned" #all reservations default to "assigned", unless they are reservations made in a block
         @block_reserved = false #defaults to false. the reserve_block method changes this to true.
       rescue ArgumentError
         raise WrongDateFormatError
       end
     end
-
 
   end
 end
