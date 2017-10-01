@@ -1,5 +1,6 @@
 require_relative 'room'
 require_relative 'reservation'
+require_relative 'block'
 
 module Hotel
 
@@ -23,19 +24,40 @@ module Hotel
 
     end
 
-    def reserve(start_date, end_date, room)
+    def reserve(start_date, end_date, room_num)
       check_dates(start_date, end_date)
+      room = @rooms[room_num]
 
-      raise ArgumentError.new("Room #{room.room_num} isn't available for the selected dates") if room.booked?(start_date, end_date) || room.blocked?(start_date, end_date)
+      raise ArgumentError.new("Room #{room_num} isn't available for the selected dates") if room.booked?(start_date, end_date) || room.blocked?(start_date, end_date)
 
       return room.reserve(start_date, end_date)
 
     end
 
-    def block(start_date, end_date, discount, rooms)
-      raise ArgumentError.new("One or more rooms is unavailable for the selected dates") if rooms.any? { |room| room.booked?(start_date, end_date) || room.blocked?(start_date, end_date) }
+    def block(start_date, end_date, discount, room_nums)
+      block_rooms = room_nums.map { |room_num| rooms[room_num] }
 
-      return Hotel::Block.new(start_date, end_date, discount, rooms)
+      raise ArgumentError.new("One or more rooms is unavailable for the selected dates") if block_rooms.any? { |room| room.booked?(start_date, end_date) || room.blocked?(start_date, end_date) }
+
+      return ::Hotel::Block.new(start_date, end_date, discount, block_rooms)
+    end
+
+    def reserve_blocked_room(block, room_num = nil)
+      # allows user to specify a room number; else system automatically
+      # choose a room from the block
+      avail_rooms = block.find_avail_in_block
+
+      raise ArgumentError.new("No more rooms available in block") if avail_rooms.length < 1
+
+      # assign room num if not provided
+      room = room_num == nil ? avail_rooms.pop : rooms[room_num]
+
+      # if room num provided, check if available
+      if room_num && !block.room_available?(room)
+        raise ArgumentError.new("Room #{room_num} is already booked")
+      else
+        block.reserve(room)
+      end
     end
 
     def find_reservations_by_date(date)

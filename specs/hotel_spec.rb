@@ -57,15 +57,15 @@ describe "Testing Hotel class" do
     it "Reserves the given room for the given dates" do
       @room1.reservations.must_equal []
 
-      new_res = hotel.reserve(today, three_days_later, @room1)
+      new_res = hotel.reserve(today, three_days_later, 1)
       @room1.reservations.must_include new_res
     end
 
     it "Raises error when it tries to reserve a room that's already reserved" do
 
-      hotel.reserve(today, three_days_later, @room1)
+      hotel.reserve(today, three_days_later, 1)
 
-      proc { hotel.reserve(today + 1, three_days_later, @room1) }.must_raise ArgumentError
+      proc { hotel.reserve(today + 1, three_days_later, 1) }.must_raise ArgumentError
 
     end
 
@@ -73,7 +73,7 @@ describe "Testing Hotel class" do
 
       Hotel::Block.new(today, three_days_later, 0.85, [@room1])
 
-      proc { hotel.reserve(today, today + 2, @room1) }.must_raise ArgumentError
+      proc { hotel.reserve(today, today + 2, 1) }.must_raise ArgumentError
 
     end
 
@@ -87,11 +87,11 @@ describe "Testing Hotel class" do
     it "Returns a list of reservations for that date" do
       hotel.find_reservations_by_date(today).must_equal []
 
-      res1 = hotel.reserve(today, three_days_later, hotel.rooms[1])
+      res1 = hotel.reserve(today, three_days_later, 1)
       hotel.find_reservations_by_date(today).must_equal [res1]
       hotel.find_reservations_by_date(three_days_later).must_equal []
 
-      res2 = hotel.reserve(today + 1, three_days_later, hotel.rooms[2])
+      res2 = hotel.reserve(today + 1, three_days_later, 2)
       hotel.find_reservations_by_date(today).must_equal [res1]
       hotel.find_reservations_by_date(today + 1).must_equal [res1, res2]
     end
@@ -106,8 +106,8 @@ describe "Testing Hotel class" do
     it "Returns hash of rooms available for date range (doesn't count check-out date as unavail)" do
       hotel.find_avail_rooms(today, three_days_later).must_equal hotel.rooms
 
-      hotel.reserve(today, three_days_later, hotel.rooms[1])
-      hotel.reserve(today, three_days_later + 1, hotel.rooms[2])
+      hotel.reserve(today, three_days_later, 1)
+      hotel.reserve(today, three_days_later + 1, 2)
 
       hotel.find_avail_rooms(today, three_days_later).wont_include hotel.rooms[2]
       hotel.find_avail_rooms(today, three_days_later - 1).wont_include hotel.rooms[1]
@@ -121,6 +121,46 @@ describe "Testing Hotel class" do
 
       proc { hotel.find_avail_rooms(hotel, three_days_later, room1) }.must_raise ArgumentError
     end
+  end
+
+  describe "#reserve_blocked_room" do
+    before do
+      Hotel::Reservation.clear
+      @block = hotel.block(today, three_days_later, 0.8, [1, 2, 3])
+      @room1 = hotel.rooms[1]
+    end
+
+    it "Raises ArgumentError if all rooms already booked" do
+        @block.reserve(@room1)
+        @block.reserve(hotel.rooms[2])
+        @block.reserve(hotel.rooms[3])
+
+        proc { hotel.reserve_blocked_room(@block) }.must_raise ArgumentError
+    end
+
+    it "Raises ArgumentError if specified room is already booked" do
+      @block.reserve(@room1)
+      proc { hotel.reserve_blocked_room(@block, 1) }.must_raise ArgumentError
+    end
+
+    it "Reserves the specified room in the block" do
+      hotel.reserve_blocked_room(@block, 1)
+
+      res = Hotel::Reservation.new(today, three_days_later, @room1)
+      @room1.reservations.must_include res
+      hotel.find_avail_rooms(today, three_days_later).wont_include(1)
+    end
+
+    it "Reserves any available room in block if room num isn't specified" do
+      @block.reserve(@room1)
+
+      hotel.reserve_blocked_room(@block)
+      hotel.find_avail_rooms(today, three_days_later).wont_include(2 || 3)
+
+      hotel.reserve_blocked_room(@block)
+      hotel.find_avail_rooms(today, three_days_later).wont_include(2 && 3)
+    end
+
   end
 
 

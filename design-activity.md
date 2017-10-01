@@ -46,3 +46,10 @@
 9. **Bonus question: Which implementation is more loosely coupled?**
 
    Implementation B
+
+
+## Refactoring Hotel
+
+My `Hotel` class is pretty tightly coupled to the `Room` class, because it requires the user to pass `Room` objects (as opposed to a room number) to reserve or block rooms. To change this, I would make use of the hash I set up when initializing my `Hotel` class with rooms where the room number is the key and `Room` object is the value. Then, given a room number, I could first retrieve the `Room` object and then reserve it. This would be an improvement because it's much more user friendly (what user is going to want to find a room object before reserving it? No one, that's who).
+
+Also, while the `Block` class can reserve rooms from within a block, that functionality isn't in the `Hotel` class itself, and it seems like it would make more sense to have all the blocking/reserving functionality of a hotel available in one class (provided that it delegates the appropriate tasks to lower-level classes), especially since you can reserve a room in the `Hotel` class so it doesn't make sense that you can't reserve a blocked room, as well. So I could have a method that calls the appropriate method(s) in the `Block` class to reserve a room in a given block. This is an improvement b/c it's also more user friendly and puts all the user interface methods (i.e. what the CLI would draw from) in one place rather than having them scattered around different classes.

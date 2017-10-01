@@ -45,13 +45,13 @@ module Hotel
 
     def booked?(start_date, end_date = start_date.next_day)
 
-      return array_include_date?(reservations, start_date, end_date)
+      return includes_date?(reservations, start_date, end_date)
 
     end
 
     def blocked?(start_date, end_date = start_date.next_day)
 
-      return array_include_date?(blocks, start_date, end_date)
+      return includes_date?(blocks, start_date, end_date)
 
     end
 
@@ -97,11 +97,11 @@ module Hotel
 
     private
 
-    def array_include_date?(array, start_date, end_date)
+    def includes_date?(blocks_or_res_array, start_date, end_date)
       # don't include final date since check-out doesn't conflict with check-in of a new reservation
       date_range = (start_date...end_date).to_a
 
-      array.each do |item|
+      blocks_or_res_array.each do |item|
         date_range.each do |date|
           if item.include?(date)
             return true
