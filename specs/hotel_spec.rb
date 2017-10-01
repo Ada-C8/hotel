@@ -48,14 +48,14 @@ describe 'Hotel' do
       end
 
       it "returns a list of room objects" do
-        my_hotel.find_avail_rooms(date_to_find).must_be_instance_of Array
-        my_hotel.find_avail_rooms(date_to_find).length.must_equal 10
-        my_hotel.find_avail_rooms(date_to_find).each {|room| room.must_be_instance_of Hotel_System::Room}
+        my_hotel.find_avail_rooms(check_in, check_out).must_be_instance_of Array
+        my_hotel.find_avail_rooms(check_in, check_out).length.must_equal 10
+        my_hotel.find_avail_rooms(check_in, check_out).each {|room| room.must_be_instance_of Hotel_System::Room}
       end
 
       it "does not list rooms already reserved for a given date" do
-        my_hotel.find_avail_rooms(date_to_find).wont_include my_hotel.rooms[0]
-        my_hotel.find_avail_rooms(date_to_find).wont_include my_hotel.rooms[9]
+        my_hotel.find_avail_rooms(check_in, check_out).wont_include my_hotel.rooms[0]
+        my_hotel.find_avail_rooms(check_in, check_out).wont_include my_hotel.rooms[9]
       end
     end
 
