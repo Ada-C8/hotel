@@ -1,0 +1,46 @@
+#require 'pry'
+require_relative 'spec_helper'
+
+describe "Reservation class" do
+  before do
+    @res_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5", 0, nil)
+  end #before
+
+  describe "initialize" do
+    before do
+      @init_test = Hotel::Reservation.new(1111, "2001/1/1", "2001/1/5", 0, nil, room: 1)
+    end #before
+
+    it "can create an instance of the reservation class" do
+      @init_test.must_be_kind_of Hotel::Reservation
+    end #must_be_kind_of
+
+    it "can access id, room, check_in and check_out attributes" do
+      @init_test.id.must_equal 1111
+      @init_test.room.must_equal 1
+      @init_test.check_in.must_be_kind_of Date
+      @init_test.check_out.must_be_kind_of Date
+    end #first set of attributes
+
+    it "can access nights_reserved, and total_cost: " do
+      @init_test.nights_reserved.must_be_kind_of Array
+      @init_test.nights_reserved.length.must_equal 4
+      @init_test.total_cost.must_equal 800
+    end #second set of attributes
+  end #Initialize
+
+  describe "Calling Check_in and Check_out" do
+    it "can assign a date object to the check in variable" do
+      @res_test.check_in.must_be_kind_of Date
+    end
+
+    it "can assign a date object to the check out variable" do
+      @res_test.check_in.must_be_kind_of Date
+    end
+
+    it "can create a date_range given a check_in and check_out date" do
+      @res_test.nights_reserved.length.must_equal 4
+    end
+  end #check_in, check_out
+
+end #Reservation class
