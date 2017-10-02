@@ -14,12 +14,25 @@ module Property
       @room_price = 200
       @reservations = []
       @reserved_blocks = []
-      # @available = []
     end
 
-    def available(checkin, checkout)
-      dates = Range.new(checkin, checkout)
+    def list_reservations(dates)
+      @reservations.select { |rez| rez.contains(dates) }
+    end
+
+
+    def available(check_in, check_out)
+      dates = Range.new(check_in, check_out)
       available = @rooms
+
+      overlap_blocks = @reserved_blocks.select do |block|
+        block.overlap?(dates)
+      end
+      blocked_rooms = overlap_blocks.reduce([]) do |memo, block|
+        memo += block.rooms
+      end
+      available -= blocked_rooms
+
       overlap = @reservations.select do |rez|
         rez.overlap?(dates)
       end
@@ -29,22 +42,19 @@ module Property
       available -= already_reserved
       return available
     end
-    # pseudo : def no_check_in_on_same_day_as_check_out(room)
-    #   for room's check out date
-    #     do not allow check_in date to start on same day
-    #       for that room
-    #   use overlap? to control for this?
-    # make sure adjusting availability doesn;t affect the price
-    #     end
+
 
     def reserve_room(room, check_in, check_out)
       raise ArgumentError.new "Room unavailable." unless @rooms.include? room
       raise ArgumentError.new "Room #{room}is booked between
       # #{check_in} and #{check_out}" unless available(check_in, check_out).include? room
+
       room_rez = Reservation.new(room, check_in, check_out, @room_price)
       @reservations << room_rez
+
       return room_rez
     end
+
 
     def hotel_block(room_qty, check_in, check_out, price)
       rooms = available(check_in, check_out)
@@ -52,13 +62,16 @@ module Property
       raise ArgumentError "Insufficient room availability" if rooms.length < room_qty
 
       block = Property::Block.new(rooms.first(room_qty), check_in, check_out, price)
-      #This is how to pull out first n elements
-      #a = [ "q", "r", "s", "t" ]
-      #a.first     #=> "q"
-      # a.first(2)  #=> ["q", "r"]
-        @reserved_blocks << block
+      rooms = available(check_in, check_out)
+
+      if rooms.length < room_qty
+        raise ArgumentError("Not enough rooms available")
+      end
+
+      @reserved_blocks << block
       return block
     end
+
 
     def reserve_from_block(block)
       room = block.reserve_room
