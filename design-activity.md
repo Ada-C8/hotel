@@ -59,4 +59,12 @@ It is easier to change the implementation B because we just need to change the C
 
 Q: Which implementation better adheres to the single responsibility principle?
 
-A: The implementation B, because CartEntry takes care just for single products, ShoppingCart takes care of products inside entries and Order takes care of the order in general. While in implementation A, Order takes care of the single products, items in entries and the order in general. 
+A: The implementation B, because CartEntry takes care just for single products, ShoppingCart takes care of products inside entries and Order takes care of the order in general. While in implementation A, Order takes care of the single products, items in entries and the order in general.
+
+Revisiting Hotel
+
+When I did hotel the first time I paid special attention to the single responsibility of a class. Now that I'm looking  again this project, I think that the DateRange, Block and Reservation classes satisfies the requirements of a good design.
+
+The Admin class is a big class that manages the reservations and store the information about the rooms. I wanted to crate a new class call Rooms. This class would create the hash with rooms using the create_rooms method. But when I was making the changes, I noticed that if I do this, then Admin class would modify the instance variables of Rooms class, so I decided not to modify Admin class. 
+
+The change that I did was to put attr_reader or attr_accessor to instance variables, how Metiz books recommends.

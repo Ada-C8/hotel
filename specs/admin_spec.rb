@@ -19,7 +19,7 @@ describe 'Admin class' do
       @administrator.rooms.must_be_instance_of Hash
     end
 
-    it "Length of rooms is 20" do
+    it "Length of rooms hash is 20" do
       @administrator.rooms.length.must_equal 20
     end
   end
