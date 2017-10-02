@@ -84,13 +84,3 @@ module Hotel
 end #module
 
 #binding.pry
-
-# def find_reservations(day_in, day_out)
-#   all_reservations = @reservations.reservation_list + @block.block_list
-#   found_reservations = Array.new
-#   DateRange.check_dates(day_in, day_out)
-#   DateRange.create_range(day_in, day_out).each do |date|
-#     found_reservations << all_reservations.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
-#   end #each date
-#   return found_reservations.flatten.uniq
-# end #find_reservations
