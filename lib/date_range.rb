@@ -8,7 +8,7 @@ module Hotel
     def initialize(check_in, check_out)
         @check_in = Date.parse(check_in)
         @check_out = Date.parse(check_out)
-        @number_of_nights = (@check_out - @check_in).to_i
+        # @number_of_nights = (@check_out - @check_in).to_i
         unless @check_in > Date.today
           raise ArgumentError.new("That date has passed.")
         end
@@ -24,6 +24,11 @@ module Hotel
       else
         return false
       end
+    end
+
+    def number_of_nights
+      # changed number_of_nights from an intance variable to an instance method
+      return (@check_out - @check_in).to_i
     end
 
     def return_date_range
