@@ -38,7 +38,7 @@ Implementation A
 
   Order stores sales tax (constant) and shopping cart object.
 
-  Both implementations are the same with regards to what is stored.
+  Both implementations are the same with regards to what is stored in each class.
 
 
 What methods does each class have? How (if at all) does this differ between the two implementations?
