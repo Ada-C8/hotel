@@ -8,7 +8,7 @@ Order - Responsible for the shopping cart and the total price of the cart.
 
 <!-- How do the classes relate to each other? It might be helpful to draw a diagram on a whiteboard or piece of paper. -->
 
-The order class is the biggest class and draws upon the shopping cart class which in turn is in itself a collection of CartEntries. 
+The order class is the biggest class and draws upon the shopping cart class which in turn is in itself a collection of CartEntries.
 
 <!-- What data does each class store? How (if at all) does this differ between the two implementations? -->
 CartEntry: Stores the unit price and the quantity of each CartEntry object.
@@ -46,3 +46,8 @@ Implementation B would be easier to change because you could add some logic into
 <!-- Which implementation better adheres to the single responsibility principle? -->
 Implementation B
 <!-- Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled? -->
+
+
+<!-- Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement. -->
+
+I have sooo much going on in m reservations class. I felt that way when I was making the project and even more so after seeing the solution Dan posted. I'm going to start by moving a bunch of the check availability stuff to the date range class if possible.
