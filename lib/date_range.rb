@@ -1,4 +1,3 @@
-require_relative 'reservation'
 module Hotel
   class DateRange
     class InvalidDateRange < StandardError ; end

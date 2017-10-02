@@ -112,7 +112,7 @@ describe 'DateRange' do
 
       @honeymoon.overlap?(birthday).must_equal false
     end
-  end
+  end # end overlap?
 
   # before do
   #   @puppy_dates = Hotel::DateRange.new(Date.new(2017, 10, 13), Date.new(2017, 10, 31))
