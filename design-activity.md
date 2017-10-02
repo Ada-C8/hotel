@@ -45,8 +45,10 @@ You should be able to describe it in a single sentence.
 
 Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
 
-If you need inspiration, remember that the reference implementation exists.
+##### Answer
 
-Then make the changes! Don't forget to take advantage of all the tests you wrote - if they're well structured, they should quickly inform you when your refactoring breaks something.
+My find_available method in class California directly accessed the instance objects of rooms. Class California took an additional role when availability of a room could easily be determined within the class Room.  
 
-Once you're satisfied, git commit your changes and then push them to GitHub. This will automatically update your pull request.
+Changes to be made: create isAvailable method in room that returns the room number if it is available, modify find_available to use isAvailable method on each room.  
+
+This makes class California more loosely coupled to class Room. Modifications in either class will be less likely to break functionality.

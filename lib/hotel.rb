@@ -18,17 +18,11 @@ module Hotel
     end
 
     def find_available(date)
-      valid_date = Date.parse(date)
       by_date = []
       @all_rooms.each do |k, v|
-        if @all_rooms[k].reservations.length == 0
-          by_date << @all_rooms[k].room_num
-        elsif @all_rooms[k].reservations.length != 0
-          @all_rooms[k].reservations.each_index do |i|
-            unless @all_rooms[k].reservations[i].dates.include? valid_date.to_s
-              by_date << @all_rooms[k].room_num
-            end
-          end
+        room = @all_rooms[k].isAvailable(date)
+        if room
+          by_date << room
         end
       end
       return by_date
@@ -72,7 +66,7 @@ module Hotel
       start_date = Date.parse(start_date)
       end_date = Date.parse(end_date)
       dates = (start_date..end_date).map(&:to_s)
-      
+
       available_rooms = []
       dates.each {|date| available_rooms << find_available(date)}
       available_rooms = available_rooms.inject(:&).first(num_rooms)

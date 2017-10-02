@@ -31,5 +31,19 @@ module Hotel
       end
     end
 
+    def isAvailable(date)
+      valid_date = Date.parse(date)
+      if @reservations.length == 0
+        return @room_num
+      elsif @reservations.length != 0
+        @reservations.each_index do |i|
+          unless @reservations[i].dates.include? valid_date.to_s
+            return @room_num
+          end
+        end
+      end
+      return nil
+    end
+
   end #end of Room
 end #end of Hotel
