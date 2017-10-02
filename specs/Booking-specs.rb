@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'Booking' do
   before do
-    @new_booking = Hotel::Booking.new("2017-09-21", "2017-09-23")
+    @new_booking = Hotel::Booking.new("2018-09-21", "2018-09-23")
   end
   describe 'initialize' do
     it "must be an instance of Booking" do
@@ -24,7 +24,7 @@ describe 'Booking' do
       @new_booking.check_in.must_be_kind_of Date
     end
     it "must output the correct date" do
-      @new_booking.check_in.must_equal Date.parse("2017-09-21")
+      @new_booking.check_in.must_equal Date.parse("2018-09-21")
     end
   end
 
@@ -33,7 +33,7 @@ describe 'Booking' do
       @new_booking.check_out.must_be_kind_of Date
     end
     it "must output the correct date" do
-      @new_booking.check_out.must_equal Date.parse("2017-09-23")
+      @new_booking.check_out.must_equal Date.parse("2018-09-23")
     end
   end
 

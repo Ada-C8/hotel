@@ -5,7 +5,7 @@ require 'block'
 
 module Hotel
   class Reservations
-    attr_reader :room_number
+    attr_reader :room_number, :all_reservations, :rooms_collection
     attr_accessor :blocks_collection
 
     def initialize
@@ -13,10 +13,16 @@ module Hotel
       @rooms_collection = []
       all_rooms
       @blocks_collection = []
+      # @booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
+      # @block = Hotel::Block.new(check_in, check_out, block_name, @block_rooms_collection, discounted_room_rate = 180)
+      # @dates = @date_range.dates
     end
 
     def all_rooms
-      @rooms_collection = []
+      if @rooms_collection.empty? == false
+        return @rooms_collection
+      end
+
       n = 1
 
       (1..20).each do
@@ -32,13 +38,14 @@ module Hotel
     end
 
     def new_reservation(check_in, check_out, room_number = rand(1..20), room_rate = 200)
-      dates = Hotel::DateRange.new(check_in, check_out).dates
+      # dates = Hotel::DateRange.new(check_in, check_out).dates
       booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      if check_availability?(dates, room_number) == false
+      @dates = booking.dates
+      if check_availability?(@dates, room_number) == false
         raise ArgumentError.new("Room number #{room_number} unavailable for those dates.")
-        else
-          @all_reservations << booking
-          return booking
+      else
+        @all_reservations << booking
+        return booking
       end
     end
 
@@ -85,6 +92,7 @@ module Hotel
       create_block_rooms_collection #Method already checks for room availability in order to create collection
       block_rooms_collection = @block_rooms_collection
       block = Hotel::Block.new(check_in, check_out, block_name, @block_rooms_collection, discounted_room_rate = 180)
+      # @dates = @date_range.dates
       @blocks_collection << block
       return block
     end
@@ -103,6 +111,7 @@ module Hotel
           end
         end
       end
+
       @block_rooms_collection = []
 
       @number_of_rooms.times do |i|
@@ -113,26 +122,28 @@ module Hotel
 
     def check_in_block(block_name, room_number)
       @blocks_collection.each do |block|
-          if block.block_name == block_name
-            block.block_rooms_collection.each do |room|
-              if room.room_number == room_number
+        if block.block_name == block_name
+          block.block_rooms_collection.each do |room|
+            if room.room_number == room_number
               return true
-              end
             end
           end
+        end
       end
       raise ArgumentError.new("Room number #{room_number} not included in #{block_name} block.")
       return false
     end
 
-    def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 200)
+    def new_reservation_in_block(check_in, check_out, block_name, room_number = 0, room_rate = 180)
       block_room_booking = Hotel::Booking.new(check_in, check_out, room_number, room_rate)
-      check_in = Date.parse(check_in)
-      check_out = Date.parse(check_out)
+      # check_in = Date.parse(check_in)
+      # check_out = Date.parse(check_out)
 
       validate_block_dates(check_in, check_out, block_name)
       check_in_block(block_name, room_number)
       check_block_room_available(block_name, room_number)
+
+
       add_block_booking_to_block(block_name, block_room_booking)
 
       @all_reservations << block_room_booking
@@ -140,23 +151,25 @@ module Hotel
     end
 
     def match_block(block_name)
-      @this_block = nil
+      this_block = nil
       @blocks_collection.each do |block|
         if block.block_name == block_name
-          @this_block = block
+          this_block = block
         end
       end
-      return @this_block
+      return this_block
     end
 
     def validate_block_dates(check_in, check_out, block_name)
-      match_block(block_name)
-      if check_in >= @this_block.check_in && check_out <= @this_block.check_out
-        return true
-      else
-        raise ArgumentError.new("Cannot reserve for those dates - dates must be the same as block dates.")
-        return false
-      end
+      block = match_block(block_name)
+      date_range = block.date_range
+      # block.validate_block_dates(check_in, check_out)
+       if check_in >= block.check_in && check_out <= block.check_out
+          return true
+        else
+          raise ArgumentError.new("Cannot reserve for those dates - dates must be the same as block dates.")
+          return false
+        end
     end
 
     def add_block_booking_to_block(block_name, block_room_booking)
@@ -181,10 +194,13 @@ module Hotel
     end
 
     def list_reservations_by_date(date)
-      date = Date.parse(date)
+      if date.class != Date
+        date = Date.parse(date)
+      end
       list = []
       @all_reservations.each do |reservation|
-        if date >= reservation.check_in && date < reservation.check_out  #check_out date excluded
+        if date >= reservation.check_in && date < reservation.check_out
+          #reservation.overlaps?(date)  #check_out date excluded
           list << reservation
         end
       end
@@ -192,7 +208,10 @@ module Hotel
     end
 
     def list_blocked_rooms_by_date(date)
-      date = Date.parse(date)
+      if date.class != Date
+        date = Date.parse(date)
+      end
+      # date = Date.parse(date)
       blocks_list = []
       @blocks_collection.each do |block|
         if date >= block.dates[0] && date < block.dates[-1]
@@ -211,52 +230,52 @@ module Hotel
   end
 end
 #I don't think I"ll need this but keep for now and hasn't been tested#
-    # def assign_block_room(check_in, check_out, room_number)
-    #   date_range = DateRange.new(check_in, check_out).dates
-        # block_name.
-    #   date_range[0...-1].each do |date|
-    #     list_reservations_by_date(date).each do |booking|
-    #       if booking.room_number == room_number
-    #         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
-    #       end
-    #     end
-    #   end
-    # end
+# def assign_block_room(check_in, check_out, room_number)
+#   date_range = DateRange.new(check_in, check_out).dates
+# block_name.
+#   date_range[0...-1].each do |date|
+#     list_reservations_by_date(date).each do |booking|
+#       if booking.room_number == room_number
+#         raise ArgumentError.new("Room number #{room_number} is not available for those dates.")
+#       end
+#     end
+#   end
+# end
 
 
 #Not required and not yet incorporated nor tested
-    # def validate_room_number   #THIS DOESN"T WORK YET
-    #   validation = false
-    #   @rooms_collection.each do |room|
-    #     unless validation == true
-    #       if room.room_number == @room_number
-    #         validation = true
-    #       else validation = false
-    #       end
-    #     end
-    #   end
-    #   if validation == false
-    #     raise ArgumentError.new("#{room_number} is not a valid room number at this property.")
-    #     return false
-    #   else
-    #     return true
-    #   end
-    # end
+# def validate_room_number   #THIS DOESN"T WORK YET
+#   validation = false
+#   @rooms_collection.each do |room|
+#     unless validation == true
+#       if room.room_number == @room_number
+#         validation = true
+#       else validation = false
+#       end
+#     end
+#   end
+#   if validation == false
+#     raise ArgumentError.new("#{room_number} is not a valid room number at this property.")
+#     return false
+#   else
+#     return true
+#   end
+# end
 
 #Not required and not yet incorporated nor tested
-    # def assign_room_number  #DOESN"T WORK YET
-    #   unless @room_number > 0
-    #     @rooms_collection.each do |room|
-    #       if available?
-    #         @room_number = room.room_number
-    #         return @room_number
-    #       else @room_number = nil
-    #       end
-    #     end
-    #     if @room_number == nil
-    #       raise ArgumentError.new("No rooms available for those dates.")
-    #     end
-    #   end
-    #     #room_number = @rooms_collection
-    #   #end
-    # end
+# def assign_room_number  #DOESN"T WORK YET
+#   unless @room_number > 0
+#     @rooms_collection.each do |room|
+#       if available?
+#         @room_number = room.room_number
+#         return @room_number
+#       else @room_number = nil
+#       end
+#     end
+#     if @room_number == nil
+#       raise ArgumentError.new("No rooms available for those dates.")
+#     end
+#   end
+#     #room_number = @rooms_collection
+#   #end
+# end

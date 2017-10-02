@@ -29,7 +29,7 @@ describe 'Reservations' do
       @new_hotel1 = Hotel::Reservations.new
     end
     it 'must create a new booking' do
-      new_booking1 = @new_hotel1.new_reservation("2017-09-21", "2017-09-23", 1)
+      new_booking1 = @new_hotel1.new_reservation("2018-09-21", "2018-09-23", 1)
       new_booking1.must_be_instance_of Hotel::Booking
     end
     it 'must raise an error if the check-in date is in the past' do
@@ -37,10 +37,10 @@ describe 'Reservations' do
       proc{new_booking = @new_hotel1.new_reservation("2017-06-01", "2017-09-21", 2)}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the check-in date is the same as the check-out date' do
-      proc{new_booking = @new_hotel1.new_reservation("2017-09-20", "2017-09-20"), 3}.must_raise Hotel::InvalidDateError
+      proc{new_booking = @new_hotel1.new_reservation("2018-09-20", "2018-09-20"), 3}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the check_in date is after the check-out date' do
-      proc{new_booking = @new_hotel1.new_reservation("2017-09-20", "2017-09-18"), 4}.must_raise Hotel::InvalidDateError
+      proc{new_booking = @new_hotel1.new_reservation("2018-09-20", "2018-09-18"), 4}.must_raise Hotel::InvalidDateError
     end
     it 'must raise an error if the date is not valid on calendar' do
       proc{new_booking = @new_hotel1.new_reservation("2018-02-30", "2018-02-31"), 5}.must_raise ArgumentError
@@ -80,7 +80,7 @@ describe 'Reservations' do
       @new_hotel.list_rooms_available_by_date("2018-01-02").must_be_kind_of Array
     end
     it 'must return the correct number of rooms available' do
-      @new_hotel.list_rooms_available_by_date("2018-01-03").length.must_equal 17
+      @new_hotel.list_rooms_available_by_date(Date.parse("2018-01-03")).length.must_equal 17
     end
     it 'must return the correct rooms available' do
       @new_hotel.list_rooms_available_by_date("2018-01-03")[0].room_number.must_equal 3
@@ -105,7 +105,7 @@ describe 'Reservations' do
   describe 'all reservations' do
     before do
       @new_hotel.clear_reservations
-      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23", 2)
+      @new_booking1 = @new_hotel.new_reservation("2018-09-21", "2018-09-23", 2)
       @new_booking2 = @new_hotel.new_reservation("2020-01-01", "2020-01-15", 3)
       @new_booking3 = @new_hotel.new_reservation("2019-01-01", "2019-01-15", 5)
     end
@@ -116,7 +116,7 @@ describe 'Reservations' do
       @new_hotel.all_reservations.length.must_equal 3
     end
     it 'must contain the first reservation made' do
-      @new_hotel.all_reservations[0].check_in.must_equal Date.parse("2017-09-21")
+      @new_hotel.all_reservations[0].check_in.must_equal Date.parse("2018-09-21")
     end
     it 'must contain the correct total cost of the reservation' do
       @new_hotel.all_reservations[0].total_cost.must_equal 400
@@ -126,7 +126,7 @@ describe 'Reservations' do
   describe 'list_reservations_by_date' do
     before do
       @new_hotel.clear_reservations
-      @new_booking1 = @new_hotel.new_reservation("2017-09-21", "2017-09-23", 1)
+      @new_booking1 = @new_hotel.new_reservation("2018-09-21", "2018-09-23", 1)
       @new_booking2 = @new_hotel.new_reservation("2019-01-01", "2019-01-15", 10)
       @new_booking3 = @new_hotel.new_reservation("2019-01-02", "2019-01-12", 12)
       @new_booking4 = @new_hotel.new_reservation("2019-01-01", "2019-01-13", 15)
@@ -141,7 +141,7 @@ describe 'Reservations' do
       @new_hotel.list_reservations_by_date("2019-01-04").length.must_equal 3
     end
     it "must return the correct reservations" do
-      @new_hotel.list_reservations_by_date("2017-09-21")[0].room_number.must_equal @new_booking1.room_number
+      @new_hotel.list_reservations_by_date("2018-09-21")[0].room_number.must_equal @new_booking1.room_number
     end
   end
 
@@ -174,7 +174,7 @@ describe 'Reservations' do
       @new_block = @new_hotel.new_block("2018-01-01", "2018-01-10", "Heritage", 5)
     end
     it 'must list the correct number of rooms for a given date' do
-      @new_hotel.list_blocked_rooms_by_date("2018-01-02").length.must_equal 5
+      @new_hotel.list_blocked_rooms_by_date(Date.parse("2018-01-02")).length.must_equal 5
     end
   end
 

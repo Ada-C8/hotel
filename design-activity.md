@@ -70,3 +70,12 @@ B adheres better.
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 
 B is more loosely coupled.
+
+# Identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class.
+The Reservations class directly modifies attributes of other classes and overreaches in responsibility.  The other classes stick to single responsibility but Reservations does not and is much more complicated.  Reservations is too tightly coupled with other classes in several methods.
+
+# Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
+
+I would remove direct calls on other classes in the methods as much as possible, and instead create instance variables on initialize within Reservations.  I would move as much as possible of the date checking, availability checking, date range creation, etc to the DateRange class.  I would have DateRange initialize with an array of dates rather than needing to call that method on a date range each time I need it.
+
+This would be an improvement because it would make the program more resilient to breaking if changes are made to other classes.  It would also make the code easier and less complicated to change in the future.

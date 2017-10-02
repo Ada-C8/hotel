@@ -2,16 +2,15 @@ require 'date'
 require 'DateRange'
 
 module Hotel
-  class InvalidDateError < StandardError
-  end
 
-  class Booking
-    attr_accessor :check_in, :check_out, :room_number, :total_cost, :dates
+
+  class Booking < DateRange
+    attr_reader :check_in, :check_out, :room_number, :date_range
     def initialize(check_in, check_out, room_number = rand(1..20), room_rate = 200)
       @room_number = room_number
       @check_in = Date.parse(check_in)
       @check_out = Date.parse(check_out)
-      @date_range = DateRange.new(@check_in, @check_out)
+      @date_range = DateRange.new(check_in, check_out)
       @dates = @date_range.dates
       @room_rate = room_rate
       #@dates = Hotel::DateRange.new(check_in, check_out)
@@ -19,17 +18,17 @@ module Hotel
       # @total_cost = (@room_rate * @num_days)
       @discount = 0
 
-      validate_dates
+      # validate_dates
     end
 
-    def validate_dates
-      unless @check_in >= Date.today
-        raise InvalidDateError.new("Check-in cannot be before today's date.")
-      end
-      unless @check_in < @check_out
-        raise InvalidDateError.new("Check-in cannot be after check-out.")
-      end
-    end
+    # def validate_dates
+    #   unless @check_in >= Date.today
+    #     raise InvalidDateError.new("Check-in cannot be before today's date.")
+    #   end
+    #   unless @check_in < @check_out
+    #     raise InvalidDateError.new("Check-in cannot be after check-out.")
+    #   end
+    # end
 
     def total_cost
       num_days = (@check_out - @check_in).to_i
