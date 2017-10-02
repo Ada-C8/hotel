@@ -31,7 +31,7 @@ module Hotel
 
 
     def make_reservation(room_num, check_in, check_out, discount_percent: 0)
-        reservations_array << Hotel::Reservation.new(room_num, check_in, check_out, discount_percent: 0)
+      reservations_array << Hotel::Reservation.new(room_num, check_in, check_out, discount_percent: 0)
     end
 
 

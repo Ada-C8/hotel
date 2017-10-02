@@ -106,9 +106,7 @@ describe "Admin Class" do
       # edge cases
       date = Date.new(2017, 2, 9)
       date.must_be_instance_of Date
-      @admin.list_reservations(date).wont_be_instance_of Hotel::Reservation
-      @admin.list_reservations(date).wont_be_kind_of Integer
-      @admin.list_reservations(date).wont_be_kind_of String
+
     end
   end
 
@@ -125,9 +123,8 @@ describe "Admin Class" do
     @admin.list_vacancies(check_in, check_out)[-1].must_be_kind_of Integer
 
     # edge cases
-    @admin.list_vacancies(check_in, check_out).wont_be_instance_of Hotel::Block
-    @admin.list_vacancies(check_in, check_out).wont_be_kind_of Integer
-    @admin.list_vacancies(check_in, check_out).wont_be_kind_of String
+
+
   end
 
 
@@ -151,10 +148,12 @@ describe "Admin Class" do
       @admin.must_respond_to :list_vacancies
 
       @admin.blocks.length.must_equal 2
-
-      # @admin.create_block_by_date(rooms_per_block, check_in, check_out, 2).total_cost.must_equal 200
-      # @admin.create_block_by_date(rooms_per_block, check_in, check_out, 2).wont_equal 0
     end
+
+    it "Raise an error for no more available rooms" do
+      proc { Hotel::Admin.create_block_by_date(rooms_per_block, check_in, check_out, block_id)}.must_raise StandardError
+    end
+
 
     describe "find_block" do
       it "takes integer id" do
