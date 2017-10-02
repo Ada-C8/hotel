@@ -27,11 +27,12 @@ module Hotel
 
 
 
-    def add_block(room_num_array, check_in, check_out, block_id, discount_percent: 0)
-      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0)
-    end
+    # def add_block(room_num_array, check_in, check_out, block_id, discount_percent: 0)
+    #   @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0)
+    # end
 
     # Wave 2 requirement. Add reservation only no block
+    # Kept this code because wave 2 requires it. As for instructor feedback provided after first submition. Please see the create_block_by_date method on line 122'ish
     def add_reservation(room_selection, check_in, check_out)
       # self.add_block()
       # self.add_reservation_to_block()
@@ -41,16 +42,6 @@ module Hotel
 
     def list_reservations(date)
       rez_by_date = []
-
-      # blocks = @blocks.select do |block|
-      #   block.block_date_range_array.include?(date)
-      # end
-      #
-      # blocks.each do |block|
-      #   block.reservations_array.each do |reserevation|
-      #     rez_by_date << reserevation
-      #   end
-      # end
       @blocks.each do |block|
         if block.block_date_range_array.include?(date)
           block.reservations_array.each do |reservation|
@@ -62,29 +53,16 @@ module Hotel
       return rez_by_date
     end
 
-    def list_blocks(date)
-      blocks_by_date = []
-
-      @blocks.each do |block|
-        if block.block_date_range_array.include?(date)
-          blocks_by_date << block
-        end
-      end
-      return blocks_by_date
-    end
-
-    # def list_reservations(date)
-    #   rez_by_date = []
+    # def list_blocks(date)
+    #   blocks_by_date = []
     #
-    #   @reservations_array.each do |reservation|
-    #     if reservation.date_range_array.include?(date)
-    #       rez_by_date << reservation
+    #   @blocks.each do |block|
+    #     if block.block_date_range_array.include?(date)
+    #       blocks_by_date << block
     #     end
     #   end
-    #
-    #   return rez_by_date
+    #   return blocks_by_date
     # end
-
 
     # wave two requirement
     # def list_reservations(date)
@@ -102,29 +80,20 @@ module Hotel
     # to find the vacancies by date range we need to look at all the blocked rooms and then remove each room from the list
 
     def list_vacancies(check_in, check_out)
-      # available_rooms = list_of_rooms
-      blocked_rooms = []
+      available_rooms = list_of_rooms
 
       date_range = DateRange.new(check_in, check_out).date_range_array
 
       date_range.each do |date|
-
-        self.list_blocks(date).each do |block|
-          block.room_num_array
+        @blocks.each do |block|
+          if block.block_date_range_array.include?(date)
+            block.room_num_array.each do |room_num|
+              available_rooms.delete(room_num)
+            end
+          end
         end
-
-        # @blocks.each do |block|
-
-
-          # if block.block_date_range_array.include?(date)
-          #   block.room_num_array.each do |room_num|
-          #     available_rooms.delete(room_num)
-          #   end
-          # end
-        # end
       end # end date_range loop
-      return blocked_rooms
-      # return available_rooms
+      return available_rooms
     end
 
 
@@ -187,9 +156,3 @@ module Hotel
     end
   end # end class
 end # end module
-puts "testing"
-a = Hotel::Admin.new
-puts a.find_block(1)
-puts a.list_blocks(Date.new(2017,2,2))
-puts a.list_vacancies(Date.new(2017,2,2), Date.new(2017,2,7))
-puts "testing"

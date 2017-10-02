@@ -22,7 +22,6 @@ describe "Admin Class" do
 
     rooms_per_block = 4
     rooms_per_block.must_be_kind_of Integer
-    rooms_per_block.wont_be_instance_of String
 
     check_in = Date.new(2017,2,3)
     check_in.must_be_instance_of Date
@@ -34,6 +33,7 @@ describe "Admin Class" do
 
     @admin.create_block_by_date(rooms_per_block, check_in, check_out, block_id, discount_percent: 0.0)
 
+    @admin.add_reservation_to_block(1, 1, check_in, check_out, discount_percent: 0)
 
 
   end
@@ -178,14 +178,13 @@ describe "Admin Class" do
     describe "list_available_blocked_rooms" do
       it "returns an array with room numbers" do
         @admin.list_available_blocked_rooms(1).must_be_instance_of Array
-        # @admin.list_available_blocked_rooms(1).first.must_be_instance_of Integer
+        @admin.list_available_blocked_rooms(1).first.must_be_kind_of Integer
         @admin.list_available_blocked_rooms(1).last.must_be_kind_of Integer
 
 
         #edge cases
 
-        @admin.list_available_blocked_rooms(2).first.wont_be_kind_of String
-        @admin.list_available_blocked_rooms(2).last.wont_be_kind_of String
+
       end
     end
 
@@ -194,9 +193,6 @@ describe "Admin Class" do
         @admin.find_rooms_from_block(1, 4).must_be_kind_of Array
         @admin.find_rooms_from_block(1, 4).first.must_equal 1
         @admin.find_rooms_from_block(1, 4).last.must_equal 4
-        # @admin.find_rooms_from_block(2, 4).first.wont_equal 0
-        # @admin.find_rooms_from_block(2, 4).last.wont_equal 99
-
       end
     end
 
@@ -207,41 +203,6 @@ describe "Admin Class" do
   end
 end # end admin class
 
-test_ob = Hotel::Admin.new
-
-
-
-
-
-# puts "List of available rooms #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
-#
-# "
-#
-#second block
-puts test_ob.create_block_by_date(4, Date.new(2017,2,3), Date.new(2017, 2,7), 2)
-
-puts "List of available rooms after second block is created. #{test_ob.list_vacancies(Date.new(2017,2,3), Date.new(2017, 2,7))}
-
-"
-
-#
-# puts "list_available_blocked_rooms #{test_ob.list_available_blocked_rooms(1)}
-#
-# "
-# puts "finding rooms from block #{test_ob.find_rooms_from_block(1, 2)}
-#
-# "
-#
-#
-# puts "Adding #{test_ob.add_reservation_to_block(1, 2, Date.new(2017,2,3), Date.new(2017, 2,7))} reservation to block
-#
-# "
-# puts "list of reservations #{test_ob.list_reservations(Date.new(2017,2,3))}
-#
-# "
-
-# puts "testing list_available_blocked_rooms"
-# puts test_ob.list_available_blocked_rooms(1)
 
 =begin
 
