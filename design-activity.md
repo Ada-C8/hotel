@@ -1,3 +1,8 @@
+__Hotel Design Changes Made__
+I refactored my Hotel program so that all logic and responsibility for reserving a room in a block was in the Block Class instead of the Room class. This is an improvement because Blocks are a special class that have specific rooms, from which a guest can select to create a Block reservation. Room instances do not need to know if they are in a Block, but a Block must know what Rooms it includes, and which are available for booking. Rooms in a Block have special conditions under which they can be reserved, so it makes more sense to have the responsibility and logic to reserve rooms in a block reside in the more specific Block class rather than the general Room class. 
+
+
+
 1. What classes does each implementation include? Are the lists the same?
 
 Each of the implementations has three classes: CartEntry, ShoppingCart, and Order. The lists are the same.

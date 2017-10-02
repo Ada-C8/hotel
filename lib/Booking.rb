@@ -69,7 +69,6 @@ module HotelBooking
     end
 
     def make_block_reservation(block_id,room_id,guest_id = nil)
-      # room= find_room_by_id(room_id)
       block= find_block_by_id(block_id)
       reservation_id = "B" + (@all_reservations.count + 1).to_s
 
