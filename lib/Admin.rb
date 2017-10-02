@@ -91,8 +91,16 @@ module Hotel
 
       room_num_array = self.list_vacancies(check_in, check_out).take(rooms_per_block).to_a
 
+      # @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0.0)
 
-      @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0.0)
+      # take one of the rooms from the room_num_array to make a reservation
+      room_num = room_num_array.first
+
+      new_block = Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0.0)
+
+      new_block.make_reservation(room_num, check_in, check_out, discount_percent: 0)
+
+      @blocks << new_block
     end
 
     def find_block(id)

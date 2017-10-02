@@ -31,9 +31,9 @@ describe "Admin Class" do
 
     block_id = 1
 
-    @admin.create_block_by_date(rooms_per_block, check_in, check_out, block_id, discount_percent: 0.0)
+    @new_block = @admin.create_block_by_date(rooms_per_block, check_in, check_out, block_id, discount_percent: 0.0)
 
-    @admin.add_reservation_to_block(1, 1, check_in, check_out, discount_percent: 0)
+    # @admin.add_reservation_to_block(1, 1, check_in, check_out, discount_percent: 0)
 
 
   end
@@ -53,10 +53,7 @@ describe "Admin Class" do
       @admin.room_nums.last.must_equal 20
 
       # edge classes
-      # @admin.room_nums.first.wont_equal 0
-      # @admin.room_nums.last.wont_equal 21
-      # @admin.room_nums.first.wont_be_instance_of String
-      # @admin.room_nums.last.wont_be_instance_of String
+
     end
 
     describe "List_of_rooms method" do
@@ -69,10 +66,6 @@ describe "Admin Class" do
         @admin.list_of_rooms.last.must_equal 20
 
         # edge classes
-        # @admin.list_of_rooms.first.wont_equal 0
-        # @admin.list_of_rooms.last.wont_equal 21
-        # @admin.room_nums.first.wont_be_instance_of String
-        # @admin.room_nums.last.wont_be_instance_of String
       end
     end
   end # end initialize
@@ -81,14 +74,10 @@ describe "Admin Class" do
     it "thing that is added is a block" do
       @admin.blocks[0].must_be_instance_of Hotel::Block
       @admin.blocks[-1].must_be_instance_of Hotel::Block
-
-
     end
 
     it "verify block is added to array" do
       @admin.blocks.length.must_equal 1
-
-
     end
   end
 
@@ -150,6 +139,12 @@ describe "Admin Class" do
       @admin.blocks.length.must_equal 2
     end
 
+    it "automatically makes one reservation for each block" do
+      @admin.blocks.length.must_equal 1
+
+      @admin.blocks.first.reservations_array.length.must_equal 1
+    end
+
     it "Raise an error for no more available rooms" do
       proc { Hotel::Admin.create_block_by_date(rooms_per_block, check_in, check_out, block_id)}.must_raise StandardError
     end
@@ -196,9 +191,23 @@ describe "Admin Class" do
     end
 
     describe "add_reservation_to_block" do
+      it "reservation is added to array" do
+
+      check_in = Date.new(2017,2,3)
+      check_out = Date.new(2017, 2,7)
+
+      @admin.add_reservation_to_block(1, 1, check_in, check_out, discount_percent: 0)
+
+      # One reservation was already in the reservations_array so total is now 2
+      @admin.blocks.first.reservations_array.length.must_equal 2
+
+      @admin.blocks.first.reservations_array.first.must_be_instance_of Hotel::Reservation
+
+      @admin.blocks.first.reservations_array.last.must_be_instance_of Hotel::Reservation
+
 
     end
-
+    end
   end
 end # end admin class
 
