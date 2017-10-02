@@ -52,15 +52,17 @@ module Hotel
       # if date_range includes passed in date
       # return reservations
 
+      valid_reservations = []
+
       reservations.each do |reservation|
-        # I am not requiring a new instance of DateRange class anywhere in this document
-        # this is returning false and what is being returned from reservations are
-        # the new reservations being pushed on by reserve room
+        # broken
+        # the if statement seems to be always returning false and what is being returned from reservations are
+        # therefore nothing is being pushed on valid_reservations
         if (reservation.date_range.check_in..reservation.date_range.check_out).include?(date)
-          reservations << reservation
+          valid_reservations << reservation
         end
       end
-      return reservations
+      return valid_reservations
     end
 
   end
