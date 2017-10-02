@@ -10,7 +10,7 @@ module Hotel
     end
 
     def valid_date?
-      if @checkin < @checkout
+      if checkin < checkout
         true
       else
         raise ArgumentError.new("No valid input")
@@ -18,11 +18,11 @@ module Hotel
     end
 
     def stay_length
-      (@checkout - @checkin).to_i
+      (checkout - checkin).to_i
     end
 
     def include?(date)
-      if @checkin <= date && @checkout > date
+      if checkin <= date && checkout > date
         return true
       else
         return false
@@ -38,8 +38,5 @@ module Hotel
         return false
       end
     end
-
-
-
   end
 end #module
