@@ -102,37 +102,6 @@ describe "HotelBooking::Room class" do
     end
   end
 
-  describe "reserve_block_room" do
-    it "can reserve a room in a given block if given the check-in/out date, reservation id, and block id" do
-      hotel = HotelBooking::Hotel.new
-
-      rooms_in_block = [1,3]
-
-      block_room_wanted = 3
-
-      check_in = "2018-08-09"
-      check_out = "2018-08-12"
-      discounted_rate = 10
-
-      hotel.make_block(check_in, check_out, rooms_in_block,discounted_rate)
-
-      block1 = hotel.all_blocks[-1]
-
-      hotel.all_blocks.count.must_equal 1
-      block1.must_be_instance_of HotelBooking::Block
-      block1.id.must_equal "B1"
-
-      room = hotel.find_room_by_id(block_room_wanted)
-
-      room.reserve_block_room(block1.id, 99)
-
-      (block1.check_in...block1.check_out).each do |date|
-        room.all_dates.must_include date
-      end
-
-    end
-
-  end #end reserve_block_room
 
   describe "self.setup_rooms" do
     it "returns an array of all room objects, with the accurate number of rooms" do

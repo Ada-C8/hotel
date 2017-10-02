@@ -24,23 +24,16 @@ module HotelBooking
       @reserv_ids << reservation_id
     end
 
-    def reserve_block_room(block_id, reservation_id, guest_id=nil)
-      raise ArgumentError.new("This Block room is not available for this block reservation") if !(@blocks_available.include?(block_id))
-
-      @blocks_available.delete(block_id)
-    end
-
 
     def block_room(check_in,check_out,block_id)
-      (check_in...check_out).each do |date|
-        return false if @all_dates.include?(date)
+      if available_all_days?(check_in, check_out)
+        @blocks_available << block_id
+
+        (check_in...check_out).each do |date|
+          @all_dates << date
+        end
       end
 
-      @blocks_available << block_id
-
-      (check_in...check_out).each do |date|
-        @all_dates << date
-      end
     end
 
     def available_all_days?(check_in, check_out)

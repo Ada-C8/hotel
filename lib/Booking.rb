@@ -1,3 +1,4 @@
+
 require 'date'
 require_relative 'Reservation'
 require_relative 'Room'
@@ -5,6 +6,8 @@ require_relative 'Block'
 module HotelBooking
 
   class Hotel
+
+    #The Hotel class holds the data of all rooms, all reservations, and all blocks in the Hotel. It checks for valid dates before creating new reservations, block reservations, and blocks.
     attr_reader :all_rooms, :all_reservations, :all_blocks
     NUM_STANDARD_ROOMS = 20
 
@@ -15,7 +18,6 @@ module HotelBooking
     end
 
     def available_rooms(check_in,check_out, block_id = nil)
-
       check_valid_dates(check_in,check_out)
       @all_rooms.select {|room| room.available_all_days?(check_in, check_out)}
     end
@@ -24,17 +26,14 @@ module HotelBooking
       check_in_date = Date.parse(check_in)
       check_out_date = Date.parse(check_out)
 
+
+      #checks valid dates
       check_valid_dates(check_in_date,check_out_date)
+
+      #makes sure all rooms intended for the block are available for the date range provided
       check_valid_block(check_in_date,check_out_date,room_ids)
 
       block_id = "B" + "#{@all_blocks.count + 1}"
-
-      # block_rooms = []
-      #
-      # room_ids.each do |id|
-      #   room = find_room_by_id(id)
-      #   block_rooms << room
-      # end
 
       block = HotelBooking::Block.new(check_in_date,check_out_date,room_ids,discounted_rate,block_id)
 
@@ -70,19 +69,19 @@ module HotelBooking
     end
 
     def make_block_reservation(block_id,room_id,guest_id = nil)
-      reservation_id = (@all_reservations.count + 1)
-      room= find_room_by_id(room_id)
+      # room= find_room_by_id(room_id)
       block= find_block_by_id(block_id)
+      reservation_id = "B" + (@all_reservations.count + 1).to_s
 
-      raise ArgumentError.new("This block does not exist") if !(@all_blocks.include?(find_block_by_id(block_id)))
       raise ArgumentError.new("This room is not in the block") if !(block.room_ids.include?(room_id))
+      raise ArgumentError.new("This Block room has already been reserved") if !(block.available_rooms.include?(room_id))
 
-      reservation = HotelBooking::BlockReservation.new(block.check_in,block.check_out,room_id, reservation_id, block.discounted_rate)
-      reservation.block_id = block_id
+      block_reservation = HotelBooking::BlockReservation.new(block.check_in,block.check_out,room_id, reservation_id, block.discounted_rate)
+      block_reservation.block_id = block_id
 
-      room.reserve_block_room(block_id,reservation.id, guest_id=nil)
+      block.reserve_block_room(room_id)
 
-      @all_reservations << reservation
+      @all_reservations << block_reservation
 
     end
 
@@ -105,10 +104,7 @@ module HotelBooking
 
     def find_available_rooms_by_block(block_id)
       block= find_block_by_id(block_id)
-      
-      block_rooms = block.room_ids.map {|id| find_room_by_id(id)}
-
-      block_rooms.select {|room| room.blocks_available.include?(block_id)}
+      block.available_rooms
     end
 
     def check_valid_block(check_in,check_out,room_ids)
@@ -140,13 +136,11 @@ module HotelBooking
     end
 
     def self.setup_rooms
-      i = 1
       standard_rooms = []
 
-      until standard_rooms.count == NUM_STANDARD_ROOMS
-        room =  HotelBooking::Room.new(i)
+      (1..NUM_STANDARD_ROOMS).each do |num|
+        room = HotelBooking::Room.new(num)
         standard_rooms << room
-        i += 1
       end
 
       return standard_rooms

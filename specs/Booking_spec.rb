@@ -260,18 +260,15 @@ describe "Hotel" do
 
       avail_rooms_in_block.must_be_instance_of Array
 
-      avail_rooms_in_block.each do |room|
-        room.must_be_instance_of HotelBooking::Room
-        room.blocks_available.must_include block_id
-      end
-
       avail_rooms_in_block.count.must_equal 3
+      avail_rooms_in_block.must_equal rooms_in_block
 
       new_hotel.make_block_reservation(block_id, room_id)
 
       updated_available_rooms_in_block = new_hotel.find_available_rooms_by_block(block_id)
 
       updated_available_rooms_in_block.count.must_equal 2
+      updated_available_rooms_in_block.must_equal [1,5]
 
     end
   end
