@@ -55,15 +55,59 @@ describe 'Reservations' do
 
   describe 'check availability' do
     before do
-      @new_hotel.clear_reservations
-      @new_reservation1 = @new_hotel.new_reservation("2018-01-01", "2018-01-05", 1)
+      @new_hotel_check = Hotel::Reservations.new
+     @new_hotel_check.new_reservation("2018-01-01", "2018-01-05", 1)
     end
-    # after do
-    #   @new_hotel.clear_reservations
-    # end
+
     it 'must must raise argument error if room is not available' do
-      proc{ new_reservation2 = @new_hotel.new_reservation("2018-01-01", "2018-01-04", 1) }.must_raise ArgumentError
+      proc{ new_reservation2 = @new_hotel_check.new_reservation("2018-01-01", "2018-01-04", 1) }.must_raise ArgumentError
     end
+
+    it 'must not allow a room to be booked for the same dates as another booking' do
+      proc{ new_reservation3 = @new_hotel_check.new_reservation("2018-01-01", "2018-01-05", 1)}.must_raise ArgumentError
+    end
+
+    it 'must not allow dates to overlap with check-in date of another reservation' do
+      proc{ new_reservation4 = @new_hotel_check.new_reservation("2017-12-25", "2018-01-02", 1)}.must_raise ArgumentError
+    end
+
+    it 'must not allow dates to overlap with end of another reservation (excluding check-out date)' do
+      proc{ new_reservation5 = @new_hotel_check.new_reservation("2018-01-04", "2018-01-06", 1)}.must_raise ArgumentError
+    end
+
+    it 'must not allow a reservation to be booked when dates are completely contained within another reservation' do
+      proc{ new_reservation6 = @new_hotel_check.new_reservation("2018-01-02", "2018-01-03", 1)}.must_raise ArgumentError
+    end
+
+    it 'must not allow a reservation to be booked which completely contains the dates of anothe reservation' do
+      proc{ new_reservation7 = @new_hotel_check.new_reservation("2017-12-25", "2018-01-10", 1)}.must_raise ArgumentError
+    end
+
+    it 'must allow a reservation to be booked if dates are completely before another reservation' do
+      new_reservation8 = @new_hotel_check.new_reservation("2017-12-20", "2017-12-31", 1)
+      new_reservation8.must_be_instance_of Hotel::Booking
+    end
+
+    it 'must allow a reservation to be booked if dates are completely after another reservation' do
+      new_reservation9 = @new_hotel_check.new_reservation("2018-01-15", "2018-01-28", 1)
+      new_reservation9.must_be_instance_of Hotel::Booking
+    end
+
+    it 'must allow a reservation to be booked when reservation begins on previous reservation check out date' do
+      new_reservation10 =  @new_hotel_check.new_reservation("2018-01-28", "2018-02-20", 1)
+        new_reservation10.must_be_instance_of Hotel::Booking
+    end
+
+    it 'must allow a reservation to be booked when it ends on another reservations check-in date' do
+      new_reservation11 = @new_hotel_check.new_reservation("2018-03-20", "2018-03-22", 1)
+
+      new_reservation12 = @new_hotel_check.new_reservation("2018-03-02", "2018-03-20", 1)
+
+      new_reservation12.must_be_instance_of Hotel::Booking
+    end
+
+
+
   end
 
   describe 'list rooms available by date' do
