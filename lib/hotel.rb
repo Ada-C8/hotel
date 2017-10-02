@@ -44,7 +44,7 @@ module Hotel
     end
 
     def view_reservations(date)
-      date = DateRange.validate(date)
+      date = Date.validate(date)
       reservations = []
       @reservations.each do |reservation|
         reservations << reservation if reservation.dates.include?(date)

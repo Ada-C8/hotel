@@ -140,6 +140,6 @@ Provide necessary methods for working with ranges of dates
 ##### Is this class responsible for exactly one thing?
 Yes
 ##### Does this class take on any responsibility that should be delegated to "lower level" classes?
-No? One method (#validate) might be better off being added to the Date class
+Not necessarily, but one method (#validate) might be better off being added to the Date class, as it only deals with one date and not a range
 ##### Is there code in other classes that directly manipulates this class's instance variables?
 No (n/a)
