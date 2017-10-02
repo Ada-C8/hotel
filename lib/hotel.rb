@@ -33,7 +33,7 @@ module Hotel
       found_reservations = Array.new
       DateRange.check_dates(day_in, day_out)
       DateRange.create_range(day_in, day_out).each do |date|
-        found_reservations << all_reservations.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
+        found_reservations << all_reservations.find_all { |reservation| reservation.includes_date(date) }
       end #each date
       return found_reservations.flatten.uniq
     end #find_reservations
@@ -72,7 +72,7 @@ module Hotel
     end
 
     def block_open_rooms?(block_name)
-      return true if @block.block_list.find {  |reservation| block_name.include?(block_name) }
+      return true if @block.block_list.find { |reservation| block_name.include?(block_name) }
     end
 
     def reserve_in_block(block_name)
@@ -82,3 +82,15 @@ module Hotel
     end
   end #class
 end #module
+
+#binding.pry
+
+# def find_reservations(day_in, day_out)
+#   all_reservations = @reservations.reservation_list + @block.block_list
+#   found_reservations = Array.new
+#   DateRange.check_dates(day_in, day_out)
+#   DateRange.create_range(day_in, day_out).each do |date|
+#     found_reservations << all_reservations.find_all { |reservation| reservation.nights_reserved.include?(Date.parse(date)) }
+#   end #each date
+#   return found_reservations.flatten.uniq
+# end #find_reservations
