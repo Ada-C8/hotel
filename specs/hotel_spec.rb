@@ -31,18 +31,18 @@ describe 'Hotel' do
       hotel.rooms[0].must_be_kind_of Hotel::Room
     end
 
-    it 'raises ArgumentError if passed anything but an Integer' do
+    it 'raises NoMethodError if passed anything but an Integer' do
       proc {
         Hotel::Hotel.new('hi')
-      }.must_raise ArgumentError
+      }.must_raise NoMethodError
 
       proc {
         Hotel::Hotel.new(nil)
-      }.must_raise ArgumentError
+      }.must_raise NoMethodError
 
       proc {
         Hotel::Hotel.new(4.0)
-      }.must_raise ArgumentError
+      }.must_raise NoMethodError
     end
   end
 

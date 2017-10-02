@@ -94,52 +94,6 @@ Implementation B better adheres to this principle, as each class manages and enc
 ##### Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?  
 
 ### Revisiting Hotel
-#### Block
-##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
-Contains & manages necessary information for a block reservation
-##### Is this class responsible for exactly one thing?
-Yes
-##### Does this class take on any responsibility that should be delegated to "lower level" classes?
-No
-##### Is there code in other classes that directly manipulates this class's instance variables?
-No - Reservation reads the #discount_rate variable but does not manipulate it
+Overall, I feel that I did a pretty good job of adhering to the single responsibility principle. The only thing that bothers me about my design is that the price of each room comes from a constant variable defined within the Hotel class, but since the current spec of the project is for all of the hotel's rooms to have a price of 200, I still think it makes the most sense for the time being. How I would refactor the code to account for varying room types would vary depending on how the rooms' prices were being determined, so there's nothing to change at the moment.
 
-#### Hotel
-##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
-Contains and manages all types of reservations
-##### Is this class responsible for exactly one thing?
-Yes
-##### Does this class take on any responsibility that should be delegated to "lower level" classes?
-No? Room rates are currently set by the ROOM_COST constant (as room cost is always 200/night) within the Hotel class, while theoretically if these were to change they would have to come from somewhere else, but would probably still be accessed/assigned within the Hotel#initialize method.
-##### Is there code in other classes that directly manipulates this class's instance variables?
-No
-
-#### Reservation
-##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
-Contains & manages necessary information for a room reservation
-##### Is this class responsible for exactly one thing?
-Yes
-##### Does this class take on any responsibility that should be delegated to "lower level" classes?
-No
-##### Is there code in other classes that directly manipulates this class's instance variables?
-No
-
-#### Room
-##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
-Contain basic data on a given room
-##### Is this class responsible for exactly one thing?
-Yes
-##### Does this class take on any responsibility that should be delegated to "lower level" classes?
-No
-##### Is there code in other classes that directly manipulates this class's instance variables?
-No
-
-#### DateRange (module)
-##### What is this class's responsibility? (You should be able to describe it in a single sentence.)
-Provide necessary methods for working with ranges of dates
-##### Is this class responsible for exactly one thing?
-Yes
-##### Does this class take on any responsibility that should be delegated to "lower level" classes?
-No? One method (#validate) might be better off being added to the Date class
-##### Is there code in other classes that directly manipulates this class's instance variables?
-No (n/a)
+The change I _did_ make was to remove the #validate method from the DateRange class. My thought process behind the change was that the method (which converts valid input into a Date object if it isn't already one) only interacts with one date, and therefore should be part of the Date class, not DateRange.

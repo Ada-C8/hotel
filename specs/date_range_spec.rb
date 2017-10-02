@@ -139,28 +139,28 @@ describe 'DateRange' do
 
   describe 'self.validate' do
     it 'returns input unchanged if input is a Date object' do
-      DateRange.validate(@before).must_equal @before
+      Date.validate(@before).must_equal @before
     end
 
     it 'returns a Date object if input is a String' do
-      date = DateRange.validate('2017-10-14')
+      date = Date.validate('2017-10-14')
       date.must_be_kind_of Date
       date.month.must_equal 10
     end
 
     it 'raises ArgumentError if input is neither Date or String' do
       proc {
-        DateRange.validate(2017_10_14)
+        Date.validate(2017_10_14)
       }.must_raise ArgumentError
 
       proc {
-        DateRange.validate(true)
+        Date.validate(true)
       }.must_raise ArgumentError
     end
 
     it 'raises ArgumentError if passed invalid String format' do
       proc {
-        DateRange.validate('my birthday')
+        Date.validate('my birthday')
       }.must_raise ArgumentError
     end
   end
