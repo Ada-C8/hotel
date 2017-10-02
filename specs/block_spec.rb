@@ -5,7 +5,7 @@ describe "Block" do
   let(:booking) { BookingSystem::Block.new("Bob", '2001-02-03', '2001-02-05', [1,2,3,4,5]) }
   let(:hotel) { BookingSystem::Hotel.new }
 
-  describe "#initalize" do
+  describe "#initialize" do
     it "should create a new instance of BookingSystem::Block" do
       booking.must_be_instance_of BookingSystem::Block
 
@@ -32,6 +32,22 @@ describe "Block" do
       booking.must_respond_to :block_total
       booking.block_total.must_be_kind_of Integer
       booking.block_total.must_equal 0
+    end
+  end # Describe
+
+  describe "#reserve_rooms(num_to_book)" do
+    it "should reserve first 5 requested rooms in the block" do
+      booking.reserve_rooms(5)
+
+      booking.avail_block_rooms.must_be_empty
+      booking.reserved_rooms.must_equal [1,2,3,4,5]
+    end
+
+    it "should reserve first requested room in the block" do
+      booking.reserve_rooms(1)
+
+      booking.avail_block_rooms.must_equal [2,3,4,5]
+      booking.reserved_rooms.must_equal [1]
     end
   end # Describe
 

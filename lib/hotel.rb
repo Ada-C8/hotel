@@ -26,10 +26,8 @@ module BookingSystem
     def find_reservation(name)
       valid?(name)
       @all_reservations.each do |reservation|
-        if reservation.class == BookingSystem::Reservation
-          if reservation.name == name
-            return reservation
-          end
+        if reservation.class == BookingSystem::Reservation && reservation.name == name
+          return reservation
         end
       end
       raise ArgumentError.new("No reservation was found")
@@ -65,10 +63,7 @@ module BookingSystem
       valid?(reserved_name)
       found_block = find_block(reserved_name)
       check_num_input(found_block, num_to_book) # Raise ArgumentError to UI
-      avail_rooms = avail_rooms_in_block(reserved_name) # Check which room numbers are available in the block
-      now_reserved_in_block = avail_rooms[0..num_to_book - 1] # Book number of requested rooms in the current block
-      remaining_rooms = avail_rooms - now_reserved_in_block # Remaining rooms in requested block
-      found_block.update_rooms_in_block(remaining_rooms, now_reserved_in_block) # Updates available and reserved rooms in the requested block
+      found_block.reserve_rooms(num_to_book) # Run block method to reserve the rooms in the block
     end
 
     # As an administrator, I can check whether a given block has any rooms available
@@ -86,8 +81,8 @@ module BookingSystem
     # I can view a list of rooms that are not reserved for a given date range
     def check_avail_rooms_for(next_check_in, next_check_out) # WAVE 2
       next_reservation = DateRange.new(next_check_in, next_check_out)
-      valid_dates?(next_reservation)
-      existing_booked_rooms = next_reservation.overlap?(@all_reservations)
+      next_reservation.valid_dates?
+      existing_booked_rooms = next_reservation.overlap(@all_reservations)
       existing_booked_rooms.empty? ? @rooms : @rooms - existing_booked_rooms
     end
 
@@ -96,6 +91,7 @@ module BookingSystem
       current_reservations = []
       date = Date.parse(date)
       @all_reservations.each do |reservation|
+        # current_reservations << reservation if reservation.dates.include?(date)
         current_reservations << reservation if date >= reservation.check_in && date < reservation.check_out
       end
       return current_reservations
@@ -107,11 +103,6 @@ module BookingSystem
       if name.class != String
         raise ArgumentError.new("Please enter a valid name")
       end
-    end
-
-    def valid_dates?(next_reservation) # Your code should raise an error when an invalid date range is provided
-      # pattern = /\d{4}\W\d+\W\d+/
-      raise ArgumentError.new("Invalid dates") if next_reservation.check_in > next_reservation.check_out
     end
 
     def check_room_input(num_of_rooms) # User input must be less than or equal to 5 and greater than 0

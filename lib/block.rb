@@ -5,7 +5,7 @@ module BookingSystem
     attr_reader :reserved_for, :check_in, :check_out, :avail_block_rooms, :reserved_rooms, :block_total
 
     DISCOUNT_RATE = 150
-    
+
     # To create a block you need a date range, collection of rooms and a discounted room rate
     def initialize(reserved_for, check_in, check_out, avail_block_rooms)
       dates = DateRange.new(check_in, check_out)
@@ -17,16 +17,22 @@ module BookingSystem
       @block_total = 0
     end
 
-    def update_rooms_in_block(remaining_rooms, now_reserved_in_block)
-      @avail_block_rooms = remaining_rooms
-      @reserved_rooms = now_reserved_in_block
-      calculate_block_total
+    def reserve_rooms(num_to_book)
+      now_reserved_in_block = @avail_block_rooms[0..num_to_book - 1]
+      remaining_rooms = @avail_block_rooms - now_reserved_in_block # Remaining rooms in requested block
+      update_rooms_in_block(remaining_rooms, now_reserved_in_block) # Updates available and reserved rooms in the requested block
     end
 
     private
 
     def calculate_block_total # Kept in a separate method in case more functionality needs to be added later on to update the rooms in the block
       @block_total = ((@check_out - @check_in) * DISCOUNT_RATE * @reserved_rooms.length).to_i
+    end
+
+    def update_rooms_in_block(remaining_rooms, now_reserved_in_block)
+      @avail_block_rooms = remaining_rooms
+      @reserved_rooms = now_reserved_in_block
+      calculate_block_total
     end
 
   end # Block
