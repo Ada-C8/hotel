@@ -99,10 +99,13 @@ module Hotel
     unavailable_rooms = []
     all_reservations = self.all_reservations
     all_reservations.each do |reservation|
-      if (begin_search >= reservation.check_in) && (begin_search < reservation.check_out) && (end_search >= reservation.check_in) && (end_search <= reservation.check_out)
-        unavailable_rooms<< reservation.room
+      if reservation.available(begin_search, end_search) == false
+        unavailable_rooms << reservation.room
       end
     end
+      # if (begin_search >= reservation.check_in) && (begin_search < reservation.check_out) && (end_search >= reservation.check_in) && (end_search <= reservation.check_out)
+      #   unavailable_rooms<< reservation.room
+      # end
     available_rooms = HOTEL_ROOMS - unavailable_rooms
     return available_rooms
   end
@@ -113,7 +116,8 @@ module Hotel
     blocked_rooms = []
     all_the_blocks = self.all_blocks
     all_the_blocks.each do |block|
-      if (begin_search >= block.check_in) && (begin_search < block.check_out) && (end_search >= block.check_in) && (end_search <= block.check_out)
+      # if (begin_search >= block.check_in) && (begin_search < block.check_out) && (end_search >= block.check_in) && (end_search <= block.check_out)
+      if block.available(begin_search, end_search) == false
         block.rooms.each do |room|
           blocked_rooms << room
         end

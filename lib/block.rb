@@ -36,5 +36,13 @@ module Hotel
       reservations.replace(Hotel.find_reservation_by_block_id(block_id))
     end
 
+    def available(begin_search, end_search)
+        if (begin_search >= @check_in) && (begin_search < @check_out) && (end_search >= @check_in) && (end_search <= @check_out)
+          return false
+        else
+          return true
+        end
+    end
+
   end # => end of Block
 end # => end of module

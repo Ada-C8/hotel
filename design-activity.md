@@ -21,3 +21,6 @@ B's implementation would be easiest because you could just modify the price meth
 B!
 ###Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
 ###Once you've responded to the prompts, git add design-activity.md and git commit!
+
+### Hotel
+My hotel module is doing a lot!  It creates, modifies, and finds rooms, reservations and blocks.  Some of it can definitely be moved into the classes.  I refactored the available_rooms and blocked_rooms method to not rely so heavily on attr_readers from the classes.  Instead of manually checking the check in and check out date within the Hotel module, I updated it so the blocks and reservations can tell you if they are available or not within that date range.  
