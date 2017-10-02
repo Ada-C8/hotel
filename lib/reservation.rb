@@ -10,7 +10,7 @@ module Hotel
       @room = room
       @rate = 200
       # available_room_numbers = Hotel::Reservation.available_rooms(@dates).map do |room|
-        # room.room_number
+      #   room.room_number
       # end
       # if !available_room_numbers.include?(@room.room_number)
       #   raise InvalidRoomError.new('This room has already been booked')
@@ -21,6 +21,10 @@ module Hotel
     def final_cost
       return @rate * @dates.number_of_nights.to_i
     end # end final_cost
+
+    def pretty_print
+      return "Check In: #{@dates.check_in}\nCheck Out: #{@dates.check_out}\nRoom Number: #{@room}\nTotal Cost: $#{final_cost}" 
+    end
 
     # def self.reservations
     #   @@reservations

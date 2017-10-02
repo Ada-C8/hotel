@@ -27,7 +27,7 @@ describe 'Reservation' do
 
       honeymoon.dates.wont_be_kind_of Date
     end
-  end
+  end # end initialize
 
   describe 'final_cost' do
     it 'calculates the cost of the stay based on number of nights times the rate' do
@@ -36,7 +36,9 @@ describe 'Reservation' do
 
       honeymoon.final_cost.must_equal 3600
     end
-  end
+  end # end final_cost
+
+  
   # describe 'initialize' do
   #   it 'initializes with guest name, date range from DateRange, and room number from Room' do
   #     puppy_expo.guest_name.must_equal 'Finn'

@@ -1,3 +1,7 @@
+#################################
+# decided I don't need this class
+#################################
+
 # require 'spec_helper'
 #
 # module Hotel
@@ -28,7 +32,3 @@
 #     end # end self.find
 #   end # end Room class
 # end # Hotel module
-
-#################################
-# decided I don't need this class
-#################################

@@ -25,6 +25,20 @@ describe 'DateRange' do
 
       proc { Hotel::DateRange.new(check_in, check_out) }.must_raise Hotel::DateRange::InvalidDateRange
     end
+  end # end initialize
+
+  describe 'number_of_nights' do
+    it 'returns the number of nights passed in' do
+      check_in = Date.new(2017, 10, 13)
+      check_out = Date.new(2017, 10, 31)
+      honeymoon = Hotel::DateRange.new(check_in, check_out)
+
+      honeymoon.number_of_nights.must_equal 18
+    end
+  end # end number_of_nights
+
+  describe 'overlap?' do
+    it ''
   end
 
   # before do
