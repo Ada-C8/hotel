@@ -82,19 +82,35 @@ describe 'DateRange' do
     end
 
     it 'returns false if the reservation ends before the other starts' do
+      check_in = Date.new(2017, 10, 1)
+      check_out = Date.new(2017, 10, 12)
+      birthday = Hotel::DateRange.new(check_in, check_out)
 
+      @honeymoon.overlap?(birthday).must_equal false
     end
 
     it 'returns false if the reservation begins after the other ends' do
+      check_in = Date.new(2017, 11, 1)
+      check_out = Date.new(2017, 11, 2)
+      birthday = Hotel::DateRange.new(check_in, check_out)
 
+      @honeymoon.overlap?(birthday).must_equal false
     end
 
     it 'returns false if the reservation begins on the other check out date' do
+      check_in = Date.new(2017, 10, 1)
+      check_out = Date.new(2017, 10, 13)
+      birthday = Hotel::DateRange.new(check_in, check_out)
 
+      @honeymoon.overlap?(birthday).must_equal false
     end
 
     it 'returns false if the reservation ends on the other check in date' do
+      check_in = Date.new(2017, 10, 31)
+      check_out = Date.new(2017, 11, 1)
+      birthday = Hotel::DateRange.new(check_in, check_out)
 
+      @honeymoon.overlap?(birthday).must_equal false
     end
   end
 

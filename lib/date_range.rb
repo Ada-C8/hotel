@@ -18,7 +18,7 @@ module Hotel
     end # end number_of_nights
 
     def overlap?(other)
-      !(@check_out < other.check_in || @check_in > other.check_out)
+      !(@check_out <= other.check_in || @check_in >= other.check_out)
     end # end overlap?
   end # end of class
 end # end of module
