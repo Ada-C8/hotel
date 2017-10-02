@@ -95,3 +95,14 @@ Bonus question once you've read Metz ch. 3: Which implementation is more loosely
   In Implementation B, there is no attr_reader and each class has its own specific responsibility.
 
 Once you've responded to the prompts, git add design-activity.md and git commit!
+
+
+HOTEL ACTIVITY
+
+It seems that most of my classes are loosely coupled but there is opportunity to refactor the booking system.
+
+In the BookingSystem class, (lines 41 and 54), it will be better to create a new method for reservation date range in reservation class and call it in print reservation and room available methods.
+
+Check the date_range in the reservation class instead of calling the method directly in the booking system class.  Furthermore, I can remove date_range from the attribute reader in the reservation class (I tried this and it is not true!).
+
+After transferring the responsibility of checking if a reservation date overlaps to the reservation class, I am not so sure it was necessary.  It seems to make more sense to me initially the way it was designed.  That is, check if a reservation check is available then book.  Thoughts please.  

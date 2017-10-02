@@ -96,12 +96,11 @@ describe "BookingSystem" do
     #   dates = Hotel::DateRange.new(checkin_date, checkout_date)
     #   new_reservation.make_reservation("bob", 1, dates)
     #
-    #   new_reservation = Hotel::BookingSystem.new
     #   checkin_date = Date.new(2001,01,5)
     #   checkout_date = Date.new(2001,01,9)
     #   dates = Hotel::DateRange.new(checkin_date, checkout_date)
     #
-    #   proc{new_reservation.make_reservation("trey", 1, dates)}.must_raise ArgumentError
+    #   proc{Hotel::BookingSystem.make_reservation("trey", 1, dates)}.must_raise ArgumentError
     # end
   end
 

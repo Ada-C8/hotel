@@ -11,24 +11,27 @@ module Hotel
       # puts @date_range
     end
 
-    def total_cost
-      room_rate = 200
 
+    def overlap(res_date)  #new addition
+      if date_range.date_overlap?(res_date)
+        return true
+      else
+        return false
+      end
+    end
+
+    def total_cost
       checkin_date = date_range.checkin_date
       checkout_date = date_range.checkout_date
 
       num_nights = checkout_date - checkin_date
-      total_cost = num_nights * room_rate
+
+      total_cost = 0
+      reserved_rooms.each do |room|
+        total_cost += num_nights * room.room_rate
+      end
+
       return total_cost
     end
-
-
-
-
-
-
-
-
   end
-
 end

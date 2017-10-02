@@ -15,6 +15,9 @@ describe "Reservation" do
 
   describe "total cost" do
     it "calculates the total cost for reservation made" do
+      #calculate for one room
+      # another it for multiple rooms
+      # use reservation object, then call total_cost method
       room_rate = 200
       checkin_date = Date.new(2001,2,3)
       checkout_date = Date.new(2001,2,14)
