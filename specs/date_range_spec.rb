@@ -38,7 +38,41 @@ describe 'DateRange' do
   end # end number_of_nights
 
   describe 'overlap?' do
-    it ''
+    it 'returns true if the check in dates are the same' do
+
+    end
+
+    it 'returns true if the reservation starts before the other ends' do
+
+    end
+
+    it 'returns true if the reservation ends after the other starts' do
+
+    end
+
+    it 'returns true if the new date range is contained in the other date range' do
+
+    end
+
+    it 'returns true if the new date range contains the other date range' do
+
+    end
+
+    it 'returns false if the reservation ends before the other starts' do
+
+    end
+
+    it 'returns false if the reservation begins after the other ends' do
+
+    end
+
+    it 'returns false if the reservation begins on the other check out date' do
+
+    end
+
+    it 'returns false if the reservation ends on the other check in date' do
+      
+    end
   end
 
   # before do
