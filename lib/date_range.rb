@@ -13,7 +13,9 @@ module BookingSystem
     def overlap(existing_reservations)
       booked_rooms = []
       existing_reservations.each do |reservation|
-        if @check_out >= reservation.check_in && @check_out < reservation.check_out || @check_in >= reservation.check_in && @check_in < reservation.check_out || @check_in > reservation.check_in && @check_out < reservation.check_out
+        if @check_out >= reservation.check_in && @check_out < reservation.check_out ||
+          @check_in >= reservation.check_in && @check_in < reservation.check_out ||
+          @check_in > reservation.check_in && @check_out < reservation.check_out
           if reservation.class == BookingSystem::Block
             reservation.avail_block_rooms.map { |block_room_num| booked_rooms << block_room_num }
           else
