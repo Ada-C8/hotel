@@ -96,6 +96,7 @@ module Hotel
   end #end of class
 end # end of module
 
+<<<<<<< HEAD
 #TESTING#####
 # new_reservation = Hotel::BookingSystem.new
 # # puts new_reservation.collection_of_rooms
@@ -161,3 +162,5 @@ end # end of module
 # rooms = [2,3,4,5,6]
 
 # puts new_reservation.reserve_block_rooms(dates, rooms)
+=======
+>>>>>>> 81b14087aa1e4a11764bcae28888d634dd8d6e74
