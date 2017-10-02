@@ -12,7 +12,7 @@ module Hotel
     @nights_arr = []
     make_nights_arr
     end
-    
+
     def valid_input?
       if @check_in.class != Date || @check_out.class != Date
         raise ArgumentError.new("User input Check-in: #{@check_in} and Check-out: #{@check_out} are not valid inputs, must be a Date Object.")
@@ -36,5 +36,13 @@ module Hotel
       end
       # return @nights_arr
     end #end make_nights_arr method
+
+    def overlap?(other)
+      if other.check_out <= @check_in || other.check_in >= @check_out
+        return false
+      else
+        return true
+      end 
+    end
   end #end DateRange class
 end #end Hotel module

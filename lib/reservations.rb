@@ -31,20 +31,31 @@ module Hotel
       return booking
     end
 
+    # booked_rooms = []
+
+
     def check_reservations(check_in,check_out)
       booked_rooms = []
-      range = DateRange.new(check_in,check_out).nights_arr
-      range.each do |date|
-        @all_reservations.each do |booking|
-          if booking.date_range.nights_arr.include?(date)
-            booking.rooms.each do |room|
-              if (!booked_rooms.include?(room))
-                booked_rooms << room
-              end
-            end
-          end
+      range = DateRange.new(check_in,check_out)
+      @all_reservations.each do |booking|
+        if booking.date_range.overlap?(range)
+          # add rooms to booked_rooms
+          booked_rooms << booking.rooms
         end
       end
+      return booked_rooms
+      # range = DateRange.new(check_in,check_out).nights_arr
+      # range.each do |date|
+      #   @all_reservations.each do |booking|
+      #     if booking.date_range.nights_arr.include?(date)
+      #       booking.rooms.each do |room|
+      #         if (!booked_rooms.include?(room))
+      #           booked_rooms << room
+      #         end
+      #       end
+      #     end
+      #   end
+      # end
       return booked_rooms
     end
 
