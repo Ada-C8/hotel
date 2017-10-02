@@ -32,6 +32,11 @@ describe "Hotel" do
         @hotel_test.reserve_room(3,"2017-11-13", "2017-11-15")
       }.must_raise ArgumentError
     end
+    it "Raises an error if room does not exist" do
+      proc {
+        @hotel_test.reserve_room(23,"2017-11-13", "2017-11-15")
+      }.must_raise ArgumentError
+    end
   end
   describe "Access_reservations method" do
     it "Responds to Hotel" do
