@@ -39,7 +39,6 @@ module Hotel
       range = DateRange.new(check_in,check_out)
       @all_reservations.each do |booking|
         if booking.date_range.overlap?(range)
-          # add rooms to booked_rooms
           booked_rooms << booking.rooms
         end
       end

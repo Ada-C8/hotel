@@ -50,4 +50,4 @@ Implementation B
 
 <!-- Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement. -->
 
-I have sooo much going on in m reservations class. I felt that way when I was making the project and even more so after seeing the solution Dan posted. I'm going to start by moving a bunch of the check availability stuff to the date range class if possible.
+I have sooo much going on in m reservations class. I felt that way when I was making the project and even more so after seeing the solution Dan posted. I started by following a suggestion of Dan's to move some of the responsibility of the check reservations method into the date range class. I honestly think there is more to do for me on this project to make it actually single responsibility but the CS Fun hw took up soo much of my time this past week that this hw didn't get the time and effort it deserved. 
