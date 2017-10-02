@@ -1,13 +1,12 @@
-require 'spec_helper'
-
+require_relative 'date_range'
 module Hotel
   class Reservation # various ways to list reservations
     # COST = 200 # per night
     # @@reservations = [] # list of all reservations made
-    attr_reader :dates :room, :rate
+    attr_reader :dates, :room, :rate
 
     def initialize(dates, room, rate)
-      @dates = Hotel::DateRange.new(check_in, check_out)
+      @dates = dates
       @room = room
       @rate = 200
       # available_room_numbers = Hotel::Reservation.available_rooms(@dates).map do |room|
@@ -20,7 +19,7 @@ module Hotel
     end # end initialize
 
     def final_cost
-      return @rate * @dates.number_of_nights
+      return @rate * @dates.number_of_nights.to_i
     end # end final_cost
 
     # def self.reservations

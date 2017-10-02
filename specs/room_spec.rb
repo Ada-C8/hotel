@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require_relative '../specs/spec_helper'
 
 describe 'Room' do
   describe 'initialize' do
