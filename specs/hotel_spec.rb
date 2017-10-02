@@ -26,7 +26,6 @@ describe "Hotel" do
       @hotel_test.reservations[0].must_be_instance_of Hotel::Reservation
     end
     it "Raises an error if asked to reserve an unavailable room " do
-      skip
       @hotel_test.reserve_room(3,"2017-11-12", "2017-11-15")
       proc {
         @hotel_test.reserve_room(3,"2017-11-13", "2017-11-15")
@@ -47,21 +46,17 @@ describe "Hotel" do
       @hotel_test.access_reservations("2017-11-12").must_be_kind_of Array
     end
     it "Has one element" do
-      @hotel_test.reserve_room(3,"2017-11-12", "2017-11-15")
-      @hotel_test.reserve_room(3,"2017-11-16", "2017-11-20")
+      @hotel_test.reserve_room(20,"2017-11-12", "2017-11-15")
+      @hotel_test.reserve_room(20,"2017-11-16", "2017-11-20")
       skip
       @hotel_test.access_reservations("2017-11-12").length.must_equal 1
     end
   end
   describe "View_available_rooms method" do
     it "Return a list of available rooms for a given date range" do
-      hotel_test2 = Hotel::Hotel.new
-      hotel_test2.reserve_room(2,"2017-11-15", "2017-11-18")
-      hotel_test2.reserve_room(3,"2017-11-15", "2017-11-18")
-      hotel_test2.reserve_room(1,"2017-11-15", "2017-11-18")
-
-      hotel_test2.view_available_rooms("2017-11-15", "2017-11-18").must_be_kind_of Array
-      hotel_test2.view_available_rooms("2017-11-15", "2017-11-18").must_include 5
+      @hotel_test.reserve_room(19,"2017-11-15", "2017-11-18")
+      @hotel_test.view_available_rooms("2017-11-15", "2017-11-18").must_be_kind_of Array
+      @hotel_test.view_available_rooms("2017-11-15", "2017-11-18").wont_include 19
     end
   end
 end
