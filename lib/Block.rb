@@ -2,6 +2,7 @@
 module Hotel
   class Block < DateRange
     attr_accessor :check_in, :check_out, :date_range, :dates, :block_rooms_collection, :discounted_room_rate, :available_rooms, :booked, :block_name, :number_of_rooms
+
     def initialize(check_in, check_out, block_name, block_rooms_collection = [], discounted_room_rate = 180)
 
       @check_in = Date.parse(check_in)
@@ -13,12 +14,10 @@ module Hotel
       @discounted_room_rate = discounted_room_rate
       @booked = []
       @block_name = block_name
-      #@available_rooms = @block_rooms_collection
       # @number_of_rooms = number_of_rooms
       # create_block_rooms_collection
       # Hotel::Reservations.blocks_collection << Self
     end
-
 
     # def create_block_rooms_collection
     #   unless @number_of_rooms <= 5 && @number_of_rooms >= 1
@@ -42,6 +41,13 @@ module Hotel
     #   return @block_rooms_collection
     # end
 
+    def validate_block_dates(check_in, check_out, block)
+      if check_in >= block.check_in && check_out <= block.check_out
+        return true
+      else
+        raise ArgumentError.new("Cannot reserve for those dates - dates must be the same as block dates.")
+      end
+    end
 
     def has_rooms_available?
       if !(@booked.length < @block_rooms_collection.length)
@@ -50,8 +56,6 @@ module Hotel
         return true
       end
     end
-
-
 
 
   end
