@@ -52,20 +52,6 @@ module Hotel
       return rez_by_date
     end
 
-    # def list_blocks(date)
-    #   blocks_by_date = []
-    #
-    #   @blocks.each do |block|
-    #     if block.block_date_range_array.include?(date)
-    #       blocks_by_date << block
-    #     end
-    #   end
-    #   return blocks_by_date
-    # end
-
-
-    # to find the vacancies by date range we need to look at all the blocked rooms and then remove each room from the list
-
     def list_vacancies(check_in, check_out)
       available_rooms = list_of_rooms
 
@@ -83,15 +69,13 @@ module Hotel
       return available_rooms
     end
 
-    # creates block with available room for a given date range.
+    # creates block with available room for a given date range. Dan, I read you original feedback about the discount_percent passing through to calc price and ran out of time for testing. Now I worked on it for a while and I was not able to solve it. I will ask Charles for help.
     def create_block_by_date(rooms_per_block, check_in, check_out, block_id, discount_percent: 0.0)
       while self.list_vacancies(check_in, check_out).empty?
         raise StandardError("No more vacancies!")
       end
 
       room_num_array = self.list_vacancies(check_in, check_out).take(rooms_per_block).to_a
-
-      # @blocks << Hotel::Block.new(room_num_array, check_in, check_out, block_id, discount_percent: 0.0)
 
       # take one of the rooms from the room_num_array to make a reservation
       room_num = room_num_array.first
@@ -111,6 +95,8 @@ module Hotel
       end
     end
 
+
+    # Dan I saw your original feedback about the below method not being necessary. My thought at the time was single responsibility for this method and then utiling it in the find_rooms_from_block method. If my thinking is incorrect, please let me know.
     def list_available_blocked_rooms(id)
       #find the block.
       # access its assigned rooms

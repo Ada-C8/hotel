@@ -16,11 +16,17 @@ module Hotel
       @date_range_array = DateRange.new(check_in, check_out).date_range_array
     end
 
-
-    
     # def total_cost
-    #   (@date_ranges_array.length - 1) * COST_PER_NIGHT
+    #   full_price = (@block_date_range_array.length - 1) * COST_PER_NIGHT
+    #   discount = full_price * (discount_percent/100.0)
+    #   return total_cost = full_price - discount
     # end
+
+    def total_cost
+      full_price = (@date_range_array.length - 1) * COST_PER_NIGHT
+      discount = full_price * (discount_percent/100.0)
+      return total_cost = full_price - discount
+    end
 
 
 

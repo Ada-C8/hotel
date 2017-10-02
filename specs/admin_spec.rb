@@ -113,6 +113,17 @@ describe "Admin Class" do
 
     # edge cases
 
+    # I read original feedback "What if there are no reservations? (it should return a list of all the rooms)" and was not able to figure it out. Will follow up for clarification soon.
+    # @admin.list_vacancies(Date.new(2017,1,1), Date.new(2017,1,3)).must_equal[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+    @admin.list_vacancies(check_in, check_out).must_equal [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+    @admin.create_block_by_date(16, check_in, check_out, 2)
+
+    @admin.list_vacancies(check_in, check_out).must_equal []
+
+
+
 
   end
 
@@ -193,20 +204,18 @@ describe "Admin Class" do
     describe "add_reservation_to_block" do
       it "reservation is added to array" do
 
-      check_in = Date.new(2017,2,3)
-      check_out = Date.new(2017, 2,7)
+        check_in = Date.new(2017,2,3)
+        check_out = Date.new(2017, 2,7)
 
-      @admin.add_reservation_to_block(1, 1, check_in, check_out, discount_percent: 0)
+        @admin.add_reservation_to_block(1, 1, check_in, check_out, discount_percent: 0)
 
-      # One reservation was already in the reservations_array so total is now 2
-      @admin.blocks.first.reservations_array.length.must_equal 2
+        # One reservation was already in the reservations_array so total is now 2
+        @admin.blocks.first.reservations_array.length.must_equal 2
 
-      @admin.blocks.first.reservations_array.first.must_be_instance_of Hotel::Reservation
+        @admin.blocks.first.reservations_array.first.must_be_instance_of Hotel::Reservation
 
-      @admin.blocks.first.reservations_array.last.must_be_instance_of Hotel::Reservation
-
-
-    end
+        @admin.blocks.first.reservations_array.last.must_be_instance_of Hotel::Reservation
+      end
     end
   end
 end # end admin class
