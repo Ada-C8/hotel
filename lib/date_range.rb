@@ -21,6 +21,5 @@ module Hotel
     def overlap?(other)
       @check_out < other.check_in || @check_in > other.check_out
     end # end overlap?
-
   end # end of class
 end # end of module

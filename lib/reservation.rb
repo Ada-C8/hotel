@@ -21,7 +21,7 @@ module Hotel
 
     def final_cost
       return @rate * @dates.number_of_nights
-    end
+    end # end final_cost
 
     # def self.reservations
     #   @@reservations
