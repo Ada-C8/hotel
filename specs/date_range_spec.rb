@@ -30,9 +30,6 @@ describe "DateRange class" do
       Hotel::DateRange.new(check_in, check_out).must_respond_to :check_out
     end
 
-    it "Returns array of dates in range" do
-      @date_range.date_range_array.must_be_instance_of Array
-    end
 
     it "Raises an error for invalid date ranges" do
       check_in = Date.new(2017, 2, 3)
@@ -60,6 +57,29 @@ describe "DateRange class" do
   describe "total_num_of_nights" do
     it "calc is correct" do
       @date_range.total_num_of_nights.must_equal 4
+
+
+
+
+
+
+
+
+      # TODO: Add tests for include method.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       # interesting test case is check in and check out are same day.
     end
