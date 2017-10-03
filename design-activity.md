@@ -38,3 +38,13 @@
 
  9. Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
   - Implementation B, because it doesn't need to know the specific attributes in other classes (unlike in Implementation A that calls attributes from CartEntry), just that the cart it has will have a price
+
+---
+
+## Hotel (Re-)Impelementation
+
+Based on the answers to the above questions, identify one place in your Hotel project where a class takes on multiple roles, or directly modifies the attributes of another class. Describe in design-activity.md what changes you would need to make to improve this design, and how why the resulting design would be an improvement.
+
+ - In my Hotel program, I have a lot of places that are tightly coupled by creating my methods that create instances of Reservation and BlockReservation in my Admin class. Instead, I should be able to create those instances in their respective classes. For example, in my Admin class I have a total_cost method that takes in a reservation object and in the method it knows the attributes that are inside a Reservation with a Room class.
+
+ Looking back at Hotel's Admin class, I could move the logic to calculate the cost to Reservation. And also the error messages that deal with checking valid check-out and check-in dates since Reservation also takes in these values. Moving the logic would help make the responsibilities of each class more defined and contained so that not everything's in Admin.
