@@ -36,3 +36,9 @@ Which implementation better adheres to the single responsibility principle?
 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
   - Imp B
+
+____________________________________
+
+My Hotel
+
+Hotel::Admin#add_reservation_to_block method was tightly coupled to Block class per Dan's comment. So I refactored the code so only messages were sent between the two classes and those loosely coupled them. For example, I added the instance reservation directly to Block#reservation_array and this was a poor idea.

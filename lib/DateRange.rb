@@ -15,16 +15,19 @@ module Hotel
     end
 
 
-    # def include(date)
-    #   if date >= @check_in && date <= @check_out
-    #     return true
-    #   end
-    # end
-
-    def overlap?(other)
-      return !(other.checkout <= @checkin || other.checkin >= @checkout)
+    def include(date)
+      if date >= @check_in && date <= @check_out
+        return true
+      end
     end
 
+    def overlap?(other)
+      return !(other.check_out <= @check_in || other.check_in >= @check_out)
+    end
+
+    def total_num_of_nights
+      return check_out - check_in
+    end
 
 
 

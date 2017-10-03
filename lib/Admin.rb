@@ -43,7 +43,7 @@ module Hotel
     def list_reservations(date)
       rez_by_date = []
       @blocks.each do |block|
-        if block.block_date_range_array.include?(date)
+        if block.block_date_range.include(date)
           block.reservations_array.each do |reservation|
             rez_by_date << reservation
           end
@@ -55,17 +55,17 @@ module Hotel
     def list_vacancies(check_in, check_out)
       available_rooms = list_of_rooms
 
-      date_range = DateRange.new(check_in, check_out).date_range_array
+      date_range = DateRange.new(check_in, check_out)
 
-      date_range.each do |date|
+
         @blocks.each do |block|
-          if block.block_date_range_array.include?(date)
+          if block.block_date_range.overlap?(date_range)
             block.room_num_array.each do |room_num|
               available_rooms.delete(room_num)
             end
           end
         end
-      end # end date_range loop
+
       return available_rooms
     end
 

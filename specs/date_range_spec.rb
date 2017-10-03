@@ -47,8 +47,21 @@ describe "DateRange class" do
   end # end initialize
 
   describe "over lap method" do
-    it "text" do
+    it "returns true if other date range overlaps self" do
+      check_in = Date.new(2017,2,2)
+      check_out = check_in + 2
 
+      other = Hotel::DateRange.new(check_in, check_out)
+
+      @date_range.overlap?(other).must_equal true
+    end
+  end
+
+  describe "total_num_of_nights" do
+    it "calc is correct" do
+      @date_range.total_num_of_nights.must_equal 4
+
+      # interesting test case is check in and check out are same day.
     end
   end
 

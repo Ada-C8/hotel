@@ -6,13 +6,13 @@ module Hotel
   class Block
     COST_PER_NIGHT = 200.00
 
-    attr_reader  :room_num_array, :block_date_range_array, :discount_percent, :block_id, :reservations_array
+    attr_reader  :room_num_array, :block_date_range, :discount_percent, :block_id, :reservations_array
 
     def initialize(room_num_array, check_in, check_out, block_id, discount_percent: 0)
 
 
       @room_num_array = room_num_array
-      @block_date_range_array = DateRange.new(check_in, check_out).date_range_array
+      @block_date_range = DateRange.new(check_in, check_out)
       # what to automate block_id and was stumped on implementation. So I opted for manuel entry
       @block_id = block_id
       @discount_percent = discount_percent
@@ -24,7 +24,7 @@ module Hotel
 
 
     def total_cost
-      full_price = (@block_date_range_array.length - 1) * COST_PER_NIGHT
+      full_price = (@block_date_range.total_num_of_nights) * COST_PER_NIGHT
       discount = full_price * (discount_percent/100.0)
       return total_cost = full_price - discount
     end
