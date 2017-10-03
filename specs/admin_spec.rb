@@ -47,7 +47,7 @@ describe "Admin" do
       proc{@admin.reserve(Date.new(2017, 8, 9), Date.new(2017, 8, 14), 6)}.must_raise ArgumentError
     end
 
-    it "Returns an ArgumentError if the reservation can't be made" do
+    it "Returns an error if the reservation can't be made" do
       # check_in_date is later than check_out_date
       proc {@admin.reserve(Date.new(2017,10,7), Date.new(2017,10,3), 1)}.must_raise DateRangeInvalidError
 
@@ -57,7 +57,7 @@ describe "Admin" do
       proc {@admin.reserve(Date.new(2017,10,4), Date.new(2017,10,6), 1)}.must_raise DateOverlapError
 
       # Non-Date object passed into parameters
-      proc{@admin.reserve("I am not a Date!", 123, 101)}.must_raise InvalidObjectPassedError
+      proc{@admin.reserve("I am not a Date!", 123, 13)}.must_raise InvalidObjectPassedError
 
     end
 
@@ -104,12 +104,8 @@ describe "Admin" do
   describe "total_cost" do
     it "Returns the total cost of a room reserved for a certain date range" do
       new_reservation = @admin.reserve(Date.new(2017,10,1), Date.new(2017,10,4), 5)
-      @admin.total_cost(new_reservation).must_be_instance_of Integer
-      @admin.total_cost(new_reservation).must_equal 600
-    end
-
-    it "Returns nil if a Reservation object isn't passed" do
-      proc {@admin.total_cost("I am not a Reservation! >:D")}.must_raise InvalidObjectPassedError
+      new_reservation.total_cost.must_be_instance_of Integer
+      new_reservation.total_cost.must_equal 600
     end
   end
 

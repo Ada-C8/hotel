@@ -13,9 +13,7 @@ module Hotel
     # As an administrator, I can reserve an available room for a given date range
     def reserve(check_in, check_out, room_num)
       # Create a Reservation with those dates + assign a room
-      raise InvalidObjectPassedError.new() if check_in.class != Date || check_out.class != Date
-      raise DateRangeInvalidError.new() if check_out <= check_in
-      raise ArgumentError.new("Room number passed is invalid.") if room_num > NUM_OF_ROOMS || room_num < 0
+      raise InvalidObjectPassedError.new("Room number passed is invalid.") if room_num > NUM_OF_ROOMS || room_num < 0
 
       #TODO: REDUNDANT WITH BOTTOM FUNCTION
       @block_reservations.each do |other_block_reservation|
@@ -46,13 +44,6 @@ module Hotel
         reservation.check_in <= date && reservation.check_out > date
       end
       return list_of_reservations_at_date
-    end
-
-    # As an administrator, I can get the total cost for a given reservation
-    def total_cost(reservation)
-      raise InvalidObjectPassedError.new("Reservation not passed into total_cost method") if reservation.class != Hotel::Reservation
-      total_days = (reservation.check_out - reservation.check_in).to_i
-      return reservation.room.cost * total_days
     end
 
     # returns a Room object if it finds it, nil otherwise
