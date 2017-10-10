@@ -2,6 +2,7 @@ require 'date'
 
 module Hotel
   class Room
+    attr_reader :price
     def initialize(price = 200)
       @price = price.to_f
     end
