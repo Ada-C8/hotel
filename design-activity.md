@@ -13,11 +13,16 @@ What methods does each class have? How (if at all) does this differ between the 
 Consider the Order#total_price method. In each implementation:
 
 Is logic to compute the price delegated to "lower level" classes like ShoppingCart and CartEntry, or is it retained in Order?
+In implementation A, logic to compute the price is retained in Order. In implementation B, it is delegated to "lower level" classes.
 
 Does total_price directly manipulate the instance variables of other classes?
+It does in implementation A but not in implementation B.
 
 If we decide items are cheaper if bought in bulk, how would this change the code? Which implementation is easier to modify?
+Implementation B would be easier to change because only its price method would need to be adjusted to account for situations where items are bought in bulk.
 
 Which implementation better adheres to the single responsibility principle?
+Implementation B, because classes know less about each others (mainly, Order know less about CartEntry)
 
 Bonus question once you've read Metz ch. 3: Which implementation is more loosely coupled?
+Implementation B is more loosely coupled .
